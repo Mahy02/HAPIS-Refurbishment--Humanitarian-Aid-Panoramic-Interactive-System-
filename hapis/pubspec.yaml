@@ -78,6 +78,7 @@ flutter:
       - assets/images/Android_robot.svg.png
       - assets/images/3-removebg-preview.png
       - assets/images/WomenTech.png
+      - assets/images/earth-day.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
