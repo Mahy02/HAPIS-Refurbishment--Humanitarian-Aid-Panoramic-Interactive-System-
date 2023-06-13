@@ -1,7 +1,10 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hapis/constants.dart';
 import '../reusable_widgets/app_bar.dart';
+import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 
 class Settings extends StatelessWidget {
@@ -19,21 +22,32 @@ class Settings extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(50.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const SubText(subTextContent: 'LG Settings'),
-              const SizedBox(
-                height: 30,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  HapisElevatedButton(
+                      elevatedButtonContent: 'Clear KML',
+                      buttonColor: HapisColors.lgColor1),
+                  HapisElevatedButton(
+                      elevatedButtonContent: 'Relaunch LG',
+                      buttonColor: HapisColors.lgColor2),
+                ],
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Click me'),
-                style: ElevatedButton.styleFrom(
-                  primary: const Color.fromARGB(255, 210, 78, 42),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  HapisElevatedButton(
+                      elevatedButtonContent: 'Reboot LG',
+                      buttonColor: HapisColors.lgColor3),
+                  HapisElevatedButton(
+                      elevatedButtonContent: 'Shut Down LG',
+                      buttonColor: HapisColors.lgColor1),
+                ],
+              ),
             ],
           ),
         ));

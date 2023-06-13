@@ -7,7 +7,6 @@ class HapisColors {
   static const Color secondary = Color.fromARGB(255, 62, 141, 76);
   static const Color lgColor1 = Color(0xFF537DC0);
   static const Color lgColor2 = Color(0xFFE54E3E);
-  static const Color lgColor3 = Color(0xFF537DC0);
-  static const Color lgColor4 = Color(0xFFF6B915);
-  static const Color lgColor5 = Color(0xFF4CB15F);
+  static const Color lgColor3 = Color(0xFFF6B915);
+  static const Color lgColor4 = Color(0xFF4CB15F);
 }
