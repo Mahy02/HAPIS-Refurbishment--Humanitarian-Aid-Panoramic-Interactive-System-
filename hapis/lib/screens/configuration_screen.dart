@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/providers/connection_provider.dart';
+import 'package:hapis/services/SSH_services.dart';
 import 'package:provider/provider.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../reusable_widgets/hapis_elevated_button.dart';
@@ -166,8 +167,13 @@ class _ConfigurationState extends State<Configuration> {
                                 model.portController,
                                 model.userNameController);
                       }
-                      //now we call the function that conects and display connection successful or failed
-                      //TO DO:
+                     
+                      final sshService = SSHService();
+                      // Call the init function to set up the SSH client with the connection data
+                      sshService.init(context);
+
+                      // Connect to the Liquid Galaxy
+                      sshService.connect();
                     },
                     style: ElevatedButton.styleFrom(
                       primary: HapisColors.lgColor4,

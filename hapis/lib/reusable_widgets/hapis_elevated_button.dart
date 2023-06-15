@@ -4,9 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 class HapisElevatedButton extends StatelessWidget {
   final String elevatedButtonContent;
   final Color buttonColor;
+  final Function onpressed;
   const HapisElevatedButton({
     required this.elevatedButtonContent,
     required this.buttonColor,
+    required this.onpressed,
     super.key,
   });
 
@@ -16,9 +18,11 @@ class HapisElevatedButton extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.2,
       width: MediaQuery.of(context).size.width * 0.4,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          onpressed();
+        },
         style: ElevatedButton.styleFrom(
-          primary:buttonColor,
+          primary: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),

@@ -8,12 +8,12 @@ import 'package:provider/provider.dart';
 ///And then by these setting data, we would set the client so that the client is now connected with the LG
 
 class SSHService {
-  //SettingsService get _settingsService => GetIt.I<SettingsService>();
+ 
 
   /// Property that defines the SSH client instance.
   late SSHClient _client;
 
-  /// Property that defines the SSH client instance.
+  /// Property that gets the SSH client instance.
   SSHClient get client => _client;
 
   /// Sets a client with the given [ssh] info.
@@ -26,8 +26,8 @@ class SSHService {
     );
   }
 
-  void init(BuildContext context) {
-   final settings = Provider.of<Connectionprovider>(context);
+  Future<void> init(BuildContext context) async {
+   final settings =  Provider.of<Connectionprovider>(context);
     setClient(SSHModel(
       username: settings.connectionFormData.username,
       host: settings.connectionFormData.ip,

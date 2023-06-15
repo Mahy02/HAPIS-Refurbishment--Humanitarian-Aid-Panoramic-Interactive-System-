@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/services/LG_functionalities.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
@@ -28,24 +29,30 @@ class Settings extends StatelessWidget {
               const SubText(subTextContent: 'LG Settings'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   HapisElevatedButton(
                       elevatedButtonContent: 'Clear KML',
-                      buttonColor: HapisColors.lgColor1),
+                      buttonColor: HapisColors.lgColor1,
+                      onpressed: () {}),
                   HapisElevatedButton(
                       elevatedButtonContent: 'Relaunch LG',
-                      buttonColor: HapisColors.lgColor2),
+                      buttonColor: HapisColors.lgColor2,
+                      onpressed: () {
+                        LgService().relaunch();
+                      }),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   HapisElevatedButton(
                       elevatedButtonContent: 'Reboot LG',
-                      buttonColor: HapisColors.lgColor3),
+                      buttonColor: HapisColors.lgColor3,
+                      onpressed: () {}),
                   HapisElevatedButton(
                       elevatedButtonContent: 'Shut Down LG',
-                      buttonColor: HapisColors.lgColor1),
+                      buttonColor: HapisColors.lgColor1,
+                      onpressed: () {}),
                 ],
               ),
             ],
