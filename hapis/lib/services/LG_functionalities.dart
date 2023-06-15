@@ -62,6 +62,7 @@ class LgService {
   }
 
    /// Reboots the Liquid Galaxy system.
+   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
     final pw = _sshService.client.passwordOrKey;
 
@@ -76,6 +77,21 @@ class LgService {
     }
   }
 
+
+  /// Shuts down the Liquid Galaxy system.
+  Future<void> shutdown() async {
+    final pw = _sshService.client.passwordOrKey;
+
+    for (var i = screenAmount; i >= 1; i--) {
+      try {
+        await _sshService.execute(
+            'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S shutdown"');
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    }
+  }
 
 
 
