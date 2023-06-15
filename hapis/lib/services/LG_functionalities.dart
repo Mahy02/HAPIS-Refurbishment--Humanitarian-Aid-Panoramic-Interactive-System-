@@ -10,7 +10,7 @@ import '../providers/connection_provider.dart';
 
 class LgService {
   /// An instance of [SSHService] class
-  final sshService = SSHService();
+  final _sshService = SSHService();
 
 
   /// Property that defines the master rig url.
@@ -45,13 +45,13 @@ class LgService {
   /// We used to type: --lg-relaunch  in terminal
 
   Future<void> relaunch() async {
-    final pw = sshService.client.passwordOrKey;
-    final user = sshService.client.username;
+    final pw = _sshService.client.passwordOrKey;
+    final user = _sshService.client.username;
 
      for (var i = screenAmount; i >= 1; i--) {
         try {
         
-    await sshService.client.execute(
+    await _sshService.client.execute(
          "'/home/$user/bin/lg-relaunch' > /home/$user/log.txt");
         }catch (e) {
         // ignore: avoid_print
@@ -61,36 +61,21 @@ class LgService {
 
   }
 
-//   Future<void> relaunch() async {
-//     final pw = _sshClient.passwordOrKey;
-//     final user = _sshClient.username;
+   /// Reboots the Liquid Galaxy system.
+  Future<void> reboot() async {
+    final pw = _sshService.client.passwordOrKey;
 
-//     for (var i = screenAmount; i >= 1; i--) {
-//       try {
-//         final relaunchCommand = """RELAUNCH_CMD="\\
-// if [ -f /etc/init/lxdm.conf ]; then
-//   export SERVICE=lxdm
-// elif [ -f /etc/init/lightdm.conf ]; then
-//   export SERVICE=lightdm
-// else
-//   exit 1
-// fi
-// if  [[ \\\$(service \\\$SERVICE status) =~ 'stop' ]]; then
-//   echo $pw | sudo -S service \\\${SERVICE} start
-// else
-//   echo $pw | sudo -S service \\\${SERVICE} restart
-// fi
-// " && sshpass -p $pw ssh -x -t lg@lg$i "\$RELAUNCH_CMD\"""";
+    for (var i = screenAmount; i >= 1; i--) {
+      try {
+        await _sshService
+            .execute('sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"');
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    }
+  }
 
-//         await _sshService
-//             .execute('"/home/$user/bin/lg-relaunch" > /home/$user/log.txt');
-//         await _sshService.execute(relaunchCommand);
-//       } catch (e) {
-//         // ignore: avoid_print
-//         print(e);
-//       }
-//     }
-//   }
 
 
 

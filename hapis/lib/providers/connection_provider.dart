@@ -56,7 +56,7 @@ class Connectionprovider extends ChangeNotifier {
     _connectionFormData.ip = ipControl.text;
     _connectionFormData.password = passwordControl.text;
     _connectionFormData.username = userNameControl.text;
-    _connectionFormData.port = int.parse(int.parse(portControl.text).toString());
+    _connectionFormData.port = int.parse(portControl.text);
 
     notifyListeners();
   }
