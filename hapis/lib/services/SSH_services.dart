@@ -60,4 +60,20 @@ class SSHService {
     await _client.disconnect();
     return _client;
   }
+
+  /// Connects to the current client through SFTP, uploads a file into it and then disconnects.
+  /// uploading kml file
+  Future<void> uploadKml(String filePath) async {
+    await connect();
+    String? result = await _client.connectSFTP();
+
+    if (result == 'sftp_connected') {
+      await _client.sftpUpload(
+          path: filePath,
+          toPath: '/var/www/html',
+          callback: (progress) {
+            print('Sent $progress');
+          });
+    }
+  }
 }

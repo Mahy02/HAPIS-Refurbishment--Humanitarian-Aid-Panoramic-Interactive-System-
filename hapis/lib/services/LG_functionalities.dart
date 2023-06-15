@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/services/SSH_services.dart';
+import 'package:hapis/services/kml/file_services.dart';
 import 'package:provider/provider.dart';
 
+import '../models/kml/look_at_model.dart';
 import '../providers/connection_provider.dart';
 
 ///This class is responsible for the connection between the LG machine and the Tablet application
@@ -12,6 +14,8 @@ class LgService {
   /// An instance of [SSHService] class
   final _sshService = SSHService();
 
+  /// An instance of [FileService] class
+  final _fileService= FileService();
 
   /// Property that defines the master rig url.
   final String _url = 'http://lg1:81';
@@ -41,6 +45,11 @@ class LgService {
     return (screenAmount / 2).floor() + 1;
   }
 
+
+  ///Liquid Galaxy Services:
+  ///-----------------------
+  
+
   /// Relaunching the Liquid Galaxy System:
   /// We used to type: --lg-relaunch  in terminal
 
@@ -48,28 +57,10 @@ class LgService {
     final pw = _sshService.client.passwordOrKey;
     final user = _sshService.client.username;
 
-     for (var i = screenAmount; i >= 1; i--) {
-        try {
-        
-    await _sshService.client.execute(
-         "'/home/$user/bin/lg-relaunch' > /home/$user/log.txt");
-        }catch (e) {
-        // ignore: avoid_print
-        print(e);
-      }
-     }
-
-  }
-
-   /// Reboots the Liquid Galaxy system.
-   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
-  Future<void> reboot() async {
-    final pw = _sshService.client.passwordOrKey;
-
     for (var i = screenAmount; i >= 1; i--) {
       try {
-        await _sshService
-            .execute('sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"');
+        await _sshService.client
+            .execute("'/home/$user/bin/lg-relaunch' > /home/$user/log.txt");
       } catch (e) {
         // ignore: avoid_print
         print(e);
@@ -77,15 +68,35 @@ class LgService {
     }
   }
 
+  /// Reboots the Liquid Galaxy system.
+  /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
+  Future<void> reboot() async {
+     final pw = _sshService.client.passwordOrKey;
+    final user = _sshService.client.username;
+    for (var i = screenAmount; i >= 1; i--) {
+      try {
+        await _sshService
+            .execute("'/home/$user/bin/lg-reboot' > /home/$user/log.txt");
+        //OR:  
+        //OR:   'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"'
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    }
+  }
 
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
-    final pw = _sshService.client.passwordOrKey;
+     final pw = _sshService.client.passwordOrKey;
+    final user = _sshService.client.username;
 
     for (var i = screenAmount; i >= 1; i--) {
       try {
         await _sshService.execute(
-            'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S shutdown"');
+            "'/home/$user/bin/lg-poweroff' > /home/$user/log.txt");
+
+        //OR: 'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S poweroff"'
       } catch (e) {
         // ignore: avoid_print
         print(e);
@@ -94,6 +105,50 @@ class LgService {
   }
 
 
+ 
+
+  /// Puts the given [content] into the `/tmp/query.txt` file.
+  Future<void> query(String content) async {
+    await _sshService.execute('echo "$content" > /tmp/query.txt');
+  }
+
+  ///Fly to functionality:
+  /// Command to fly to a certain location: 'echo "flytoview=${flyto.generateLinearString()}" > /tmp/query.txt'
+  /// Uses the [query] method to fly to some place in Google Earth according to the given [lookAt].
+  /// See [LookAtModel].
+  Future<void> flyTo(LookAtModel lookAt) async {
+    await query('flytoview=${lookAt.linearTag}');
+  }
+
+
+  ///Orbit functionality: 
+  /// Uses the [query] method to play some tour in Google Earth according to  the given [tourName].
+  /// Command: 'echo "playtour=Orbit" > /tmp/query.txt'
+  Future<void> startTour(String tourName) async {
+    await query('playtour=$tourName');
+  }
+
+  /// Uses the [query] method to stop all tours in Google Earth.
+  Future<void> stopTour() async {
+    await query('exittour=true');
+  }
+
+
+  ///KML services:
+  ///------------
+
+  ///Visualizing the uploaded KML on LG command: echo "http://lg1:81/$projectname.kml" > /var/www/html/kmls.txt'
+  ///Sending tour to the Google Earth using the KML file and the tourname ex: Orbit
+   /// Sends and starts a `tour` into the Google Earth.
+  Future<void> sendTour(String tourKml, String tourName) async {
+    final fileName = '$tourName.kml';
+
+    final kmlFile = await _fileService.createFile(fileName, tourKml);
+    await _sshService.uploadKml(kmlFile.path);
+
+    await _sshService
+        .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
+  }
 
 }
 
