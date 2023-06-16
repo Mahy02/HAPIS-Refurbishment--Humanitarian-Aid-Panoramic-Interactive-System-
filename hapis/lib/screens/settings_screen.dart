@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/services/LG_functionalities.dart';
+import 'package:provider/provider.dart';
+import '../providers/ssh_provider.dart';
 import '../reusable_widgets/app_bar.dart';
+import '../reusable_widgets/drawer.dart';
 import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 
@@ -17,9 +20,9 @@ class Settings extends StatelessWidget {
         appBar: const HAPISAppBar(
           appBarText: 'Settings',
         ),
-        drawer: const Drawer(
+        drawer: Drawer(
             // Drawer content goes here
-            ),
+            child: buildDrawer(context)),
         body: Padding(
           padding: const EdgeInsets.all(50.0),
           child: Column(
@@ -38,7 +41,11 @@ class Settings extends StatelessWidget {
                       elevatedButtonContent: 'Relaunch LG',
                       buttonColor: HapisColors.lgColor2,
                       onpressed: () {
-                        LgService().relaunch();
+                        final sshData =
+                            Provider.of<SSHprovider>(context, listen: false);
+                        print("inside relaunch ");
+                        print(sshData.client.username);
+                        LgService(sshData).relaunch();
                       }),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 
 /// A custom [TextFormField] widget that can be used to input text with validation.
@@ -31,6 +32,7 @@ class TextFormFieldWidget extends StatelessWidget {
     bool? isPrefixIconrequired,
     Icon? prefixIcon,
     bool? enabled,
+    bool? isHidden,
     this.onChanged,
     this.onEditingComplete,
   })  : _textController = textController,
@@ -43,6 +45,7 @@ class TextFormFieldWidget extends StatelessWidget {
         _isPrefixIconRequired = isPrefixIconrequired,
         _PrefixIcon = prefixIcon,
         _enabled = enabled,
+        _isHidden= isHidden,
         super(key: key);
 
   final TextEditingController _textController;
@@ -57,6 +60,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final bool? _isPrefixIconRequired;
   final Icon? _PrefixIcon;
   final bool? _enabled;
+  final bool? _isHidden;
 
   @override
   Key? get key => super.key;
@@ -75,6 +79,7 @@ class TextFormFieldWidget extends StatelessWidget {
         controller: _textController,
         maxLength: _maxLength, //we also have maxLines
         initialValue: _initialValue,
+        obscureText: _isHidden!,
         decoration: InputDecoration(
           // hintText: 'Be clear and descriptive.',
           hintText: _hint,
@@ -99,6 +104,11 @@ class TextFormFieldWidget extends StatelessWidget {
           prefixIcon: _isPrefixIconRequired ?? false ? _PrefixIcon : null,
         ),
         onChanged: onChanged,
+        style: TextStyle(
+          color: Colors.black,
+          fontFamily: GoogleFonts.montserrat().fontFamily,
+          fontSize: 25,
+        ),
         onEditingComplete: onEditingComplete,
         validator: (value) {
           if (_isSuffixRequired == true) {

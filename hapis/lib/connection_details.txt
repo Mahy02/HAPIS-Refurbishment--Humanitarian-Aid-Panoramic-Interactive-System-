@@ -1,0 +1,11 @@
+username: lg
+password: lg
+ip address:192.168.163.3   or 192.168.163.255
+port: 22
+
+
+From volcano app:
+username: lg
+password: 2#2
+ip address:192.168.163.3   
+port: 22

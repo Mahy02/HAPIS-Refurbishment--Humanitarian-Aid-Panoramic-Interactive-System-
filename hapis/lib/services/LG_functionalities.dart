@@ -5,14 +5,18 @@ import 'package:provider/provider.dart';
 
 import '../models/kml/look_at_model.dart';
 import '../providers/connection_provider.dart';
+import '../providers/ssh_provider.dart';
 
 ///This class is responsible for the connection between the LG machine and the Tablet application
 ///The LG service needed such as shutting down the LG, Rebooting the LG, Relaunching the LG
 ///As well as common functionalities assosiated with the LG such as Fly-to, orbit, sending KML files, Clearing KML, Shwowing Ballons and Logos
 
 class LgService {
-  /// An instance of [SSHService] class
-  final _sshService = SSHService();
+  /// An instance of [SSHprovider] class
+
+ final SSHprovider _sshData;
+LgService(this._sshData);
+
 
   /// An instance of [FileService] class
   final _fileService= FileService();
@@ -54,12 +58,12 @@ class LgService {
   /// We used to type: --lg-relaunch  in terminal
 
   Future<void> relaunch() async {
-    final pw = _sshService.client.passwordOrKey;
-    final user = _sshService.client.username;
+    final pw = _sshData.client.passwordOrKey;
+    final user = _sshData.client.username;
 
     for (var i = screenAmount; i >= 1; i--) {
       try {
-        await _sshService.client
+        await _sshData.client
             .execute("'/home/$user/bin/lg-relaunch' > /home/$user/log.txt");
       } catch (e) {
         // ignore: avoid_print
@@ -71,11 +75,11 @@ class LgService {
   /// Reboots the Liquid Galaxy system.
   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
-     final pw = _sshService.client.passwordOrKey;
-    final user = _sshService.client.username;
+     final pw = _sshData.client.passwordOrKey;
+    final user = _sshData.client.username;
     for (var i = screenAmount; i >= 1; i--) {
       try {
-        await _sshService
+        await _sshData
             .execute("'/home/$user/bin/lg-reboot' > /home/$user/log.txt");
         //OR:  
         //OR:   'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"'
@@ -88,12 +92,12 @@ class LgService {
 
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
-     final pw = _sshService.client.passwordOrKey;
-    final user = _sshService.client.username;
+     final pw = _sshData.client.passwordOrKey;
+    final user = _sshData.client.username;
 
     for (var i = screenAmount; i >= 1; i--) {
       try {
-        await _sshService.execute(
+        await _sshData.execute(
             "'/home/$user/bin/lg-poweroff' > /home/$user/log.txt");
 
         //OR: 'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S poweroff"'
@@ -109,7 +113,7 @@ class LgService {
 
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
-    await _sshService.execute('echo "$content" > /tmp/query.txt');
+    await _sshData.execute('echo "$content" > /tmp/query.txt');
   }
 
   ///Fly to functionality:
@@ -144,9 +148,9 @@ class LgService {
     final fileName = '$tourName.kml';
 
     final kmlFile = await _fileService.createFile(fileName, tourKml);
-    await _sshService.uploadKml(kmlFile.path);
+    await _sshData.uploadKml(kmlFile.path);
 
-    await _sshService
+    await _sshData
         .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
   }
 

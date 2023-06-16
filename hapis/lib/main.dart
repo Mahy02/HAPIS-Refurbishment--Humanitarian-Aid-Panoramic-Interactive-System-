@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/providers/connection_provider.dart';
+import 'package:hapis/providers/icon_state_provider.dart';
+import 'package:hapis/providers/ssh_provider.dart';
 import 'package:hapis/screens/configuration_screen.dart';
 import 'package:hapis/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,8 @@ class HAPIS extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Connectionprovider()),
+        ChangeNotifierProvider(create: (_) => IconState()),
+        ChangeNotifierProvider(create: (_) => SSHprovider()),
       ],
       child: MaterialApp(
         theme: ThemeData(

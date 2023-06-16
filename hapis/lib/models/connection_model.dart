@@ -14,11 +14,15 @@ class ConnectionModel {
   /// Defaults is 22.
   int port;
 
+  ///For connection status
+  bool isConnected;
+
   ConnectionModel({
     this.username = 'lg',
     this.password = '',
     this.ip = '',
     this.port = 22,
+    this.isConnected= false,
   });
 
   /// Turns a `Map` into a `ConnectionModel`.
@@ -27,7 +31,8 @@ class ConnectionModel {
         username: map['username'],
         password: map['password'],
         ip: map['ip'],
-        port: map['port']);
+        port: map['port'],
+        isConnected: map['isConnected']);
   }
 
   /// Return a `Map` from the current `ConnectionModel`.
@@ -36,5 +41,6 @@ class ConnectionModel {
         'password': password,
         'ip': ip,
         'port': port,
+        'isConnected': isConnected,
       };
 }
