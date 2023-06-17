@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/providers/connection_provider.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
 import 'package:hapis/providers/ssh_provider.dart';
+import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/configuration_screen.dart';
 import 'package:hapis/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class HAPIS extends StatelessWidget {
           //  '/user/signup/null': (context) => NewPasswordPage(),
           '/settings': (context) => const Settings(),
           '/connections': (context) => const Configuration(),
+          '/about': (context) => const About(),
         },
       ),
     );

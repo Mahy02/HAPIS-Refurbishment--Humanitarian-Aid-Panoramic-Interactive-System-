@@ -80,6 +80,8 @@ flutter:
       - assets/images/3-removebg-preview.png
       - assets/images/WomenTech.png
       - assets/images/earth-day.png
+      - assets/images/EDU.png
+      - assets/images/LiquidGalaxyLab.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hapis/screens/about_screen.dart';
 
 import '../screens/configuration_screen.dart';
 import '../screens/settings_screen.dart';
@@ -26,7 +27,7 @@ Drawer buildDrawer(BuildContext context) {
           ),
           const IconSideMenuWidget(
             itemNumber: '1',
-            page: Settings(),
+            page: About(),
             itemTitle: 'About',
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.05),
