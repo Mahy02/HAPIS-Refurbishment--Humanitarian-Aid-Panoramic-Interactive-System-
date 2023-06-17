@@ -14,18 +14,17 @@ import '../providers/ssh_provider.dart';
 class LgService {
   /// An instance of [SSHprovider] class
 
- final SSHprovider _sshData;
-LgService(this._sshData);
-
+  final SSHprovider _sshData;
+  LgService(this._sshData);
 
   /// An instance of [FileService] class
-  final _fileService= FileService();
+  final _fileService = FileService();
 
   /// Property that defines the master rig url.
   final String _url = 'http://lg1:81';
 
   /// Property that defines number of screens. Defaults to `5`.
-  int screenAmount = 5;
+  int screenAmount = 3;
 
   /// Lg order:  if 5 => 5 4 1 2 3   if 3 => 3 1 2
 
@@ -49,10 +48,8 @@ LgService(this._sshData);
     return (screenAmount / 2).floor() + 1;
   }
 
-
   ///Liquid Galaxy Services:
   ///-----------------------
-  
 
   /// Relaunching the Liquid Galaxy System:
   /// We used to type: --lg-relaunch  in terminal
@@ -61,10 +58,35 @@ LgService(this._sshData);
     final pw = _sshData.client.passwordOrKey;
     final user = _sshData.client.username;
 
+    if (await _sshData.client.isConnected()) {
+      print("check connection");
+    }
+
+    print("inside relaunch function");
+    print(user);
+    print(screenAmount);
+
     for (var i = screenAmount; i >= 1; i--) {
+      print(i);
       try {
+        final relaunchCommand = """RELAUNCH_CMD="\\
+if [ -f /etc/init/lxdm.conf ]; then
+  export SERVICE=lxdm
+elif [ -f /etc/init/lightdm.conf ]; then
+  export SERVICE=lightdm
+else
+  exit 1
+fi
+if  [[ \\\$(service \\\$SERVICE status) =~ 'stop' ]]; then
+  echo $pw | sudo -S service \\\${SERVICE} start
+else
+  echo $pw | sudo -S service \\\${SERVICE} restart
+fi
+" && sshpass -p $pw ssh -x -t lg@lg$i "\$RELAUNCH_CMD\"""";
         await _sshData.client
             .execute("'/home/$user/bin/lg-relaunch' > /home/$user/log.txt");
+        await _sshData.client.execute(relaunchCommand);
+        print("after execute");
       } catch (e) {
         // ignore: avoid_print
         print(e);
@@ -75,13 +97,14 @@ LgService(this._sshData);
   /// Reboots the Liquid Galaxy system.
   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
-     final pw = _sshData.client.passwordOrKey;
+    final pw = _sshData.client.passwordOrKey;
     final user = _sshData.client.username;
     for (var i = screenAmount; i >= 1; i--) {
       try {
         await _sshData
-            .execute("'/home/$user/bin/lg-reboot' > /home/$user/log.txt");
-        //OR:  
+            .execute('sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"');
+
+        //OR:   .execute("'/home/$user/bin/lg-reboot' > /home/$user/log.txt");
         //OR:   'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"'
       } catch (e) {
         // ignore: avoid_print
@@ -92,14 +115,15 @@ LgService(this._sshData);
 
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
-     final pw = _sshData.client.passwordOrKey;
+    final pw = _sshData.client.passwordOrKey;
     final user = _sshData.client.username;
 
     for (var i = screenAmount; i >= 1; i--) {
       try {
         await _sshData.execute(
-            "'/home/$user/bin/lg-poweroff' > /home/$user/log.txt");
+            'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S poweroff"');
 
+        //OR: "'/home/$user/bin/lg-poweroff' > /home/$user/log.txt"
         //OR: 'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S poweroff"'
       } catch (e) {
         // ignore: avoid_print
@@ -107,9 +131,6 @@ LgService(this._sshData);
       }
     }
   }
-
-
- 
 
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
@@ -124,8 +145,7 @@ LgService(this._sshData);
     await query('flytoview=${lookAt.linearTag}');
   }
 
-
-  ///Orbit functionality: 
+  ///Orbit functionality:
   /// Uses the [query] method to play some tour in Google Earth according to  the given [tourName].
   /// Command: 'echo "playtour=Orbit" > /tmp/query.txt'
   Future<void> startTour(String tourName) async {
@@ -137,13 +157,12 @@ LgService(this._sshData);
     await query('exittour=true');
   }
 
-
   ///KML services:
   ///------------
 
   ///Visualizing the uploaded KML on LG command: echo "http://lg1:81/$projectname.kml" > /var/www/html/kmls.txt'
   ///Sending tour to the Google Earth using the KML file and the tourname ex: Orbit
-   /// Sends and starts a `tour` into the Google Earth.
+  /// Sends and starts a `tour` into the Google Earth.
   Future<void> sendTour(String tourKml, String tourName) async {
     final fileName = '$tourName.kml';
 
@@ -153,7 +172,6 @@ LgService(this._sshData);
     await _sshData
         .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
   }
-
 }
 
 /*

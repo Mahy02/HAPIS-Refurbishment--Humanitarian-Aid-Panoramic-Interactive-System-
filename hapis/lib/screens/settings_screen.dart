@@ -55,11 +55,23 @@ class Settings extends StatelessWidget {
                   HapisElevatedButton(
                       elevatedButtonContent: 'Reboot LG',
                       buttonColor: HapisColors.lgColor3,
-                      onpressed: () {}),
+                      onpressed: () {
+                        final sshData =
+                            Provider.of<SSHprovider>(context, listen: false);
+                        print("inside rebootr ");
+                        print(sshData.client.username);
+                        LgService(sshData).reboot();
+                      }),
                   HapisElevatedButton(
                       elevatedButtonContent: 'Shut Down LG',
                       buttonColor: HapisColors.lgColor1,
-                      onpressed: () {}),
+                      onpressed: () {
+                        final sshData =
+                            Provider.of<SSHprovider>(context, listen: false);
+                        print("inside shut down ");
+                        print(sshData.client.username);
+                        LgService(sshData).shutdown();
+                      }),
                 ],
               ),
             ],
