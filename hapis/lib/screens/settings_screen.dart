@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
+import '../models/kml/look_at_model.dart';
 import '../providers/ssh_provider.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../reusable_widgets/drawer.dart';
@@ -36,7 +37,20 @@ class Settings extends StatelessWidget {
                   HapisElevatedButton(
                       elevatedButtonContent: 'Clear KML',
                       buttonColor: HapisColors.lgColor1,
-                      onpressed: () {}),
+                      onpressed: () {
+                        //for now we woul d just try the fly to function
+                        final sshData =
+                            Provider.of<SSHprovider>(context, listen: false);
+                        print("inside clear KML ");
+                        print(sshData.client.username);
+                        LgService(sshData).flyTo(LookAtModel(
+                            longitude: -74.0060,
+                            latitude: 40.7128,
+                            altitude: 0,
+                            range: '1492.66.0',
+                            tilt: '45',
+                            heading: '0'));
+                      }),
                   HapisElevatedButton(
                       elevatedButtonContent: 'Relaunch LG',
                       buttonColor: HapisColors.lgColor2,

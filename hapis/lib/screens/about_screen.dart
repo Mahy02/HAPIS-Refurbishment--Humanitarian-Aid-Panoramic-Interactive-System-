@@ -107,7 +107,7 @@ class About extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Liquid Galxy Project Admin: Andreu Ibanez',
+                    'Liquid Galxy Project Admin: Andreu Ibáñez Perales',
                     style: TextStyle(
                         fontSize: 28,
                         fontFamily: GoogleFonts.lato().fontFamily),

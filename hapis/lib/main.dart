@@ -6,6 +6,7 @@ import 'package:hapis/providers/ssh_provider.dart';
 import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/configuration_screen.dart';
 import 'package:hapis/screens/settings_screen.dart';
+import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
@@ -21,6 +22,11 @@ class HAPIS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return MaterialApp(
+    final sshData = Provider.of<SSHprovider>(context, listen: false);
+    print("inside relaunch ");
+    print(sshData.client.username);
+    LgService(sshData).setLogos();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Connectionprovider()),

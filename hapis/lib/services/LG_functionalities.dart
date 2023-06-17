@@ -3,7 +3,9 @@ import 'package:hapis/services/SSH_services.dart';
 import 'package:hapis/services/kml/file_services.dart';
 import 'package:provider/provider.dart';
 
+import '../models/kml/KMLModel.dart';
 import '../models/kml/look_at_model.dart';
+import '../models/kml/screen_overlay_model.dart';
 import '../providers/connection_provider.dart';
 import '../providers/ssh_provider.dart';
 
@@ -50,6 +52,13 @@ class LgService {
 
   ///Liquid Galaxy Services:
   ///-----------------------
+
+
+  /// Gets the Liquid Galaxy rig screen amount. Returns a [String] that represents the screen amount.
+  Future<String?> getScreenAmount() async {
+    return _sshData
+        .execute("grep -oP '(?<=DHCP_LG_FRAMES_MAX=).*' personavars.txt");
+  }
 
   /// Relaunching the Liquid Galaxy System:
   /// We used to type: --lg-relaunch  in terminal
@@ -134,7 +143,12 @@ fi
 
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
+    print("inside query");
     await _sshData.execute('echo "$content" > /tmp/query.txt');
+    //await _sshData.execute('echo "$content" > ~/query.txt');
+
+    print("after execute query");
+    print(content);
   }
 
   ///Fly to functionality:
@@ -142,6 +156,9 @@ fi
   /// Uses the [query] method to fly to some place in Google Earth according to the given [lookAt].
   /// See [LookAtModel].
   Future<void> flyTo(LookAtModel lookAt) async {
+    print("inside fly to fn");
+    print(lookAt.latitude);
+    print(lookAt.linearTag);
     await query('flytoview=${lookAt.linearTag}');
   }
 
@@ -172,6 +189,104 @@ fi
     await _sshData
         .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
   }
+
+   /// Sets the logos KML into the Liquid Galaxy rig. A KML [name] and [content]
+  /// may be passed, but it's not required.
+  Future<void> setLogos({
+    String name = 'SVT-logos',
+    String content = '<name>Logos</name>',
+  }) async {
+    final screenOverlay = ScreenOverlayModel.logos();
+
+    final kml = KMLModel(
+      name: name,
+      content: content,
+      screenOverlay: screenOverlay.tag,
+    );
+
+    try {
+      final result = await getScreenAmount();
+      if (result != null) {
+        screenAmount = int.parse(result);
+      }
+
+      await sendKMLToSlave(logoScreen, kml.body);
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+  }
+
+ /// Sends a KML [content] to the given slave [screen].
+  Future<void> sendKMLToSlave(int screen, String content) async {
+    try {
+      await _sshData
+          .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+  }
+  /// Sends a the given [kml] to the Liquid Galaxy system.
+  ///
+  /// It also accepts a [List] of images represents by [Map]s. The [images] must
+  /// have the following pattern:
+  /// ```
+  /// [
+  ///   {
+  ///     'name': 'img-1.png',
+  ///     'path': 'path/to/img-1'
+  ///   },
+  ///   {
+  ///     'name': 'img-2.png',
+  ///     'path': 'path/to/img-2'
+  ///   }
+  /// ]
+  /// ```
+  Future<void> sendKml(KMLModel kml,
+      {List<Map<String, String>> images = const []}) async {
+    final fileName = '${kml.name}.kml';
+
+    await clearKml();
+
+    for (var img in images) {
+      final image = await _fileService.createImage(img['name']!, img['path']!);
+      await _sshData.uploadKml(image.path);
+    }
+
+    final kmlFile = await _fileService.createFile(fileName, kml.body);
+    await _sshData.uploadKml(kmlFile.path);
+
+    await _sshData
+        .execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
+  }
+
+  
+  /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos
+  /// after clearing (default to `true`).
+  Future<void> clearKml({bool keepLogos = true}) async {
+    String query =
+        'echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';
+
+    for (var i = 2; i <= screenAmount; i++) {
+      String blankKml = KMLModel.generateBlank('slave_$i');
+      query += " && echo '$blankKml' > /var/www/html/kml/slave_$i.kml";
+    }
+
+    if (keepLogos) {
+      final kml = KMLModel(
+        name: 'SVT-logos',
+        content: '<name>Logos</name>',
+        screenOverlay: ScreenOverlayModel.logos().tag,
+      );
+
+      query +=
+          " && echo '${kml.body}' > /var/www/html/kml/slave_$logoScreen.kml";
+    }
+
+    await _sshData.execute(query);
+  }
+
 }
 
 /*
