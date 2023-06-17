@@ -53,7 +53,6 @@ class LgService {
   ///Liquid Galaxy Services:
   ///-----------------------
 
-
   /// Gets the Liquid Galaxy rig screen amount. Returns a [String] that represents the screen amount.
   Future<String?> getScreenAmount() async {
     return _sshData
@@ -190,12 +189,13 @@ fi
         .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
   }
 
-   /// Sets the logos KML into the Liquid Galaxy rig. A KML [name] and [content]
+  /// Sets the logos KML into the Liquid Galaxy rig. A KML [name] and [content]
   /// may be passed, but it's not required.
   Future<void> setLogos({
     String name = 'SVT-logos',
     String content = '<name>Logos</name>',
   }) async {
+    print("inside set logos fun");
     final screenOverlay = ScreenOverlayModel.logos();
 
     final kml = KMLModel(
@@ -217,7 +217,7 @@ fi
     }
   }
 
- /// Sends a KML [content] to the given slave [screen].
+  /// Sends a KML [content] to the given slave [screen].
   Future<void> sendKMLToSlave(int screen, String content) async {
     try {
       await _sshData
@@ -227,6 +227,7 @@ fi
       print(e);
     }
   }
+
   /// Sends a the given [kml] to the Liquid Galaxy system.
   ///
   /// It also accepts a [List] of images represents by [Map]s. The [images] must
@@ -257,11 +258,9 @@ fi
     final kmlFile = await _fileService.createFile(fileName, kml.body);
     await _sshData.uploadKml(kmlFile.path);
 
-    await _sshData
-        .execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
+    await _sshData.execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
   }
 
-  
   /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos
   /// after clearing (default to `true`).
   Future<void> clearKml({bool keepLogos = true}) async {
@@ -286,7 +285,6 @@ fi
 
     await _sshData.execute(query);
   }
-
 }
 
 /*

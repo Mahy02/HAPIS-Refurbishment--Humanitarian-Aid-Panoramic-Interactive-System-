@@ -12,6 +12,7 @@ import '../reusable_widgets/drawer.dart';
 import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../reusable_widgets/text_form_field.dart';
+import '../services/LG_functionalities.dart';
 
 class Configuration extends StatefulWidget {
   const Configuration({super.key});
@@ -235,6 +236,7 @@ class _ConfigurationState extends State<Configuration> {
                             //isConnected = true;
                             model.isConnected = true;
                           });
+                           LgService(sshData).setLogos();
                         }
 
                         

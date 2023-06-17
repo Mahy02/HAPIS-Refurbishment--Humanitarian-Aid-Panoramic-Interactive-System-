@@ -84,7 +84,7 @@ class ScreenOverlayModel {
   factory ScreenOverlayModel.logos() {
     return ScreenOverlayModel(
       name: 'LogoSO',
-      icon: 'assets/images/gsoc.png',
+      icon: 'https://i.imgur.com/p3uiWAy.png',
       overlayX: 0,
       overlayY: 1,
       screenX: 0.02,

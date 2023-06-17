@@ -12,7 +12,16 @@ import 'package:provider/provider.dart';
 import 'constants.dart';
 
 void main() {
-  runApp(const HAPIS());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Connectionprovider()),
+        ChangeNotifierProvider(create: (_) => IconState()),
+        ChangeNotifierProvider(create: (_) => SSHprovider()),
+      ],
+      child: const HAPIS(),
+    ),
+  );
 }
 
 class HAPIS extends StatelessWidget {
@@ -23,32 +32,33 @@ class HAPIS extends StatelessWidget {
   Widget build(BuildContext context) {
     // return MaterialApp(
     final sshData = Provider.of<SSHprovider>(context, listen: false);
-    print("inside relaunch ");
-    print(sshData.client.username);
+    print("inside main ");
     LgService(sshData).setLogos();
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Connectionprovider()),
-        ChangeNotifierProvider(create: (_) => IconState()),
-        ChangeNotifierProvider(create: (_) => SSHprovider()),
-      ],
-      child: MaterialApp(
-        theme: ThemeData(
-            fontFamily: GoogleFonts.montserrat().fontFamily,
-            primaryColor: HapisColors.primary),
-        title: 'HAPIS',
-        home: const Configuration(),
-        //home: const Settings(),
-        //initialRoute: ,
-        routes: {
-          // '/': (context) => const LogInPage1(),
-          //  '/user/signup/null': (context) => NewPasswordPage(),
-          '/settings': (context) => const Settings(),
-          '/connections': (context) => const Configuration(),
-          '/about': (context) => const About(),
-        },
-      ),
+    return
+        // MultiProvider(
+        //   providers: [
+        //     ChangeNotifierProvider(create: (_) => Connectionprovider()),
+        //     ChangeNotifierProvider(create: (_) => IconState()),
+        //     ChangeNotifierProvider(create: (_) => SSHprovider()),
+        //   ],
+        // child:
+        MaterialApp(
+      theme: ThemeData(
+          fontFamily: GoogleFonts.montserrat().fontFamily,
+          primaryColor: HapisColors.primary),
+      title: 'HAPIS',
+      home: const Configuration(),
+      //home: const Settings(),
+      //initialRoute: ,
+      routes: {
+        // '/': (context) => const LogInPage1(),
+        //  '/user/signup/null': (context) => NewPasswordPage(),
+        '/settings': (context) => const Settings(),
+        '/connections': (context) => const Configuration(),
+        '/about': (context) => const About(),
+      },
     );
+    // );
   }
 }

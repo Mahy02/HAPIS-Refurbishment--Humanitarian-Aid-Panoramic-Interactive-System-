@@ -82,6 +82,7 @@ flutter:
       - assets/images/earth-day.png
       - assets/images/EDU.png
       - assets/images/LiquidGalaxyLab.png
+      - assets/images/LG logos.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
