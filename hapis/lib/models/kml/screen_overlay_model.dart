@@ -84,7 +84,8 @@ class ScreenOverlayModel {
   factory ScreenOverlayModel.logos() {
     return ScreenOverlayModel(
       name: 'LogoSO',
-      icon: 'https://i.imgur.com/p3uiWAy.png',
+      icon:
+          'https://raw.githubusercontent.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/week1/hapis/assets/images/LG%20logos.jpg',
       overlayX: 0,
       overlayY: 1,
       screenX: 0.02,
