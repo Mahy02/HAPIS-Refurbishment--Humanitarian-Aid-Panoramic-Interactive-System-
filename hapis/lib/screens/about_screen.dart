@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
-import 'package:hapis/reusable_widgets/drawer.dart';
+import 'package:hapis/utils/drawer.dart';
 
 import '../utils/build_inner_logos.dart';
 

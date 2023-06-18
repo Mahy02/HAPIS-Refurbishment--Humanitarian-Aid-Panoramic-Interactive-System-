@@ -84,6 +84,9 @@ flutter:
       - assets/images/EDU.png
       - assets/images/LiquidGalaxyLab.png
       - assets/images/LG logos.jpg
+      - assets/images/growth.png
+      - assets/images/architecture-and-city.png
+      - assets/images/earth.png
       #- assets/images/Logos_2.png
 
 

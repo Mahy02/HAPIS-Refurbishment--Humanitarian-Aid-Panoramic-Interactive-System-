@@ -24,10 +24,7 @@ class SSHprovider extends ChangeNotifier {
   /// Property that defines the SSH machine password or RSA private key.
   String? _passwordOrKey;
 
-  late SSHClient _client;
-
-  
- 
+  SSHClient? _client;
 
   /// Sets a client with the given [ssh] info.
   void setClient(SSHModel ssh) {
@@ -38,7 +35,7 @@ class SSHprovider extends ChangeNotifier {
       passwordOrKey: ssh.passwordOrKey,
     );
     print("checking set client");
-    print(_client.username);
+    print(_client!.username);
   }
 
   set host(String? value) {
@@ -66,9 +63,8 @@ class SSHprovider extends ChangeNotifier {
   String? get host => _host;
   int? get port => _port;
 
-   /// Property that gets the SSH client instance.
-  SSHClient get client => _client;
-
+  /// Property that gets the SSH client instance.
+  SSHClient? get client => _client;
 
   final SSHModel _sshData = SSHModel();
   SSHModel get sshData => _sshData;
@@ -96,7 +92,7 @@ class SSHprovider extends ChangeNotifier {
       passwordOrKey: settings.connectionFormData.password,
       port: settings.connectionFormData.port,
     ));
-     notifyListeners();
+    notifyListeners();
   }
 
   /// Connects to the current client, executes a command into it and then disconnects.
@@ -106,44 +102,41 @@ class SSHprovider extends ChangeNotifier {
     String? execResult;
 
     if (result == 'session_connected') {
-      execResult = await _client.execute(command);
+      execResult = await _client!.execute(command);
     }
 
     await disconnect();
-     notifyListeners();
+    notifyListeners();
     return execResult;
   }
 
   /// Connects to a machine using the current client.
   Future<String?> connect() async {
-
-    return _client.connect();
+    return _client!.connect();
   }
 
   /// Disconnects from the a machine using the current client.
   Future<SSHClient> disconnect() async {
-    await _client.disconnect();
-    return _client;
+    await _client!.disconnect();
+    return _client!;
   }
 
   /// Connects to the current client through SFTP, uploads a file into it and then disconnects.
   /// uploading kml file
   Future<void> uploadKml(String filePath) async {
     await connect();
-    String? result = await _client.connectSFTP();
+    String? result = await _client!.connectSFTP();
 
     if (result == 'sftp_connected') {
-      await _client.sftpUpload(
+      await _client!.sftpUpload(
           path: filePath,
           toPath: '/var/www/html',
           callback: (progress) {
             print('Sent $progress');
           });
     }
-     notifyListeners();
+    notifyListeners();
   }
-
-  
 }
 
 

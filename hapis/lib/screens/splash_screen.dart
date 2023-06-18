@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hapis/screens/configuration_screen.dart';
-import 'package:hapis/utils/build_inner_logos.dart';
-
 import '../constants.dart';
-import '../utils/colors.dart';
+import 'home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigateToHome() async {
     await Future.delayed(Duration(seconds: 3));
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => Configuration()));
+        MaterialPageRoute(builder: (BuildContext context) => HomePage()));
   }
 
   @override

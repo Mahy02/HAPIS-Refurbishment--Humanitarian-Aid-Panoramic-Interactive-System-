@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/screens/about_screen.dart';
+import 'package:hapis/screens/home.dart';
 
 import '../screens/configuration_screen.dart';
 import '../screens/settings_screen.dart';
-import 'item_side_menu.dart';
+import '../reusable_widgets/item_side_menu.dart';
 
 ///This is a method called [buildDrawer] to build the drawer for the side menu
 ///it returns a [Drawer] which is a flutter built in drawer widget with a [ListView] for all our components
@@ -33,7 +34,7 @@ Drawer buildDrawer(BuildContext context) {
           SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           const IconSideMenuWidget(
             itemNumber: '2',
-            page: Configuration(),
+            page: HomePage(),
             itemTitle: 'Home',
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.05),

@@ -85,13 +85,13 @@ class ScreenOverlayModel {
     return ScreenOverlayModel(
       name: 'LogoSO',
       icon:
-          'https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week1/hapis/assets/images/LG%20logos.jpg',
+          'https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week1/hapis/assets/images/LG%20logos.jpg?raw=true',
       overlayX: 0,
       overlayY: 1,
       screenX: 0.02,
       screenY: 0.95,
-      sizeX: 500,
-      sizeY: 500,
+      sizeX: 558,
+      sizeY: 314,
     );
   }
 }

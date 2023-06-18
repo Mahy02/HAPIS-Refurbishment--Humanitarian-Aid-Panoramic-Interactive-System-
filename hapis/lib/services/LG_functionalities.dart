@@ -26,6 +26,8 @@ class LgService {
   final String _url = 'http://lg1:81';
 
   /// Property that defines number of screens. Defaults to `5`.
+  ///
+
   int screenAmount = 3;
 
   /// Lg order:  if 5 => 5 4 1 2 3   if 3 => 3 1 2
@@ -53,7 +55,7 @@ class LgService {
   ///Liquid Galaxy Services:
   ///-----------------------
 
-  /// Gets the Liquid Galaxy rig screen amount. Returns a [String] that represents the screen amount.
+  /// /// Gets the Liquid Galaxy rig screen amount. Returns a [String] that represents the screen amount.
   Future<String?> getScreenAmount() async {
     return _sshData
         .execute("grep -oP '(?<=DHCP_LG_FRAMES_MAX=).*' personavars.txt");
@@ -63,20 +65,25 @@ class LgService {
   /// We used to type: --lg-relaunch  in terminal
 
   Future<void> relaunch() async {
-    final pw = _sshData.client.passwordOrKey;
-    final user = _sshData.client.username;
+    final pw = _sshData.client!.passwordOrKey;
+    final user = _sshData.client!.username;
 
-    if (await _sshData.client.isConnected()) {
+    if (await _sshData.client!.isConnected()) {
       print("check connection");
     }
 
     print("inside relaunch function");
-    print(user);
-    print(screenAmount);
 
+    final result = await getScreenAmount();
+    if (result != null) {
+      screenAmount = int.parse(result);
+    }
+
+    print(screenAmount);
     for (var i = screenAmount; i >= 1; i--) {
       print(i);
       try {
+        print(user);
         final relaunchCommand = """RELAUNCH_CMD="\\
 if [ -f /etc/init/lxdm.conf ]; then
   export SERVICE=lxdm
@@ -91,9 +98,11 @@ else
   echo $pw | sudo -S service \\\${SERVICE} restart
 fi
 " && sshpass -p $pw ssh -x -t lg@lg$i "\$RELAUNCH_CMD\"""";
-        await _sshData.client
+
+        await _sshData.client!
             .execute("'/home/$user/bin/lg-relaunch' > /home/$user/log.txt");
-        await _sshData.client.execute(relaunchCommand);
+
+        await _sshData.client!.execute(relaunchCommand);
         print("after execute");
       } catch (e) {
         // ignore: avoid_print
@@ -105,8 +114,16 @@ fi
   /// Reboots the Liquid Galaxy system.
   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
-    final pw = _sshData.client.passwordOrKey;
-    final user = _sshData.client.username;
+    final pw = _sshData.client!.passwordOrKey;
+    final user = _sshData.client!.username;
+
+    final result = await getScreenAmount();
+    if (result != null) {
+      screenAmount = int.parse(result);
+    }
+
+    print(screenAmount);
+
     for (var i = screenAmount; i >= 1; i--) {
       try {
         await _sshData
@@ -123,8 +140,15 @@ fi
 
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
-    final pw = _sshData.client.passwordOrKey;
-    final user = _sshData.client.username;
+    final pw = _sshData.client!.passwordOrKey;
+    final user = _sshData.client!.username;
+
+    final result = await getScreenAmount();
+    if (result != null) {
+      screenAmount = int.parse(result);
+    }
+
+    print(screenAmount);
 
     for (var i = screenAmount; i >= 1; i--) {
       try {
@@ -264,20 +288,30 @@ fi
   /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos
   /// after clearing (default to `true`).
   Future<void> clearKml({bool keepLogos = true}) async {
+    print("inside clear kml fn");
+    //print(_sshData.client.username);
+    if (await _sshData.client!.isConnected()) {
+      print("check connection");
+    }
+
     String query =
         'echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';
 
+    print("here");
     for (var i = 2; i <= screenAmount; i++) {
       String blankKml = KMLModel.generateBlank('slave_$i');
       query += " && echo '$blankKml' > /var/www/html/kml/slave_$i.kml";
     }
 
     if (keepLogos) {
+      print("inside keep logos");
       final kml = KMLModel(
         name: 'SVT-logos',
         content: '<name>Logos</name>',
         screenOverlay: ScreenOverlayModel.logos().tag,
       );
+
+      print("here");
 
       query +=
           " && echo '${kml.body}' > /var/www/html/kml/slave_$logoScreen.kml";

@@ -8,7 +8,7 @@ import 'package:hapis/providers/ssh_provider.dart';
 import 'package:hapis/services/SSH_services.dart';
 import 'package:provider/provider.dart';
 import '../reusable_widgets/app_bar.dart';
-import '../reusable_widgets/drawer.dart';
+import '../utils/drawer.dart';
 import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../reusable_widgets/text_form_field.dart';
@@ -217,10 +217,8 @@ class _ConfigurationState extends State<Configuration> {
                           print(model.isConnected);
                         }
 
-                       
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-                            
 
                         // Call the init function to set up the SSH client with the connection data
                         sshData.init(context);
@@ -228,7 +226,8 @@ class _ConfigurationState extends State<Configuration> {
                         // Connect to the Liquid Galaxy
                         String? result = await sshData.connect();
                         print("client checking in config screen");
-                        print(sshData.client.username);
+                        print(sshData.client!.username);
+                        print(result);
 
                         //checking on the connection status:
                         if (result == 'session_connected') {
@@ -236,10 +235,8 @@ class _ConfigurationState extends State<Configuration> {
                             //isConnected = true;
                             model.isConnected = true;
                           });
-                           LgService(sshData).setLogos();
+                          LgService(sshData).setLogos();
                         }
-
-                        
                       },
                       style: ElevatedButton.styleFrom(
                         primary: HapisColors.lgColor4,

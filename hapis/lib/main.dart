@@ -33,6 +33,7 @@ class HAPIS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return MaterialApp(
+    int counter=1;
     final sshData = Provider.of<SSHprovider>(context, listen: false);
     print("inside main ");
     LgService(sshData).setLogos();
