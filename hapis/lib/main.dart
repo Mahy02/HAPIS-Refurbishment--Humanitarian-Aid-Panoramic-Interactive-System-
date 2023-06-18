@@ -6,6 +6,8 @@ import 'package:hapis/providers/ssh_provider.dart';
 import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/configuration_screen.dart';
 import 'package:hapis/screens/settings_screen.dart';
+import 'package:hapis/screens/splash_screen.dart';
+
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +50,7 @@ class HAPIS extends StatelessWidget {
           fontFamily: GoogleFonts.montserrat().fontFamily,
           primaryColor: HapisColors.primary),
       title: 'HAPIS',
-      home: const Configuration(),
+       home: const SplashScreen(),
       //home: const Settings(),
       //initialRoute: ,
       routes: {
