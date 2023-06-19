@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hapis/models/connection_model.dart';
 
 import '../models/ssh_model.dart';
-import '../services/SSH_services.dart';
 
 ///This is a [Provider] class of [Connectionprovider] that extends [ChangeNotifier]
 ///It has the following:

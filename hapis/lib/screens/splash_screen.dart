@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'home.dart';
 
+
+///This is a splash screen for displaying the logos and the name of the app for 3 seconds, then navigate to home page
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

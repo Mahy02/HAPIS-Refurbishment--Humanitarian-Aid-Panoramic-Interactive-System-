@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
@@ -12,6 +12,8 @@ import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../services/LG_functionalities.dart';
 import '../utils/pop_up_connection.dart';
+
+///This is our Home page. It has 2 main buttons=> Global statistics and Cities
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

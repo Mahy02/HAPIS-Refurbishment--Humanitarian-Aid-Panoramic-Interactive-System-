@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:hapis/models/connection_model.dart';
 import 'package:provider/provider.dart';
 import 'package:ssh2/ssh2.dart';
-
 import '../models/ssh_model.dart';
-import '../services/SSH_services.dart';
 import 'connection_provider.dart';
 
 ///This is a [Provider] class of [SSHprovider] that extends [ChangeNotifier]
 
 ///They all have setters and getters
 ///We have [saveData] method to save data into the form using [SSHModel]
+/// [init] is the function that sets the client with its data when connected
+/// [execute] is used to execute a specefic command when connecting with the client 
+/// [uploadKml] is used to upload a file as kml
+/// [connect] is used for connecting the client
+///  [disconnect] is used for disconnecting the client
 
 class SSHprovider extends ChangeNotifier {
   String? _host;
@@ -138,13 +140,6 @@ class SSHprovider extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-
-
-//this class is for the user interaction** it gets saved so that we can add it to the ssh model
-
-
-  
 
   
 

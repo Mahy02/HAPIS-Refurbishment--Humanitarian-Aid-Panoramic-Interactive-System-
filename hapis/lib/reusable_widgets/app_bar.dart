@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 
+
+///This is the custom app bar for our application
 class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String appBarText;
   const HAPISAppBar({

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
+///This is where we define some functionalities related to the colors of the text 
+///[getColorForLetter] is used to to display the text with different colors according to a letter
+///[getColorForWord] is used to display the text with different colors according to the word
+
 Color getColorForLetter(String letter) {
   switch (letter) {
     case 'H':

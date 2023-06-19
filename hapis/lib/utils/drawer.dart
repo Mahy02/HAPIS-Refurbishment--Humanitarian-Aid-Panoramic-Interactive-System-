@@ -8,8 +8,8 @@ import '../reusable_widgets/item_side_menu.dart';
 
 ///This is a method called [buildDrawer] to build the drawer for the side menu
 ///it returns a [Drawer] which is a flutter built in drawer widget with a [ListView] for all our components
-///It helps navigate between these pages=>
-///We use  [IconSideMenuWidget] to represent each item in the sidemenu and also uses [ItemSideMenuWidget]
+///It helps navigate between these pages=> [HomePage] , [About], [Configuration] & [Settings]
+///We use  [IconSideMenuWidget] to represent each item in the sidemenu 
 
 Drawer buildDrawer(BuildContext context) {
   return Drawer(
@@ -49,11 +49,6 @@ Drawer buildDrawer(BuildContext context) {
             page: Configuration(),
             itemTitle: 'Connect LG',
           ),
-          // IconSideMenuWidget(
-          //   itemNumber: '3',
-          //   page: DependentDropdownMenu(),
-          //   itemTitle: 'Publish',
-          // ),
           Divider(
               color: Color.fromARGB(245, 220, 220, 220),
               thickness: 2,

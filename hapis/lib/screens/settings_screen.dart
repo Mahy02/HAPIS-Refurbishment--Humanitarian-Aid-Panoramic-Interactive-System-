@@ -1,16 +1,19 @@
-import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
-import '../models/kml/look_at_model.dart';
 import '../providers/ssh_provider.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../utils/drawer.dart';
 import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../utils/pop_up_connection.dart';
+
+
+///The settings page is the main page for the LG Tasks which are: Clear KML, Reboot LG, Relaunch LG and Shut Down LG
+///Each of them is a custom elevated button [HapisElevatedButton] and on pressed, we call the appropriate [LgService] functionality 
+///after getting the ssh client data from [SSHprovider] Class
 
 class Settings extends StatelessWidget {
   const Settings({super.key});

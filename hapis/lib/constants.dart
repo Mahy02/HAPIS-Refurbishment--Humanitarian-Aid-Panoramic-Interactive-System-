@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///Here we save any constants we might need for HAPIS tablet app
+///
+/// * We have a class [HapisColors] for savinng the default colors for our app
 class HapisColors {
   static const Color primary = Color(0xFF90CCF5);
   static const Color accent = Color.fromARGB(255, 255, 255, 255);

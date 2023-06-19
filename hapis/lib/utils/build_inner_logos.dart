@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
+
+///This is a widget for  [BuildLogos] in the about Page, as well as the text in the about page
+
 Widget BuildLogos() {
   return Column(
     children: [

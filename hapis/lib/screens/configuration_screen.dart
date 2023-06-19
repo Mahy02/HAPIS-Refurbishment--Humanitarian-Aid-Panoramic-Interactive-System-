@@ -1,18 +1,20 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/providers/connection_provider.dart';
 import 'package:hapis/providers/ssh_provider.dart';
-import 'package:hapis/services/SSH_services.dart';
 import 'package:provider/provider.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../utils/drawer.dart';
-import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../reusable_widgets/text_form_field.dart';
 import '../services/LG_functionalities.dart';
+
+
+///This is we configure the connection between the LG and the tablet app
+///We need a username, password, master IP address and port number for valid connection
+///We update the data in the [Connectionprovider] Class and if data is valid we establish a connection from the [SSHprovider]
 
 class Configuration extends StatefulWidget {
   const Configuration({super.key});
@@ -24,7 +26,7 @@ class Configuration extends StatefulWidget {
 class _ConfigurationState extends State<Configuration> {
   final _formKey = GlobalKey<FormState>();
 
-  //bool isConnected = false;
+  
 
   @override
   Widget build(BuildContext context) {

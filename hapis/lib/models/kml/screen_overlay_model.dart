@@ -1,5 +1,5 @@
 /// Class that defines the `screen overlay` entity, which contains its properties and methods.
-/// Used for displaying the ballons and teh logos
+/// Used for displaying the ballons and the logos
 
 class ScreenOverlayModel {
   /// Property that defines the screen overlay `name`.

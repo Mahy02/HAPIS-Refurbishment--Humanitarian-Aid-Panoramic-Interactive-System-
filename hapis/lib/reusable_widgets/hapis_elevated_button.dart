@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
+///This is a customer elevated button which is reused in many views through our app
+///[HapisElevatedButton] takes as parameters: 
+///   * [elevatedButtonContent] - A [String] for displaying the content of each elevated button
+///   * [buttonColor] - A [Color] to display different colors for the buttons through the app
+///   * [onpressed]  - A [Function] to be displayed when the button is pressed
+///   * [height] - A [double] parameter for adjusting the height of the button
+///   * [imagePath] - An optional [String] representing the image path, if a button requires an image
+
 class HapisElevatedButton extends StatelessWidget {
   final String elevatedButtonContent;
   final Color buttonColor;

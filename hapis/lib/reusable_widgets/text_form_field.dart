@@ -7,10 +7,9 @@ import 'package:hapis/constants.dart';
 class TextFormFieldWidget extends StatelessWidget {
   /// Creates a new instance of [TextFormFieldWidget].
   ///
-  /// * [TitleController] - A [TextEditingController] to control the text field.
+  /// * [textController] - A [TextEditingController] to display the text the user enters
   /// * [label] - A [String] to show as the label for the text field.
   /// * [hint] - A [String] to show as the hint for the text field.
-  /// * [isRequired] - A [bool] that determines whether or not the text field is required.
   /// * [onChanged] - An optional callback function that might be needed in some textfields to display something in the same page
   /// * [maxlines]  - an optional maxlines of type [int]
   /// * [maxLength] - an optional maxlength of type [int]

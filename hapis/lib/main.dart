@@ -13,6 +13,12 @@ import 'package:provider/provider.dart';
 
 import 'constants.dart';
 
+///This is the main starting point of our application
+///
+///Our Home is the [SplashScreen]
+///We call [LgService] Class to call setlogos using the ssh info from the [SSHprovider] at the start of the app
+/// we have a [MultiProvider] for all our providers in our app
+
 void main() {
   runApp(
     MultiProvider(
