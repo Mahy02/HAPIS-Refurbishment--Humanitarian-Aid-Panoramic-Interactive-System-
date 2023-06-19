@@ -45,13 +45,10 @@ class Settings extends StatelessWidget {
                         );
                         print("inside clear kml ");
                         //print(sshData.client.username);
-
                         print(sshData.client != null);
                         if (sshData.client != null) {
-                          if (await sshData.client!.isConnected()) {
-                            print("here");
-                            LgService(sshData).clearKml(keepLogos: false);
-                          }
+                          print("here");
+                          LgService(sshData).clearKml(keepLogos: false);
                         } else {
                           showDialogConnection(context);
                         }
@@ -67,10 +64,9 @@ class Settings extends StatelessWidget {
                         // print(sshData.client.username);
                         if (sshData.client != null) {
                           print(sshData.client!.username);
-                          if (await sshData.client!.isConnected()) {
-                            print("here");
-                            LgService(sshData).relaunch();
-                          }
+
+                          print("here");
+                          LgService(sshData).relaunch();
                         } else {
                           showDialogConnection(context);
                         }
@@ -91,10 +87,9 @@ class Settings extends StatelessWidget {
                         // print(sshData.client!.username);
                         if (sshData.client != null) {
                           print(sshData.client!.username);
-                          if (await sshData.client!.isConnected()) {
-                            print("here");
-                            LgService(sshData).reboot();
-                          }
+
+                          print("here");
+                          LgService(sshData).reboot();
                         } else {
                           print("else");
                           showDialogConnection(context);
@@ -110,10 +105,8 @@ class Settings extends StatelessWidget {
                         print("inside shut down ");
                         // print(sshData.client!.username);
                         if (sshData.client != null) {
-                          if (await sshData.client!.isConnected()) {
-                            print("here");
-                            LgService(sshData).shutdown();
-                          }
+                          print("here");
+                          LgService(sshData).shutdown();
                         } else {
                           showDialogConnection(context);
                         }

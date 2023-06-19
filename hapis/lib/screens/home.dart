@@ -72,16 +72,15 @@ class HomePage extends StatelessWidget {
                   print("here");
                   if (sshData.client != null) {
                     print(sshData.client!.username);
-                    if (await sshData.client!.isConnected()) {
-                      print("here");
-                      LgService(sshData).flyTo(LookAtModel(
-                          longitude: -74.0060,
-                          latitude: 40.7128,
-                          altitude: 0,
-                          range: '1492.66.0',
-                          tilt: '45',
-                          heading: '0'));
-                    }
+
+                    print("here");
+                    LgService(sshData).flyTo(LookAtModel(
+                        longitude: -74.0060,
+                        latitude: 40.7128,
+                        altitude: 0,
+                        range: '1492.66.0',
+                        tilt: '45',
+                        heading: '0'));
                   } else {
                     showDialogConnection(context);
                   }
