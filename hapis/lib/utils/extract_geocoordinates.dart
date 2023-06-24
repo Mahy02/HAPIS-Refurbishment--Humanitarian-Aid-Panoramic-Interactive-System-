@@ -1,4 +1,5 @@
 import 'package:geocoding/geocoding.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
 
 ///function that takes an address (can be a full address or a city name) and returns list of locations
 ///Locations can be => latitudem longitude, altitude
@@ -26,3 +27,21 @@ class LatLng {
 ///   double longitude = firstLocation.longitude;
 ///   double altitude = firstLocation.altitude;
 
+
+Future<String?> getCountryFromCity(String cityName) async {
+  try {
+    List<Location> locations = await geocoding.locationFromAddress(cityName);
+    if (locations.isNotEmpty) {
+      final coordinates = locations[0];
+      List<geocoding.Placemark> placemarks = await geocoding.placemarkFromCoordinates(
+          coordinates.latitude, coordinates.longitude);
+      if (placemarks.isNotEmpty) {
+        final country = placemarks[0].country;
+        return country;
+      }
+    }
+  } catch (e) {
+    print('Error getting country: $e');
+  }
+  return null;
+}

@@ -1,7 +1,6 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
+import 'package:hapis/screens/cities.dart';
 import 'package:hapis/utils/drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +54,10 @@ class HomePage extends StatelessWidget {
                       onpressed: () {
                         //will show cities
                         ///TO DO:
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CitiesPage()));
                       }),
                 ],
               ),

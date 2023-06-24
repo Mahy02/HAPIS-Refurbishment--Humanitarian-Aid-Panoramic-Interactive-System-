@@ -1,4 +1,3 @@
-
 /// Model that represents the `UsersModel`, with all of its properties and methods.
 
 class UsersModel {
@@ -13,6 +12,9 @@ class UsersModel {
 
   /// Property that defines the user lastName
   String? lastName;
+
+  ///property that defines the country the user lives in
+  String? country;
 
   /// Property that defines the city the user lives in
   String? city;
@@ -34,6 +36,7 @@ class UsersModel {
       this.userName,
       this.firstName,
       this.lastName,
+      this.country,
       this.city,
       this.addressLocation,
       this.phoneNum,
@@ -43,16 +46,15 @@ class UsersModel {
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
-      userID: map['UserID'],
-      userName: map['UserName'],
-      firstName: map['FirstName'],
-      lastName: map['LastName'],
-      city: map['City'],
-      addressLocation: map['AddressLocation'],
-      phoneNum: map['PhoneNum'],
-      email: map['Email'],
-      pass: map['Password']
-    );
+        userID: map['UserID'],
+        userName: map['UserName'],
+        firstName: map['FirstName'],
+        lastName: map['LastName'],
+        country: map['Country'],
+        city: map['City'],
+        addressLocation: map['AddressLocation'],
+        phoneNum: map['PhoneNum'],
+        email: map['Email'],
+        pass: map['Password']);
   }
-
 }

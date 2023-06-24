@@ -43,6 +43,7 @@ class SqlDb {
         UserName TEXT NOT NULL,
         FirstName TEXT NOT NULL,
         LastName TEXT NOT NULL,
+        Country TEXT NOT NULL,
         City NOT NULL TEXT,
         AddressLocation NOT NULL TEXT,
         PhoneNum NOT NULL TEXT,
