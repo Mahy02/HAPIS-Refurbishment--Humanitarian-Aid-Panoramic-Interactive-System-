@@ -1,4 +1,4 @@
-import 'package:hapis/models/users_model.dart';
+import 'package:hapis/models/db_models/users_model.dart';
 
 import '../../helpers/sql_db.dart';
 

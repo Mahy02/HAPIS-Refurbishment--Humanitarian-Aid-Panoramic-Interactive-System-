@@ -1,6 +1,6 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:hapis/models/users_model.dart';
+import 'package:hapis/models/db_models/users_model.dart';
 
 class CityComponent extends StatelessWidget {
    final UsersModel User;

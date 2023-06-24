@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 
-import '../models/users_model.dart';
+import '../models/db_models/users_model.dart';
 import '../reusable_widgets/cityComponent.dart';
 import '../reusable_widgets/no_component.dart';
 

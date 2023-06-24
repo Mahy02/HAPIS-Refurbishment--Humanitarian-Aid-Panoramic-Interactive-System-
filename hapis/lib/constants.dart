@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 ///Here we save any constants we might need for HAPIS tablet app
 ///
 /// * We have a class [HapisColors] for savinng the default colors for our app
+/// * [earthRadius] property for defining earth radius for orbit functionality 
 class HapisColors {
   static const Color primary = Color(0xFF90CCF5);
   static const Color accent = Color.fromARGB(255, 255, 255, 255);
@@ -13,3 +14,5 @@ class HapisColors {
   static const Color lgColor3 = Color(0xFFF6B915);
   static const Color lgColor4 = Color(0xFF4CB15F);
 }
+
+const double earthRadius = 6371000; // Average radius of the Earth in meters

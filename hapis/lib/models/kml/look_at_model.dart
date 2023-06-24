@@ -67,7 +67,7 @@ class LookAtModel {
   String get linearTag =>
       '<LookAt><longitude>$longitude</longitude><latitude>$latitude</latitude><altitude>$altitude</altitude><range>$range</range><tilt>$tilt</tilt><heading>$heading</heading><gx:altitudeMode>$altitudeMode</gx:altitudeMode></LookAt>';
 
-  /// Returns a [Map] from the current [LookAtEntity].
+  /// Returns a [Map] from the current [LookAtModel].
   toMap() {
     return {
       'lng': longitude,
@@ -80,7 +80,7 @@ class LookAtModel {
     };
   }
 
-  /// Returns a [LookAtEntity] from the given [map].
+  /// Returns a [LookAtModel] from the given [map].
   factory LookAtModel.fromMap(Map<String, dynamic> map) {
     return LookAtModel(
         longitude: map['lng'],
