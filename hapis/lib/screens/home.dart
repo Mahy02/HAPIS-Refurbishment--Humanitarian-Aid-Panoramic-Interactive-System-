@@ -42,6 +42,9 @@ class HomePage extends StatelessWidget {
                       buttonColor: HapisColors.lgColor1,
                       height: MediaQuery.of(context).size.height * 0.4,
                       imagePath: 'assets/images/growth.png',
+                      imageHeight: MediaQuery.of(context).size.height * 0.25,
+                      imageWidth: MediaQuery.of(context).size.height * 0.25,
+                      isPoly: false,
                       onpressed: () {
                         //will show bubble on LG
                         ///TO DO:
@@ -51,6 +54,9 @@ class HomePage extends StatelessWidget {
                       buttonColor: HapisColors.lgColor3,
                       height: MediaQuery.of(context).size.height * 0.4,
                       imagePath: 'assets/images/architecture-and-city.png',
+                      imageHeight: MediaQuery.of(context).size.height * 0.25,
+                      imageWidth: MediaQuery.of(context).size.height * 0.25,
+                      isPoly: false,
                       onpressed: () {
                         //will show cities
                         ///TO DO:
@@ -66,30 +72,33 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 40,
             ),
-            HapisElevatedButton(
-                elevatedButtonContent:
-                    'Test fly to  (button will be removed later)',
-                buttonColor: HapisColors.lgColor4,
-                height: MediaQuery.of(context).size.height * 0.2,
-                onpressed: () async {
-                  final sshData =
-                      Provider.of<SSHprovider>(context, listen: false);
-                  print("here");
-                  if (sshData.client != null) {
-                    print(sshData.client!.username);
+            // HapisElevatedButton(
+            //     elevatedButtonContent:
+            //         'Test fly to  (button will be removed later)',
+            //     buttonColor: HapisColors.lgColor4,
+            //     height: MediaQuery.of(context).size.height * 0.2,
+            //     imageHeight: MediaQuery.of(context).size.height * 0.25,
+            //     imageWidth: MediaQuery.of(context).size.height * 0.25,
+            //     isPoly: false,
+            //     onpressed: () async {
+            //       final sshData =
+            //           Provider.of<SSHprovider>(context, listen: false);
+            //       print("here");
+            //       if (sshData.client != null) {
+            //         print(sshData.client!.username);
 
-                    print("here");
-                    LgService(sshData).flyTo(LookAtModel(
-                        longitude: -74.0060,
-                        latitude: 40.7128,
-                        altitude: 0,
-                        range: '1492.66.0',
-                        tilt: '45',
-                        heading: '0'));
-                  } else {
-                    showDialogConnection(context);
-                  }
-                }),
+            //         print("here");
+            //         LgService(sshData).flyTo(LookAtModel(
+            //             longitude: -74.0060,
+            //             latitude: 40.7128,
+            //             altitude: 0,
+            //             range: '1492.66.0',
+            //             tilt: '45',
+            //             heading: '0'));
+            //       } else {
+            //         showDialogConnection(context);
+            //       }
+            //     }),
             SizedBox(
               height: 40,
             ),

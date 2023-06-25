@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/services/LG_functionalities.dart';
@@ -10,9 +9,8 @@ import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../utils/pop_up_connection.dart';
 
-
 ///The settings page is the main page for the LG Tasks which are: Clear KML, Reboot LG, Relaunch LG and Shut Down LG
-///Each of them is a custom elevated button [HapisElevatedButton] and on pressed, we call the appropriate [LgService] functionality 
+///Each of them is a custom elevated button [HapisElevatedButton] and on pressed, we call the appropriate [LgService] functionality
 ///after getting the ssh client data from [SSHprovider] Class
 
 class Settings extends StatelessWidget {
@@ -41,6 +39,7 @@ class Settings extends StatelessWidget {
                       elevatedButtonContent: 'Clear KML',
                       buttonColor: HapisColors.lgColor1,
                       height: MediaQuery.of(context).size.height * 0.2,
+                      isPoly: false,
                       onpressed: () async {
                         final sshData = Provider.of<SSHprovider>(
                           context,
@@ -60,6 +59,7 @@ class Settings extends StatelessWidget {
                       elevatedButtonContent: 'Relaunch LG',
                       buttonColor: HapisColors.lgColor2,
                       height: MediaQuery.of(context).size.height * 0.2,
+                      isPoly: false,
                       onpressed: () async {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
@@ -83,6 +83,7 @@ class Settings extends StatelessWidget {
                       elevatedButtonContent: 'Reboot LG',
                       buttonColor: HapisColors.lgColor3,
                       height: MediaQuery.of(context).size.height * 0.2,
+                      isPoly: false,
                       onpressed: () async {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
@@ -102,6 +103,7 @@ class Settings extends StatelessWidget {
                       elevatedButtonContent: 'Shut Down LG',
                       buttonColor: HapisColors.lgColor1,
                       height: MediaQuery.of(context).size.height * 0.2,
+                      isPoly: false,
                       onpressed: () async {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);

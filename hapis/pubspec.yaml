@@ -44,6 +44,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
   sqflite: ^2.2.8+4
   geocoding: ^2.1.0
+  flutter_polygon: ^0.3.0+2
 
 dev_dependencies:
   flutter_test:

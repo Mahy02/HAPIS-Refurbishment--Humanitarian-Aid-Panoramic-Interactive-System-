@@ -63,10 +63,10 @@ class CityModel {
   }
 
   /// Gets the balloon content from the current city.
+  // ${image!.isNotEmpty ? '<img height="200" src="${getImageAssetString('assets/images/cityballoon.png')}" alt="City Image"><br/><br/>' : ''}
   String balloonContent() => '''
       <b><font size="+2">$name <font color="#5D5D5D"></font></font></b>
       <br/><br/>
-      ${image!.isNotEmpty ? '<img height="200" src="${getImageAssetString('assets/images/cityballoon.png')}" alt="City Image"><br/><br/>' : ''}
       <b>Total Number of Seekers:</b> $numberOfSeekers
       <br/>
       <b>Total Number of Givers:</b> $numberOfGivers
@@ -181,7 +181,6 @@ class CityModel {
         inProgressDonations: map['inProgressDonations'],
         successfulDonations: map['successfulDonations'],
         topThreeCategories: map['topThreeCategories'],
-        cityCoordinates: map['cityCoordinates']
-        );
+        cityCoordinates: map['cityCoordinates']);
   }
 }

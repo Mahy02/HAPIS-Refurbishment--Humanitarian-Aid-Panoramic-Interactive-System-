@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:flutter_polygon/flutter_polygon.dart';
+import 'package:hapis/constants.dart';
+import 'package:hapis/main.dart';
 
 ///This is a customer elevated button which is reused in many views through our app
-///[HapisElevatedButton] takes as parameters: 
+///[HapisElevatedButton] takes as parameters:
 ///   * [elevatedButtonContent] - A [String] for displaying the content of each elevated button
 ///   * [buttonColor] - A [Color] to display different colors for the buttons through the app
 ///   * [onpressed]  - A [Function] to be displayed when the button is pressed
@@ -15,6 +18,9 @@ class HapisElevatedButton extends StatelessWidget {
   final Color buttonColor;
   final Function onpressed;
   final double height;
+  final bool isPoly;
+  double? imageHeight;
+  double? imageWidth;
   String? imagePath;
   HapisElevatedButton({
     required this.elevatedButtonContent,
@@ -22,6 +28,9 @@ class HapisElevatedButton extends StatelessWidget {
     required this.onpressed,
     required this.height,
     this.imagePath,
+    this.imageHeight,
+    this.imageWidth,
+    required this.isPoly,
     super.key,
   });
 
@@ -44,18 +53,60 @@ class HapisElevatedButton extends StatelessWidget {
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    imagePath!, // Replace with your image path
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    width: MediaQuery.of(context).size.height * 0.25,
-                  ),
+                  isPoly
+                      ?
+                      //     ? Expanded(
+                      //         child: ClipPolygon(
+                      //           sides: 8,
+                      //           borderRadius: 50,
+                      //           child: Container(
+                      //             width: imageWidth,
+                      //             height: imageHeight,
+                      //             decoration: BoxDecoration(
+                      //               border: Border.all(
+                      //                 color: Colors.black,
+                      //                 width: 2,
+                      //               ),
+                      //             ),
+                      //             child: Image.asset(
+                      //               imagePath!,
+                      //               // width: imageWidth,
+                      //               // height: imageHeight,
+                      //               //fit: BoxFit.cover,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       )
+                      // :
+                      Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: HapisColors.primary,
+                              width: 3.0,
+                            ),
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Image.asset(
+                            imagePath!, // Replace with your image path
+                            height: imageHeight,
+                            width: imageWidth,
+                          ),
+                        )
+                      : Image.asset(
+                          imagePath!, // Replace with your image path
+                          height: imageHeight,
+                          width: imageWidth,
+                        ),
                   const SizedBox(height: 20),
-                  Text(
-                    elevatedButtonContent,
-                    style: TextStyle(
-                      fontSize: 35,
-                      fontFamily: GoogleFonts.montserrat().fontFamily,
-                      fontWeight: FontWeight.bold,
+                  Center(
+                    child: Text(
+                      elevatedButtonContent,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 35,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

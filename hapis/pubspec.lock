@@ -134,6 +134,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.19"
+  flutter_polygon:
+    dependency: "direct main"
+    description:
+      name: flutter_polygon
+      sha256: c10c39b31c96c8ec5cd7f93bee07659e0e306f4af9d6139a30e3769acea9cc5d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0+2"
   flutter_test:
     dependency: "direct dev"
     description: flutter

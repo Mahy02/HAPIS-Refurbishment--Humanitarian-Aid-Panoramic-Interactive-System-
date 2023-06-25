@@ -45,3 +45,30 @@ Future<String?> getCountryFromCity(String cityName) async {
   }
   return null;
 }
+
+
+Future<String?> getPlaceIdFromAddress(String address) async {
+  try {
+    // Geocode the address to get the coordinates
+    List<Location> locations = await locationFromAddress(address);
+    if (locations.isEmpty) {
+      return null; // Address not found
+    }
+
+    // Reverse geocode the coordinates to get the place details
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        locations.first.latitude, locations.first.longitude);
+    if (placemarks.isEmpty) {
+      return null; // Place details not found
+    }
+
+    // Convert the placemark to a map and extract the place ID
+    Map<String, dynamic> placemarkMap = placemarks.first.toJson();
+    String? placeId = placemarkMap['placeId'];
+
+    return placeId;
+  } catch (e) {
+    print('Error retrieving place ID: $e');
+    return null;
+  }
+}
