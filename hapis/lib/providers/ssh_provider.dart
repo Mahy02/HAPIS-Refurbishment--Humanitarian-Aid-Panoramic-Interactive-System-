@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ssh2/ssh2.dart';
+import 'package:dartssh2/dartssh2.dart';
+
 import '../models/ssh_model.dart';
 import 'connection_provider.dart';
 
@@ -9,9 +12,8 @@ import 'connection_provider.dart';
 ///They all have setters and getters
 ///We have [saveData] method to save data into the form using [SSHModel]
 /// [init] is the function that sets the client with its data when connected
-/// [execute] is used to execute a specefic command when connecting with the client 
+/// [execute] is used to execute a specefic command when connecting with the client
 /// [uploadKml] is used to upload a file as kml
-/// [connect] is used for connecting the client
 ///  [disconnect] is used for disconnecting the client
 
 class SSHprovider extends ChangeNotifier {
@@ -29,12 +31,26 @@ class SSHprovider extends ChangeNotifier {
   SSHClient? _client;
 
   /// Sets a client with the given [ssh] info.
-  void setClient(SSHModel ssh) {
+  /// /// Sets a client with the given [ssh] info.
+  // void setClient(SSHModel ssh) {
+  //   _client = SSHClient(
+  //     host: ssh.host,
+  //     port: ssh.port,
+  //     username: ssh.username,
+  //     passwordOrKey: ssh.passwordOrKey,
+  //   );
+  //   print("checking set client");
+  //   print(_client!.username);
+  // }
+
+  void setClient(SSHModel ssh) async {
+    final socket = await SSHSocket.connect(ssh.host, ssh.port);
     _client = SSHClient(
-      host: ssh.host,
-      port: ssh.port,
+      socket,
+      onPasswordRequest: () {
+        return ssh.passwordOrKey;
+      },
       username: ssh.username,
-      passwordOrKey: ssh.passwordOrKey,
     );
     print("checking set client");
     print(_client!.username);
@@ -98,14 +114,20 @@ class SSHprovider extends ChangeNotifier {
   }
 
   /// Connects to the current client, executes a command into it and then disconnects.
-  Future<String?> execute(String command) async {
-    String? result = await connect();
+  Future<SSHSession> execute(String command) async {
+    //String? result = await connect();
 
-    String? execResult;
+    //String? execResult;
+    SSHSession execResult;
 
-    if (result == 'session_connected') {
+    //if (result == 'session_connected') {
+    // await _client!.execute(command);
+    //}
+    //try {
       execResult = await _client!.execute(command);
-    }
+    //} catch (e) {
+    //  print(e);
+   // }
 
     await disconnect();
     notifyListeners();
@@ -113,34 +135,43 @@ class SSHprovider extends ChangeNotifier {
   }
 
   /// Connects to a machine using the current client.
-  Future<String?> connect() async {
-    return _client!.connect();
-  }
+  // Future<String?> connect() async {
+  //   return _client!.connect();
+  // }
 
   /// Disconnects from the a machine using the current client.
   Future<SSHClient> disconnect() async {
-    await _client!.disconnect();
+    _client!.close();
     return _client!;
   }
 
   /// Connects to the current client through SFTP, uploads a file into it and then disconnects.
   /// uploading kml file
-  Future<void> uploadKml(String filePath) async {
-    await connect();
-    String? result = await _client!.connectSFTP();
+  // Future<void> uploadKml(String filePath) async {
+  //   // await connect();
+  //   String? result = await _client!.connectSFTP();
 
-    if (result == 'sftp_connected') {
-      await _client!.sftpUpload(
-          path: filePath,
-          toPath: '/var/www/html',
-          callback: (progress) {
-            print('Sent $progress');
-          });
-    }
-    notifyListeners();
+  //   if (result == 'sftp_connected') {
+  //     await _client!.sftpUpload(
+  //         path: filePath,
+  //         toPath: '/var/www/html',
+  //         callback: (progress) {
+  //           print('Sent $progress');
+  //         });
+  //   }
+  //   notifyListeners();
+  // }
+
+  uploadKml(File inputFile, String filename) async {
+    final sftp = await _client?.sftp();
+    double anyKindofProgressBar;
+    final file = await sftp?.open('/var/www/html/$filename',
+        mode: SftpFileOpenMode.create |
+            SftpFileOpenMode.truncate |
+            SftpFileOpenMode.write);
+    var fileSize = await inputFile.length();
+    await file?.write(inputFile.openRead().cast(), onProgress: (progress) {
+      anyKindofProgressBar = progress / fileSize;
+    });
   }
 }
-
-  
-
-  

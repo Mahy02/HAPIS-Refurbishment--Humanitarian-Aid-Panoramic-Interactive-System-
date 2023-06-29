@@ -4,9 +4,13 @@ import 'package:geocoding/geocoding.dart' as geocoding;
 ///function that takes an address (can be a full address or a city name) and returns list of locations
 ///Locations can be => latitudem longitude, altitude
 Future<LatLng> getCoordinates(String address) async {
+  print(address);
   List<Location> locations = await locationFromAddress(address);
-   Location location = locations.first;
+  Location location = locations.first;
+  print(location.latitude);
+  print(location.longitude);
   return LatLng(location.latitude, location.longitude);
+
   //return locations;
 }
 
@@ -27,14 +31,14 @@ class LatLng {
 ///   double longitude = firstLocation.longitude;
 ///   double altitude = firstLocation.altitude;
 
-
 Future<String?> getCountryFromCity(String cityName) async {
   try {
     List<Location> locations = await geocoding.locationFromAddress(cityName);
     if (locations.isNotEmpty) {
       final coordinates = locations[0];
-      List<geocoding.Placemark> placemarks = await geocoding.placemarkFromCoordinates(
-          coordinates.latitude, coordinates.longitude);
+      List<geocoding.Placemark> placemarks =
+          await geocoding.placemarkFromCoordinates(
+              coordinates.latitude, coordinates.longitude);
       if (placemarks.isNotEmpty) {
         final country = placemarks[0].country;
         return country;
@@ -45,7 +49,6 @@ Future<String?> getCountryFromCity(String cityName) async {
   }
   return null;
 }
-
 
 Future<String?> getPlaceIdFromAddress(String address) async {
   try {

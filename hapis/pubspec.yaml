@@ -39,12 +39,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^4.0.4
   provider: ^6.0.5
-  ssh2: ^2.2.3
+  
   path_provider: ^2.0.15
   flutter_native_splash: ^2.2.19
   sqflite: ^2.2.8+4
   geocoding: ^2.1.0
   flutter_polygon: ^0.3.0+2
+  dartssh2: ^2.8.2
+
+
+  #ssh2: ^2.2.3
+ 
 
 dev_dependencies:
   flutter_test:

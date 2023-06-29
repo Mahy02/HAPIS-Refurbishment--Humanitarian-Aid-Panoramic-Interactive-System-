@@ -38,6 +38,7 @@ class _CityComponentState extends State<CityComponent> {
   void _viewCityStats(CityModel city, bool showBalloon, BuildContext context,
       {double orbitPeriod = 2.8, bool updatePosition = true}) async {
     final sshData = Provider.of<SSHprovider>(context, listen: false);
+    print("here");
     final CityBalloonService cityService = CityBalloonService();
     print("inside view city");
     print(sshData.client!.username);
@@ -109,8 +110,12 @@ class _CityComponentState extends State<CityComponent> {
   Widget build(BuildContext context) {
     final imagePath = countryMap[widget.country];
     final buttonContent = '${widget.city}\n${widget.country}';
+    print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    print(widget.city);
+    print(widget.country);
     return
         //Image.asset(imagePath!);
+
         HapisElevatedButton(
       buttonColor: widget.buttonColor,
       elevatedButtonContent: buttonContent,
@@ -136,7 +141,13 @@ class _CityComponentState extends State<CityComponent> {
             cityDBServices().getNumberOfSuccessfulDonations();
         List<String> topThreeCategories =
             cityDBServices().getTopDonatedCategories();
+        print(numberOfSeekers);
+        print(widget.city);
+        print(widget.country);
         final LatLng cityCoordinates = await getCoordinates(widget.city);
+        print("city button trial");
+        print(cityCoordinates);
+
         CityModel city = CityModel(
             id: '2',
             name: widget.city,

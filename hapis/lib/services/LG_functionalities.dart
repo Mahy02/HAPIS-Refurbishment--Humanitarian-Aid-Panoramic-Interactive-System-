@@ -1,9 +1,9 @@
-
 import 'package:hapis/services/kml/file_services.dart';
 import '../models/kml/KMLModel.dart';
 import '../models/kml/look_at_model.dart';
 import '../models/kml/screen_overlay_model.dart';
 import '../providers/ssh_provider.dart';
+import 'package:dartssh2/dartssh2.dart';
 
 ///This class is responsible for the connection between the LG machine and the Tablet application
 ///The LG service needed such as shutting down the LG, Rebooting the LG, Relaunching the LG
@@ -48,21 +48,25 @@ class LgService {
   ///Liquid Galaxy Services:
   ///-----------------------
 
- /// Gets the Liquid Galaxy rig screen amount. Returns a [String] that represents the screen amount.
+  /// Gets the Liquid Galaxy rig screen amount. Returns a [String] that represents the screen amount.
   Future<String?> getScreenAmount() async {
-    return _sshData
-        .execute("grep -oP '(?<=DHCP_LG_FRAMES_MAX=).*' personavars.txt");
+    String? result = screenAmount.toString();
+    // SSHSession resultSession = await _sshData
+    //     .execute("grep -oP '(?<=DHCP_LG_FRAMES_MAX=).*' personavars.txt");
+    //result = resultSession.stdout;
+    return result;
   }
 
   /// Relaunching the Liquid Galaxy System:
   /// We used to type: --lg-relaunch  in terminal
   Future<void> relaunch() async {
-    final pw = _sshData.client!.passwordOrKey;
+    final pw = _sshData.passwordOrKey;
+    //client!.passwordOrKey;
     final user = _sshData.client!.username;
 
-    if (await _sshData.client!.isConnected()) {
-      print("check connection");
-    }
+    // if (await _sshData.client!.isConnected()) {
+    //   print("check connection");
+    // }
 
     print("inside relaunch function");
 
@@ -106,7 +110,8 @@ fi
   /// Reboots the Liquid Galaxy system.
   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
-    final pw = _sshData.client!.passwordOrKey;
+    // final pw = _sshData.client!.passwordOrKey;
+    final pw = _sshData.passwordOrKey;
     final user = _sshData.client!.username;
 
     final result = await getScreenAmount();
@@ -132,7 +137,8 @@ fi
 
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
-    final pw = _sshData.client!.passwordOrKey;
+    //final pw = _sshData.client!.passwordOrKey;
+    final pw = _sshData.passwordOrKey;
     final user = _sshData.client!.username;
 
     final result = await getScreenAmount();
@@ -199,7 +205,8 @@ fi
     final fileName = '$tourName.kml';
 
     final kmlFile = await _fileService.createFile(fileName, tourKml);
-    await _sshData.uploadKml(kmlFile.path);
+    // await _sshData.uploadKml(kmlFile.path);
+    await _sshData.uploadKml(kmlFile, fileName);
 
     await _sshData
         .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
@@ -267,11 +274,14 @@ fi
 
     for (var img in images) {
       final image = await _fileService.createImage(img['name']!, img['path']!);
-      await _sshData.uploadKml(image.path);
+      String imageName = img['name']!;
+      await _sshData.uploadKml(image, imageName);
+      //await _sshData.uploadKml(image.path);
     }
 
     final kmlFile = await _fileService.createFile(fileName, kml.body);
-    await _sshData.uploadKml(kmlFile.path);
+    await _sshData.uploadKml(kmlFile, fileName);
+    // await _sshData.uploadKml(kmlFile.path);
 
     await _sshData.execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
   }
@@ -281,9 +291,9 @@ fi
   Future<void> clearKml({bool keepLogos = true}) async {
     print("inside clear kml fn");
     //print(_sshData.client.username);
-    if (await _sshData.client!.isConnected()) {
-      print("check connection");
-    }
+    // if (await _sshData.client!.isConnected()) {
+    //   print("check connection");
+    // }
 
     String query =
         'echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';

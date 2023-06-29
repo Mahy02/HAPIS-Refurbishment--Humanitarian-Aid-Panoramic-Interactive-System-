@@ -226,19 +226,19 @@ class _ConfigurationState extends State<Configuration> {
                         sshData.init(context);
 
                         // Connect to the Liquid Galaxy
-                        String? result = await sshData.connect();
+                        //String? result = await sshData.connect();
                         print("client checking in config screen");
                         print(sshData.client!.username);
-                        print(result);
+                        //print(result);
 
                         //checking on the connection status:
-                        if (result == 'session_connected') {
+                        //if (result == 'session_connected') {
                           setState(() {
                             //isConnected = true;
                             model.isConnected = true;
                           });
                           LgService(sshData).setLogos();
-                        }
+                       // }
                       },
                       style: ElevatedButton.styleFrom(
                         primary: HapisColors.lgColor4,
