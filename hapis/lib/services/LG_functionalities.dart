@@ -3,7 +3,6 @@ import '../models/kml/KMLModel.dart';
 import '../models/kml/look_at_model.dart';
 import '../models/kml/screen_overlay_model.dart';
 import '../providers/ssh_provider.dart';
-import 'package:dartssh2/dartssh2.dart';
 
 ///This class is responsible for the connection between the LG machine and the Tablet application
 ///The LG service needed such as shutting down the LG, Rebooting the LG, Relaunching the LG
@@ -61,14 +60,18 @@ class LgService {
   /// We used to type: --lg-relaunch  in terminal
   Future<void> relaunch() async {
     final pw = _sshData.passwordOrKey;
+    final user = _sshData.username;
+    //final pw = _sshData.passwordOrKey;
     //client!.passwordOrKey;
-    final user = _sshData.client!.username;
+    //final user = _sshData.client!.username;
 
     // if (await _sshData.client!.isConnected()) {
     //   print("check connection");
     // }
 
     print("inside relaunch function");
+    print(pw);
+    print(user);
 
     final result = await getScreenAmount();
     if (result != null) {
@@ -111,8 +114,10 @@ fi
   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
     // final pw = _sshData.client!.passwordOrKey;
-    final pw = _sshData.passwordOrKey;
-    final user = _sshData.client!.username;
+     final pw = _sshData.passwordOrKey;
+    final user = _sshData.username;
+    // final pw = _sshData.passwordOrKey;
+    // final user = _sshData.client!.username;
 
     final result = await getScreenAmount();
     if (result != null) {
@@ -138,8 +143,10 @@ fi
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
     //final pw = _sshData.client!.passwordOrKey;
-    final pw = _sshData.passwordOrKey;
-    final user = _sshData.client!.username;
+     final pw = _sshData.passwordOrKey;
+    final user = _sshData.username;
+    // final pw = _sshData.passwordOrKey;
+    // final user = _sshData.client!.username;
 
     final result = await getScreenAmount();
     if (result != null) {
@@ -303,6 +310,7 @@ fi
       String blankKml = KMLModel.generateBlank('slave_$i');
       query += " && echo '$blankKml' > /var/www/html/kml/slave_$i.kml";
     }
+    print("after for in clear kml fn");
 
     if (keepLogos) {
       print("inside keep logos");

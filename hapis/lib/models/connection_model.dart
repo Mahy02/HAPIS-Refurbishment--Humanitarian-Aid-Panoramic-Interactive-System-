@@ -17,22 +17,28 @@ class ConnectionModel {
   ///For connection status
   bool isConnected;
 
+  ///For gettings screen amount
+  int screenAmount;
+
   ConnectionModel({
     this.username = 'lg',
     this.password = '',
     this.ip = '',
     this.port = 22,
-    this.isConnected= false,
+    this.isConnected = false,
+    this.screenAmount = 3,
   });
 
   /// Turns a `Map` into a `ConnectionModel`.
   factory ConnectionModel.fromMap(Map<String, dynamic> map) {
     return ConnectionModel(
-        username: map['username'],
-        password: map['password'],
-        ip: map['ip'],
-        port: map['port'],
-        isConnected: map['isConnected']);
+      username: map['username'],
+      password: map['password'],
+      ip: map['ip'],
+      port: map['port'],
+      isConnected: map['isConnected'],
+      screenAmount: map['screenAmount'],
+    );
   }
 
   /// Return a `Map` from the current `ConnectionModel`.
@@ -42,5 +48,6 @@ class ConnectionModel {
         'ip': ip,
         'port': port,
         'isConnected': isConnected,
+        'screenAmount': screenAmount,
       };
 }

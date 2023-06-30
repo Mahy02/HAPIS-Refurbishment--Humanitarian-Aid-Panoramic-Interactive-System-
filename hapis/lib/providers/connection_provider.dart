@@ -19,8 +19,14 @@ class Connectionprovider extends ChangeNotifier {
       TextEditingController(text: '22');
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _screenAmountController = TextEditingController();
 
   bool _isConnected = false;
+
+  set screenAmount(String value) {
+    _screenAmountController.text = value;
+    notifyListeners();
+  }
 
   set userName(String value) {
     _userNameController.text = value;
@@ -51,6 +57,7 @@ class Connectionprovider extends ChangeNotifier {
   TextEditingController get hostController => _ipController;
   TextEditingController get passwordOrKeyController => _passwordController;
   TextEditingController get portController => _portController;
+  TextEditingController get screenAmountController => _screenAmountController;
   bool get isConnected => _isConnected;
 
   final ConnectionModel _connectionFormData = ConnectionModel();
@@ -61,16 +68,17 @@ class Connectionprovider extends ChangeNotifier {
       TextEditingController ipControl,
       TextEditingController passwordControl,
       TextEditingController portControl,
+      TextEditingController screenAmount,
       bool isConnected) {
     _connectionFormData.ip = ipControl.text;
     _connectionFormData.password = passwordControl.text;
     _connectionFormData.username = userNameControl.text;
     _connectionFormData.port = int.parse(portControl.text);
     _connectionFormData.isConnected = isConnected;
+    _connectionFormData.screenAmount = int.parse(screenAmount.text);
 
     notifyListeners();
   }
-
 }
 
 

@@ -16,6 +16,7 @@ import '../providers/ssh_provider.dart';
 import '../services/db_services/city_db_services.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/extract_geocoordinates.dart';
+import '../utils/pop_up_connection.dart';
 
 class CityComponent extends StatefulWidget {
   final String city;
@@ -160,7 +161,17 @@ class _CityComponentState extends State<CityComponent> {
             topThreeCategories: topThreeCategories,
             cityCoordinates: cityCoordinates);
 
-        _viewCityStats(city, true, context);
+        final sshData = Provider.of<SSHprovider>(context, listen: false);
+        print("inside city component on pressed ");
+        // print(sshData.client.username);
+        if (sshData.client != null) {
+          print(sshData.client!.username);
+
+          print("here");
+          _viewCityStats(city, true, context);
+        } else {
+          showDialogConnection(context);
+        }
       },
     );
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -43,17 +44,63 @@ class SSHprovider extends ChangeNotifier {
   //   print(_client!.username);
   // }
 
-  void setClient(SSHModel ssh) async {
-    final socket = await SSHSocket.connect(ssh.host, ssh.port);
-    _client = SSHClient(
-      socket,
-      onPasswordRequest: () {
-        return ssh.passwordOrKey;
-      },
-      username: ssh.username,
-    );
-    print("checking set client");
-    print(_client!.username);
+  Future<String?> setClient(SSHModel ssh) async {
+    String result = "";
+
+    try {
+      final socket = await SSHSocket.connect(ssh.host, ssh.port);
+      String? password;
+      bool isAuthenticated = false;
+      //final authenticationCompleter = Completer<void>();
+      _client = SSHClient(
+        socket,
+        onPasswordRequest: () {
+          password = ssh.passwordOrKey;
+          print('Password requested: ${password}');
+          return password;
+        },
+        username: ssh.username,
+        onAuthenticated: () {
+          // authenticationCompleter
+          //     .complete(); // Notify that authentication is complete
+          isAuthenticated = true;
+          print('SSH client authenticated');
+        },
+        keepAliveInterval: const Duration(seconds: 3600),
+      );
+      print("outside");
+      print(isAuthenticated);
+
+      // Wait for authentication to complete
+      //await authenticationCompleter.future;
+
+      // Add a delay before checking isAuthenticated
+      await Future.delayed(Duration(seconds: 10));
+      print("after delay");
+      print(isAuthenticated);
+
+      if (isAuthenticated) {
+        print('Connected to the SSH server.');
+      } else {
+        // Perform additional checks if necessary
+        // For example, check if the client is connected to the server,
+        // check for supported SSH versions, etc.
+        print("inside not auth");
+        // If the client is not authenticated, indicate a failed connection
+        throw Exception('SSH authentication failed');
+      }
+
+      // Perform other operations on the connected socket
+    } catch (e) {
+      print('Failed to connect to the SSH server: $e');
+      result = "Failed to connect to the SSH server: $e";
+    }
+
+    // print("checking set client");
+    // print(_client!.username);
+    print("after set client the result is:");
+    print(result);
+    return result;
   }
 
   set host(String? value) {
@@ -96,7 +143,7 @@ class SSHprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> init(BuildContext context) async {
+  Future<String?> init(BuildContext context) async {
     final settings = Provider.of<Connectionprovider>(context, listen: false);
     print("inside init in ssh services");
     print("getting data from provider");
@@ -104,13 +151,18 @@ class SSHprovider extends ChangeNotifier {
     print(settings.connectionFormData.ip);
     print(settings.connectionFormData.password);
     print(settings.connectionFormData.port);
-    setClient(SSHModel(
+    String? result = await setClient(SSHModel(
       username: settings.connectionFormData.username,
       host: settings.connectionFormData.ip,
       passwordOrKey: settings.connectionFormData.password,
       port: settings.connectionFormData.port,
     ));
+    _username = settings.connectionFormData.username;
+    _host = settings.connectionFormData.ip;
+    _passwordOrKey = settings.connectionFormData.password;
+    _port = settings.connectionFormData.port;
     notifyListeners();
+    return result;
   }
 
   /// Connects to the current client, executes a command into it and then disconnects.
@@ -124,12 +176,12 @@ class SSHprovider extends ChangeNotifier {
     // await _client!.execute(command);
     //}
     //try {
-      execResult = await _client!.execute(command);
+    execResult = await _client!.execute(command);
     //} catch (e) {
     //  print(e);
-   // }
+    // }
 
-    await disconnect();
+    //await disconnect();
     notifyListeners();
     return execResult;
   }

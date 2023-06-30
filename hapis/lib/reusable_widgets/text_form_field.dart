@@ -44,7 +44,7 @@ class TextFormFieldWidget extends StatelessWidget {
         _isPrefixIconRequired = isPrefixIconrequired,
         _PrefixIcon = prefixIcon,
         _enabled = enabled,
-        _isHidden= isHidden,
+        _isHidden = isHidden,
         super(key: key);
 
   final TextEditingController _textController;
@@ -61,6 +61,10 @@ class TextFormFieldWidget extends StatelessWidget {
   final bool? _enabled;
   final bool? _isHidden;
 
+  // FocusNode _focusNode = FocusNode();
+  // bool _isFocused = false;
+  // Color color;
+
   @override
   Key? get key => super.key;
 
@@ -69,6 +73,8 @@ class TextFormFieldWidget extends StatelessWidget {
     /// Returns a [TextFormField] widget wrapped in [Padding] widget with a set of attributes such as [maxLength], [decoration], [validator].
     ///
     /// [_isRequired] boolean is used to show error message if the field is empty and required.
+    ///
+
     return Padding(
       key: key,
       padding: const EdgeInsets.all(10.0),
@@ -76,21 +82,37 @@ class TextFormFieldWidget extends StatelessWidget {
         autofocus: true,
         enabled: _enabled,
         controller: _textController,
+
         maxLength: _maxLength, //we also have maxLines
         initialValue: _initialValue,
         obscureText: _isHidden!,
         decoration: InputDecoration(
           // hintText: 'Be clear and descriptive.',
+          labelText: _label,
+          labelStyle: TextStyle(
+            fontSize: 30,
+            fontFamily: GoogleFonts.montserrat().fontFamily,
+            fontWeight: FontWeight.bold,
+            color: HapisColors.lgColor1,
+          ),
           hintText: _hint,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
             borderSide: const BorderSide(
-              color: HapisColors.primary,
-              width: 3.0,
+              color: Colors.black,
+              width: 5.0,
             ),
           ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50),
+            borderSide: const BorderSide(
+              color: HapisColors.lgColor3,
+              width: 2.0,
+            ),
+          ),
+
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+              const EdgeInsets.symmetric(vertical: 40, horizontal: 80),
           filled: true,
           fillColor: Color.fromARGB(156, 240, 240, 240),
 
@@ -106,7 +128,7 @@ class TextFormFieldWidget extends StatelessWidget {
         style: TextStyle(
           color: Colors.black,
           fontFamily: GoogleFonts.montserrat().fontFamily,
-          fontSize: 25,
+          fontSize: 30,
         ),
         onEditingComplete: onEditingComplete,
         validator: (value) {
