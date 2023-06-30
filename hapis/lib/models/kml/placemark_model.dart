@@ -141,7 +141,6 @@ class PlacemarkModel {
             </div>
           </body>
         </html>
-          
         ]]></text>
       </BalloonStyle>
       <LabelStyle>

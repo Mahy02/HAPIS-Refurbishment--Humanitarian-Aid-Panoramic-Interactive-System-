@@ -79,8 +79,6 @@ class _CityComponentState extends State<CityComponent> {
     );
     //  }
 
-    
-
     if (updatePosition) {
       await LgService(sshData).flyTo(LookAtModel(
         latitude: city.cityCoordinates.latitude,
