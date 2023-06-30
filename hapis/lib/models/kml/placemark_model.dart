@@ -1,4 +1,3 @@
-
 import 'package:hapis/models/kml/line_model.dart';
 import 'package:hapis/models/kml/point_model.dart';
 import 'package:hapis/models/kml/tour_model.dart';
@@ -133,9 +132,16 @@ class PlacemarkModel {
   String get balloonOnlyTag => '''
     <Style id="balloon-$id">
       <BalloonStyle>
-        <bgColor>ffffffff</bgColor>
+        <bgColor>537DC0</bgColor>
         <text><![CDATA[
-          $balloonContent
+         <html>
+          <body style="font-family: montserrat, sans-serif; font-size: 24px; width: 400px; display: flex; justify-content: center; align-items: center;">
+            <div style="background-color: #ffffff; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">
+              <span style="color: black;">$balloonContent</span> <!-- Content of the balloon with red color -->
+            </div>
+          </body>
+        </html>
+          
         ]]></text>
       </BalloonStyle>
       <LabelStyle>
@@ -182,8 +188,7 @@ class PlacemarkModel {
       visibility: map['visibility'],
       viewOrbit: map['viewOrbit'],
       scale: map['scale'],
-      lookAt:
-          map['lookAt'] != null ? LookAtModel.fromMap(map['lookAt']) : null,
+      lookAt: map['lookAt'] != null ? LookAtModel.fromMap(map['lookAt']) : null,
       point: PointModel.fromMap(map['point']),
       line: LineModel.fromMap(map['line']),
       tour: map['tour'] != null ? TourModel.fromMap(map['tour']) : null,

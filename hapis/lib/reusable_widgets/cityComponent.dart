@@ -58,48 +58,36 @@ class _CityComponentState extends State<CityComponent> {
       _cityPlacemark = placemark;
     });
 
-    // final kml = KMLModel(
-    //   name: city.name.replaceAll(RegExp(r'[^a-zA-Z0-9]'), ''),
-    //   content: placemark.tag,
-    // );
+    // if (LgService(sshData).balloonScreen == LgService(sshData).logoScreen) {
+    //   await LgService(sshData).setLogos(
+    //     name: 'SVT-logos-balloon',
+    //     content: '''
+    //         <name>Logos-Balloon</name>
+    //         ${placemark.balloonOnlyTag}
+    //       ''',
+    //   );
+    //} else {
+    LgService(sshData).clearKml();
+    final kmlBalloon = KMLModel(
+      name: 'HAPIS-balloon',
+      content: placemark.balloonOnlyTag,
+    );
 
-    // await LgService(sshData).sendKml(
-    //   kml,
-    //   images: [
-    //     {
-    //       'name': 'satellite.png',
-    //       'path': 'assets/images/satellite.png',
-    //     }
-    //   ],
-    // );
+    await LgService(sshData).sendKMLToSlave(
+      LgService(sshData).balloonScreen,
+      kmlBalloon.body,
+    );
+    //  }
 
-    if (LgService(sshData).balloonScreen == LgService(sshData).logoScreen) {
-      await LgService(sshData).setLogos(
-        name: 'SVT-logos-balloon',
-        content: '''
-            <name>Logos-Balloon</name>
-            ${placemark.balloonOnlyTag}
-          ''',
-      );
-    } else {
-      final kmlBalloon = KMLModel(
-        name: 'SVT-balloon',
-        content: placemark.balloonOnlyTag,
-      );
-
-      await LgService(sshData).sendKMLToSlave(
-        LgService(sshData).balloonScreen,
-        kmlBalloon.body,
-      );
-    }
+    
 
     if (updatePosition) {
       await LgService(sshData).flyTo(LookAtModel(
         latitude: city.cityCoordinates.latitude,
         longitude: city.cityCoordinates.longitude,
-        altitude: 100000,
-        range: '4000000',
-        tilt: '60',
+        altitude: 0,
+        range: '13000',
+        tilt: '0',
         heading: '0',
       ));
     }
