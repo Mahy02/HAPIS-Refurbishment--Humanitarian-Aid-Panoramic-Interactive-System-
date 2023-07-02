@@ -71,7 +71,7 @@ class GlobeModel {
 
   List<Map<String, double>> getGlobeOrbitCoordinates({
     double step = 3,
-    double altitude = 24938716.73, // Specify the desired altitude for the orbit
+    double altitude = 38052591.07, // Specify the desired altitude for the orbit
   }) {
     // if (globeCoordinates == null) {
     //   return [];
@@ -85,8 +85,8 @@ class GlobeModel {
       displacement += step / 361;
 
       double angle = displacement * (pi / 180.0);
-      double latitude = -50;
-      double longitude = -155;
+      double latitude = 40.085941;
+      double longitude = 10.52668;
       double distance = altitude;
 
       // Calculate the new coordinates based on the orbit parameters

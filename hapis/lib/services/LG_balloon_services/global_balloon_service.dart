@@ -23,7 +23,7 @@ class GlobalBalloonService {
           latitude: 40.085941,
           range: '0',
           tilt: '0',
-          altitude: 24938716.73,
+          altitude: 38052591.07,
           heading: '0',
           altitudeMode: 'relativeToSeaFloor');
     } else {
@@ -34,6 +34,7 @@ class GlobalBalloonService {
     print(lookAtObj.longitude);
     print(lookAtObj.altitude);
     print(lookAtObj.range);
+    print(lookAtObj.heading);
 
     final point = PointModel(
         lat: lookAtObj.latitude,
@@ -44,6 +45,7 @@ class GlobalBalloonService {
     print(point.lat);
     print(point.lng);
     print(point.altitude);
+
     final tour = TourModel(
       name: 'GlobeTour',
       placemarkId: 'p-${globe.id}',
@@ -84,7 +86,7 @@ class GlobalBalloonService {
           latitude: 40.085941,
           range: '0',
           tilt: '0',
-          altitude: 24938716.73,
+          altitude: 38052591.07,
           heading: '0',
           altitudeMode: 'relativeToSeaFloor');
     } else {

@@ -252,7 +252,9 @@ fi
 
   /// Sends a KML [content] to the given slave [screen].
   Future<void> sendKMLToSlave(int screen, String content) async {
+     await clearKml();
     try {
+
       await _sshData
           .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
     } catch (e) {
