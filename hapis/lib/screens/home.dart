@@ -5,7 +5,6 @@ import 'package:hapis/screens/cities.dart';
 import 'package:hapis/services/LG_balloon_services/global_balloon_service.dart';
 import 'package:hapis/utils/drawer.dart';
 import 'package:provider/provider.dart';
-
 import '../constants.dart';
 import '../models/kml/KMLModel.dart';
 import '../models/kml/look_at_model.dart';
@@ -28,14 +27,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   PlacemarkModel? _globePlacemark;
 
-  /// Views a `city stats` into the Google Earth.
-  void _viewCityStats(GlobeModel globe, bool showBalloon, BuildContext context,
+  /// Views a `globe stats` into the Google Earth.
+  void _viewGlobeStats(GlobeModel globe, bool showBalloon, BuildContext context,
       {double orbitPeriod = 2.8, bool updatePosition = true}) async {
     final sshData = Provider.of<SSHprovider>(context, listen: false);
     print("here");
     final GlobalBalloonService globeService = GlobalBalloonService();
-    print("inside view city");
-    print(sshData.client!.username);
+    print("inside view globe");
 
     final placemark = globeService.buildGlobalPlacemark(
       globe,
@@ -44,25 +42,19 @@ class _HomePageState extends State<HomePage> {
       lookAt: _globePlacemark != null && !updatePosition
           ? _globePlacemark!.lookAt
           : null,
-      updatePosition: updatePosition,
+      updatePosition: false,
     );
+    //print(placemark.orbitTag);
+    //print(placemark.lookAt);
 
     setState(() {
       _globePlacemark = placemark;
     });
 
-    // if (LgService(sshData).balloonScreen == LgService(sshData).logoScreen) {
-    //   await LgService(sshData).setLogos(
-    //     name: 'SVT-logos-balloon',
-    //     content: '''
-    //         <name>Logos-Balloon</name>
-    //         ${placemark.balloonOnlyTag}
-    //       ''',
-    //   );
-    //} else {
-    LgService(sshData).clearKml();
+    // LgService(sshData).clearKml();
+
     final kmlBalloon = KMLModel(
-      name: 'HAPIS-balloon',
+      name: 'HAPIS-Global-balloon',
       content: placemark.balloonOnlyTag,
     );
 
@@ -70,19 +62,19 @@ class _HomePageState extends State<HomePage> {
       LgService(sshData).balloonScreen,
       kmlBalloon.body,
     );
-    //  }
 
-    if (updatePosition) {
-      await LgService(sshData).flyTo(LookAtModel(
-          longitude: 43,
-          latitude: 12.6,
-          range: '5000000',
-          tilt: '0',
-          altitude: 24938716.73,
-          heading: '0'));
-    }
+    // if (updatePosition) {
+    //   await LgService(sshData).flyTo(LookAtModel(
+    //       longitude: 0,
+    //       latitude: 0,
+    //       range: '800000',
+    //       tilt: '0',
+    //       altitude: 30683.86,
+    //       heading: '0'));
+    // }
     final orbit = globeService.buildOrbit();
     await LgService(sshData).sendTour(orbit, 'Orbit');
+    await LgService(sshData).startTour('Orbit');
   }
 
   @override
@@ -147,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                         print(numberOfSeekers);
 
                         GlobeModel globe = GlobeModel(
-                            id: '2',
+                            id: '4',
                             numberOfSeekers: numberOfSeekers,
                             numberOfGivers: numberOfGivers,
                             inProgressDonations: inProgressDonations,
@@ -157,13 +149,15 @@ class _HomePageState extends State<HomePage> {
 
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-                        print("inside city component on pressed ");
-                        // print(sshData.client.username);
+                        print("inside globe on pressed ");
+
                         if (sshData.client != null) {
                           print(sshData.client!.username);
 
                           print("here");
-                          _viewCityStats(globe, true, context);
+                          _viewGlobeStats(globe, true, context);
+                        } else {
+                          showDialogConnection(context);
                         }
                       }),
                   HapisElevatedButton(

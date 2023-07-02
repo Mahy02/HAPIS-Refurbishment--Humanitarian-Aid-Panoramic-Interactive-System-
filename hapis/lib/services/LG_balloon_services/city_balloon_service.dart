@@ -9,7 +9,7 @@ import '../../models/balloon_models/city_ballon_model.dart';
 import '../../models/kml/orbit_model.dart';
 
 class CityBalloonService {
-  /// Builds and returns a satellite `Placemark` entity according to the given [city]
+  /// Builds and returns a city `Placemark` entity according to the given [city]
   PlacemarkModel buildCityPlacemark(
     CityModel city,
     bool balloon,
@@ -39,7 +39,7 @@ class CityBalloonService {
     final coordinates =
         city.getCityOrbitCoordinates(city.name, step: orbitPeriod);
     final tour = TourModel(
-      name: 'SimulationTour',
+      name: 'CityTour',
       placemarkId: 'p-${city.id}',
       initialCoordinate: {
         'lat': point.lat,
@@ -56,7 +56,7 @@ class CityBalloonService {
       point: point,
       //description: satellite.citation,
       balloonContent: balloon ? city.balloonContent() : '',
-      icon: 'satellite.png',
+      icon: 'cityballoon.png',
       line: LineModel(
         id: city.id,
         altitudeMode: 'absolute',
@@ -73,10 +73,7 @@ class CityBalloonService {
       {LookAtModel? lookAt})  {
     LookAtModel lookAtObj;
 
-//final LatLng coord = await getCoordinates(city.name);
     if (lookAt == null) {
-     // final coord = tle.read();
-
       lookAtObj = LookAtModel(
         longitude: city.cityCoordinates.longitude,
         latitude: city.cityCoordinates.latitude,

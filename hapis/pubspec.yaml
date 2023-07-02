@@ -97,6 +97,8 @@ flutter:
       - assets/images/earth.png
       - assets/images/cityballoon.png
       - assets/flags/
+      - assets/images/orbit.png
+      - assets/images/orbit2.png
       #- assets/images/Logos_2.png
 
 

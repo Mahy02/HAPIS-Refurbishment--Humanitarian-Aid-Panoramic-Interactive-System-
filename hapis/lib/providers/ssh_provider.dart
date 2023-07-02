@@ -29,6 +29,8 @@ class SSHprovider extends ChangeNotifier {
   /// Property that defines the SSH machine password or RSA private key.
   String? _passwordOrKey;
 
+  int? _numberOfScreens;
+
   SSHClient? _client;
 
   /// Sets a client with the given [ssh] info.
@@ -66,7 +68,7 @@ class SSHprovider extends ChangeNotifier {
           isAuthenticated = true;
           print('SSH client authenticated');
         },
-        keepAliveInterval: const Duration(seconds: 3600),
+        keepAliveInterval: const Duration(seconds: 360000),
       );
       print("outside");
       print(isAuthenticated);
@@ -113,6 +115,11 @@ class SSHprovider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set numberOfScreens(int? value) {
+    _numberOfScreens = value;
+    notifyListeners();
+  }
+
   set username(String? value) {
     _username = value;
     notifyListeners();
@@ -127,6 +134,7 @@ class SSHprovider extends ChangeNotifier {
   String? get username => _username;
   String? get host => _host;
   int? get port => _port;
+  int? get numberOfScreens => _numberOfScreens;
 
   /// Property that gets the SSH client instance.
   SSHClient? get client => _client;
@@ -134,11 +142,13 @@ class SSHprovider extends ChangeNotifier {
   final SSHModel _sshData = SSHModel();
   SSHModel get sshData => _sshData;
 
-  void saveData(String host, String username, String passwordOrKey, int port) {
+  void saveData(String host, String username, String passwordOrKey, int port,
+      int screenAmount) {
     _sshData.host = host;
     _sshData.passwordOrKey = passwordOrKey;
     _sshData.username = username;
     _sshData.port = port;
+    _sshData.screenAmount = screenAmount;
 
     notifyListeners();
   }
@@ -161,6 +171,8 @@ class SSHprovider extends ChangeNotifier {
     _host = settings.connectionFormData.ip;
     _passwordOrKey = settings.connectionFormData.password;
     _port = settings.connectionFormData.port;
+    _numberOfScreens = settings.connectionFormData.screenAmount;
+
     notifyListeners();
     return result;
   }

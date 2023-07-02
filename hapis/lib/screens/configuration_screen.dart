@@ -182,6 +182,8 @@ class _ConfigurationState extends State<Configuration> {
                             // Call the init function to set up the SSH client with the connection data
                             String? result = await sshData.init(context);
 
+                            
+
                             // Connect to the Liquid Galaxy
                             //String? result = await sshData.connect();
                             // print("client checking in config screen");

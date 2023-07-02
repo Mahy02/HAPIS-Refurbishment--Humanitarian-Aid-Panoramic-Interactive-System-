@@ -58,18 +58,10 @@ class _CityComponentState extends State<CityComponent> {
       _cityPlacemark = placemark;
     });
 
-    // if (LgService(sshData).balloonScreen == LgService(sshData).logoScreen) {
-    //   await LgService(sshData).setLogos(
-    //     name: 'SVT-logos-balloon',
-    //     content: '''
-    //         <name>Logos-Balloon</name>
-    //         ${placemark.balloonOnlyTag}
-    //       ''',
-    //   );
-    //} else {
+
     LgService(sshData).clearKml();
     final kmlBalloon = KMLModel(
-      name: 'HAPIS-balloon',
+      name: 'HAPIS-City-balloon',
       content: placemark.balloonOnlyTag,
     );
 

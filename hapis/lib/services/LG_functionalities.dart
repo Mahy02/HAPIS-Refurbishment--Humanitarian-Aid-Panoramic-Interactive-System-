@@ -20,39 +20,41 @@ class LgService {
   final String _url = 'http://lg1:81';
 
   /// Property that defines number of screens. Defaults to `5`.
-  int screenAmount = 3;
+  int screenAmount = 5;
 
   /// Lg order:  if 5 => 5 4 1 2 3   if 3 => 3 1 2
 
   /// Property that defines the logo slave screen number according to the [screenAmount] property. (Most left screen)
   int get logoScreen {
-    if (screenAmount == 1) {
+    int sA= int.parse(getScreenAmount()!);
+    if (sA == 1) {
       return 1;
     }
 
     // Gets the most left screen.
-    return (screenAmount / 2).floor() + 2;
+    return (sA / 2).floor() + 2;
   }
 
   /// Property that defines the balloon slave screen number according to the [screenAmount] property. (Most right screen)
   int get balloonScreen {
-    if (screenAmount == 1) {
+    int sA= int.parse(getScreenAmount()!);
+    if (sA == 1) {
       return 1;
     }
 
     // Gets the most right screen.
-    return (screenAmount / 2).floor() + 1;
+    return (sA / 2).floor() + 1;
   }
 
   ///Liquid Galaxy Services:
   ///-----------------------
 
   /// Gets the Liquid Galaxy rig screen amount. Returns a [String] that represents the screen amount.
-  Future<String?> getScreenAmount() async {
-    String? result = screenAmount.toString();
-    // SSHSession resultSession = await _sshData
-    //     .execute("grep -oP '(?<=DHCP_LG_FRAMES_MAX=).*' personavars.txt");
-    //result = resultSession.stdout;
+  String? getScreenAmount() {
+    int numberOfScreen = _sshData.numberOfScreens!;
+    screenAmount = numberOfScreen;
+    String? result = numberOfScreen.toString();
+
     return result;
   }
 
@@ -114,7 +116,7 @@ fi
   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
     // final pw = _sshData.client!.passwordOrKey;
-     final pw = _sshData.passwordOrKey;
+    final pw = _sshData.passwordOrKey;
     final user = _sshData.username;
     // final pw = _sshData.passwordOrKey;
     // final user = _sshData.client!.username;
@@ -143,7 +145,7 @@ fi
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
     //final pw = _sshData.client!.passwordOrKey;
-     final pw = _sshData.passwordOrKey;
+    final pw = _sshData.passwordOrKey;
     final user = _sshData.username;
     // final pw = _sshData.passwordOrKey;
     // final user = _sshData.client!.username;
@@ -194,6 +196,7 @@ fi
   /// Uses the [query] method to play some tour in Google Earth according to  the given [tourName].
   /// Command: 'echo "playtour=Orbit" > /tmp/query.txt'
   Future<void> startTour(String tourName) async {
+    print("inside start tour");
     await query('playtour=$tourName');
   }
 
@@ -209,6 +212,7 @@ fi
   ///Sending tour to the Google Earth using the KML file and the tourname ex: Orbit
   /// Sends and starts a `tour` into the Google Earth.
   Future<void> sendTour(String tourKml, String tourName) async {
+    print("inside send tour in LG functionalities");
     final fileName = '$tourName.kml';
 
     final kmlFile = await _fileService.createFile(fileName, tourKml);

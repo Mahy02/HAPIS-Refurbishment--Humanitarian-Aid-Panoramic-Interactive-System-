@@ -53,13 +53,13 @@ class GlobeModel {
   /// Gets the balloon content from the current city.
   // ${image!.isNotEmpty ? '<img height="200" src="${getImageAssetString('assets/images/cityballoon.png')}" alt="City Image"><br/><br/>' : ''}
   String balloonContent() => '''
-      <b><font size="+3">Global Statistics <font color="#5D5D5D"></font></font></b>
+      <b><font size="+2">Global Statistics <font color="#5D5D5D"></font></font></b>
       <br/><br/>
       <b>Total Number of Seekers:</b> $numberOfSeekers
       <br/>
       <b>Total Number of Givers:</b> $numberOfGivers
       <br/>
-      <b>Total In Progress Donations:</b> $inProgressDonations
+      <b>Total Donations In Progress:</b> $inProgressDonations
       <br/>
       <b>Total Successful Donations:</b> $successfulDonations
       <br/>
@@ -69,9 +69,9 @@ class GlobeModel {
        <br/>
     ''';
 
-  List<Map<String, double>> getCityOrbitCoordinates({
+  List<Map<String, double>> getGlobeOrbitCoordinates({
     double step = 3,
-    double altitude = 10000, // Specify the desired altitude for the orbit
+    double altitude = 24938716.73, // Specify the desired altitude for the orbit
   }) {
     // if (globeCoordinates == null) {
     //   return [];
@@ -85,8 +85,8 @@ class GlobeModel {
       displacement += step / 361;
 
       double angle = displacement * (pi / 180.0);
-      double latitude = 43;
-      double longitude = 12.6;
+      double latitude = -50;
+      double longitude = -155;
       double distance = altitude;
 
       // Calculate the new coordinates based on the orbit parameters
