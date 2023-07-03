@@ -236,6 +236,8 @@ class SSHprovider extends ChangeNotifier {
     var fileSize = await inputFile.length();
     await file?.write(inputFile.openRead().cast(), onProgress: (progress) {
       anyKindofProgressBar = progress / fileSize;
+      print(anyKindofProgressBar);
     });
+    print("finish upload");
   }
 }

@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       _globePlacemark = placemark;
     });
 
-    // LgService(sshData).clearKml();
+    LgService(sshData).clearKml();
 
     final kmlBalloon = KMLModel(
       name: 'HAPIS-Global-balloon',
@@ -73,8 +73,10 @@ class _HomePageState extends State<HomePage> {
     //       heading: '0'));
     // }
     final orbit = globeService.buildOrbit();
+    //await LgService(sshData).clearKml();
     await LgService(sshData).sendTour(orbit, 'Orbit');
     await LgService(sshData).startTour('Orbit');
+    print("end of global function");
   }
 
   @override

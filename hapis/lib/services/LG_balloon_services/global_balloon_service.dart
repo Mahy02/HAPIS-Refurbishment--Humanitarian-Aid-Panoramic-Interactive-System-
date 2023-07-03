@@ -18,12 +18,28 @@ class GlobalBalloonService {
     LookAtModel lookAtObj;
 
     if (lookAt == null) {
+      // String formattedLongitude = NumberFormat('#,##0.##°').format(-45.4518936);
+      // String formattedLatitude = NumberFormat('#,##0.##°').format(0.0000101);
+      // String formattedRange = NumberFormat('#,##0.## m').format(22231212.86);
+      // String formattedAltitude = NumberFormat('#,##0.## m').format(20540.1097385);
+      // String formattedHeading = NumberFormat('#,##0.##°').format(0);
+      // String formattedTilt = NumberFormat('#,##0.##°').format(0);
+
       lookAtObj = LookAtModel(
-          longitude: 10.52668,
-          latitude: 40.085941,
-          range: '0',
-          tilt: '0',
-          altitude: 38052591.07,
+          // longitude: -3.629954,
+          // latitude: 40.769083,
+          // range: '900000000.0',
+          // tilt: '0',
+          // altitude: 0,
+          // heading: '0',
+          // altitudeMode: 'relativeToSeaFloor'
+          longitude: -45.4518936,
+          latitude: 0.0000101,
+          range: '22231212.86',
+          tilt: '60',
+          //altitude: 20540.1097385,
+          altitude: 25512.1097385,
+          //altitude: 20000.1097385,
           heading: '0',
           altitudeMode: 'relativeToSeaFloor');
     } else {
@@ -82,11 +98,20 @@ class GlobalBalloonService {
     print("inside build orbit");
     if (lookAt == null) {
       lookAtObj = LookAtModel(
-          longitude: 10.52668,
-          latitude: 40.085941,
-          range: '0',
-          tilt: '0',
-          altitude: 38052591.07,
+          // longitude: -3.629954,
+          // latitude: 40.769083,
+          // range: '90000000000',
+          // tilt: '0',
+          // altitude: 0,
+          // heading: '0',
+          // altitudeMode: 'relativeToSeaFloor'
+          longitude: -45.4518936,
+          latitude: 0.0000101,
+          range: '22231212.86',
+          tilt: '60',
+          //altitude: 20540.1097385,
+          altitude: 25512.1097385,
+          //altitude: 20000.1097385,
           heading: '0',
           altitudeMode: 'relativeToSeaFloor');
     } else {

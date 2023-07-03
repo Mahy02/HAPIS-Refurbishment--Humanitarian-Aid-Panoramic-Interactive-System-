@@ -26,7 +26,7 @@ class LgService {
 
   /// Property that defines the logo slave screen number according to the [screenAmount] property. (Most left screen)
   int get logoScreen {
-    int sA= int.parse(getScreenAmount()!);
+    int sA = int.parse(getScreenAmount()!);
     if (sA == 1) {
       return 1;
     }
@@ -37,7 +37,7 @@ class LgService {
 
   /// Property that defines the balloon slave screen number according to the [screenAmount] property. (Most right screen)
   int get balloonScreen {
-    int sA= int.parse(getScreenAmount()!);
+    int sA = int.parse(getScreenAmount()!);
     if (sA == 1) {
       return 1;
     }
@@ -175,6 +175,7 @@ fi
   Future<void> query(String content) async {
     print("inside query");
     await _sshData.execute('echo "$content" > /tmp/query.txt');
+    //await _sshData.execute('chmod 777 /tmp/query.txt && echo "$content" > /tmp/query.txt');
     //await _sshData.execute('echo "$content" > ~/query.txt');
 
     print("after execute query");
@@ -198,6 +199,7 @@ fi
   Future<void> startTour(String tourName) async {
     print("inside start tour");
     await query('playtour=$tourName');
+    print("after query start tour");
   }
 
   /// Uses the [query] method to stop all tours in Google Earth.
@@ -216,16 +218,18 @@ fi
     final fileName = '$tourName.kml';
 
     final kmlFile = await _fileService.createFile(fileName, tourKml);
-    // await _sshData.uploadKml(kmlFile.path);
+
     await _sshData.uploadKml(kmlFile, fileName);
 
     await _sshData
         .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
+    // await _sshData.execute(
+    //     'chmod 777 /var/www/html/kmls.txt && echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
   }
 
   /// Sets the logos KML into the Liquid Galaxy rig. A KML [name] and [content] may be passed, but it's not required.
   Future<void> setLogos({
-    String name = 'SVT-logos',
+    String name = 'HAPIS-logos',
     String content = '<name>Logos</name>',
   }) async {
     print("inside set logos fun");
@@ -238,11 +242,6 @@ fi
     );
 
     try {
-      final result = await getScreenAmount();
-      if (result != null) {
-        screenAmount = int.parse(result);
-      }
-
       await sendKMLToSlave(logoScreen, kml.body);
     } catch (e) {
       // ignore: avoid_print
@@ -252,11 +251,12 @@ fi
 
   /// Sends a KML [content] to the given slave [screen].
   Future<void> sendKMLToSlave(int screen, String content) async {
-     await clearKml();
+    // await clearKml();
     try {
-
       await _sshData
           .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
+      // await _sshData.execute(
+      //     "chmod 777 /var/www/html/kml/slave_$screen.kml && echo '$content' > /var/www/html/kml/slave_$screen.kml");
     } catch (e) {
       // ignore: avoid_print
       print(e);
@@ -289,18 +289,57 @@ fi
       final image = await _fileService.createImage(img['name']!, img['path']!);
       String imageName = img['name']!;
       await _sshData.uploadKml(image, imageName);
-      //await _sshData.uploadKml(image.path);
     }
 
     final kmlFile = await _fileService.createFile(fileName, kml.body);
     await _sshData.uploadKml(kmlFile, fileName);
-    // await _sshData.uploadKml(kmlFile.path);
 
     await _sshData.execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
+    // await _sshData.execute(
+    //     'chmod 777 /var/www/html/kmls.txt && echo "$_url/$fileName" > /var/www/html/kmls.txt');
   }
 
   /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos
   /// after clearing (default to `true`).
+  // Future<void> clearKml({bool keepLogos = true}) async {
+  //   print("inside clear kml fn");
+
+  //   String query =
+  //       'echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';
+
+  //   //String query = "echo ' ' > /var/www/html/kmls.txt";
+
+  //   // String query =
+  //   //     'chmod 777 /tmp/query.txt && chmod 777 /var/www/html/kmls.txt && echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';
+
+  //   print("here");
+  //   for (var i = 2; i <= screenAmount; i++) {
+  //     String blankKml = KMLModel.generateBlank('slave_$i');
+  //     query += "echo '$blankKml' > /var/www/html/kml/slave_$i.kml";
+  //   }
+
+  //   print("after for in clear kml fn");
+  //   print(query);
+
+  //   print("keep logos: $keepLogos");
+
+  //   if (keepLogos) {
+  //     print("inside keep logos");
+  //     final kml = KMLModel(
+  //       name: 'HAPIS-logos',
+  //       content: '<name>Logos</name>',
+  //       screenOverlay: ScreenOverlayModel.logos().tag,
+  //     );
+
+  //     print("here");
+
+  //     query += "echo '${kml.body}' > /var/www/html/kml/slave_$logoScreen.kml";
+  //   }
+
+  //   await _sshData.execute(query);
+  //   print("finish clean kml");
+  // }
+
   Future<void> clearKml({bool keepLogos = true}) async {
     print("inside clear kml fn");
     //print(_sshData.client.username);
@@ -316,7 +355,6 @@ fi
       String blankKml = KMLModel.generateBlank('slave_$i');
       query += " && echo '$blankKml' > /var/www/html/kml/slave_$i.kml";
     }
-    print("after for in clear kml fn");
 
     if (keepLogos) {
       print("inside keep logos");
