@@ -101,10 +101,10 @@ flutter:
       - assets/images/orbit.png
       - assets/images/orbit2.png
       #- assets/images/Logos_2.png
-      - Forms.csv
-      - Matchings.csv
-      - Requests.csv
-      - Users.csv
+      - assets/Forms.csv
+      - assets/Matchings.csv
+      - assets/Requests.csv
+      - assets/Users.csv
 
 
 
