@@ -10,6 +10,7 @@ import 'package:hapis/screens/splash_screen.dart';
 
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'constants.dart';
 import 'helpers/sql_db.dart';
@@ -20,14 +21,17 @@ import 'helpers/sql_db.dart';
 ///We call [LgService] Class to call setlogos using the ssh info from the [SSHprovider] at the start of the app
 /// we have a [MultiProvider] for all our providers in our app
 
-void main() async{
-   /// Initialize the app
+void main() async {
+  /// Initialize the app
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Import the database tables from CSV files
-  SqlDb sqlDb = SqlDb();
-  await sqlDb.importAllTablesFromCSV();
   
+  // SqlDb sqlDbb = SqlDb();
+  // await sqlDbb.deleteDb();
+  SqlDb sqlDb = SqlDb();
+  //await sqlDb.importAllTablesFromCSV();
+
   runApp(
     MultiProvider(
       providers: [
@@ -47,7 +51,7 @@ class HAPIS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return MaterialApp(
-    int counter=1;
+    int counter = 1;
     final sshData = Provider.of<SSHprovider>(context, listen: false);
     print("inside main ");
     LgService(sshData).setLogos();
@@ -65,7 +69,7 @@ class HAPIS extends StatelessWidget {
           fontFamily: GoogleFonts.montserrat().fontFamily,
           primaryColor: HapisColors.primary),
       title: 'HAPIS',
-       home: const SplashScreen(),
+      home: const SplashScreen(),
       //home: const Settings(),
       //initialRoute: ,
       routes: {

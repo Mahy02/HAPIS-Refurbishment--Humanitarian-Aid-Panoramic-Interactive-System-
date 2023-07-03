@@ -29,6 +29,9 @@ class SqlDb {
     ///path + name of database
     String path = join(databasePath, 'HAPIS.db');
 
+
+    //await deleteDatabase(path);
+
     ///creating the database
     ///Open the database or create it if it doesn't exist
     ///The version is needed when we want to update something in our database, like adding a table or deleted a table or so on
@@ -38,6 +41,16 @@ class SqlDb {
     print("Initialized DB successfully");
     return mydb;
   }
+
+
+Future<void> deleteDb() async {
+  // Get the path to the database file
+  String databasePath = await getDatabasesPath();
+  String path = join(databasePath, 'HAPIS.db');
+
+  // Delete the database file
+  await deleteDatabase(path);
+}
 
   ///`_onCreate` function that gets called once the database is created, it creates 4 tables  --IT IS CALLED ONLY ONCE
 
@@ -49,12 +62,12 @@ class SqlDb {
         UserName TEXT NOT NULL,
         FirstName TEXT NOT NULL,
         LastName TEXT NOT NULL,
+        City TEXT NOT NULL ,
         Country TEXT NOT NULL,
-        City NOT NULL TEXT,
-        AddressLocation NOT NULL TEXT,
-        PhoneNum NOT NULL TEXT,
-        Email NOT NULL TEXT,
-        Password NOT NULL TEXT
+        AddressLocation TEXT NOT NULL,
+        PhoneNum TEXT NOT NULL,
+        Email TEXT NOT NULL,
+        Password TEXT NOT NULL
        );
     ''');
 
@@ -66,7 +79,7 @@ class SqlDb {
         Item TEXT NOT NULL,
         Category TEXT NOT NULL CHECK (Category IN ('Clothing', 'Household', 'Books and Media', 'Toys and Games', 'Sports Equipment', 'Baby item', 'Hygiene Products', 'Medical Supplies', 'Pet supplies', 'Food', 'Electronics')) ,
         Dates_available TEXT NOT NULL,
-        For TEXT NOT NULL  CHECK (For IN ('self', 'other')) ,
+        For TEXT NOT NULL  CHECK (For IN ('self', 'other', '')) ,
         Status TEXT NOT NULL CHECK (Status IN ('Completed', 'Not Completed')) ,
         FOREIGN KEY (UserID) REFERENCES Users(UserID) 		 		
        );
@@ -77,9 +90,9 @@ class SqlDb {
         M_ID INTEGER  NOT NULL PRIMARY KEY ,
         Seeker_FormID INTEGER NOT NULL,
         Giver_FormID INTEGER NOT NULL,
-        Rec1_Status  TEXT NOT NUL  CHECK (Rec1_Status IN ('Pending', 'Accepted', 'Rejected')) ,
-        Rec2_status TEXT NOT NUL CHECK (Rec2_status IN ('Pending', 'Accepted', 'Rejected')) ,
-        Donation_Status TEXT NOT NUL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,
+        Rec1_Status  TEXT NOT NULL  CHECK (Rec1_Status IN ('Pending', 'Accepted', 'Rejected')) ,
+        Rec2_status TEXT NOT NULL CHECK (Rec2_status IN ('Pending', 'Accepted', 'Rejected')) ,
+        Donation_Status TEXT NOT NULL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,
         FOREIGN KEY (Seeker_FormID) REFERENCES Forms(FormID),
         FOREIGN KEY (Giver_FormID) REFERENCES Forms(FormID)
        );
@@ -91,8 +104,8 @@ class SqlDb {
         Sender_ID INTEGER NOT NULL,
         Rec_ID INTEGER NOT NULL,
         Rec_FormID INTEGER NOT NULL,
-        Rec_Status  TEXT NOT NUL  CHECK (Rec_Status IN ('Pending', 'Accepted', 'Rejected')) ,
-        Donation_Status TEXT NOT NUL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,
+        Rec_Status  TEXT NOT NULL  CHECK (Rec_Status IN ('Pending', 'Accepted', 'Rejected')) ,
+        Donation_Status TEXT NOT NULL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,
         FOREIGN KEY (Rec_FormID) REFERENCES Forms(FormID),
         FOREIGN KEY (Sender_ID) REFERENCES Users(UserID),
         FOREIGN KEY (Rec_ID) REFERENCES Users(UserID)
@@ -142,36 +155,42 @@ class SqlDb {
     return response;
   }
 
-  /// Function to import CSV data into a table
-  Future<void> importTableFromCSV(String tableName, String csvFileName) async {
-    // Read the CSV file from assets
-    String csvString = await rootBundle.loadString(csvFileName);
 
-    // Parse the CSV string
-    List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
+Future<void> importTableFromCSV(String tableName, String csvFileName) async {
+  // Read the CSV file from assets
+  String csvString = await rootBundle.loadString('assets/$csvFileName');
 
-    // Get a reference to the database
-    Database? hapisDb = await db;
+  // Parse the CSV string
+  List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
 
-    // Start a database transaction
-    await hapisDb!.transaction((txn) async {
-      // Iterate over each row in the CSV data
-      for (List<dynamic> row in csvData) {
-        // Convert the row data to a map
-        Map<String, dynamic> rowData = {};
+  // Get a reference to the database
+  Database? hapisDb = await db;
 
-        for (int i = 0; i < row.length; i++) {
-          // first row contains column names
-          String columnName = csvData[0][i].toString();
-          rowData[columnName] = row[i];
-        }
+  // Start a database transaction
+  await hapisDb!.transaction((txn) async {
+    for (int rowIndex = 1; rowIndex < csvData.length; rowIndex++) {
+      // Convert the row data to a map
+      Map<String, dynamic> rowData = {};
 
-        // Insert the row into the table
-        await txn.insert(tableName, rowData);
+      for (int i = 0; i < csvData[rowIndex].length; i++) {
+        // Get the name of the current column
+        String columnName = csvData[0][i].toString();
+
+        // Get the value of the current column for the current row
+        dynamic columnValue = csvData[rowIndex][i];
+
+        // Add the column name and value to the row data map
+        rowData[columnName] = columnValue;
       }
-    });
-    print("inside import table from csv");
-  }
+
+      // Insert the row into the table
+      await txn.insert(tableName, rowData);
+    }
+  });
+
+  print("Imported data from CSV file into table '$tableName'");
+}
+
 
   /// Function to import all tables from CSV files
   Future<void> importAllTablesFromCSV() async {
@@ -189,3 +208,147 @@ class SqlDb {
     print("import all tables");
   }
 }
+
+//  ======================================================REMEMBER TO REMOVE DELETE DATABASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE=====================================
+
+
+
+
+
+// /// Function to import CSV data into a table
+  // Future<void> importTableFromCSV(String tableName, String csvFileName) async {
+  //   // Read the CSV file from assets
+  //   String csvString = await rootBundle.loadString('assets/$csvFileName');
+
+  //   // Parse the CSV string
+  //   List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
+
+  //   // Get a reference to the database
+  //   Database? hapisDb = await db;
+
+  //   // Start a database transaction
+  //   await hapisDb!.transaction((txn) async {
+      
+  //     for (List<dynamic> row in csvData) {
+  //       // Convert the row data to a map
+  //       Map<String, dynamic> rowData = {};
+
+  //       for (int i = 0; i < row.length; i++) {
+  //         // first row contains column names
+  //         String columnName = csvData[0][i].toString();
+  //         rowData[columnName] = row[i];
+  //       }
+
+  //       // Insert the row into the table
+  //       await txn.insert(tableName, rowData);
+  //     }
+  //   });
+  //   print("inside import table from csv");
+  // }
+
+
+// Define a map that maps CSV column names to database column names
+      // Map<String, String> usersMap = {
+      //   'user_ID': 'UserID',
+      //   'username': 'UserName',
+      //   'First_Name': 'FirstName',
+      //   'Last_Name': 'LastName',
+      //   'city': 'City',
+      //   'Country': 'Country',
+      //   'Location_on_google_map': 'AddressLocation',
+      //   'Phone_num': 'PhoneNum',
+      //   'Email': 'Email',
+      //   'Password': 'Password',
+      // };
+
+      //  Map<String, String> formsMap = {
+      //   'Form_ID': 'FormID',
+      //   'User_ID': 'UserID',
+      //   'Type': 'Type',
+      //   'Item': 'Item',
+      //   'Category': 'Category',
+      //   'Dates_available': 'Dates_available',
+      //   'For': 'For',
+      //   'Status': 'Status',
+      // };
+
+      // Map<String, String> matchingsMap = {
+      //   'M_ID': 'M_ID',
+      //   'Seeker_FormID': 'Seeker_FormID',
+      //   'Giver_FormID': 'Giver_FormID',
+      //   'Rec1_Status': 'Rec1_Status',
+      //   'Rec2_status': 'Rec2_status',
+      //   'Donation_Status': 'Donation_Status',
+      // };
+      // Map<String, String> requestsMap = {
+      //   'R_ID': 'R_ID',
+      //   'Sender_ID': 'Sender_ID',
+      //   'Rec_ID': 'Rec_ID',
+      //   'Rec_FormID': 'Rec_FormID',
+      //   'Rec_Status': 'Rec_Status',
+      //   'Donation_Status': 'Donation_Status',
+      // };
+
+      // if (tableName == 'Users') {
+// Iterate over each row in the CSV data
+        // for (int i = 1; i < csvData.length; i++) {
+        //   // Convert the row data to a map
+        //   Map<String, dynamic> rowData = {};
+
+        //   for (int j = 0; j < csvData[i].length; j++) {
+        //     String columnName = csvData[0][j].toString();
+        //     String dbColumnName = usersMap[columnName] ?? columnName;
+        //     rowData[dbColumnName] = csvData[i][j];
+        //   }
+
+        //   // Insert the row into the table
+        //   await txn.insert(tableName, rowData);
+        // }
+      //}
+      // else if(tableName == 'Forms'){
+      //   for (int i = 1; i < csvData.length; i++) {
+      //     // Convert the row data to a map
+      //     Map<String, dynamic> rowData = {};
+
+      //     for (int j = 0; j < csvData[i].length; j++) {
+      //       String columnName = csvData[0][j].toString();
+      //       String dbColumnName = formsMap[columnName] ?? columnName;
+      //       rowData[dbColumnName] = csvData[i][j];
+      //     }
+
+      //     // Insert the row into the table
+      //     await txn.insert(tableName, rowData);
+      //   }
+      // }
+      // else if(tableName=='Matchings'){
+      //   for (int i = 1; i < csvData.length; i++) {
+      //     // Convert the row data to a map
+      //     Map<String, dynamic> rowData = {};
+
+      //     for (int j = 0; j < csvData[i].length; j++) {
+      //       String columnName = csvData[0][j].toString();
+      //       String dbColumnName = matchingsMap[columnName] ?? columnName;
+      //       rowData[dbColumnName] = csvData[i][j];
+      //     }
+
+      //     // Insert the row into the table
+      //     await txn.insert(tableName, rowData);
+      //   }
+
+      // }
+      // else if(tableName =='Requests'){
+      //   for (int i = 1; i < csvData.length; i++) {
+      //     // Convert the row data to a map
+      //     Map<String, dynamic> rowData = {};
+
+      //     for (int j = 0; j < csvData[i].length; j++) {
+      //       String columnName = csvData[0][j].toString();
+      //       String dbColumnName = requestsMap[columnName] ?? columnName;
+      //       rowData[dbColumnName] = csvData[i][j];
+      //     }
+
+      //     // Insert the row into the table
+      //     await txn.insert(tableName, rowData);
+      //   }
+
+     // }

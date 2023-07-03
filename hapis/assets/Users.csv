@@ -1,16 +1,15 @@
-user_ID ,username ,First Name,Last Name,city ,,Location_on_google_map ,Phone_num,Email,Password 
-1,Thicand42,Sai,Kosaka,Tokyo,Japan,"1-ch?me-6 Ky?bashi, Chuo City, T?ky?-to 104-0031, Japó",22 366095,SaiKosaka@armyspy.com,OhK7aa3Xoh
-2,Thrervoich,Motoko,Taihei,Tokyo,Japan,"15 Nihonbashikabutoch?, Chuo City, T?ky?-to 103-0026, Japó",24 838673,MotokoTaihei@gustr.com,moop3Ier7
-3,Hort1949,Ikumi,Kanausuku,Tokyo,Japan,"Japó, ?173-0036 T?ky?-to, Itabashi City, Mukaihara, 3-ch?me?9?4 ??????",22 923870,IkumiKanausuku@fleckens.hu,jahw1oa8Ai
-4,Throok,Tomoka,Matsuoka,Tokyo,Japan,"4-ch?me-7 Toyotamakita, Nerima City, T?ky?-to 176-0012, Japó",96 439302,TomokaMatsuoka@armyspy.com,shaeKa5uzae
-5,Arefling00,Shoudai,Tanba,Tokyo,Japan,"1-ch?me-43 Kotakech?, Nerima City, T?ky?-to 176-0004, Japó",96 741695,ShoudaiTanba@einrot.com,iFaf7AhKoh
-6,Faceink1957,Shinji,Matsumura,Tokyo,Japan,"4 Chome-2 Shibuya, Shibuya City, Tokyo 150-0002, Japó",23 171931,ShinjiMatsumura@einrot.com,chool8ahKah
-7,Accutudgeted,Io,Fujikawa,Tokyo,Japan,"Japó, ?135-0051 T?ky?-to, Koto City, Edagawa, 1-ch?me?9?17 ???????????????",26 858315,IoFujikawa@gustr.com,aeSi7meiR
-8,Lonsind,Shinga,Hakui,Tokyo,Japan,"3-ch?me-17-15 Megurohonch?, Meguro City, T?ky?-to 152-0002, Japó",26 857543,ShingaHakui@teleworm.us,IopaeVaiC6ei
-9,Fivinte,Mariyo,Shimizu,Tokyo,Japan,"3-ch?me-11 Nishi?i, Shinagawa City, T?ky?-to 140-0015, Japó",22 299580,MariyoShimizu@einrot.com,Eo9piexo8eo
-10,Leng1943,Akihide,Yajima,Tokyo,Japan,"Japó, ?140-0003 T?ky?-to, Shinagawa City, Yashio, 2-ch?me?6?2 ????",22 175195,AkihideYajima@fleckens.hu,Nio4ibie
-11,Labould,Louise ,Boyle,Edinburgh,"United Kingdom
-","143 W Port, Edinburgh, United Kingdom",070 8547 1937,LouiseBoyle@armyspy.com,aeya4Odei
+UserID ,UserName ,FirstName,LastName,City ,Country ,AddressLocation ,PhoneNum,Email,Password 
+1,Thicand42,Sai,Kosaka,Tokyo,Japan,"1-ch?me-6 Ky?bashi, Chuo City, T?ky?-to 104-0031, Japï¿½",22 366095,SaiKosaka@armyspy.com,OhK7aa3Xoh
+2,Thrervoich,Motoko,Taihei,Tokyo,Japan,"15 Nihonbashikabutoch?, Chuo City, T?ky?-to 103-0026, Japï¿½",24 838673,MotokoTaihei@gustr.com,moop3Ier7
+3,Hort1949,Ikumi,Kanausuku,Tokyo,Japan,"Japï¿½, ?173-0036 T?ky?-to, Itabashi City, Mukaihara, 3-ch?me?9?4 ??????",22 923870,IkumiKanausuku@fleckens.hu,jahw1oa8Ai
+4,Throok,Tomoka,Matsuoka,Tokyo,Japan,"4-ch?me-7 Toyotamakita, Nerima City, T?ky?-to 176-0012, Japï¿½",96 439302,TomokaMatsuoka@armyspy.com,shaeKa5uzae
+5,Arefling00,Shoudai,Tanba,Tokyo,Japan,"1-ch?me-43 Kotakech?, Nerima City, T?ky?-to 176-0004, Japï¿½",96 741695,ShoudaiTanba@einrot.com,iFaf7AhKoh
+6,Faceink1957,Shinji,Matsumura,Tokyo,Japan,"4 Chome-2 Shibuya, Shibuya City, Tokyo 150-0002, Japï¿½",23 171931,ShinjiMatsumura@einrot.com,chool8ahKah
+7,Accutudgeted,Io,Fujikawa,Tokyo,Japan,"Japï¿½, ?135-0051 T?ky?-to, Koto City, Edagawa, 1-ch?me?9?17 ???????????????",26 858315,IoFujikawa@gustr.com,aeSi7meiR
+8,Lonsind,Shinga,Hakui,Tokyo,Japan,"3-ch?me-17-15 Megurohonch?, Meguro City, T?ky?-to 152-0002, Japï¿½",26 857543,ShingaHakui@teleworm.us,IopaeVaiC6ei
+9,Fivinte,Mariyo,Shimizu,Tokyo,Japan,"3-ch?me-11 Nishi?i, Shinagawa City, T?ky?-to 140-0015, Japï¿½",22 299580,MariyoShimizu@einrot.com,Eo9piexo8eo
+10,Leng1943,Akihide,Yajima,Tokyo,Japan,"Japï¿½, ?140-0003 T?ky?-to, Shinagawa City, Yashio, 2-ch?me?6?2 ????",22 175195,AkihideYajima@fleckens.hu,Nio4ibie
+11,Labould,Louise ,Boyle,Edinburgh,"United Kingdom","143 W Port, Edinburgh, United Kingdom",070 8547 1937,LouiseBoyle@armyspy.com,aeya4Odei
 12,Acers2002,Lydia,King,Edinburgh,United Kingdom,"8 The Loan, South Queensferry, City of Edinburgh, United Kingdom",079 1220 4171,LydiaKing@jourrapide.com,Phoh7nah
 13,Whoods,Mac ,Docherty,Edinburgh,United Kingdom,"39 Great Jct St, Edinburgh, United Kingdom",079 5021 1344,MacDocherty@dayrep.com,thies7Fee
 14,Tookill,Codey ,Muir,Edinburgh,United Kingdom,"24 Nicolson Square, Edinburgh, United Kingdom",079 7302 9197,CodeyMuir@armyspy.com,xo6vaB4aey
@@ -20,26 +19,26 @@ user_ID ,username ,First Name,Last Name,city ,,Location_on_google_map ,Phone_num
 18,Houts1968,Martyna ,Murphy,Edinburgh,United Kingdom,"25 Greenside Ln, Edinburgh, United Kingdom",077 8349 5290,MartynaMurphy@rhyta.com,eeciX9phaiy
 19,Evight,Amelie ,Morrison,Edinburgh,United Kingdom,"5 Canonmills, Edinburgh, United Kingdom",078 4828 3192,AmelieMorrison@teleworm.us,ohShoun6oh
 20,Blesteth,Paul ,Williamson,Edinburgh,United Kingdom,"79 Restalrig Rd S, Edinburgh, United Kingdom",077 5703 5789,PaulWilliamson@dayrep.com,EeshieG2tu
-21,Therry,Lovella,Davis,San Francisco,United States,"1434 34th Ave, San Francisco, CA 94122, Estats Units d'Amèrica",8435469546,LovellaRDavis@rhyta.com,neol0ONg4qu
-22,Clithapping,Oscar,Hodges,San Francisco,United States,"1417 26th Ave, San Francisco, CA 94122, Estats Units d'Amèrica",4439643412,OscarKHodges@teleworm.us,zaiBug0te
-23,Stowly1990,Joyce,Parmley,San Francisco,United States,"1223-1299 24th Ave, San Francisco, CA 94122, Estats Units d'Amèrica",4126614737,JoyceRParmley@jourrapide.com,tosho8Ieg7ai
-24,Stoped,David,Hall,San Francisco,United States,"1212 10th Ave, San Francisco, CA 94122, Estats Units d'Amèrica",2087737216,DavidKHall@gustr.com,ooK8geech
-25,Funition,Gretchen,Ward,San Francisco,United States,"3230-3290 Fulton St, San Francisco, CA 94118, Estats Units d'Amèrica",8086936767,GretchenTWard@jourrapide.com,quool6Wi8
-26,Rometh,Lisa,Craft,San Francisco,United States,"1427 Cabrillo St, San Francisco, CA 94118, Estats Units d'Amèrica",6513360810,LisaDCraft@cuvox.de,reero7Quu
-27,Toorse,James,Bailey,San Francisco,United States,"666 22nd Ave, San Francisco, CA 94121, Estats Units d'Amèrica",6105868582,JamesJBailey@dayrep.com,Zae0mohvu5oo
-28,Muchy1989,Alice,Taylor,San Francisco,United States,"701-765 28th Ave, San Francisco, CA 94121, Estats Units d'Amèrica",8325586914,AliceETaylor@gustr.com,eesaev8Fush
-29,Arager,Gregory,Lykins,San Francisco,United States,"3750 Balboa St, San Francisco, CA 94121, Estats Units d'Amèrica",6099988023,GregoryTLykins@fleckens.hu,sheici2Ei
-30,Phome1935,Nicole,Campbell,San Francisco,United States,"San Francisco, Califòrnia 94121, Estats Units",7149242357,NicoleSCampbell@superrito.com,Fahjas5f
-31,Babiless,Dámaso,Figueroa,Lleida,Spain,"Av. Alcalde Porqueras 3, Lleida, Spain",721 914 872,DamasoFigueroaCarreon@dayrep.com,sethe0Ahz8ee
+21,Therry,Lovella,Davis,San Francisco,United States,"1434 34th Ave, San Francisco, CA 94122, Estats Units d'Amï¿½rica",8435469546,LovellaRDavis@rhyta.com,neol0ONg4qu
+22,Clithapping,Oscar,Hodges,San Francisco,United States,"1417 26th Ave, San Francisco, CA 94122, Estats Units d'Amï¿½rica",4439643412,OscarKHodges@teleworm.us,zaiBug0te
+23,Stowly1990,Joyce,Parmley,San Francisco,United States,"1223-1299 24th Ave, San Francisco, CA 94122, Estats Units d'Amï¿½rica",4126614737,JoyceRParmley@jourrapide.com,tosho8Ieg7ai
+24,Stoped,David,Hall,San Francisco,United States,"1212 10th Ave, San Francisco, CA 94122, Estats Units d'Amï¿½rica",2087737216,DavidKHall@gustr.com,ooK8geech
+25,Funition,Gretchen,Ward,San Francisco,United States,"3230-3290 Fulton St, San Francisco, CA 94118, Estats Units d'Amï¿½rica",8086936767,GretchenTWard@jourrapide.com,quool6Wi8
+26,Rometh,Lisa,Craft,San Francisco,United States,"1427 Cabrillo St, San Francisco, CA 94118, Estats Units d'Amï¿½rica",6513360810,LisaDCraft@cuvox.de,reero7Quu
+27,Toorse,James,Bailey,San Francisco,United States,"666 22nd Ave, San Francisco, CA 94121, Estats Units d'Amï¿½rica",6105868582,JamesJBailey@dayrep.com,Zae0mohvu5oo
+28,Muchy1989,Alice,Taylor,San Francisco,United States,"701-765 28th Ave, San Francisco, CA 94121, Estats Units d'Amï¿½rica",8325586914,AliceETaylor@gustr.com,eesaev8Fush
+29,Arager,Gregory,Lykins,San Francisco,United States,"3750 Balboa St, San Francisco, CA 94121, Estats Units d'Amï¿½rica",6099988023,GregoryTLykins@fleckens.hu,sheici2Ei
+30,Phome1935,Nicole,Campbell,San Francisco,United States,"San Francisco, Califï¿½rnia 94121, Estats Units",7149242357,NicoleSCampbell@superrito.com,Fahjas5f
+31,Babiless,Dï¿½maso,Figueroa,Lleida,Spain,"Av. Alcalde Porqueras 3, Lleida, Spain",721 914 872,DamasoFigueroaCarreon@dayrep.com,sethe0Ahz8ee
 32,Cartheindfar,Sabelia,Velez,Lleida,Spain,"Av. de Catalunya 4, Lleida, Spain",726 607 893,SabeliaVelezOlvera@jourrapide.com,Poophoo3moo
 33,Histrely,Fabrizio,Orozco,Lleida,Spain,"Av. Alcalde Porqueras 13, Lleida, Spain",613 414 268,FabrizioOrozcoMontenegro@fleckens.hu,Ahr4haiNg
 34,Imsed1982,Florio,Ferrer,Lleida,Spain,"Av. Estudi General 6, Lleida, Spain",754 286 708,FlorioFerrerSerna@superrito.com,ashieKie8
-35,Facke1946,Hermione,Solórzano,Lleida,Spain,"Av. Prat de la Riba 23, Lleida, Spain",737 816 654,HermioneSolorzanoMontano@rhyta.com,thooN0eenai
+35,Facke1946,Hermione,Solï¿½rzano,Lleida,Spain,"Av. Prat de la Riba 23, Lleida, Spain",737 816 654,HermioneSolorzanoMontano@rhyta.com,thooN0eenai
 36,Incents,Galeno,Blanco,Lleida,Spain,"Av. Catalunya 10, Lleida, Spain",672 949 462,GalenoBlancoSalinas@jourrapide.com,beel2ieQu
-37,Weataid,Zenon,Porras,Lleida,Spain,"Plaça dels Pagesos 25, Lleida, Spain",623 647 881,ZenonPorrasBustos@superrito.com,xaGeegee3
+37,Weataid,Zenon,Porras,Lleida,Spain,"Plaï¿½a dels Pagesos 25, Lleida, Spain",623 647 881,ZenonPorrasBustos@superrito.com,xaGeegee3
 38,Aruld1959,Ulises,Cotto,Lleida,Spain,"Av. de les Garrigues 14, Lleida, Spain",754 079 743,UlisesCottoPineda@rhyta.com,ahz8zeuC
-39,Surew1973,Jesusa,Salgado,Lleida,Spain,"Av. de Balàfia 15, Lleida, Spain",789 660 443,JesusaSalgadoNunez@fleckens.hu,maeN3aij
-40,Whiond,Martiniana,Najera,Lleida,Spain,"Baró de Maials 20, Lleida, Spain",619 582 314,MartinianaNajeraBrito@armyspy.com,eghuCho8
+39,Surew1973,Jesusa,Salgado,Lleida,Spain,"Av. de Balï¿½fia 15, Lleida, Spain",789 660 443,JesusaSalgadoNunez@fleckens.hu,maeN3aij
+40,Whiond,Martiniana,Najera,Lleida,Spain,"Barï¿½ de Maials 20, Lleida, Spain",619 582 314,MartinianaNajeraBrito@armyspy.com,eghuCho8
 41,NourAli00,Nour,Ali,Cairo,Egypt,"5 El Zohour St., MOHANDESEEN, Cairo, Egypt",1002671922,NourAli@example.com,ohth5Zai
 42,AHatem21,Ahmed,Hatem,Cairo,Egypt,"197 26th July St., Agouza, Cairo, Egypt",1009176299,AhmedHatem@blbla.com,USohsoo3
 43,Fatom2,Fatma,Hassan,Cairo,Egypt,"3 Hassan Sadek St., off Mirghany, Cairo, Egypt",1201878817,FatmaHassan@blaa.com,Ielohb7ut7b

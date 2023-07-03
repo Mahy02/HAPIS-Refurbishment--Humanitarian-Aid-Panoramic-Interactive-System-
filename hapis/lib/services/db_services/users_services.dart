@@ -37,15 +37,15 @@ class UserServices {
 
   Future<List<Map<String, String>>> getCitiesAndCountries() async {
     String sqlStatement = '''
-    SELECT DISTINCT city, country
+    SELECT DISTINCT City, Country
     FROM Users
   ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
     List<Map<String, String>> results = queryResult.map((row) {
       return {
-        'city': row['city'] as String,
-        'country': row['country'] as String,
+        'city': row['City'] as String,
+        'country': row['Country'] as String,
       };
     }).toList();
 
