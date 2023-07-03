@@ -46,6 +46,7 @@ dependencies:
   geocoding: ^2.1.0
   flutter_polygon: ^0.3.0+2
   dartssh2: ^2.8.2
+  csv: ^5.0.2
 
 
 
@@ -100,6 +101,10 @@ flutter:
       - assets/images/orbit.png
       - assets/images/orbit2.png
       #- assets/images/Logos_2.png
+      - Forms.csv
+      - Matchings.csv
+      - Requests.csv
+      - Users.csv
 
 
 

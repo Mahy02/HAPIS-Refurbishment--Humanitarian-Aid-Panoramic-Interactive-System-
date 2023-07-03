@@ -13,6 +13,7 @@ import '../providers/ssh_provider.dart';
 import '../reusable_widgets/hapis_elevated_button.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../services/LG_functionalities.dart';
+import '../services/db_services/global_db_services.dart';
 import '../utils/pop_up_connection.dart';
 
 ///This is our Home page. It has 2 main buttons=> Global statistics and Cities
@@ -107,38 +108,44 @@ class _HomePageState extends State<HomePage> {
                       imageHeight: MediaQuery.of(context).size.height * 0.25,
                       imageWidth: MediaQuery.of(context).size.height * 0.25,
                       isPoly: false,
-                      onpressed: () {
+                      onpressed: () async {
                         //will show bubble on LG
                         ///TO DO:
-                        int numberOfSeekers = 30;
-                        int numberOfGivers = 20;
+                        // int numberOfSeekers = 30;
+                        // int numberOfGivers = 20;
 
-                        int inProgressDonations = 4;
-                        int successfulDonations = 2;
-                        List<String> topThreeCategories = [
-                          'Food',
-                          'Clothing',
-                          'Pet supplies'
-                        ];
-                        List<String> topThreeCities = [
-                          'Cairo',
-                          'Tokyo',
-                          'llieda'
-                        ];
-                        // int numberOfSeekers =
-                        //     globeDBServices().getNumberOfSeekers();
-                        // int numberOfGivers =
-                        //     globeDBServices().getNumberOfGivers();
+                        // int inProgressDonations = 4;
+                        // int successfulDonations = 2;
+                        // List<String> topThreeCategories = [
+                        //   'Food',
+                        //   'Clothing',
+                        //   'Pet supplies'
+                        // ];
+                        // List<String> topThreeCities = [
+                        //   'Cairo',
+                        //   'Tokyo',
+                        //   'llieda'
+                        // ];
+                        int numberOfSeekers =
+                            await globalDBServices().getNumberOfSeekers();
+                        int numberOfGivers =
+                            await globalDBServices().getNumberOfGivers();
 
-                        // int inProgressDonations =
-                        //     globeDBServices().getNumberOfInProgressDonations();
-                        // int successfulDonations =
-                        //     globeDBServices().getNumberOfSuccessfulDonations();
-                        // List<String> topThreeCategories =
-                        //     globeDBServices().getTopDonatedCategories();
-                        // List<String> topThreeCities =
-                        //     globeDBServices().getTopDonatedCategories();
-                        print(numberOfSeekers);
+                        int inProgressDonations = await globalDBServices()
+                            .getNumberOfInProgressDonations();
+                        int successfulDonations = await globalDBServices()
+                            .getNumberOfSuccessfulDonations();
+                        List<String> topThreeCategories =
+                            await globalDBServices().getTopDonatedCategories();
+                        List<String> topThreeCities =
+                            await globalDBServices().getTopCities();
+
+                        print("number of seekers: $numberOfSeekers");
+                        print("number of givers: $numberOfGivers");
+                        print("in progress donations: $inProgressDonations");
+                        print("succ donations: $successfulDonations");
+                        print("top 3 cat: $topThreeCategories");
+                        print("top 3 cities: $topThreeCities");
 
                         GlobeModel globe = GlobeModel(
                             id: '4',
@@ -149,18 +156,18 @@ class _HomePageState extends State<HomePage> {
                             topThreeCategories: topThreeCategories,
                             topThreeCities: topThreeCities);
 
-                        final sshData =
-                            Provider.of<SSHprovider>(context, listen: false);
+                        // final sshData =
+                        //     Provider.of<SSHprovider>(context, listen: false);
                         print("inside globe on pressed ");
 
-                        if (sshData.client != null) {
-                          print(sshData.client!.username);
+                        // if (sshData.client != null) {
+                        //   print(sshData.client!.username);
 
-                          print("here");
-                          _viewGlobeStats(globe, true, context);
-                        } else {
-                          showDialogConnection(context);
-                        }
+                        //   print("here");
+                        //   _viewGlobeStats(globe, true, context);
+                        // } else {
+                        //   showDialogConnection(context);
+                        // }
                       }),
                   HapisElevatedButton(
                       elevatedButtonContent: 'Cities',

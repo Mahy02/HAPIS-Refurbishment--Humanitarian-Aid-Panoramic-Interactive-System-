@@ -58,7 +58,6 @@ class _CityComponentState extends State<CityComponent> {
       _cityPlacemark = placemark;
     });
 
-
     LgService(sshData).clearKml();
     final kmlBalloon = KMLModel(
       name: 'HAPIS-City-balloon',
@@ -110,22 +109,30 @@ class _CityComponentState extends State<CityComponent> {
         //but check connectivity first
 
         print("inside a city");
-        int numberOfSeekers = cityDBServices().getNumberOfSeekers();
-        int numberOfGivers = cityDBServices().getNumberOfGivers();
-        List<String> seekers = cityDBServices().getListOfSeekers();
+        int numberOfSeekers =await cityDBServices().getNumberOfSeekers(widget.city);
+        int numberOfGivers = await cityDBServices().getNumberOfGivers(widget.city);
+        List<String> seekers =  cityDBServices().getListOfSeekers();
         List<String> givers = cityDBServices().getListOfGivers();
-        int inProgressDonations =
-            cityDBServices().getNumberOfInProgressDonations();
-        int successfulDonations =
-            cityDBServices().getNumberOfSuccessfulDonations();
-        List<String> topThreeCategories =
-            cityDBServices().getTopDonatedCategories();
+        int inProgressDonations = await
+            cityDBServices().getNumberOfInProgressDonations(widget.city);
+        int successfulDonations = await
+            cityDBServices().getNumberOfSuccessfulDonations(widget.city);
+        List<String> topThreeCategories = await
+            cityDBServices().getTopDonatedCategories(widget.city);
         print(numberOfSeekers);
         print(widget.city);
         print(widget.country);
         final LatLng cityCoordinates = await getCoordinates(widget.city);
         print("city button trial");
         print(cityCoordinates);
+
+
+        print("inside city component on pressed ");
+        print("number of seekers: $numberOfSeekers");
+        print("number of givers: $numberOfGivers");
+        print("in progress donations: $inProgressDonations");
+        print("succ donations: $successfulDonations");
+        print("top 3 cat: $topThreeCategories");
 
         CityModel city = CityModel(
             id: '2',
@@ -139,17 +146,18 @@ class _CityComponentState extends State<CityComponent> {
             topThreeCategories: topThreeCategories,
             cityCoordinates: cityCoordinates);
 
-        final sshData = Provider.of<SSHprovider>(context, listen: false);
-        print("inside city component on pressed ");
+       // final sshData = Provider.of<SSHprovider>(context, listen: false);
+        
+        
         // print(sshData.client.username);
-        if (sshData.client != null) {
-          print(sshData.client!.username);
+        // if (sshData.client != null) {
+        //   print(sshData.client!.username);
 
-          print("here");
-          _viewCityStats(city, true, context);
-        } else {
-          showDialogConnection(context);
-        }
+        //   print("here");
+        //   _viewCityStats(city, true, context);
+        // } else {
+        //   showDialogConnection(context);
+        // }
       },
     );
   }

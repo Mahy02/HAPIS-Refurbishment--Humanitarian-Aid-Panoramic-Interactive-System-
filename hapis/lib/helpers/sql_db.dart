@@ -1,5 +1,9 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:csv/csv.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 ///This class [SqlDb] is responsible for functions related to the database
 
@@ -26,10 +30,12 @@ class SqlDb {
     String path = join(databasePath, 'HAPIS.db');
 
     ///creating the database
+    ///Open the database or create it if it doesn't exist
     ///The version is needed when we want to update something in our database, like adding a table or deleted a table or so on
     ///Instead of dropping the database and creating it again
     Database mydb = await openDatabase(path,
         onCreate: _onCreate, version: 1, onUpgrade: _onUpgrade);
+    print("Initialized DB successfully");
     return mydb;
   }
 
@@ -104,6 +110,8 @@ class SqlDb {
   readData(String selectSql) async {
     Database? hapisDb = await db;
     List<Map> response = await hapisDb!.rawQuery(selectSql);
+    print("Read data");
+    print(response);
     return response;
   }
 
@@ -111,6 +119,8 @@ class SqlDb {
   insertData(String selectSql) async {
     Database? hapisDb = await db;
     int response = await hapisDb!.rawInsert(selectSql);
+    print("insert data");
+    print(response);
     return response;
   }
 
@@ -118,6 +128,8 @@ class SqlDb {
   updateData(String selectSql) async {
     Database? hapisDb = await db;
     int response = await hapisDb!.rawUpdate(selectSql);
+    print("update data");
+    print(response);
     return response;
   }
 
@@ -125,6 +137,55 @@ class SqlDb {
   deleteData(String selectSql) async {
     Database? hapisDb = await db;
     int response = await hapisDb!.rawDelete(selectSql);
+    print("delete data");
+    print(response);
     return response;
+  }
+
+  /// Function to import CSV data into a table
+  Future<void> importTableFromCSV(String tableName, String csvFileName) async {
+    // Read the CSV file from assets
+    String csvString = await rootBundle.loadString(csvFileName);
+
+    // Parse the CSV string
+    List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
+
+    // Get a reference to the database
+    Database? hapisDb = await db;
+
+    // Start a database transaction
+    await hapisDb!.transaction((txn) async {
+      // Iterate over each row in the CSV data
+      for (List<dynamic> row in csvData) {
+        // Convert the row data to a map
+        Map<String, dynamic> rowData = {};
+
+        for (int i = 0; i < row.length; i++) {
+          // first row contains column names
+          String columnName = csvData[0][i].toString();
+          rowData[columnName] = row[i];
+        }
+
+        // Insert the row into the table
+        await txn.insert(tableName, rowData);
+      }
+    });
+    print("inside import table from csv");
+  }
+
+  /// Function to import all tables from CSV files
+  Future<void> importAllTablesFromCSV() async {
+    // Import Users table
+    await importTableFromCSV('Users', 'Users.csv');
+
+    // Import Forms table
+    await importTableFromCSV('Forms', 'Forms.csv');
+
+    // Import Matchings table
+    await importTableFromCSV('Matchings', 'Matchings.csv');
+
+    // Import Requests table
+    await importTableFromCSV('Requests', 'Requests.csv');
+    print("import all tables");
   }
 }

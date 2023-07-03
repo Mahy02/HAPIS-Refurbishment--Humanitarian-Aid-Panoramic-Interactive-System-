@@ -12,6 +12,7 @@ import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
+import 'helpers/sql_db.dart';
 
 ///This is the main starting point of our application
 ///
@@ -19,7 +20,14 @@ import 'constants.dart';
 ///We call [LgService] Class to call setlogos using the ssh info from the [SSHprovider] at the start of the app
 /// we have a [MultiProvider] for all our providers in our app
 
-void main() {
+void main() async{
+   /// Initialize the app
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// Import the database tables from CSV files
+  SqlDb sqlDb = SqlDb();
+  await sqlDb.importAllTablesFromCSV();
+  
   runApp(
     MultiProvider(
       providers: [

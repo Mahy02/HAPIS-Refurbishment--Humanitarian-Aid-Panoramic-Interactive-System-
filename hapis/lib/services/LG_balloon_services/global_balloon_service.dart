@@ -18,12 +18,7 @@ class GlobalBalloonService {
     LookAtModel lookAtObj;
 
     if (lookAt == null) {
-      // String formattedLongitude = NumberFormat('#,##0.##°').format(-45.4518936);
-      // String formattedLatitude = NumberFormat('#,##0.##°').format(0.0000101);
-      // String formattedRange = NumberFormat('#,##0.## m').format(22231212.86);
-      // String formattedAltitude = NumberFormat('#,##0.## m').format(20540.1097385);
-      // String formattedHeading = NumberFormat('#,##0.##°').format(0);
-      // String formattedTilt = NumberFormat('#,##0.##°').format(0);
+      
 
       lookAtObj = LookAtModel(
           // longitude: -3.629954,
