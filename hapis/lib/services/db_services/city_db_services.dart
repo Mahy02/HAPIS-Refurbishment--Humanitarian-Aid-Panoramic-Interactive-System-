@@ -72,7 +72,7 @@ top 3 donated categories in this city
     String sqlStatement = '''
     SELECT COUNT(*) AS successful_donation_count
     FROM (
-      SELECT *
+      SELECT Matchings.Donation_Status
       FROM Matchings
       JOIN Forms ON Matchings.Seeker_FormID = Forms.FormID 
       JOIN Users ON Forms.UserID = Users.UserID
@@ -80,7 +80,7 @@ top 3 donated categories in this city
       
       UNION ALL
       
-      SELECT *
+      SELECT Requests.Donation_Status
       FROM Requests
       JOIN Users ON Requests.Rec_ID = Users.UserID
       WHERE Users.City = '$cityName' AND Requests.Donation_Status = 'Finished'
@@ -100,7 +100,7 @@ top 3 donated categories in this city
     String sqlStatement = '''
     SELECT COUNT(*) AS Inprogress_donation_count
     FROM (
-      SELECT *
+      SELECT Matchings.Donation_Status
       FROM Matchings
       JOIN Forms ON Matchings.Seeker_FormID = Forms.FormID 
       JOIN Users ON Forms.UserID = Users.UserID
@@ -108,7 +108,7 @@ top 3 donated categories in this city
       
       UNION ALL
       
-      SELECT *
+      SELECT Requests.Donation_Status
       FROM Requests
       JOIN Users ON Requests.Rec_ID = Users.UserID
       WHERE Users.City = '$cityName' AND Requests.Donation_Status = 'In progress'
@@ -128,7 +128,7 @@ top 3 donated categories in this city
     String sqlStatement = '''
         SELECT Forms.Category, COUNT(*) AS category_count
         FROM Forms
-        JOIN Users ON Forms.User_ID = Users.UserID
+        JOIN Users ON Forms.UserID = Users.UserID
         WHERE Users.city = '$cityName'
         GROUP BY Forms.Category
         ORDER BY category_count DESC
@@ -144,13 +144,6 @@ top 3 donated categories in this city
   }
 
   return topCategories;
-
-
-    // return [
-    //   'Category 1',
-    //   'Category 2',
-    //   'Category 3',
-    // ];
   }
 }
 

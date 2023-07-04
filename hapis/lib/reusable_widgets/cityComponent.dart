@@ -109,23 +109,24 @@ class _CityComponentState extends State<CityComponent> {
         //but check connectivity first
 
         print("inside a city");
-        int numberOfSeekers =await cityDBServices().getNumberOfSeekers(widget.city);
-        int numberOfGivers = await cityDBServices().getNumberOfGivers(widget.city);
-        List<String> seekers =  cityDBServices().getListOfSeekers();
+        int numberOfSeekers =
+            await cityDBServices().getNumberOfSeekers(widget.city);
+        int numberOfGivers =
+            await cityDBServices().getNumberOfGivers(widget.city);
+        List<String> seekers = cityDBServices().getListOfSeekers();
         List<String> givers = cityDBServices().getListOfGivers();
-        int inProgressDonations = await
-            cityDBServices().getNumberOfInProgressDonations(widget.city);
-        int successfulDonations = await
-            cityDBServices().getNumberOfSuccessfulDonations(widget.city);
-        List<String> topThreeCategories = await
-            cityDBServices().getTopDonatedCategories(widget.city);
+        int inProgressDonations =
+            await cityDBServices().getNumberOfInProgressDonations(widget.city);
+        int successfulDonations =
+            await cityDBServices().getNumberOfSuccessfulDonations(widget.city);
+        List<String> topThreeCategories =
+            await cityDBServices().getTopDonatedCategories(widget.city);
         print(numberOfSeekers);
         print(widget.city);
         print(widget.country);
-        final LatLng cityCoordinates = await getCoordinates(widget.city);
+        //final LatLng cityCoordinates = await getCoordinates(widget.city);
         print("city button trial");
-        print(cityCoordinates);
-
+        //print(cityCoordinates);
 
         print("inside city component on pressed ");
         print("number of seekers: $numberOfSeekers");
@@ -134,21 +135,20 @@ class _CityComponentState extends State<CityComponent> {
         print("succ donations: $successfulDonations");
         print("top 3 cat: $topThreeCategories");
 
-        CityModel city = CityModel(
-            id: '2',
-            name: widget.city,
-            seekers: seekers,
-            givers: givers,
-            numberOfSeekers: numberOfSeekers,
-            numberOfGivers: numberOfGivers,
-            inProgressDonations: inProgressDonations,
-            successfulDonations: successfulDonations,
-            topThreeCategories: topThreeCategories,
-            cityCoordinates: cityCoordinates);
+        // CityModel city = CityModel(
+        //     id: '2',
+        //     name: widget.city,
+        //     seekers: seekers,
+        //     givers: givers,
+        //     numberOfSeekers: numberOfSeekers,
+        //     numberOfGivers: numberOfGivers,
+        //     inProgressDonations: inProgressDonations,
+        //     successfulDonations: successfulDonations,
+        //     topThreeCategories: topThreeCategories,
+        //     cityCoordinates: cityCoordinates);
 
-       // final sshData = Provider.of<SSHprovider>(context, listen: false);
-        
-        
+        // final sshData = Provider.of<SSHprovider>(context, listen: false);
+
         // print(sshData.client.username);
         // if (sshData.client != null) {
         //   print(sshData.client!.username);
