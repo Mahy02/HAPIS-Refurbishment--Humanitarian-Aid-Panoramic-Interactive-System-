@@ -1,3 +1,8 @@
+import 'dart:math';
+
+import '../../constants.dart';
+import '../../utils/extract_geocoordinates.dart';
+
 /// Model that represents the `UsersModel`, with all of its properties and methods.
 
 class UsersModel {
@@ -40,6 +45,9 @@ class UsersModel {
   ///property that defines user's total number of seeking for others
   int? seekingForOthers;
 
+  ///property that defines user `Coordinates`
+  LatLng? userCoordinates;
+
   UsersModel(
       {this.userID,
       this.userName,
@@ -50,21 +58,96 @@ class UsersModel {
       this.addressLocation,
       this.phoneNum,
       this.email,
-      this.pass, this.givings, this.seekingForOthers, this.seekingsForSelf});
+      this.pass,
+      this.givings,
+      this.seekingForOthers,
+      this.seekingsForSelf,
+      this.userCoordinates});
+
+  /// Gets the balloon content from the current giver.
+  String giverBalloonContent() => '''
+      <b><font size="+2">'Personal Information & statistics'<font color="#5D5D5D"></font></font></b>
+      <br/><br/>
+      <b>Name:</b> ${'$firstName $lastName'}
+      <br/>
+      <b>Phone Number:</b> $phoneNum
+      <br/>
+      <b>Enail:</b> $email
+      <br/>
+      <b>Total Number of donations made:</b> $givings
+      <br/>
+    ''';
+
+      /// Gets the balloon content from the current seeker.
+  String seekerBalloonContent() => '''
+      <b><font size="+2">'Personal Information & statistics'<font color="#5D5D5D"></font></font></b>
+      <br/><br/>
+      <b>Name:</b> ${'$firstName $lastName'}
+      <br/>
+      <b>Phone Number:</b> $phoneNum
+      <br/>
+      <b>Enail:</b> $email
+      <br/>
+      <b>Total Number seekings made for self:</b> $seekingsForSelf
+      <br/>
+      <b>Total Number seekings made for others:</b> $seekingForOthers
+      <br/>
+    ''';
+
+   List<Map<String, double>> getUserOrbitCoordinates(
+    String address,
+    {
+    double step = 3,
+    double altitude = 10000, // Specify the desired altitude for the orbit
+  }) {
+    
+    // if (cityCoordinates == null) {
+    //   return [];
+    // }
+   // final LatLng userCoordinates=  await getCoordinates(addressLocation!);
+
+    List<Map<String, double>> coords = [];
+    double displacement = 0;
+    double spot = 0;
+
+    while (spot < 361) {
+      displacement += step / 361;
+
+      double angle = displacement * (pi / 180.0);
+      double latitude = userCoordinates!.latitude;
+      double longitude = userCoordinates!.longitude;
+      double distance = altitude;
+
+      // Calculate the new coordinates based on the orbit parameters
+      double newLatitude = latitude + distance * cos(angle) / earthRadius;
+      double newLongitude = longitude +
+          distance * sin(angle) / (earthRadius * cos(latitude * (pi / 180.0)));
+
+      coords.add({
+        'lat': newLatitude,
+        'lng': newLongitude,
+        'alt': altitude,
+      });
+
+      spot++;
+    }
+
+    return coords;
+  }
 
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
-        userID: map['UserID'],
-        userName: map['UserName'],
-        firstName: map['FirstName'],
-        lastName: map['LastName'],
-        country: map['Country'],
-        city: map['City'],
-        addressLocation: map['AddressLocation'],
-        phoneNum: map['PhoneNum'],
-        email: map['Email'],
-        pass: map['Password'],
-        );
+      userID: map['UserID'],
+      userName: map['UserName'],
+      firstName: map['FirstName'],
+      lastName: map['LastName'],
+      country: map['Country'],
+      city: map['City'],
+      addressLocation: map['AddressLocation'],
+      phoneNum: map['PhoneNum'],
+      email: map['Email'],
+      pass: map['Password'],
+    );
   }
 }

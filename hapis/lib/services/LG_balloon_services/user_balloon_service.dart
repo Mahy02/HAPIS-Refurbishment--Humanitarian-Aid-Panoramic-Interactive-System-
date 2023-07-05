@@ -1,45 +1,49 @@
-/*
- /// Builds and returns a satellite `Placemark` entity according to the given
-  /// [satellite], [tle], [transmitters] and more.
-  PlacemarkEntity buildPlacemark(
-    SatelliteEntity satellite,
-    TLEEntity tle,
-    List<TransmitterEntity> transmitters,
+
+import 'package:hapis/models/db_models/users_model.dart';
+import 'package:hapis/models/kml/line_model.dart';
+import 'package:hapis/models/kml/look_at_model.dart';
+import 'package:hapis/models/kml/placemark_model.dart';
+import 'package:hapis/models/kml/point_model.dart';
+import 'package:hapis/models/kml/tour_model.dart';
+
+import '../../models/balloon_models/city_ballon_model.dart';
+import '../../models/kml/orbit_model.dart';
+import '../../utils/extract_geocoordinates.dart';
+
+class UserBalloonService {
+  /// Builds and returns a user `Placemark` entity according to the given [user]
+  PlacemarkModel buildUserPlacemark(
+    UsersModel user,
     bool balloon,
+    bool seeker,
     double orbitPeriod, {
-    LookAtEntity? lookAt,
+    LookAtModel? lookAt,
     bool updatePosition = true,
-  }) {
-    LookAtEntity lookAtObj;
+  })   {
+    LookAtModel lookAtObj;
+
+   // final LatLng coord = await getCoordinates(user.addressLocation!);
 
     if (lookAt == null) {
-      final coord = tle.read();
-
-      lookAtObj = LookAtEntity(
-        lng: coord['lng']!,
-        lat: coord['lat']!,
-        altitude: coord['alt']!,
-        range: '4000000',
-        tilt: '60',
-        heading: '0',
-      );
+      lookAtObj = LookAtModel(
+          longitude: user.userCoordinates!.longitude,
+          latitude: user.userCoordinates!.latitude,
+          range: '4000000',
+          tilt: '60',
+          heading: '0');
     } else {
       lookAtObj = lookAt;
     }
 
-    final point = PointEntity(
-      lat: lookAtObj.lat,
-      lng: lookAtObj.lng,
-      altitude: lookAtObj.altitude,
-    );
-
-    satellite.tle = tle;
-
-    final coordinates = satellite.getOrbitCoordinates(step: orbitPeriod);
-
-    final tour = TourEntity(
-      name: 'SimulationTour',
-      placemarkId: 'p-${satellite.id}',
+    final point = PointModel(
+        lat: lookAtObj.latitude,
+        lng: lookAtObj.longitude,
+        altitude: lookAtObj.altitude);
+    final coordinates =
+        user.getUserOrbitCoordinates(user.addressLocation!, step: orbitPeriod);
+    final tour = TourModel(
+      name: 'CityTour',
+      placemarkId: 'p-${user.userID}',
       initialCoordinate: {
         'lat': point.lat,
         'lng': point.lng,
@@ -48,17 +52,14 @@
       coordinates: coordinates,
     );
 
-    return PlacemarkEntity(
-      id: satellite.id,
-      name: '${satellite.name} (${satellite.getStatusLabel().toUpperCase()})',
+    return PlacemarkModel(
+      id: user.userID.toString(),
+      name: '${user.userName} ',
       lookAt: updatePosition ? lookAtObj : null,
       point: point,
-      description: satellite.citation,
-      balloonContent:
-          balloon ? satellite.balloonContent(transmitters.length) : '',
-      icon: 'satellite.png',
-      line: LineEntity(
-        id: satellite.id,
+      balloonContent: balloon ? (seeker? user.seekerBalloonContent(): user.giverBalloonContent()) : '',
+      line: LineModel(
+        id: user.userID.toString(),
         altitudeMode: 'absolute',
         coordinates: coordinates,
       ),
@@ -66,20 +67,18 @@
     );
   }
 
-  /// Builds an `orbit` KML based on the given [satellite] and [tle].
+  /// Builds an `orbit` KML based on the given [user] 
   ///
   /// Returns a [String] that represents the `orbit` KML.
-  String buildOrbit(SatelliteEntity satellite, TLEEntity tle,
-      {LookAtEntity? lookAt}) {
-    LookAtEntity lookAtObj;
+  String buildOrbit(UsersModel user,
+      {LookAtModel? lookAt})  {
+    LookAtModel lookAtObj;
 
     if (lookAt == null) {
-      final coord = tle.read();
-
-      lookAtObj = LookAtEntity(
-        lng: coord['lng']!,
-        lat: coord['lat']!,
-        altitude: coord['alt']!,
+      lookAtObj = LookAtModel(
+        longitude: user.userCoordinates!.longitude,
+        latitude: user.userCoordinates!.latitude,
+        altitude: 0,
         range: '4000000',
         tilt: '60',
         heading: '0',
@@ -88,8 +87,6 @@
       lookAtObj = lookAt;
     }
 
-    return OrbitEntity.buildOrbit(OrbitEntity.tag(lookAtObj));
+    return OrbitModel.buildOrbit(OrbitModel.tag(lookAtObj));
   }
 }
-
-*/

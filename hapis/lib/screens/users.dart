@@ -66,6 +66,10 @@ class _UsersState extends State<Users> {
                           print(
                               'seekings for others: ${seeker.seekingForOthers}');
                           print('seekings for self: ${seeker.seekingsForSelf}');
+                          print(
+                              'coordinates: ${seeker.userCoordinates!.latitude}');
+                          print(
+                              'coordinates: ${seeker.userCoordinates!.longitude}');
                         }
                         Navigator.push(
                             context,
@@ -91,6 +95,10 @@ class _UsersState extends State<Users> {
                           print('ID: ${giver.userID}');
                           print('City: ${giver.city}');
                           print('givings made: ${giver.givings}');
+                          print(
+                              'coordinates: ${giver.userCoordinates!.latitude}');
+                          print(
+                              'coordinates: ${giver.userCoordinates!.longitude}');
                         }
                         //will display placemark for givers on map
                         ///TO DO:

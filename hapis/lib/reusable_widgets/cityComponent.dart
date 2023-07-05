@@ -90,9 +90,7 @@ class _CityComponentState extends State<CityComponent> {
   Widget build(BuildContext context) {
     final imagePath = countryMap[widget.country];
     final buttonContent = '${widget.city}\n${widget.country}';
-    // print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-    // print(widget.city);
-    // print(widget.country);
+
     return
         //Image.asset(imagePath!);
 
@@ -147,7 +145,7 @@ class _CityComponentState extends State<CityComponent> {
         //   print('ID: ${giver.userID}');
         //   print('City: ${giver.city}');
         // }
-       // print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        // print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         //final LatLng cityCoordinates = await getCoordinates(widget.city);
         print("city button trial");

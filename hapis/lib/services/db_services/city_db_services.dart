@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/users_model.dart';
+import 'package:hapis/utils/extract_geocoordinates.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/sql_db.dart';
@@ -97,6 +98,7 @@ top 3 donated categories in this city
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     for (Map<String, dynamic> row in result) {
+      LatLng coords = await getCoordinates(row['AddressLocation']);
       UsersModel user = UsersModel(
         userID: row['UserUserID'],
         userName: row['UserName'],
@@ -108,8 +110,9 @@ top 3 donated categories in this city
         phoneNum: row['PhoneNum'],
         email: row['Email'],
         pass: row['Password'],
-       seekingForOthers: row['other_count'],
-       seekingsForSelf: row['self_count'],
+        seekingForOthers: row['other_count'],
+        seekingsForSelf: row['self_count'],
+        userCoordinates: coords,
       );
       userProvider.saveSeekers(user);
     }
@@ -134,6 +137,10 @@ top 3 donated categories in this city
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     for (Map<String, dynamic> row in result) {
+      LatLng coords = await getCoordinates(row['AddressLocation']);
+      print(
+          "inside query db, the coords: ${coords.latitude} and ${coords.longitude}");
+
       UsersModel user = UsersModel(
         userID: row['UserUserID'],
         userName: row['UserName'],
@@ -146,6 +153,7 @@ top 3 donated categories in this city
         email: row['Email'],
         pass: row['Password'],
         givings: row['numberOfGivings'],
+        userCoordinates: coords,
       );
       userProvider.saveGivers(user);
     }

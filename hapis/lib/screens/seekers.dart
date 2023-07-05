@@ -23,19 +23,17 @@ class _SeekersState extends State<Seekers> {
 
   List<UsersModel> filteredSeekersList = [];
 
-  
-
   @override
   void initState() {
     super.initState();
-    print("initialization");
+    // print("initialization");
     Future.delayed(Duration.zero, () {
       getSeekers();
     });
   }
 
   void getSeekers() {
-    print("get seekers called");
+    // print("get seekers called");
     setState(() {
       filteredSeekersList = widget.seekersList;
     });
@@ -52,8 +50,6 @@ class _SeekersState extends State<Seekers> {
             padding: const EdgeInsets.only(top: 50.0, left: 50, right: 50),
             child: TextField(
               controller: searchController,
-              
-              
               onChanged: (value) {
                 print(value);
                 print("hereeeeeeeeeeeeee");
@@ -93,7 +89,6 @@ class _SeekersState extends State<Seekers> {
           ),
           Flexible(
             child: filteredSeekersList.isEmpty
-                
                 ? const NoComponentWidget(
                     displayText: 'Sorry, there are no users available',
                     icon: Icons.people_alt)
@@ -101,10 +96,7 @@ class _SeekersState extends State<Seekers> {
                     padding:
                         const EdgeInsets.only(top: 50, right: 50, left: 50),
                     child: GridView.builder(
-                 
                       itemCount: filteredSeekersList.length,
-                     
-
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, // Display 3 items per row
@@ -112,10 +104,7 @@ class _SeekersState extends State<Seekers> {
                         mainAxisSpacing: 100.0,
                       ),
                       itemBuilder: (context, index) {
-                        
                         final UsersModel user = filteredSeekersList[index];
-                        print("user: $user");
-                        print("index: $index");
 
                         return UserComponent(
                             key: const ValueKey("userComponent"), user: user);

@@ -27,14 +27,14 @@ class _GiversState extends State<Givers> {
   @override
   void initState() {
     super.initState();
-    print("initialization");
+    //print("initialization");
     Future.delayed(Duration.zero, () {
       getGivers();
     });
   }
 
   void getGivers() {
-    print("get seekers called");
+    //print("get seekers called");
     setState(() {
       filteredGiversList = widget.giversList;
     });
@@ -104,8 +104,6 @@ class _GiversState extends State<Givers> {
                       ),
                       itemBuilder: (context, index) {
                         final UsersModel user = filteredGiversList[index];
-                        print("user: $user");
-                        print("index: $index");
 
                         return UserComponent(
                             key: const ValueKey("userComponent"), user: user);

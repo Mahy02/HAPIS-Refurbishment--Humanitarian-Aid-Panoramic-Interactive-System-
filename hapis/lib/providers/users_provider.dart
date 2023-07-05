@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/users_model.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/extract_geocoordinates.dart';
+
 ///This is a [Provider] class of [UserProvider] that extends [ChangeNotifier]
 
 ///They all have setters and getters
@@ -47,11 +49,19 @@ class UserProvider extends ChangeNotifier {
   ///property that defines user's total number of seeking for others
   int? _seekingForOthers;
 
+  ///property that defines user `Coordinates`
+  LatLng? _userCoordinates;
+
   ///property that defines list of seekers
   List<UsersModel> _seekers = [];
 
   ///property that defines list of givers
   List<UsersModel> _givers = [];
+
+  set userCoordinates(LatLng value) {
+    _userCoordinates = value;
+    notifyListeners();
+  }
 
   set pass(String? value) {
     _pass = value;
@@ -143,25 +153,26 @@ class UserProvider extends ChangeNotifier {
   int? get seekingsForOthers => _seekingForOthers;
   List<UsersModel> get seekers => _seekers;
   List<UsersModel> get givers => _givers;
+  LatLng get userCoordinates => _userCoordinates!;
 
   final UsersModel _user = UsersModel();
   UsersModel get user => _user;
 
   void saveData(
-    int userID,
-    String userName,
-    String firstName,
-    String lastName,
-    String country,
-    String city,
-    String addressLocation,
-    String phoneNum,
-    String email,
-    String pass,
-    int givings,
-    int seekingsForSelf,
-    int seekingsForOthers,
-  ) {
+      int userID,
+      String userName,
+      String firstName,
+      String lastName,
+      String country,
+      String city,
+      String addressLocation,
+      String phoneNum,
+      String email,
+      String pass,
+      int givings,
+      int seekingsForSelf,
+      int seekingsForOthers,
+      LatLng userCoordinates) {
     _user.userID = userID;
     _user.userName = userName;
     _user.firstName = firstName;
@@ -175,6 +186,7 @@ class UserProvider extends ChangeNotifier {
     _user.seekingsForSelf = seekingsForSelf;
     _user.seekingForOthers = _seekingForOthers;
     _user.givings = _givings;
+    _user.userCoordinates = _userCoordinates;
     notifyListeners();
   }
 
