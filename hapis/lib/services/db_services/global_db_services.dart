@@ -3,10 +3,10 @@ import '../../helpers/sql_db.dart';
 class globalDBServices {
   SqlDb db = SqlDb();
 
-   /// Retrieve the number of seekers globally
+  /// Retrieve the number of seekers globally
   Future<int> getNumberOfSeekers() async {
     String sqlStatment = '''
-      SELECT COUNT(*) AS seeker_count
+      SELECT COUNT(DISTINCT Forms.UserID) AS seeker_count
       FROM Forms
       WHERE Forms.Type = 'seeker';
     ''';
@@ -22,7 +22,7 @@ class globalDBServices {
   /// Retrieve the number of givers globally
   Future<int> getNumberOfGivers() async {
     String sqlStatment = '''
-      SELECT COUNT(*) AS giver_count
+      SELECT COUNT(DISTINCT Forms.UserID) AS giver_count
       FROM Forms
       WHERE Forms.Type = 'giver';
     ''';
@@ -34,7 +34,6 @@ class globalDBServices {
 
     return numberOfGivers;
   }
-
 
   /// Retrieve the number of successful donations globally
   Future<int> getNumberOfSuccessfulDonations() async {
@@ -86,8 +85,8 @@ class globalDBServices {
     return numberOfInProgressDonations;
   }
 
- /// Retrieve the top 3 donated categories globally
-  Future<List<String>> getTopDonatedCategories() async{
+  /// Retrieve the top 3 donated categories globally
+  Future<List<String>> getTopDonatedCategories() async {
     String sqlStatement = '''
         SELECT Forms.Category, COUNT(*) AS category_count
         FROM Forms
@@ -96,20 +95,19 @@ class globalDBServices {
         LIMIT 3;
     ''';
 
-   List<Map<String, dynamic>> result = await db.readData(sqlStatement);
+    List<Map<String, dynamic>> result = await db.readData(sqlStatement);
 
-  List<String> topCategories = [];
-  for (Map<String, dynamic> row in result) {
-    String category = row['Category'];
-    topCategories.add(category);
+    List<String> topCategories = [];
+    for (Map<String, dynamic> row in result) {
+      String category = row['Category'];
+      topCategories.add(category);
+    }
+
+    return topCategories;
   }
 
-  return topCategories;
-
-  }
-
-   /// Retrieve the top 3 cities globally
-   Future<List<String>> getTopCities() async{
+  /// Retrieve the top 3 cities globally
+  Future<List<String>> getTopCities() async {
     String sqlStatement = '''
         SELECT Users.city, COUNT(*) AS city_count
         FROM Forms
@@ -119,18 +117,14 @@ class globalDBServices {
         LIMIT 3;
     ''';
 
-   List<Map<String, dynamic>> result = await db.readData(sqlStatement);
+    List<Map<String, dynamic>> result = await db.readData(sqlStatement);
 
-  List<String> topCities = [];
-  for (Map<String, dynamic> row in result) {
-    String city = row['City'];
-    topCities.add(city);
+    List<String> topCities = [];
+    for (Map<String, dynamic> row in result) {
+      String city = row['City'];
+      topCities.add(city);
+    }
+
+    return topCities;
   }
-
-  return topCities;
-
-  }
-
-
-
 }

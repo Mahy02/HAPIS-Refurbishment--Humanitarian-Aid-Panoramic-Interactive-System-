@@ -13,6 +13,8 @@ import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/ssh_provider.dart';
+import '../providers/users_provider.dart';
+import '../screens/users.dart';
 import '../services/db_services/city_db_services.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/extract_geocoordinates.dart';
@@ -88,9 +90,9 @@ class _CityComponentState extends State<CityComponent> {
   Widget build(BuildContext context) {
     final imagePath = countryMap[widget.country];
     final buttonContent = '${widget.city}\n${widget.country}';
-    print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-    print(widget.city);
-    print(widget.country);
+    // print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    // print(widget.city);
+    // print(widget.country);
     return
         //Image.asset(imagePath!);
 
@@ -113,17 +115,40 @@ class _CityComponentState extends State<CityComponent> {
             await cityDBServices().getNumberOfSeekers(widget.city);
         int numberOfGivers =
             await cityDBServices().getNumberOfGivers(widget.city);
-        List<String> seekers = cityDBServices().getListOfSeekers();
-        List<String> givers = cityDBServices().getListOfGivers();
         int inProgressDonations =
             await cityDBServices().getNumberOfInProgressDonations(widget.city);
         int successfulDonations =
             await cityDBServices().getNumberOfSuccessfulDonations(widget.city);
         List<String> topThreeCategories =
             await cityDBServices().getTopDonatedCategories(widget.city);
-        print(numberOfSeekers);
-        print(widget.city);
-        print(widget.country);
+
+        //clear before:
+        UserProvider userProvider =
+            Provider.of<UserProvider>(context, listen: false);
+        userProvider.clearData();
+
+        await cityDBServices().getSeekersInfo(widget.city, context);
+
+        await cityDBServices().getGiversInfo(widget.city, context);
+
+        // print(seekers);
+        // print(givers);
+
+        // List<UsersModel> seekers = userProvider.seekers;
+        // List<UsersModel> givers = userProvider.givers;
+
+        // for (UsersModel seeker in seekers) {
+        //   print('Seeker: ${seeker.firstName} ${seeker.lastName}');
+        //   print('ID: ${seeker.userID}');
+        //   print('City: ${seeker.city}');
+        // }
+        // for (UsersModel giver in givers) {
+        //   print('giver: ${giver.firstName} ${giver.lastName}');
+        //   print('ID: ${giver.userID}');
+        //   print('City: ${giver.city}');
+        // }
+       // print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
         //final LatLng cityCoordinates = await getCoordinates(widget.city);
         print("city button trial");
         //print(cityCoordinates);
@@ -154,7 +179,10 @@ class _CityComponentState extends State<CityComponent> {
         //   print(sshData.client!.username);
 
         //   print("here");
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Users(city: widget.city)));
         //   _viewCityStats(city, true, context);
+
         // } else {
         //   showDialogConnection(context);
         // }

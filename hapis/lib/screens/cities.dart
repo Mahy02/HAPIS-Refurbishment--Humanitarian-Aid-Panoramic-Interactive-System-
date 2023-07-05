@@ -125,9 +125,9 @@ class _CitiesPageState extends State<CitiesPage> {
                         final Color buttonColor =
                             buttonColors[index % buttonColors.length];
                         // print(event.category);
-                        print(city);
-                        print(country);
-                        print("before pressing city");
+                        // print(city);
+                        // print(country);
+                        // print("before pressing city");
                         return CityComponent(
                           key: const ValueKey("cityComponent"),
                           city: city,

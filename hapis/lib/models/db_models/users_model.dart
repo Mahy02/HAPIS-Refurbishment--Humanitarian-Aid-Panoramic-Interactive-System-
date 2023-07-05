@@ -31,6 +31,15 @@ class UsersModel {
   /// Property that defines the user's password
   String? pass;
 
+  /// property that defines the user's total number of donations
+  int? givings;
+
+  ///property that defines user's total number of seeking for self
+  int? seekingsForSelf;
+
+  ///property that defines user's total number of seeking for others
+  int? seekingForOthers;
+
   UsersModel(
       {this.userID,
       this.userName,
@@ -41,7 +50,7 @@ class UsersModel {
       this.addressLocation,
       this.phoneNum,
       this.email,
-      this.pass});
+      this.pass, this.givings, this.seekingForOthers, this.seekingsForSelf});
 
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UsersModel.fromMap(Map<String, dynamic> map) {
@@ -55,6 +64,7 @@ class UsersModel {
         addressLocation: map['AddressLocation'],
         phoneNum: map['PhoneNum'],
         email: map['Email'],
-        pass: map['Password']);
+        pass: map['Password'],
+        );
   }
 }

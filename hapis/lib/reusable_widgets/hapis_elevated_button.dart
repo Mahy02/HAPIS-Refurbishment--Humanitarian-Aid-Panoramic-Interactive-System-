@@ -55,29 +55,7 @@ class HapisElevatedButton extends StatelessWidget {
                 children: [
                   isPoly
                       ?
-                      //     ? Expanded(
-                      //         child: ClipPolygon(
-                      //           sides: 8,
-                      //           borderRadius: 50,
-                      //           child: Container(
-                      //             width: imageWidth,
-                      //             height: imageHeight,
-                      //             decoration: BoxDecoration(
-                      //               border: Border.all(
-                      //                 color: Colors.black,
-                      //                 width: 2,
-                      //               ),
-                      //             ),
-                      //             child: Image.asset(
-                      //               imagePath!,
-                      //               // width: imageWidth,
-                      //               // height: imageHeight,
-                      //               //fit: BoxFit.cover,
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       )
-                      // :
+                     
                       Container(
                           decoration: BoxDecoration(
                             border: Border.all(

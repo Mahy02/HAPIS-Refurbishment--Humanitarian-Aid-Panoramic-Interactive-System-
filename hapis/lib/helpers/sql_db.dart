@@ -123,8 +123,8 @@ Future<void> deleteDb() async {
   readData(String selectSql) async {
     Database? hapisDb = await db;
     List<Map> response = await hapisDb!.rawQuery(selectSql);
-    print("Read data");
-    print(response);
+    //print("Read data");
+    //print(response);
     return response;
   }
 

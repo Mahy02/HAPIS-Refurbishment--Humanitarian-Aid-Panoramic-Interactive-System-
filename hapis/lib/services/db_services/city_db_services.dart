@@ -1,4 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:hapis/models/db_models/users_model.dart';
+import 'package:provider/provider.dart';
+
 import '../../helpers/sql_db.dart';
+import '../../providers/users_provider.dart';
 
 class cityDBServices {
   SqlDb db = SqlDb();
@@ -18,7 +23,7 @@ top 3 donated categories in this city
   /// Retrieve the number of seekers in this city
   Future<int> getNumberOfSeekers(String cityName) async {
     String sqlStatment = '''
-      SELECT COUNT(*) AS seeker_count
+      SELECT COUNT(DISTINCT Forms.UserID) AS seeker_count
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
       WHERE Users.City = '$cityName' AND Forms.Type = 'seeker';
@@ -27,15 +32,13 @@ top 3 donated categories in this city
 
     int numberOfSeekers = result[0]['seeker_count'];
 
-    print("number of seekers: $numberOfSeekers");
-
     return numberOfSeekers;
   }
 
   /// Retrieve the number of givers in this city
   Future<int> getNumberOfGivers(String cityName) async {
     String sqlStatment = '''
-      SELECT COUNT(*) AS giver_count
+      SELECT COUNT(DISTINCT Forms.UserID) AS giver_count
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
       WHERE Users.City = '$cityName' AND Forms.Type = 'giver';
@@ -44,27 +47,108 @@ top 3 donated categories in this city
 
     int numberOfGivers = result[0]['giver_count'];
 
-    print("number of givers: $numberOfGivers");
-
     return numberOfGivers;
   }
 
-  /// Retrieve the list of seekers for this city - addresses
-  List<String> getListOfSeekers() {
-    return [
-      'Address 1',
-      'Address 2',
-      'Address 3',
-    ];
+  /// Retrieve the list of seekers for this city - their data
+  //Future<List<UsersModel>>
+  getSeekersInfo(String cityName, BuildContext context) async {
+    String sqlStatment = '''
+      SELECT  Users.UserID AS UserUserID , UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password,COUNT(CASE WHEN Forms.For = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.For = 'other' THEN Forms.FormID END) AS other_count
+      FROM Forms
+      JOIN Users ON Forms.UserID = Users.UserID
+      WHERE Users.City = '$cityName' AND Forms.Type = 'seeker'
+      GROUP BY Users.UserID;
+    ''';
+
+    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+    // print('results of query get seekers info: $result');
+    // result will look like this:
+    /*
+        [
+      {
+        'UserID': 1,
+        'UserName': 'johndoe',
+        'FirstName': 'John',
+        'LastName': 'Doe',
+        'City': 'New York',
+        'Country': 'USA',
+        'AddressLocation': '123 Main St',
+        'PhoneNum': '555-1234',
+        'Email': 'johndoe@example.com',
+        'Password': 'password123'
+      },
+      {
+        'UserID': 2,
+        'UserName': 'janedoe',
+        'FirstName': 'Jane',
+        'LastName': 'Doe',
+        'City': 'New York',
+        'Country': 'USA',
+        'AddressLocation': '456 Elm St',
+        'PhoneNum': '555-5678',
+        'Email': 'janedoe@example.com',
+        'Password': 'password456'
+      }
+    ]
+        */
+
+    //List<UsersModel> seekerUsers = [];
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    for (Map<String, dynamic> row in result) {
+      UsersModel user = UsersModel(
+        userID: row['UserUserID'],
+        userName: row['UserName'],
+        firstName: row['FirstName'],
+        lastName: row['LastName'],
+        city: row['City'],
+        country: row['Country'],
+        addressLocation: row['AddressLocation'],
+        phoneNum: row['PhoneNum'],
+        email: row['Email'],
+        pass: row['Password'],
+       seekingForOthers: row['other_count'],
+       seekingsForSelf: row['self_count'],
+      );
+      userProvider.saveSeekers(user);
+    }
+
+    //return seekerUsers;
   }
 
-  /// Retrieve the list of givers for this city - addresses
-  List<String> getListOfGivers() {
-    return [
-      'Address A',
-      'Address B',
-      'Address C',
-    ];
+  /// Retrieve the list of givers for this city - their data
+  getGiversInfo(String cityName, BuildContext context) async {
+    String sqlStatment = '''
+      SELECT  Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password, COUNT(*) AS numberOfGivings
+      FROM Forms
+      JOIN Users ON Forms.UserID = Users.UserID
+      WHERE Users.City = '$cityName' AND Forms.Type = 'giver'
+      GROUP BY Users.UserID;
+    ''';
+
+    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+
+    print(result);
+
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    for (Map<String, dynamic> row in result) {
+      UsersModel user = UsersModel(
+        userID: row['UserUserID'],
+        userName: row['UserName'],
+        firstName: row['FirstName'],
+        lastName: row['LastName'],
+        city: row['City'],
+        country: row['Country'],
+        addressLocation: row['AddressLocation'],
+        phoneNum: row['PhoneNum'],
+        email: row['Email'],
+        pass: row['Password'],
+        givings: row['numberOfGivings'],
+      );
+      userProvider.saveGivers(user);
+    }
   }
 
   /// Retrieve the number of successful donations in this city
@@ -89,8 +173,6 @@ top 3 donated categories in this city
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
     int numberOfSuccessfulDonations = result[0]['successful_donation_count'];
-
-    print("Number of successful donations: $numberOfSuccessfulDonations");
 
     return numberOfSuccessfulDonations;
   }
@@ -118,13 +200,11 @@ top 3 donated categories in this city
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
     int numberOfInProgressDonations = result[0]['Inprogress_donation_count'];
 
-    print("Number of inprogress donations: $numberOfInProgressDonations");
-
     return numberOfInProgressDonations;
   }
 
   // Retrieve the top 3 donated categories in this city
-  Future<List<String>> getTopDonatedCategories(String cityName) async{
+  Future<List<String>> getTopDonatedCategories(String cityName) async {
     String sqlStatement = '''
         SELECT Forms.Category, COUNT(*) AS category_count
         FROM Forms
@@ -135,15 +215,15 @@ top 3 donated categories in this city
         LIMIT 3;
     ''';
 
-   List<Map<String, dynamic>> result = await db.readData(sqlStatement);
+    List<Map<String, dynamic>> result = await db.readData(sqlStatement);
 
-  List<String> topCategories = [];
-  for (Map<String, dynamic> row in result) {
-    String category = row['Category'];
-    topCategories.add(category);
-  }
+    List<String> topCategories = [];
+    for (Map<String, dynamic> row in result) {
+      String category = row['Category'];
+      topCategories.add(category);
+    }
 
-  return topCategories;
+    return topCategories;
   }
 }
 

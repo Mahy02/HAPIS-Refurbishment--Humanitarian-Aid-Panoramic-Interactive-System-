@@ -100,6 +100,9 @@ flutter:
       - assets/flags/
       - assets/images/orbit.png
       - assets/images/orbit2.png
+      - assets/images/seekers.png
+      - assets/images/giver.png
+      - assets/images/info.png
       #- assets/images/Logos_2.png
       - assets/Forms.csv
       - assets/Matchings.csv
