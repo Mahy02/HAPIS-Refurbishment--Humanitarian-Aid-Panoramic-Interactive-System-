@@ -54,6 +54,7 @@ class _CitiesPageState extends State<CitiesPage> {
             child: TextField(
               controller: searchController,
               onChanged: (value) {
+                print("changed");
                 performSearch(value);
               },
               style: const TextStyle(

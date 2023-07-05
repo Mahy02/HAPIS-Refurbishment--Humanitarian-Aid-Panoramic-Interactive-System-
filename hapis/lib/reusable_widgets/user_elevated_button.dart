@@ -39,7 +39,6 @@ class UserElevatedButton extends StatelessWidget {
                       color: Colors.black,
                       fontSize: 20,
                       fontFamily: GoogleFonts.montserrat().fontFamily,
-                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -59,14 +58,14 @@ class UserElevatedButton extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.05,
                         child: Image.asset(
                           'assets/images/info.png',
-                          height: MediaQuery.of(context).size.height * 0.15,
-                          width: MediaQuery.of(context).size.height * 0.04,
+                          height: MediaQuery.of(context).size.height * 0.18,
+                          width: MediaQuery.of(context).size.height * 0.06,
                         ),
                       ),
                       Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: HapisColors.lgColor1,
+                              color: HapisColors.lgColor4,
                               width: 1.5,
                             ),
                             borderRadius: BorderRadius.circular(2),
@@ -74,8 +73,8 @@ class UserElevatedButton extends StatelessWidget {
                           height: MediaQuery.of(context).size.height * 0.05,
                           child: Image.asset(
                             'assets/images/orbit.png',
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            width: MediaQuery.of(context).size.height * 0.04,
+                            height: MediaQuery.of(context).size.height * 0.18,
+                            width: MediaQuery.of(context).size.height * 0.06,
                           )),
                     ],
                   ),

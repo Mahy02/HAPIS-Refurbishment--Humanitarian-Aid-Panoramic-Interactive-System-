@@ -5,40 +5,38 @@ import 'package:hapis/utils/drawer.dart';
 import '../constants.dart';
 import '../models/db_models/users_model.dart';
 import '../reusable_widgets/no_component.dart';
+import '../reusable_widgets/sub_text.dart';
 import '../reusable_widgets/user_component.dart';
 
 class Givers extends StatefulWidget {
   final List<UsersModel> giversList;
   final String city;
-  const Givers({super.key, required this.giversList, required this.city});
+  //const Givers({super.key, required this.giversList, required this.city});
+  const Givers({Key? key, required this.giversList, required this.city})
+      : super(key: key);
 
   @override
   State<Givers> createState() => _GiversState();
 }
 
 class _GiversState extends State<Givers> {
-  final List<Color> buttonColors = [
-    HapisColors.lgColor1,
-    HapisColors.lgColor2,
-    HapisColors.lgColor3,
-    HapisColors.lgColor4
-  ];
-
   TextEditingController searchController = TextEditingController();
 
-  //List<Map<String, String>> giversList = [];
-  List<Map<String, String>> filteredGiversList = [];
+  List<UsersModel> filteredGiversList = [];
 
   @override
   void initState() {
     super.initState();
-    getGivers();
+    print("initialization");
+    Future.delayed(Duration.zero, () {
+      getGivers();
+    });
   }
 
-  Future<void> getGivers() async {
+  void getGivers() {
+    print("get seekers called");
     setState(() {
-      // citiesList = cities;
-      //filteredCitiesList = cities;
+      filteredGiversList = widget.giversList;
     });
   }
 
@@ -54,7 +52,7 @@ class _GiversState extends State<Givers> {
             child: TextField(
               controller: searchController,
               onChanged: (value) {
-                // performSearch(value);
+                performSearch(value);
               },
               style: const TextStyle(
                 fontSize: 30, // Increase the font size to your desired value
@@ -84,6 +82,10 @@ class _GiversState extends State<Givers> {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 30.0),
+            child: SubText(subTextContent: 'Donors In ${widget.city} '),
+          ),
           Flexible(
             child: widget.giversList.isEmpty
                 ? const NoComponentWidget(
@@ -93,9 +95,7 @@ class _GiversState extends State<Givers> {
                     padding:
                         const EdgeInsets.only(top: 50, right: 50, left: 50),
                     child: GridView.builder(
-                      // itemCount: citiesList.length,
-                      itemCount: widget.giversList.length,
-
+                      itemCount: filteredGiversList.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, // Display 3 items per row
@@ -103,8 +103,10 @@ class _GiversState extends State<Givers> {
                         mainAxisSpacing: 100.0,
                       ),
                       itemBuilder: (context, index) {
-                        UsersModel user = widget.giversList[index];
-                      
+                        final UsersModel user = filteredGiversList[index];
+                        print("user: $user");
+                        print("index: $index");
+
                         return UserComponent(
                             key: const ValueKey("userComponent"), user: user);
                       },
@@ -116,16 +118,16 @@ class _GiversState extends State<Givers> {
     );
   }
 
-  // void performSearch(String query) {
-  //   setState(() {
-  //     filteredCitiesList = citiesList.where((city) {
-  //       final String cityName = city['city']!.toLowerCase();
-  //       final String countryName = city['country']!.toLowerCase();
-  //       return cityName.contains(query.toLowerCase()) ||
-  //           countryName.contains(query.toLowerCase());
-  //     }).toList();
-  //   });
-  // }
+  void performSearch(String query) {
+    setState(() {
+      filteredGiversList = widget.giversList.where((user) {
+        final String userFirstName = user.firstName!.toLowerCase();
+        final String userLastName = user.lastName!.toLowerCase();
+        return userFirstName.contains(query.toLowerCase()) ||
+            userLastName.contains(query.toLowerCase());
+      }).toList();
+    });
+  }
 
   @override
   void dispose() {

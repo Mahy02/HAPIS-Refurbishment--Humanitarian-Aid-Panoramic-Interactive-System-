@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hapis/screens/seekers.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
@@ -69,11 +70,11 @@ class _UsersState extends State<Users> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Givers(
-                                    giversList: seekers, city: widget.city)));
+                                builder: (context) => Seekers(
+                                    seekersList: seekers, city: widget.city)));
                       }),
                   HapisElevatedButton(
-                      elevatedButtonContent: 'Givers',
+                      elevatedButtonContent: 'Donors',
                       buttonColor: HapisColors.lgColor4,
                       height: MediaQuery.of(context).size.height * 0.4,
                       imagePath: 'assets/images/giver.png',
