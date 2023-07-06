@@ -6,6 +6,9 @@ import '../../utils/extract_geocoordinates.dart';
 /// Model that represents the `UsersModel`, with all of its properties and methods.
 
 class UsersModel {
+  /// Property that defines the user `uuid`.
+  //String id;
+
   /// Property that defines the user userID
   int? userID;
 
@@ -49,7 +52,9 @@ class UsersModel {
   LatLng? userCoordinates;
 
   UsersModel(
-      {this.userID,
+      {
+       // required this.id,
+        this.userID,
       this.userName,
       this.firstName,
       this.lastName,
@@ -86,7 +91,7 @@ class UsersModel {
       <br/>
       <b>Phone Number:</b> $phoneNum
       <br/>
-      <b>Enail:</b> $email
+      <b>Email:</b> $email
       <br/>
       <b>Total Number seekings made for self:</b> $seekingsForSelf
       <br/>
@@ -135,9 +140,13 @@ class UsersModel {
     return coords;
   }
 
+
+
+
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
+     // id: map['id'],
       userID: map['UserID'],
       userName: map['UserName'],
       firstName: map['FirstName'],

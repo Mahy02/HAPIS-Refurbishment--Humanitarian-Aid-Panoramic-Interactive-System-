@@ -106,7 +106,7 @@ class _GiversState extends State<Givers> {
                         final UsersModel user = filteredGiversList[index];
 
                         return UserComponent(
-                            key: const ValueKey("userComponent"), user: user);
+                            key: const ValueKey("userComponent"), user: user, type: 'giver');
                       },
                     ),
                   ),

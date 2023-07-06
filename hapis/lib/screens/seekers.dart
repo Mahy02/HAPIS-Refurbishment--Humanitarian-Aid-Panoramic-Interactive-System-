@@ -107,7 +107,7 @@ class _SeekersState extends State<Seekers> {
                         final UsersModel user = filteredSeekersList[index];
 
                         return UserComponent(
-                            key: const ValueKey("userComponent"), user: user);
+                            key: const ValueKey("userComponent"), user: user, type: 'seeker');
                       },
                     ),
                   ),

@@ -1,4 +1,3 @@
-
 import 'package:hapis/models/db_models/users_model.dart';
 import 'package:hapis/models/kml/line_model.dart';
 import 'package:hapis/models/kml/look_at_model.dart';
@@ -19,17 +18,17 @@ class UserBalloonService {
     double orbitPeriod, {
     LookAtModel? lookAt,
     bool updatePosition = true,
-  })   {
+  }) {
     LookAtModel lookAtObj;
 
-   // final LatLng coord = await getCoordinates(user.addressLocation!);
+    // final LatLng coord = await getCoordinates(user.addressLocation!);
 
     if (lookAt == null) {
       lookAtObj = LookAtModel(
           longitude: user.userCoordinates!.longitude,
           latitude: user.userCoordinates!.latitude,
-          range: '4000000',
-          tilt: '60',
+          range: '300',
+          tilt: '45',
           heading: '0');
     } else {
       lookAtObj = lookAt;
@@ -42,8 +41,8 @@ class UserBalloonService {
     final coordinates =
         user.getUserOrbitCoordinates(user.addressLocation!, step: orbitPeriod);
     final tour = TourModel(
-      name: 'CityTour',
-      placemarkId: 'p-${user.userID}',
+      name: 'UserTour',
+      placemarkId: 'p-${user.userID.toString()}',
       initialCoordinate: {
         'lat': point.lat,
         'lng': point.lng,
@@ -52,12 +51,19 @@ class UserBalloonService {
       coordinates: coordinates,
     );
 
+    print("testing balloon content:");
+
+    print(balloon
+        ? (seeker ? user.seekerBalloonContent() : user.giverBalloonContent())
+        : '');
     return PlacemarkModel(
       id: user.userID.toString(),
-      name: '${user.userName} ',
+      name: 'Personal Information & statistics',
       lookAt: updatePosition ? lookAtObj : null,
       point: point,
-      balloonContent: balloon ? (seeker? user.seekerBalloonContent(): user.giverBalloonContent()) : '',
+      balloonContent: balloon
+          ? (seeker ? user.seekerBalloonContent() : user.giverBalloonContent())
+          : '',
       line: LineModel(
         id: user.userID.toString(),
         altitudeMode: 'absolute',
@@ -67,11 +73,10 @@ class UserBalloonService {
     );
   }
 
-  /// Builds an `orbit` KML based on the given [user] 
+  /// Builds an `orbit` KML based on the given [user]
   ///
   /// Returns a [String] that represents the `orbit` KML.
-  String buildOrbit(UsersModel user,
-      {LookAtModel? lookAt})  {
+  String buildOrbit(UsersModel user, {LookAtModel? lookAt}) {
     LookAtModel lookAtObj;
 
     if (lookAt == null) {
@@ -79,8 +84,8 @@ class UserBalloonService {
         longitude: user.userCoordinates!.longitude,
         latitude: user.userCoordinates!.latitude,
         altitude: 0,
-        range: '4000000',
-        tilt: '60',
+        range: '300',
+        tilt: '45',
         heading: '0',
       );
     } else {

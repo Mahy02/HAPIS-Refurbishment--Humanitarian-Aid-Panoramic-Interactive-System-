@@ -60,16 +60,26 @@ class _CityComponentState extends State<CityComponent> {
       _cityPlacemark = placemark;
     });
 
-    LgService(sshData).clearKml();
+   try{
+    await LgService(sshData).clearKml();
+     } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
     final kmlBalloon = KMLModel(
       name: 'HAPIS-City-balloon',
       content: placemark.balloonOnlyTag,
     );
 
+    try{
     await LgService(sshData).sendKMLToSlave(
       LgService(sshData).balloonScreen,
       kmlBalloon.body,
     );
+     } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
     //  }
 
     if (updatePosition) {
@@ -91,10 +101,7 @@ class _CityComponentState extends State<CityComponent> {
     final imagePath = countryMap[widget.country];
     final buttonContent = '${widget.city}\n${widget.country}';
 
-    return
-        //Image.asset(imagePath!);
-
-        HapisElevatedButton(
+    return HapisElevatedButton(
       buttonColor: widget.buttonColor,
       elevatedButtonContent: buttonContent,
       height: MediaQuery.of(context).size.height * 0.2,
@@ -129,7 +136,61 @@ class _CityComponentState extends State<CityComponent> {
 
         await cityDBServices().getGiversInfo(widget.city, context);
 
-        // print(seekers);
+        final LatLng cityCoordinates = await getCoordinates(widget.city);
+        print("city button trial");
+        print(cityCoordinates);
+
+        print("inside city component on pressed ");
+        print("number of seekers: $numberOfSeekers");
+        print("number of givers: $numberOfGivers");
+        print("in progress donations: $inProgressDonations");
+        print("succ donations: $successfulDonations");
+        print("top 3 cat: $topThreeCategories");
+
+        CityModel city = CityModel(
+            id: widget.city,
+            name: widget.city,
+            //seekers: seekers,
+            // givers: givers,
+            numberOfSeekers: numberOfSeekers,
+            numberOfGivers: numberOfGivers,
+            inProgressDonations: inProgressDonations,
+            successfulDonations: successfulDonations,
+            topThreeCategories: topThreeCategories,
+            cityCoordinates: cityCoordinates);
+
+        // ignore: use_build_context_synchronously
+        final sshData = Provider.of<SSHprovider>(context, listen: false);
+
+        if (sshData.client != null) {
+          // ignore: use_build_context_synchronously
+          _viewCityStats(city, true, context);
+
+          // ignore: use_build_context_synchronously
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Users(city: widget.city)));
+        } else {
+          // ignore: use_build_context_synchronously
+          showDialogConnection(context);
+        }
+      },
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+// print(seekers);
         // print(givers);
 
         // List<UsersModel> seekers = userProvider.seekers;
@@ -145,46 +206,3 @@ class _CityComponentState extends State<CityComponent> {
         //   print('ID: ${giver.userID}');
         //   print('City: ${giver.city}');
         // }
-        // print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-        //final LatLng cityCoordinates = await getCoordinates(widget.city);
-        print("city button trial");
-        //print(cityCoordinates);
-
-        print("inside city component on pressed ");
-        print("number of seekers: $numberOfSeekers");
-        print("number of givers: $numberOfGivers");
-        print("in progress donations: $inProgressDonations");
-        print("succ donations: $successfulDonations");
-        print("top 3 cat: $topThreeCategories");
-
-        // CityModel city = CityModel(
-        //     id: '2',
-        //     name: widget.city,
-        //     seekers: seekers,
-        //     givers: givers,
-        //     numberOfSeekers: numberOfSeekers,
-        //     numberOfGivers: numberOfGivers,
-        //     inProgressDonations: inProgressDonations,
-        //     successfulDonations: successfulDonations,
-        //     topThreeCategories: topThreeCategories,
-        //     cityCoordinates: cityCoordinates);
-
-        // final sshData = Provider.of<SSHprovider>(context, listen: false);
-
-        // print(sshData.client.username);
-        // if (sshData.client != null) {
-        //   print(sshData.client!.username);
-
-        //   print("here");
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Users(city: widget.city)));
-        //   _viewCityStats(city, true, context);
-
-        // } else {
-        //   showDialogConnection(context);
-        // }
-      },
-    );
-  }
-}

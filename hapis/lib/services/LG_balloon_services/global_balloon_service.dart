@@ -18,25 +18,21 @@ class GlobalBalloonService {
     LookAtModel lookAtObj;
 
     if (lookAt == null) {
-      
-
       lookAtObj = LookAtModel(
-          // longitude: -3.629954,
-          // latitude: 40.769083,
-          // range: '900000000.0',
-          // tilt: '0',
-          // altitude: 0,
-          // heading: '0',
-          // altitudeMode: 'relativeToSeaFloor'
-          longitude: -45.4518936,
-          latitude: 0.0000101,
-          range: '22231212.86',
-          tilt: '60',
-          //altitude: 20540.1097385,
-          altitude: 25512.1097385,
-          //altitude: 20000.1097385,
-          heading: '0',
-          altitudeMode: 'relativeToSeaFloor');
+        longitude: -60.4518936,
+        //longitude: -140.4518936,
+        //latitude: 0.0000101,
+        latitude: -47.0000101,
+        // range: '90000000000',
+        range: '31231212.86',
+        //tilt: '0',
+        tilt: '0',
+        //altitude: 0,
+        //altitude: 25540.1097385,
+        altitude: 50000.1097385,
+        heading: '0',
+        altitudeMode: 'relativeToSeaFloor',
+      );
     } else {
       lookAtObj = lookAt;
     }
@@ -93,22 +89,20 @@ class GlobalBalloonService {
     print("inside build orbit");
     if (lookAt == null) {
       lookAtObj = LookAtModel(
-          // longitude: -3.629954,
-          // latitude: 40.769083,
-          // range: '90000000000',
-          // tilt: '0',
-          // altitude: 0,
-          // heading: '0',
-          // altitudeMode: 'relativeToSeaFloor'
-          longitude: -45.4518936,
-          latitude: 0.0000101,
-          range: '22231212.86',
-          tilt: '60',
-          //altitude: 20540.1097385,
-          altitude: 25512.1097385,
-          //altitude: 20000.1097385,
-          heading: '0',
-          altitudeMode: 'relativeToSeaFloor');
+        longitude: -45.4518936,
+        // longitude: -140.4518936,
+        //latitude: 0.0000101,
+        latitude: -47.0000101,
+        // range: '90000000000',
+        range: '31231212.86',
+        //tilt: '0',
+        tilt: '0',
+        //altitude: 0,
+        //altitude: 25540.1097385,
+        altitude: 50000.1097385,
+        heading: '0',
+        altitudeMode: 'relativeToSeaFloor',
+      );
     } else {
       lookAtObj = lookAt;
     }

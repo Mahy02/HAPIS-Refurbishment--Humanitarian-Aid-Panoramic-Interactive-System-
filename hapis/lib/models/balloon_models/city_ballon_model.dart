@@ -17,10 +17,10 @@ class CityModel {
   String? image;
 
   /// Property that defines the city list of `seekers`
-  List<String> seekers;
+  List<String>? seekers;
 
   ///property that defines the city list of `givers`
-  List<String> givers;
+  List<String>? givers;
 
   ///property that defines the city `total number of seekers`
   int numberOfSeekers;
@@ -44,8 +44,8 @@ class CityModel {
     required this.id,
     required this.name,
     this.image,
-    required this.seekers,
-    required this.givers,
+     this.seekers,
+     this.givers,
     required this.numberOfSeekers,
     required this.numberOfGivers,
     required this.inProgressDonations,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/models/balloon_models/global_stats_model.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/cities.dart';
@@ -52,32 +53,54 @@ class _HomePageState extends State<HomePage> {
       _globePlacemark = placemark;
     });
 
-    LgService(sshData).clearKml();
+    try{
+    await LgService(sshData).clearKml();
+     } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
 
     final kmlBalloon = KMLModel(
       name: 'HAPIS-Global-balloon',
       content: placemark.balloonOnlyTag,
     );
-
+     
+     try{
     await LgService(sshData).sendKMLToSlave(
       LgService(sshData).balloonScreen,
       kmlBalloon.body,
     );
+     } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
 
-    // if (updatePosition) {
-    //   await LgService(sshData).flyTo(LookAtModel(
-    //       longitude: 0,
-    //       latitude: 0,
-    //       range: '800000',
-    //       tilt: '0',
-    //       altitude: 30683.86,
-    //       heading: '0'));
-    // }
+    if (updatePosition) {
+      await LgService(sshData).flyTo(LookAtModel(
+        longitude: -45.4518936,
+        latitude: 0.0000101,
+        // range: '90000000000',
+        range: '31231212.86',
+        //tilt: '0',
+        tilt: '0',
+        //altitude: 0,
+        //altitude: 25540.1097385,
+        altitude: 50000.1097385,
+        heading: '0',
+        altitudeMode: 'relativeToSeaFloor',
+      ));
+    }
     final orbit = globeService.buildOrbit();
     //await LgService(sshData).clearKml();
-    await LgService(sshData).sendTour(orbit, 'Orbit');
-    await LgService(sshData).startTour('Orbit');
-    print("end of global function");
+
+    try {
+      await LgService(sshData).sendTour(orbit, 'Orbit');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+    //await LgService(sshData).startTour('Orbit');
+    // print("end of global function");
   }
 
   @override
@@ -89,14 +112,53 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Align(
+            Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 100.0, left: 80),
-                  child: SubText(subTextContent: 'Welcome to HAPIS !'),
+                  padding:
+                      const EdgeInsets.only(top: 50.0, left: 80, right: 80),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SubText(subTextContent: 'Welcome to HAPIS !'),
+                      Column(
+                        children: [
+                          GestureDetector(
+                            child: Image.asset(
+                              'assets/images/orbit.png',
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              width: MediaQuery.of(context).size.width * 0.15,
+                            ),
+                            onTap: () async {
+                              final sshData = Provider.of<SSHprovider>(context,
+                                  listen: false);
+
+                              if (sshData.client != null) {
+                                try {
+                                  await LgService(sshData).startTour('Orbit');
+                                  print("awaiting orbit");
+                                } catch (e) {
+                                  // ignore: avoid_print
+                                  print(e);
+                                }
+                              } else {
+                                showDialogConnection(context);
+                              }
+                            },
+                          ),
+                          Text(' Orbit ',
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.black,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
+                              ))
+                        ],
+                      ),
+                    ],
+                  ),
                 )),
             Padding(
-              padding: const EdgeInsets.only(top: 110.0),
+              padding: const EdgeInsets.only(top: 80.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -111,21 +173,7 @@ class _HomePageState extends State<HomePage> {
                       onpressed: () async {
                         //will show bubble on LG
                         ///TO DO:
-                        // int numberOfSeekers = 30;
-                        // int numberOfGivers = 20;
 
-                        // int inProgressDonations = 4;
-                        // int successfulDonations = 2;
-                        // List<String> topThreeCategories = [
-                        //   'Food',
-                        //   'Clothing',
-                        //   'Pet supplies'
-                        // ];
-                        // List<String> topThreeCities = [
-                        //   'Cairo',
-                        //   'Tokyo',
-                        //   'llieda'
-                        // ];
                         int numberOfSeekers =
                             await globalDBServices().getNumberOfSeekers();
                         int numberOfGivers =
@@ -148,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                         print("top 3 cities: $topThreeCities");
 
                         GlobeModel globe = GlobeModel(
-                            id: '4',
+                            id: 'Globe',
                             numberOfSeekers: numberOfSeekers,
                             numberOfGivers: numberOfGivers,
                             inProgressDonations: inProgressDonations,
@@ -156,18 +204,18 @@ class _HomePageState extends State<HomePage> {
                             topThreeCategories: topThreeCategories,
                             topThreeCities: topThreeCities);
 
-                        // final sshData =
-                        //     Provider.of<SSHprovider>(context, listen: false);
+                        final sshData =
+                            Provider.of<SSHprovider>(context, listen: false);
                         print("inside globe on pressed ");
 
-                        // if (sshData.client != null) {
-                        //   print(sshData.client!.username);
+                        if (sshData.client != null) {
+                          print(sshData.client!.username);
 
-                        //   print("here");
-                        //   _viewGlobeStats(globe, true, context);
-                        // } else {
-                        //   showDialogConnection(context);
-                        // }
+                          print("here");
+                          _viewGlobeStats(globe, true, context);
+                        } else {
+                          showDialogConnection(context);
+                        }
                       }),
                   HapisElevatedButton(
                       elevatedButtonContent: 'Cities',
@@ -192,9 +240,10 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 40,
             ),
+
             // HapisElevatedButton(
             //     elevatedButtonContent:
-            //         'Test fly to  (button will be removed later)',
+            //         'Test orbit (button will be removed later)',
             //     buttonColor: HapisColors.lgColor4,
             //     height: MediaQuery.of(context).size.height * 0.2,
             //     imageHeight: MediaQuery.of(context).size.height * 0.25,
@@ -203,18 +252,16 @@ class _HomePageState extends State<HomePage> {
             //     onpressed: () async {
             //       final sshData =
             //           Provider.of<SSHprovider>(context, listen: false);
-            //       print("here");
-            //       if (sshData.client != null) {
-            //         print(sshData.client!.username);
 
-            //         print("here");
-            //         LgService(sshData).flyTo(LookAtModel(
-            //             longitude: -74.0060,
-            //             latitude: 40.7128,
-            //             altitude: 0,
-            //             range: '1492.66.0',
-            //             tilt: '45',
-            //             heading: '0'));
+            //       if (sshData.client != null) {
+            //         try {
+            //           await LgService(sshData).startTour('Orbit');
+            //           print("awaiting orbit");
+            //         } catch (e) {
+            //           // ignore: avoid_print
+            //           print(e);
+            //         }
+
             //       } else {
             //         showDialogConnection(context);
             //       }
@@ -222,17 +269,6 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 40,
             ),
-            // HapisElevatedButton(
-            //     elevatedButtonContent:
-            //         'Test orbit (button will be removed later)',
-            //     buttonColor: HapisColors.lgColor4,
-            //     height: MediaQuery.of(context).size.height * 0.2,
-            //     onpressed: () {
-            //       //testing orbit
-            //     }),
-            // SizedBox(
-            //   height: 40,
-            // ),
           ],
         ),
       ),

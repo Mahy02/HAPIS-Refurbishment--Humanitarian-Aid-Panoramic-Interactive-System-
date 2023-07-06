@@ -190,7 +190,12 @@ fi
     print("inside fly to fn");
     print(lookAt.latitude);
     print(lookAt.linearTag);
-    await query('flytoview=${lookAt.linearTag}');
+    try {
+      await query('flytoview=${lookAt.linearTag}');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
   }
 
   ///Orbit functionality:
@@ -198,13 +203,23 @@ fi
   /// Command: 'echo "playtour=Orbit" > /tmp/query.txt'
   Future<void> startTour(String tourName) async {
     print("inside start tour");
-    await query('playtour=$tourName');
+    try {
+      await query('playtour=$tourName');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
     print("after query start tour");
   }
 
   /// Uses the [query] method to stop all tours in Google Earth.
   Future<void> stopTour() async {
-    await query('exittour=true');
+    try {
+      await query('exittour=true');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
   }
 
   ///KML services:
@@ -216,13 +231,17 @@ fi
   Future<void> sendTour(String tourKml, String tourName) async {
     print("inside send tour in LG functionalities");
     final fileName = '$tourName.kml';
+    try {
+      final kmlFile = await _fileService.createFile(fileName, tourKml);
 
-    final kmlFile = await _fileService.createFile(fileName, tourKml);
+      await _sshData.uploadKml(kmlFile, fileName);
 
-    await _sshData.uploadKml(kmlFile, fileName);
-
-    await _sshData
-        .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
+      await _sshData
+          .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
     // await _sshData.execute(
     //     'chmod 777 /var/www/html/kmls.txt && echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
   }
@@ -252,6 +271,8 @@ fi
   /// Sends a KML [content] to the given slave [screen].
   Future<void> sendKMLToSlave(int screen, String content) async {
     // await clearKml();
+    print(screen);
+    print('ballon content before sending kml to slave: $content');
     try {
       await _sshData
           .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
@@ -261,6 +282,7 @@ fi
       // ignore: avoid_print
       print(e);
     }
+    print("sent user kml ballon");
   }
 
   /// Sends a the given [kml] to the Liquid Galaxy system.
@@ -283,62 +305,38 @@ fi
       {List<Map<String, String>> images = const []}) async {
     final fileName = '${kml.name}.kml';
 
-    await clearKml();
+    try {
+      await clearKml();
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
 
     for (var img in images) {
       final image = await _fileService.createImage(img['name']!, img['path']!);
       String imageName = img['name']!;
-      await _sshData.uploadKml(image, imageName);
+      try {
+        await _sshData.uploadKml(image, imageName);
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
     }
+    try {
+      final kmlFile = await _fileService.createFile(fileName, kml.body);
+      await _sshData.uploadKml(kmlFile, fileName);
 
-    final kmlFile = await _fileService.createFile(fileName, kml.body);
-    await _sshData.uploadKml(kmlFile, fileName);
-
-    await _sshData.execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
+      await _sshData.execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
     // await _sshData.execute(
     //     'chmod 777 /var/www/html/kmls.txt && echo "$_url/$fileName" > /var/www/html/kmls.txt');
   }
 
   /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos
   /// after clearing (default to `true`).
-  // Future<void> clearKml({bool keepLogos = true}) async {
-  //   print("inside clear kml fn");
-
-  //   String query =
-  //       'echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';
-
-  //   //String query = "echo ' ' > /var/www/html/kmls.txt";
-
-  //   // String query =
-  //   //     'chmod 777 /tmp/query.txt && chmod 777 /var/www/html/kmls.txt && echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';
-
-  //   print("here");
-  //   for (var i = 2; i <= screenAmount; i++) {
-  //     String blankKml = KMLModel.generateBlank('slave_$i');
-  //     query += "echo '$blankKml' > /var/www/html/kml/slave_$i.kml";
-  //   }
-
-  //   print("after for in clear kml fn");
-  //   print(query);
-
-  //   print("keep logos: $keepLogos");
-
-  //   if (keepLogos) {
-  //     print("inside keep logos");
-  //     final kml = KMLModel(
-  //       name: 'HAPIS-logos',
-  //       content: '<name>Logos</name>',
-  //       screenOverlay: ScreenOverlayModel.logos().tag,
-  //     );
-
-  //     print("here");
-
-  //     query += "echo '${kml.body}' > /var/www/html/kml/slave_$logoScreen.kml";
-  //   }
-
-  //   await _sshData.execute(query);
-  //   print("finish clean kml");
-  // }
 
   Future<void> clearKml({bool keepLogos = true}) async {
     print("inside clear kml fn");
@@ -369,8 +367,12 @@ fi
       query +=
           " && echo '${kml.body}' > /var/www/html/kml/slave_$logoScreen.kml";
     }
-
-    await _sshData.execute(query);
+    try {
+      await _sshData.execute(query);
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
   }
 }
 
