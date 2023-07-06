@@ -1,6 +1,8 @@
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/models/balloon_models/global_stats_model.dart';
+import 'package:hapis/providers/connection_provider.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/cities.dart';
 import 'package:hapis/services/LG_balloon_services/global_balloon_service.dart';
@@ -53,9 +55,9 @@ class _HomePageState extends State<HomePage> {
       _globePlacemark = placemark;
     });
 
-    try{
-    await LgService(sshData).clearKml();
-     } catch (e) {
+    try {
+      await LgService(sshData).clearKml();
+    } catch (e) {
       // ignore: avoid_print
       print(e);
     }
@@ -64,13 +66,13 @@ class _HomePageState extends State<HomePage> {
       name: 'HAPIS-Global-balloon',
       content: placemark.balloonOnlyTag,
     );
-     
-     try{
-    await LgService(sshData).sendKMLToSlave(
-      LgService(sshData).balloonScreen,
-      kmlBalloon.body,
-    );
-     } catch (e) {
+
+    try {
+      await LgService(sshData).sendKMLToSlave(
+        LgService(sshData).balloonScreen,
+        kmlBalloon.body,
+      );
+    } catch (e) {
       // ignore: avoid_print
       print(e);
     }
@@ -132,9 +134,12 @@ class _HomePageState extends State<HomePage> {
                             onTap: () async {
                               final sshData = Provider.of<SSHprovider>(context,
                                   listen: false);
-
+                                final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                               if (sshData.client != null) {
                                 try {
+                                  await LgService(sshData).stopTour();
                                   await LgService(sshData).startTour('Orbit');
                                   print("awaiting orbit");
                                 } catch (e) {
@@ -206,6 +211,9 @@ class _HomePageState extends State<HomePage> {
 
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
+                              final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside globe on pressed ");
 
                         if (sshData.client != null) {

@@ -1,3 +1,4 @@
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -12,6 +13,7 @@ import 'package:hapis/services/LG_balloon_services/city_balloon_service.dart';
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/connection_provider.dart';
 import '../providers/ssh_provider.dart';
 import '../providers/users_provider.dart';
 import '../screens/users.dart';
@@ -163,6 +165,9 @@ class _CityComponentState extends State<CityComponent> {
 
           // ignore: use_build_context_synchronously
           final sshData = Provider.of<SSHprovider>(context, listen: false);
+            final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
 
           if (sshData.client != null) {
             // ignore: use_build_context_synchronously

@@ -1,7 +1,9 @@
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
+import '../providers/connection_provider.dart';
 import '../providers/ssh_provider.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../utils/drawer.dart';
@@ -45,6 +47,9 @@ class Settings extends StatelessWidget {
                           context,
                           listen: false,
                         );
+                          final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside clear kml ");
                         //print(sshData.client.username);
                         print(sshData.client != null);
@@ -64,6 +69,9 @@ class Settings extends StatelessWidget {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
                         print("inside relaunch ");
+                          final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         // print(sshData.client.username);
                         if (sshData.client != null) {
                           print(sshData.client!.username);
@@ -87,6 +95,9 @@ class Settings extends StatelessWidget {
                       onpressed: () async {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
+                              final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside rebootr ");
                         // print(sshData.client!.username);
                         if (sshData.client != null) {
@@ -107,6 +118,9 @@ class Settings extends StatelessWidget {
                       onpressed: () async {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
+                              final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside shut down ");
                         // print(sshData.client!.username);
                         if (sshData.client != null) {

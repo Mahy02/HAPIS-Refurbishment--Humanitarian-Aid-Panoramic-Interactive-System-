@@ -75,6 +75,8 @@ class LgService {
     print(pw);
     print(user);
 
+    
+
     final result = await getScreenAmount();
     if (result != null) {
       screenAmount = int.parse(result);
@@ -173,8 +175,8 @@ fi
 
   /// Setups the Google Earth in slave screens to refresh every 2 seconds.
   Future<void> setRefresh() async {
-   final pw = _sshData.passwordOrKey;
-   final user = _sshData.username;
+    final pw = _sshData.passwordOrKey;
+    final user = _sshData.username;
 
     const search = '<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href>';
     const replace =
@@ -204,7 +206,7 @@ fi
 
   /// Setups the Google Earth in slave screens to stop refreshing.
   Future<void> resetRefresh() async {
-   final pw = _sshData.passwordOrKey;
+    final pw = _sshData.passwordOrKey;
 
     const search =
         '<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href><refreshMode>onInterval<\\/refreshMode><refreshInterval>2<\\/refreshInterval>';
@@ -227,7 +229,6 @@ fi
 
     await reboot();
   }
-
 
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
@@ -279,8 +280,6 @@ fi
       print(e);
     }
   }
-
-
 
   ///KML services:
   ///------------

@@ -1,3 +1,4 @@
+import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../models/kml/KMLModel.dart';
 import '../models/kml/look_at_model.dart';
 import '../models/kml/placemark_model.dart';
+import '../providers/connection_provider.dart';
 import '../providers/ssh_provider.dart';
 import '../services/LG_functionalities.dart';
 import '../utils/pop_up_connection.dart';
@@ -158,7 +160,10 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             height: MediaQuery.of(context).size.height * 0.18,
                             width: MediaQuery.of(context).size.height * 0.06,
                           ),
-                          onTap: () {
+                          onTap: () async{
+                              final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                             _viewUserStats(widget.user, true, context);
                           },
                         ),
@@ -181,9 +186,13 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             onTap: () async {
                               final sshData = Provider.of<SSHprovider>(context,
                                   listen: false);
+                                    final connection = Provider.of<Connectionprovider>(context,
+                                  listen: false);
+final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
 
                               if (sshData.client != null) {
                                 try {
+                                   await LgService(sshData).stopTour();
                                   await LgService(sshData).startTour('Orbit');
                                   print("awaiting orbit");
                                 } catch (e) {
