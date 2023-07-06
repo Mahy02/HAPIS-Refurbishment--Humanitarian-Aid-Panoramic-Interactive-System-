@@ -171,6 +171,64 @@ fi
     }
   }
 
+  /// Setups the Google Earth in slave screens to refresh every 2 seconds.
+  Future<void> setRefresh() async {
+   final pw = _sshData.passwordOrKey;
+   final user = _sshData.username;
+
+    const search = '<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href>';
+    const replace =
+        '<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href><refreshMode>onInterval<\\/refreshMode><refreshInterval>2<\\/refreshInterval>';
+    final command =
+        'echo $pw | sudo -S sed -i "s/$search/$replace/" ~/earth/kml/slave/myplaces.kml';
+
+    final clear =
+        'echo $pw | sudo -S sed -i "s/$replace/$search/" ~/earth/kml/slave/myplaces.kml';
+
+    for (var i = 2; i <= screenAmount; i++) {
+      final clearCmd = clear.replaceAll('{{slave}}', i.toString());
+      final cmd = command.replaceAll('{{slave}}', i.toString());
+      String query = 'sshpass -p $pw ssh -t lg$i \'{{cmd}}\'';
+
+      try {
+        await _sshData.execute(query.replaceAll('{{cmd}}', clearCmd));
+        await _sshData.execute(query.replaceAll('{{cmd}}', cmd));
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    }
+
+    await reboot();
+  }
+
+  /// Setups the Google Earth in slave screens to stop refreshing.
+  Future<void> resetRefresh() async {
+   final pw = _sshData.passwordOrKey;
+
+    const search =
+        '<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href><refreshMode>onInterval<\\/refreshMode><refreshInterval>2<\\/refreshInterval>';
+    const replace = '<href>##LG_PHPIFACE##kml\\/slave_{{slave}}.kml<\\/href>';
+
+    final clear =
+        'echo $pw | sudo -S sed -i "s/$search/$replace/" ~/earth/kml/slave/myplaces.kml';
+
+    for (var i = 2; i <= screenAmount; i++) {
+      final cmd = clear.replaceAll('{{slave}}', i.toString());
+      String query = 'sshpass -p $pw ssh -t lg$i \'$cmd\'';
+
+      try {
+        await _sshData.execute(query);
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    }
+
+    await reboot();
+  }
+
+
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
     print("inside query");
@@ -221,6 +279,8 @@ fi
       print(e);
     }
   }
+
+
 
   ///KML services:
   ///------------
