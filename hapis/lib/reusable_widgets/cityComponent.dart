@@ -60,9 +60,9 @@ class _CityComponentState extends State<CityComponent> {
       _cityPlacemark = placemark;
     });
 
-   try{
-    await LgService(sshData).clearKml();
-     } catch (e) {
+    try {
+      await LgService(sshData).clearKml();
+    } catch (e) {
       // ignore: avoid_print
       print(e);
     }
@@ -71,12 +71,12 @@ class _CityComponentState extends State<CityComponent> {
       content: placemark.balloonOnlyTag,
     );
 
-    try{
-    await LgService(sshData).sendKMLToSlave(
-      LgService(sshData).balloonScreen,
-      kmlBalloon.body,
-    );
-     } catch (e) {
+    try {
+      await LgService(sshData).sendKMLToSlave(
+        LgService(sshData).balloonScreen,
+        kmlBalloon.body,
+      );
+    } catch (e) {
       // ignore: avoid_print
       print(e);
     }
@@ -136,44 +136,50 @@ class _CityComponentState extends State<CityComponent> {
 
         await cityDBServices().getGiversInfo(widget.city, context);
 
-        final LatLng cityCoordinates = await getCoordinates(widget.city);
-        print("city button trial");
-        print(cityCoordinates);
+        try {
+          final LatLng cityCoordinates = await getCoordinates(widget.city);
 
-        print("inside city component on pressed ");
-        print("number of seekers: $numberOfSeekers");
-        print("number of givers: $numberOfGivers");
-        print("in progress donations: $inProgressDonations");
-        print("succ donations: $successfulDonations");
-        print("top 3 cat: $topThreeCategories");
+          print("city button trial");
+          print(cityCoordinates);
 
-        CityModel city = CityModel(
-            id: widget.city,
-            name: widget.city,
-            //seekers: seekers,
-            // givers: givers,
-            numberOfSeekers: numberOfSeekers,
-            numberOfGivers: numberOfGivers,
-            inProgressDonations: inProgressDonations,
-            successfulDonations: successfulDonations,
-            topThreeCategories: topThreeCategories,
-            cityCoordinates: cityCoordinates);
+          print("inside city component on pressed ");
+          print("number of seekers: $numberOfSeekers");
+          print("number of givers: $numberOfGivers");
+          print("in progress donations: $inProgressDonations");
+          print("succ donations: $successfulDonations");
+          print("top 3 cat: $topThreeCategories");
 
-        // ignore: use_build_context_synchronously
-        final sshData = Provider.of<SSHprovider>(context, listen: false);
-
-        if (sshData.client != null) {
-          // ignore: use_build_context_synchronously
-          _viewCityStats(city, true, context);
+          CityModel city = CityModel(
+              id: widget.city,
+              name: widget.city,
+              //seekers: seekers,
+              // givers: givers,
+              numberOfSeekers: numberOfSeekers,
+              numberOfGivers: numberOfGivers,
+              inProgressDonations: inProgressDonations,
+              successfulDonations: successfulDonations,
+              topThreeCategories: topThreeCategories,
+              cityCoordinates: cityCoordinates);
 
           // ignore: use_build_context_synchronously
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Users(city: widget.city)));
-        } else {
-          // ignore: use_build_context_synchronously
-          showDialogConnection(context);
+          final sshData = Provider.of<SSHprovider>(context, listen: false);
+
+          if (sshData.client != null) {
+            // ignore: use_build_context_synchronously
+            _viewCityStats(city, true, context);
+
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Users(city: widget.city)));
+          } else {
+            // ignore: use_build_context_synchronously
+            showDialogConnection(context);
+          }
+        } catch (e) {
+          // ignore: avoid_print
+          print(e);
         }
       },
     );

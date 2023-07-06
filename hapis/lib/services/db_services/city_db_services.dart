@@ -98,7 +98,9 @@ top 3 donated categories in this city
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     for (Map<String, dynamic> row in result) {
+      try{
       LatLng coords = await getCoordinates(row['AddressLocation']);
+       
       UsersModel user = UsersModel(
         userID: row['UserUserID'],
         userName: row['UserName'],
@@ -115,6 +117,10 @@ top 3 donated categories in this city
         userCoordinates: coords,
       );
       userProvider.saveSeekers(user);
+      } catch (e) {
+                                  // ignore: avoid_print
+                                  print(e);
+                                }
     }
 
     //return seekerUsers;
@@ -137,6 +143,8 @@ top 3 donated categories in this city
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     for (Map<String, dynamic> row in result) {
+
+      try{
       LatLng coords = await getCoordinates(row['AddressLocation']);
       print(
           "inside query db, the coords: ${coords.latitude} and ${coords.longitude}");
@@ -156,6 +164,10 @@ top 3 donated categories in this city
         userCoordinates: coords,
       );
       userProvider.saveGivers(user);
+      } catch (e) {
+                                  // ignore: avoid_print
+                                  print(e);
+                                }
     }
   }
 

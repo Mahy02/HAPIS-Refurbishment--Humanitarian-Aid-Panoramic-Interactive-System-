@@ -30,10 +30,10 @@ void main() async {
 
   /// Import the database tables from CSV files
 
-  // SqlDb sqlDbb = SqlDb();
-  // await sqlDbb.deleteDb();
+   //SqlDb sqlDbb = SqlDb();
+   //await sqlDbb.deleteDb();
   SqlDb sqlDb = SqlDb();
-  //await sqlDb.importAllTablesFromCSV();
+  await sqlDb.importAllTablesFromCSV();
 
   runApp(
     MultiProvider(

@@ -29,7 +29,6 @@ class SqlDb {
     ///path + name of database
     String path = join(databasePath, 'HAPIS.db');
 
-
     //await deleteDatabase(path);
 
     ///creating the database
@@ -42,15 +41,14 @@ class SqlDb {
     return mydb;
   }
 
+  Future<void> deleteDb() async {
+    // Get the path to the database file
+    String databasePath = await getDatabasesPath();
+    String path = join(databasePath, 'HAPIS.db');
 
-Future<void> deleteDb() async {
-  // Get the path to the database file
-  String databasePath = await getDatabasesPath();
-  String path = join(databasePath, 'HAPIS.db');
-
-  // Delete the database file
-  await deleteDatabase(path);
-}
+    // Delete the database file
+    await deleteDatabase(path);
+  }
 
   ///`_onCreate` function that gets called once the database is created, it creates 4 tables  --IT IS CALLED ONLY ONCE
 
@@ -67,7 +65,8 @@ Future<void> deleteDb() async {
         AddressLocation TEXT NOT NULL,
         PhoneNum TEXT NOT NULL,
         Email TEXT NOT NULL,
-        Password TEXT NOT NULL
+        Password TEXT NOT NULL,
+        UNIQUE(UserID)
        );
     ''');
 
@@ -81,7 +80,8 @@ Future<void> deleteDb() async {
         Dates_available TEXT NOT NULL,
         For TEXT NOT NULL  CHECK (For IN ('self', 'other', '')) ,
         Status TEXT NOT NULL CHECK (Status IN ('Completed', 'Not Completed')) ,
-        FOREIGN KEY (UserID) REFERENCES Users(UserID) 		 		
+        FOREIGN KEY (UserID) REFERENCES Users(UserID),
+        UNIQUE(FormID)		 		
        );
     ''');
 
@@ -94,7 +94,8 @@ Future<void> deleteDb() async {
         Rec2_status TEXT NOT NULL CHECK (Rec2_status IN ('Pending', 'Accepted', 'Rejected')) ,
         Donation_Status TEXT NOT NULL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,
         FOREIGN KEY (Seeker_FormID) REFERENCES Forms(FormID),
-        FOREIGN KEY (Giver_FormID) REFERENCES Forms(FormID)
+        FOREIGN KEY (Giver_FormID) REFERENCES Forms(FormID),
+        UNIQUE(M_ID)
        );
     ''');
 
@@ -108,7 +109,8 @@ Future<void> deleteDb() async {
         Donation_Status TEXT NOT NULL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,
         FOREIGN KEY (Rec_FormID) REFERENCES Forms(FormID),
         FOREIGN KEY (Sender_ID) REFERENCES Users(UserID),
-        FOREIGN KEY (Rec_ID) REFERENCES Users(UserID)
+        FOREIGN KEY (Rec_ID) REFERENCES Users(UserID),
+        UNIQUE(R_ID)
        );
     ''');
     print("create DATABASE & TABLES ");
@@ -155,42 +157,50 @@ Future<void> deleteDb() async {
     return response;
   }
 
+  Future<void> importTableFromCSV(String tableName, String csvFileName) async {
+    // Read the CSV file from assets
+    String csvString = await rootBundle.loadString('assets/$csvFileName');
 
-Future<void> importTableFromCSV(String tableName, String csvFileName) async {
-  // Read the CSV file from assets
-  String csvString = await rootBundle.loadString('assets/$csvFileName');
+    // Parse the CSV string
+    List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
 
-  // Parse the CSV string
-  List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
+    // Get a reference to the database
+    Database? hapisDb = await db;
 
-  // Get a reference to the database
-  Database? hapisDb = await db;
+    // Start a database transaction
+    await hapisDb!.transaction((txn) async {
+      for (int rowIndex = 1; rowIndex < csvData.length; rowIndex++) {
+        // Convert the row data to a map
+        Map<String, dynamic> rowData = {};
 
-  // Start a database transaction
-  await hapisDb!.transaction((txn) async {
-    for (int rowIndex = 1; rowIndex < csvData.length; rowIndex++) {
-      // Convert the row data to a map
-      Map<String, dynamic> rowData = {};
+        for (int i = 0; i < csvData[rowIndex].length; i++) {
+          // Get the name of the current column
+          String columnName = csvData[0][i].toString();
 
-      for (int i = 0; i < csvData[rowIndex].length; i++) {
-        // Get the name of the current column
-        String columnName = csvData[0][i].toString();
+          // Get the value of the current column for the current row
+          dynamic columnValue = csvData[rowIndex][i];
 
-        // Get the value of the current column for the current row
-        dynamic columnValue = csvData[rowIndex][i];
+          // Add the column name and value to the row data map
+          rowData[columnName] = columnValue;
+        }
 
-        // Add the column name and value to the row data map
-        rowData[columnName] = columnValue;
+        // Insert the row into the table
+        try {
+          await txn.insert(tableName, rowData);
+        } catch (e) {
+          // if the insert fails due to a unique constraint violation, ignore the error
+          if (e is DatabaseException && e.isUniqueConstraintError()) {
+            print('Ignoring duplicate row: $rowData');
+          } else {
+            // re-throw the exception if it's not a unique constraint violation
+            throw e;
+          }
+        }
       }
+    });
 
-      // Insert the row into the table
-      await txn.insert(tableName, rowData);
-    }
-  });
-
-  print("Imported data from CSV file into table '$tableName'");
-}
-
+    print("Imported data from CSV file into table '$tableName'");
+  }
 
   /// Function to import all tables from CSV files
   Future<void> importAllTablesFromCSV() async {
