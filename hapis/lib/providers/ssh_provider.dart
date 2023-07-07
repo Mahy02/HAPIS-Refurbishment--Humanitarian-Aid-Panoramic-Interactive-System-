@@ -33,6 +33,35 @@ class SSHprovider extends ChangeNotifier {
 
   SSHClient? _client;
 
+  /// reconnects with the client again every 30 seconds while the app is running
+  reconnectClient(SSHModel ssh) async {
+      try {
+      final socket = await SSHSocket.connect(ssh.host, ssh.port,
+          timeout: Duration(seconds: 36000000));
+      String? password;
+    
+      //final authenticationCompleter = Completer<void>();
+      _client = SSHClient(
+        socket,
+        onPasswordRequest: () {
+          password = ssh.passwordOrKey;
+          print('Password requested: ${password}');
+          return password;
+        },
+        username: ssh.username,
+       
+        keepAliveInterval: const Duration(seconds: 36000000),
+      );
+     
+      // Perform other operations on the connected socket
+    } catch (e) {
+      print('Failed to connect to the SSH server: $e');
+      
+    }
+
+  
+  }
+
   /// Sets a client with the given [ssh] info.
   /// /// Sets a client with the given [ssh] info.
   // void setClient(SSHModel ssh) {
@@ -50,7 +79,8 @@ class SSHprovider extends ChangeNotifier {
     String result = "";
 
     try {
-      final socket = await SSHSocket.connect(ssh.host, ssh.port);
+      final socket = await SSHSocket.connect(ssh.host, ssh.port,
+          timeout: Duration(seconds: 36000000));
       String? password;
       bool isAuthenticated = false;
       //final authenticationCompleter = Completer<void>();
@@ -68,7 +98,7 @@ class SSHprovider extends ChangeNotifier {
           isAuthenticated = true;
           print('SSH client authenticated');
         },
-        keepAliveInterval: const Duration(seconds: 360000),
+        keepAliveInterval: const Duration(seconds: 36000000),
       );
       print("outside");
       print(isAuthenticated);

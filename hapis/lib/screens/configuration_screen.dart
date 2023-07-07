@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/providers/connection_provider.dart';
 import 'package:hapis/providers/ssh_provider.dart';
 import 'package:provider/provider.dart';
+import '../models/ssh_model.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../utils/drawer.dart';
 import '../reusable_widgets/sub_text.dart';
@@ -25,6 +28,35 @@ class Configuration extends StatefulWidget {
 class _ConfigurationState extends State<Configuration> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false; // Track the loading state
+
+  // Timer? _timer;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+  //     // Call the reconnectClient() method here
+  //     final sshData = Provider.of<SSHprovider>(context, listen: false);
+  //     final settings = Provider.of<Connectionprovider>(context, listen: false);
+  //     final result = sshData.reconnectClient(SSHModel(
+  //       username: settings.connectionFormData.username,
+  //       host: settings.connectionFormData.ip,
+  //       passwordOrKey: settings.connectionFormData.password,
+  //       port: settings.connectionFormData.port,
+  //     ));
+  //     if (result != '') {
+  //       setState(() {
+  //         settings.connectionFormData.isConnected = false;
+  //       });
+  //     }
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   _timer?.cancel(); // Cancel the timer when the widget is disposed
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -181,8 +213,6 @@ class _ConfigurationState extends State<Configuration> {
 
                             // Call the init function to set up the SSH client with the connection data
                             String? result = await sshData.init(context);
-
-                            
 
                             // Connect to the Liquid Galaxy
                             //String? result = await sshData.connect();

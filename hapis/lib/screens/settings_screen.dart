@@ -47,9 +47,9 @@ class Settings extends StatelessWidget {
                           context,
                           listen: false,
                         );
-                          final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+//                           final connection = Provider.of<Connectionprovider>(context,
+//                                   listen: false);
+// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside clear kml ");
                         //print(sshData.client.username);
                         print(sshData.client != null);
@@ -69,9 +69,9 @@ final socket = await SSHSocket.connect(connection.connectionFormData.ip, connect
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
                         print("inside relaunch ");
-                          final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+//                           final connection = Provider.of<Connectionprovider>(context,
+//                                   listen: false);
+// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         // print(sshData.client.username);
                         if (sshData.client != null) {
                           print(sshData.client!.username);
@@ -95,9 +95,9 @@ final socket = await SSHSocket.connect(connection.connectionFormData.ip, connect
                       onpressed: () async {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-                              final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+//                               final connection = Provider.of<Connectionprovider>(context,
+//                                   listen: false);
+// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside rebootr ");
                         // print(sshData.client!.username);
                         if (sshData.client != null) {
@@ -118,9 +118,9 @@ final socket = await SSHSocket.connect(connection.connectionFormData.ip, connect
                       onpressed: () async {
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-                              final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+//                               final connection = Provider.of<Connectionprovider>(context,
+//                                   listen: false);
+// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside shut down ");
                         // print(sshData.client!.username);
                         if (sshData.client != null) {

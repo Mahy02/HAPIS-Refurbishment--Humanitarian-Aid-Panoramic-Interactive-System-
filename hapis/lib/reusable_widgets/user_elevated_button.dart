@@ -46,7 +46,9 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
     final UserBalloonService userService = UserBalloonService();
     print("inside view user");
 
-    print(userService);
+    print('seeker: $seeker');
+    print('showBallon: $showBalloon');
+
     final placemark = userService.buildUserPlacemark(
       user,
       showBalloon,
@@ -57,19 +59,21 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
           : null,
       updatePosition: updatePosition,
     );
-    print("balloon content before clearn kml:");
-    print(placemark.balloonContent);
+
     setState(() {
       _userPlacemark = placemark;
     });
 
     try {
+      print('clearing kml before another balloon');
+      debugPrint('debug before clear kml');
       await LgService(sshData).clearKml();
+      debugPrint('debug after clear kml');
     } catch (e) {
       // ignore: avoid_print
       print(e);
     }
-    //according to user if seeker or giver
+    //  according to user if seeker or giver
     final kmlBalloon = KMLModel(
       name: 'HAPIS-USER-balloon',
       content: placemark.balloonOnlyTag,
@@ -79,15 +83,17 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
     print(kmlBalloon.content);
     print(kmlBalloon.body);
     try {
+      debugPrint('debug before send kml');
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,
       );
+      debugPrint('debug after send  kml');
+      print('sent');
     } catch (e) {
       // ignore: avoid_print
       print(e);
     }
-    //  }
 
     if (updatePosition) {
       await LgService(sshData).flyTo(LookAtModel(
@@ -98,6 +104,15 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
         tilt: '0',
         heading: '0',
       ));
+    }
+
+    await Future.delayed(Duration(seconds: 5));
+    String query = 'echo "exittour=true" > /tmp/query.txt ';
+    try {
+      await sshData.execute(query);
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
     }
     final orbit = userService.buildOrbit(user);
     try {
@@ -160,11 +175,64 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             height: MediaQuery.of(context).size.height * 0.18,
                             width: MediaQuery.of(context).size.height * 0.06,
                           ),
-                          onTap: () async{
-                              final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+                          onTap: () async {
+                            // final connection = Provider.of<Connectionprovider>(
+                            //     context,
+                            //     listen: false);
+                            // final socket = await SSHSocket.connect(
+                            //     connection.connectionFormData.ip,
+                            //     connection.connectionFormData.port);
+                            // final sshData = Provider.of<SSHprovider>(context,
+                            //     listen: false);
+                            // print('before calling view stats');
+                            // try {
+                            //   print('clearing kml before another balloon');
+                            //   debugPrint('debug before clear kml');
+                            //   await LgService(sshData).clearKml();
+                            //   debugPrint('debug after clear kml');
+                            // } catch (e) {
+                            //   // ignore: avoid_print
+                            //   print(e);
+                            // }
+                            // print('after calling clear before view stats');
                             _viewUserStats(widget.user, true, context);
+                            // print('after view user stats');
+                            //                         print(
+                            //                             'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+                            //                         await Future.delayed(Duration(seconds: 15));
+                            //                         print(_userPlacemark!.balloonOnlyTag);
+                            //                         String balloon_trial = '''
+                            //   <b><font size="+2">'Personal Information & statistics'<font color="#5D5D5D"></font></font></b>
+                            //   <br/><br/>
+                            //   <b>Name:</b> Mahy
+                            //   <br/>
+                            //   <b>Phone Number:</b> bla
+                            //   <br/>
+                            //   <b>Email:</b> bla
+                            //   <br/>
+                            //   <b>Total Number seekings made for self:</b> bla
+                            //   <br/>
+                            //   <b>Total Number seekings made for others:</b> bla
+                            //   <br/>
+                            // ''';
+                            //                         final kmlBalloon = KMLModel(
+                            //                           name: 'HAPIS-USER-balloon',
+                            //                           // content: _userPlacemark!.balloonOnlyTag,
+                            //                           content: balloon_trial,
+                            //                         );
+                            //                         try {
+                            //                           debugPrint('debug before send kml');
+                            //                           await LgService(sshData).sendKMLToSlave(
+                            //                             1,
+                            //                             kmlBalloon.body,
+                            //                           );
+                            //                           debugPrint('debug after send  kml');
+                            //                           print('sent');
+                            //                         } catch (e) {
+                            //                           // ignore: avoid_print
+                            //                           print(e);
+                            //                         }
                           },
                         ),
                       ),
@@ -186,13 +254,17 @@ final socket = await SSHSocket.connect(connection.connectionFormData.ip, connect
                             onTap: () async {
                               final sshData = Provider.of<SSHprovider>(context,
                                   listen: false);
-                                    final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+
+                              // final connection =
+                              //     Provider.of<Connectionprovider>(context,
+                              //         listen: false);
+                              // final socket = await SSHSocket.connect(
+                              //     connection.connectionFormData.ip,
+                              //     connection.connectionFormData.port);
 
                               if (sshData.client != null) {
                                 try {
-                                   await LgService(sshData).stopTour();
+                                  await LgService(sshData).stopTour();
                                   await LgService(sshData).startTour('Orbit');
                                   print("awaiting orbit");
                                 } catch (e) {

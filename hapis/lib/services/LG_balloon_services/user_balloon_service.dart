@@ -23,6 +23,14 @@ class UserBalloonService {
 
     // final LatLng coord = await getCoordinates(user.addressLocation!);
 
+    String type;
+
+    if (seeker) {
+      type = 'seeker';
+    } else {
+      type = 'giver';
+    }
+
     if (lookAt == null) {
       lookAtObj = LookAtModel(
           longitude: user.userCoordinates!.longitude,
@@ -42,7 +50,8 @@ class UserBalloonService {
         user.getUserOrbitCoordinates(user.addressLocation!, step: orbitPeriod);
     final tour = TourModel(
       name: 'UserTour',
-      placemarkId: 'p-${user.userID.toString()}',
+      // placemarkId: 'p-${user.userID.toString()}',
+      placemarkId: 'p-${user.userName}',
       initialCoordinate: {
         'lat': point.lat,
         'lng': point.lng,
@@ -56,8 +65,10 @@ class UserBalloonService {
     print(balloon
         ? (seeker ? user.seekerBalloonContent() : user.giverBalloonContent())
         : '');
+
     return PlacemarkModel(
-      id: user.userID.toString(),
+      // id: user.userID.toString(),
+      id: user.userName!,
       name: 'Personal Information & statistics',
       lookAt: updatePosition ? lookAtObj : null,
       point: point,
@@ -65,7 +76,8 @@ class UserBalloonService {
           ? (seeker ? user.seekerBalloonContent() : user.giverBalloonContent())
           : '',
       line: LineModel(
-        id: user.userID.toString(),
+        // id: user.userID.toString(),
+        id: user.userName!,
         altitudeMode: 'absolute',
         coordinates: coordinates,
       ),

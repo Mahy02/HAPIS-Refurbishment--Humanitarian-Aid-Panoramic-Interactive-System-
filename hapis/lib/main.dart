@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'constants.dart';
 import 'helpers/sql_db.dart';
+import 'models/ssh_model.dart';
 
 ///This is the main starting point of our application
 ///
@@ -30,8 +32,8 @@ void main() async {
 
   /// Import the database tables from CSV files
 
-   //SqlDb sqlDbb = SqlDb();
-   //await sqlDbb.deleteDb();
+  //SqlDb sqlDbb = SqlDb();
+  //await sqlDbb.deleteDb();
   SqlDb sqlDb = SqlDb();
   await sqlDb.importAllTablesFromCSV();
 
@@ -46,7 +48,28 @@ void main() async {
       child: const HAPIS(),
     ),
   );
+
+  // Create a timer that calls the reconnectClient() function every 30 seconds
+  Timer.periodic(Duration(seconds: 30), (timer) async {
+    final sshData =
+        Provider.of<SSHprovider>(navigatorKey.currentContext!, listen: false);
+
+    final settings = Provider.of<Connectionprovider>(
+        navigatorKey.currentContext!,
+        listen: false);
+    sshData.reconnectClient(SSHModel(
+      username: settings.connectionFormData.username,
+      host: settings.connectionFormData.ip,
+      passwordOrKey: settings.connectionFormData.password,
+      port: settings.connectionFormData.port,
+    ));
+    // if (result != '') {
+    //   Provider.of<Connectionprovider>(navigatorKey.currentContext!, listen: false).isConnected = false;
+    // }
+  });
 }
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class HAPIS extends StatelessWidget {
   const HAPIS({super.key});
@@ -74,6 +97,7 @@ class HAPIS extends StatelessWidget {
           primaryColor: HapisColors.primary),
       title: 'HAPIS',
       home: const SplashScreen(),
+      navigatorKey: navigatorKey,
       //home: const Settings(),
       //initialRoute: ,
       routes: {

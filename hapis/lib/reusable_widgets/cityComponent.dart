@@ -165,9 +165,9 @@ class _CityComponentState extends State<CityComponent> {
 
           // ignore: use_build_context_synchronously
           final sshData = Provider.of<SSHprovider>(context, listen: false);
-            final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+//             final connection = Provider.of<Connectionprovider>(context,
+//                                   listen: false);
+// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
 
           if (sshData.client != null) {
             // ignore: use_build_context_synchronously

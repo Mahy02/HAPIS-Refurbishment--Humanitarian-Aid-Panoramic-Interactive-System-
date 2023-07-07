@@ -75,8 +75,6 @@ class LgService {
     print(pw);
     print(user);
 
-    
-
     final result = await getScreenAmount();
     if (result != null) {
       screenAmount = int.parse(result);
@@ -333,8 +331,10 @@ fi
     print(screen);
     print('ballon content before sending kml to slave: $content');
     try {
+      print('inside try');
       await _sshData
           .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
+      print('after execute');
       // await _sshData.execute(
       //     "chmod 777 /var/www/html/kml/slave_$screen.kml && echo '$content' > /var/www/html/kml/slave_$screen.kml");
     } catch (e) {
@@ -416,7 +416,7 @@ fi
     if (keepLogos) {
       print("inside keep logos");
       final kml = KMLModel(
-        name: 'SVT-logos',
+        name: 'HAPIS-logos',
         content: '<name>Logos</name>',
         screenOverlay: ScreenOverlayModel.logos().tag,
       );

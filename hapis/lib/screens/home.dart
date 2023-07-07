@@ -134,9 +134,9 @@ class _HomePageState extends State<HomePage> {
                             onTap: () async {
                               final sshData = Provider.of<SSHprovider>(context,
                                   listen: false);
-                                final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+//                                 final connection = Provider.of<Connectionprovider>(context,
+//                                   listen: false);
+// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                               if (sshData.client != null) {
                                 try {
                                   await LgService(sshData).stopTour();
@@ -211,9 +211,9 @@ final socket = await SSHSocket.connect(connection.connectionFormData.ip, connect
 
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-                              final connection = Provider.of<Connectionprovider>(context,
-                                  listen: false);
-final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+//                               final connection = Provider.of<Connectionprovider>(context,
+//                                   listen: false);
+// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
                         print("inside globe on pressed ");
 
                         if (sshData.client != null) {
