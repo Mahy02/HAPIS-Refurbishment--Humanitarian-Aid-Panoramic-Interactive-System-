@@ -14,8 +14,6 @@ class globalDBServices {
 
     int numberOfSeekers = result[0]['seeker_count'];
 
-    print("number of seekers: $numberOfSeekers");
-
     return numberOfSeekers;
   }
 
@@ -29,8 +27,6 @@ class globalDBServices {
     List<Map> result = await db.readData(sqlStatment);
 
     int numberOfGivers = result[0]['giver_count'];
-
-    print("number of givers: $numberOfGivers");
 
     return numberOfGivers;
   }
@@ -55,8 +51,6 @@ class globalDBServices {
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
     int numberOfSuccessfulDonations = result[0]['successful_donation_count'];
 
-    print("Number of successful donations: $numberOfSuccessfulDonations");
-
     return numberOfSuccessfulDonations;
   }
 
@@ -79,8 +73,6 @@ class globalDBServices {
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
     int numberOfInProgressDonations = result[0]['Inprogress_donation_count'];
-
-    print("Number of inprogress donations: $numberOfInProgressDonations");
 
     return numberOfInProgressDonations;
   }

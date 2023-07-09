@@ -8,10 +8,15 @@ import '../models/db_models/users_model.dart';
 import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/user_component.dart';
 
+/// this is the [Seekers] that include all seekers retrieved from the database
+/// It has a default [HAPISAppBar] and calls [buildDrawer] for the [Drawer]
+/// [GridView] was used for the cities to display 3 items per row
+/// The widget returns a [UserComponent] for each user in the database
+
 class Seekers extends StatefulWidget {
   final List<UsersModel> seekersList;
   final String city;
-  //const Seekers({super.key, required this.seekersList, required this.city});
+
   const Seekers({Key? key, required this.seekersList, required this.city})
       : super(key: key);
   @override
@@ -19,21 +24,21 @@ class Seekers extends StatefulWidget {
 }
 
 class _SeekersState extends State<Seekers> {
+  ///`searchController` for the search functionality
   TextEditingController searchController = TextEditingController();
 
+  ///`filteredSeekersList` for all filtered seekers from `searchController
   List<UsersModel> filteredSeekersList = [];
 
   @override
   void initState() {
     super.initState();
-    // print("initialization");
     Future.delayed(Duration.zero, () {
       getSeekers();
     });
   }
 
   void getSeekers() {
-    // print("get seekers called");
     setState(() {
       filteredSeekersList = widget.seekersList;
     });
@@ -51,12 +56,10 @@ class _SeekersState extends State<Seekers> {
             child: TextField(
               controller: searchController,
               onChanged: (value) {
-                print(value);
-                print("hereeeeeeeeeeeeee");
                 performSearch(value);
               },
               style: const TextStyle(
-                fontSize: 30, // Increase the font size to your desired value
+                fontSize: 30,
               ),
               decoration: const InputDecoration(
                 hintText: 'Search for a user',
@@ -72,13 +75,12 @@ class _SeekersState extends State<Seekers> {
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
-                    width: 1.5, // Replace with the desired border color
+                    width: 1.5,
                   ),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: HapisColors.lgColor3, width: 1.5
-                      // Replace with the desired border color when focused
-                      ),
+                  borderSide:
+                      BorderSide(color: HapisColors.lgColor3, width: 1.5),
                 ),
               ),
             ),
@@ -107,7 +109,9 @@ class _SeekersState extends State<Seekers> {
                         final UsersModel user = filteredSeekersList[index];
 
                         return UserComponent(
-                            key: const ValueKey("userComponent"), user: user, type: 'seeker');
+                            key: const ValueKey("userComponent"),
+                            user: user,
+                            type: 'seeker');
                       },
                     ),
                   ),

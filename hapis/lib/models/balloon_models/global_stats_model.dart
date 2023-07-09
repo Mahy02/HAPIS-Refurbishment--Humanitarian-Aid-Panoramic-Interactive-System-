@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart';
-
 import '../../constants.dart';
-import '../../utils/extract_geocoordinates.dart';
+
 
 /// Entity that represents the `Globe`, with all of its properties and methods.
 class GlobeModel {
@@ -65,21 +64,16 @@ class GlobeModel {
       <br/>
       <b>Top Three Donated Categories:</b> ${topThreeCategories.join(', ')}
       <br/>
-       <b>Top Three Cities with most Donations:</b> ${topThreeCategories.join(', ')}
+       <b>Top Three Cities with most Donations:</b> ${topThreeCities.join(', ')}
        <br/>
     ''';
 
   List<Map<String, double>> getGlobeOrbitCoordinates({
     double step = 3,
-    double altitude = 
-    //20000.1097385,
-    25512.1097385,
-    //20540.1097385, // Specify the desired altitude for the orbit
-    //was 0
+    double altitude = 25512.1097385,
+   
   }) {
-    // if (globeCoordinates == null) {
-    //   return [];
-    // }
+   
 
     List<Map<String, double>> coords = [];
     double displacement = 0;

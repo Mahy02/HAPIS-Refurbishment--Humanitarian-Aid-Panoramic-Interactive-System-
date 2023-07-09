@@ -7,6 +7,11 @@ import '../constants.dart';
 import '../reusable_widgets/cityComponent.dart';
 import '../reusable_widgets/no_component.dart';
 
+/// this is the [CitiesPage] that include all cities retrieved from the database
+/// It has a default [HAPISAppBar] and calls [buildDrawer] for the [Drawer]
+/// [GridView] was used for the cities to display two items per row
+/// The widget returns a [CityComponent] for each city in the database
+
 class CitiesPage extends StatefulWidget {
   const CitiesPage({super.key});
 
@@ -15,6 +20,7 @@ class CitiesPage extends StatefulWidget {
 }
 
 class _CitiesPageState extends State<CitiesPage> {
+  /// `buttonColors` to define colors for each button
   final List<Color> buttonColors = [
     HapisColors.lgColor1,
     HapisColors.lgColor2,
@@ -22,9 +28,13 @@ class _CitiesPageState extends State<CitiesPage> {
     HapisColors.lgColor4
   ];
 
+  ///`searchController` for the search functionality
   TextEditingController searchController = TextEditingController();
 
+  ///`citiesList` for the all the cities
   List<Map<String, String>> citiesList = [];
+
+  ///`filteredCitiesList` for all filtered cities from `searchController
   List<Map<String, String>> filteredCitiesList = [];
 
   @override
@@ -33,6 +43,7 @@ class _CitiesPageState extends State<CitiesPage> {
     getCities();
   }
 
+  ///`getCities` to get the cities and countries from the database and set the `citiesList` and `filteredCitiesList`
   Future<void> getCities() async {
     final List<Map<String, String>> cities =
         await UserServices().getCitiesAndCountries();
@@ -54,11 +65,11 @@ class _CitiesPageState extends State<CitiesPage> {
             child: TextField(
               controller: searchController,
               onChanged: (value) {
-                print("changed");
+                /// calling `performSearch` to search for value entered on change of `searchController
                 performSearch(value);
               },
               style: const TextStyle(
-                fontSize: 30, // Increase the font size to your desired value
+                fontSize: 30,
               ),
               decoration: const InputDecoration(
                 hintText: 'Search for a city',
@@ -74,31 +85,18 @@ class _CitiesPageState extends State<CitiesPage> {
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
-                    width: 1.5, // Replace with the desired border color
+                    width: 1.5,
                   ),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: HapisColors.lgColor3, width: 1.5
-                      // Replace with the desired border color when focused
-                      ),
+                  borderSide:
+                      BorderSide(color: HapisColors.lgColor3, width: 1.5),
                 ),
               ),
             ),
           ),
           Expanded(
             child: filteredCitiesList.isEmpty
-                // child: FutureBuilder<List<Map<String, String>>>(
-                //   future: UserServices().getCitiesAndCountries(),
-                //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const Center(child: CircularProgressIndicator());
-                //     }
-                //     if (snapshot.hasError) {
-                //       return const Center(child: Text('Error fetching cities'));
-                //     }
-                //     final citiesList = snapshot.data ?? [];
-                //     final noCities = citiesList.isEmpty;
-                //     return noCities!
                 ? const NoComponentWidget(
                     displayText: 'Sorry, there are no Cities available',
                     icon: Icons.location_city_outlined)
@@ -106,9 +104,7 @@ class _CitiesPageState extends State<CitiesPage> {
                     padding:
                         const EdgeInsets.only(top: 50, right: 50, left: 50),
                     child: GridView.builder(
-                      // itemCount: citiesList.length,
                       itemCount: filteredCitiesList.length,
-
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, // Display two items per row
@@ -116,19 +112,13 @@ class _CitiesPageState extends State<CitiesPage> {
                         mainAxisSpacing: 100.0,
                       ),
                       itemBuilder: (context, index) {
-                        // final String city = citiesList[index];
-                        // final String city = citiesList[index]['city'];
-                        // final String country = citiesList[index]['country'];
                         final String city = filteredCitiesList[index]['city']!;
                         final String country =
                             filteredCitiesList[index]['country']!;
 
                         final Color buttonColor =
                             buttonColors[index % buttonColors.length];
-                        // print(event.category);
-                        // print(city);
-                        // print(country);
-                        // print("before pressing city");
+
                         return CityComponent(
                           key: const ValueKey("cityComponent"),
                           city: city,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/models/connection_model.dart';
 
-
-
 ///This is a [Provider] class of [Connectionprovider] that extends [ChangeNotifier]
 ///It has the following:
 ///  *  [_ipController] of type  [TextEditingController] to get the data of the host entered by the user
@@ -15,7 +13,7 @@ import 'package:hapis/models/connection_model.dart';
 
 class Connectionprovider extends ChangeNotifier {
   final TextEditingController _ipController = TextEditingController();
-  final TextEditingController _portController = //int
+  final TextEditingController _portController =
       TextEditingController(text: '22');
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -80,7 +78,3 @@ class Connectionprovider extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-
-
-//this class is for the user interaction** it gets saved so that we can add it to the ssh model

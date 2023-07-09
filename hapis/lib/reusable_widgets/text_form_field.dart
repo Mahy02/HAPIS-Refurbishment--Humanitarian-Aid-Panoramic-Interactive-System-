@@ -61,9 +61,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final bool? _enabled;
   final bool? _isHidden;
 
-  // FocusNode _focusNode = FocusNode();
-  // bool _isFocused = false;
-  // Color color;
+  
 
   @override
   Key? get key => super.key;
@@ -83,11 +81,10 @@ class TextFormFieldWidget extends StatelessWidget {
         enabled: _enabled,
         controller: _textController,
 
-        maxLength: _maxLength, //we also have maxLines
+        maxLength: _maxLength, 
         initialValue: _initialValue,
         obscureText: _isHidden!,
         decoration: InputDecoration(
-          // hintText: 'Be clear and descriptive.',
           labelText: _label,
           labelStyle: TextStyle(
             fontSize: 30,

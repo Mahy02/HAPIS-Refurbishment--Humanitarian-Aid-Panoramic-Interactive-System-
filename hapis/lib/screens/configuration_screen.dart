@@ -1,4 +1,4 @@
-import 'dart:async';
+
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +6,6 @@ import 'package:hapis/constants.dart';
 import 'package:hapis/providers/connection_provider.dart';
 import 'package:hapis/providers/ssh_provider.dart';
 import 'package:provider/provider.dart';
-import '../models/ssh_model.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../utils/drawer.dart';
 import '../reusable_widgets/sub_text.dart';
@@ -15,8 +14,11 @@ import '../services/LG_functionalities.dart';
 import '../utils/show_connection_error.dart';
 
 ///This is we configure the connection between the LG and the tablet app
-///We need a username, password, master IP address and port number for valid connection
+///We need a username, password, master IP address and port number as well as number of screens for valid connection
 ///We update the data in the [Connectionprovider] Class and if data is valid we establish a connection from the [SSHprovider]
+///The Configruation widget use the custom [HAPISAppBar] and calls [buildDrawer] for the [Drawer]
+///It uses [Consumer] to save the data in the [Connectionprovider]
+
 
 class Configuration extends StatefulWidget {
   const Configuration({super.key});
@@ -26,37 +28,14 @@ class Configuration extends StatefulWidget {
 }
 
 class _ConfigurationState extends State<Configuration> {
+
+  /// `form key` for our configuration form
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false; // Track the loading state
 
-  // Timer? _timer;
+  /// `is loading` to Track the loading state
+  bool _isLoading = false; 
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _timer = Timer.periodic(Duration(seconds: 30), (timer) {
-  //     // Call the reconnectClient() method here
-  //     final sshData = Provider.of<SSHprovider>(context, listen: false);
-  //     final settings = Provider.of<Connectionprovider>(context, listen: false);
-  //     final result = sshData.reconnectClient(SSHModel(
-  //       username: settings.connectionFormData.username,
-  //       host: settings.connectionFormData.ip,
-  //       passwordOrKey: settings.connectionFormData.password,
-  //       port: settings.connectionFormData.port,
-  //     ));
-  //     if (result != '') {
-  //       setState(() {
-  //         settings.connectionFormData.isConnected = false;
-  //       });
-  //     }
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   _timer?.cancel(); // Cancel the timer when the widget is disposed
-  //   super.dispose();
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +44,7 @@ class _ConfigurationState extends State<Configuration> {
         appBarText: '',
       ),
       drawer: Drawer(
-          // Drawer content goes here
+      
           child: buildDrawer(context)),
       body: SingleChildScrollView(
         child: Consumer<Connectionprovider>(
@@ -76,7 +55,7 @@ class _ConfigurationState extends State<Configuration> {
                 alignment: Alignment.center,
                 children: [
                   Column(
-                    //crossAxisAlignment: CrossAxisAlignment.stretch,
+                   
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(
@@ -186,7 +165,9 @@ class _ConfigurationState extends State<Configuration> {
                         height: MediaQuery.of(context).size.height * 0.2,
                         child: ElevatedButton(
                           onPressed: () async {
+                            /// checking first if form is valid
                             if (_formKey.currentState!.validate()) {
+                              ///calling `saveData` from the provider to save the data entered by the user
                               Provider.of<Connectionprovider>(context,
                                       listen: false)
                                   .saveData(
@@ -197,44 +178,38 @@ class _ConfigurationState extends State<Configuration> {
                                 model.screenAmountController,
                                 model.isConnected,
                               );
-                              print(model.connectionFormData.username);
-                              print(model.connectionFormData.ip);
-                              print(model.connectionFormData.password);
-                              print(model.connectionFormData.port);
-                              print(model.isConnected);
+                            
                             }
 
                             final sshData = Provider.of<SSHprovider>(context,
                                 listen: false);
 
+
+                            ///start the loading process by setting `isloading` to true
                             setState(() {
-                              _isLoading = true; // Show the loading indicator
+                              _isLoading = true; 
                             });
 
-                            // Call the init function to set up the SSH client with the connection data
+                            /// Call the init function to set up the SSH client with the connection data
                             String? result = await sshData.init(context);
 
-                            // Connect to the Liquid Galaxy
-                            //String? result = await sshData.connect();
-                            // print("client checking in config screen");
-                            //print(sshData.client!.username);
-                            print(result);
-
-                            //checking on the connection status:
+                           
+                            ///checking on the connection status:
                             if (result == '') {
                               setState(() {
-                                //isConnected = true;
+                              
                                 model.isConnected = true;
                               });
+                              ///If connected, the logos should appear by calling `setLogos` from the `LGService` calss
                               LgService(sshData).setLogos();
                             } else {
-                              //we want to show a message
-                              //TO DO:
+                              ///show an error message
                               showConnectionError(context, result!);
                             }
 
+                             ///stop the loading process by setting `isloading` to false
                             setState(() {
-                              _isLoading = false; // Show the loading indicator
+                              _isLoading = false; 
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -256,8 +231,7 @@ class _ConfigurationState extends State<Configuration> {
                     ],
                   ),
                   if (_isLoading)
-                    // Show the loading indicator if _isLoading is true
-
+                    /// Show the loading indicator if `_isLoading` is true
                     Container(
                       width: MediaQuery.of(context).size.width * 0.2,
                       height: MediaQuery.of(context).size.height * 0.3,

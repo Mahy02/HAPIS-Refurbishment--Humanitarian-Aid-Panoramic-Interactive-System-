@@ -16,6 +16,7 @@ import 'connection_provider.dart';
 /// [execute] is used to execute a specefic command when connecting with the client
 /// [uploadKml] is used to upload a file as kml
 ///  [disconnect] is used for disconnecting the client
+/// [reconnectClient] for connecting the client again in case the connection is lost while app is running
 
 class SSHprovider extends ChangeNotifier {
   String? _host;
@@ -33,105 +34,67 @@ class SSHprovider extends ChangeNotifier {
 
   SSHClient? _client;
 
-  /// reconnects with the client again every 30 seconds while the app is running
+  /// reconnects with the client again every 30 seconds while the app is running with given `ssh` info
   reconnectClient(SSHModel ssh) async {
-      try {
+    try {
       final socket = await SSHSocket.connect(ssh.host, ssh.port,
-          timeout: Duration(seconds: 36000000));
+          timeout: const Duration(seconds: 36000000));
       String? password;
-    
-      //final authenticationCompleter = Completer<void>();
+
       _client = SSHClient(
         socket,
         onPasswordRequest: () {
           password = ssh.passwordOrKey;
-          print('Password requested: ${password}');
           return password;
         },
         username: ssh.username,
-       
         keepAliveInterval: const Duration(seconds: 36000000),
       );
-     
+
       // Perform other operations on the connected socket
     } catch (e) {
       print('Failed to connect to the SSH server: $e');
-      
     }
-
-  
   }
 
   /// Sets a client with the given [ssh] info.
-  /// /// Sets a client with the given [ssh] info.
-  // void setClient(SSHModel ssh) {
-  //   _client = SSHClient(
-  //     host: ssh.host,
-  //     port: ssh.port,
-  //     username: ssh.username,
-  //     passwordOrKey: ssh.passwordOrKey,
-  //   );
-  //   print("checking set client");
-  //   print(_client!.username);
-  // }
-
   Future<String?> setClient(SSHModel ssh) async {
     String result = "";
 
     try {
       final socket = await SSHSocket.connect(ssh.host, ssh.port,
-          timeout: Duration(seconds: 36000000));
+          timeout: const Duration(seconds: 36000000));
       String? password;
       bool isAuthenticated = false;
-      //final authenticationCompleter = Completer<void>();
+
       _client = SSHClient(
         socket,
         onPasswordRequest: () {
           password = ssh.passwordOrKey;
-          print('Password requested: ${password}');
+
           return password;
         },
         username: ssh.username,
         onAuthenticated: () {
-          // authenticationCompleter
-          //     .complete(); // Notify that authentication is complete
           isAuthenticated = true;
-          print('SSH client authenticated');
         },
         keepAliveInterval: const Duration(seconds: 36000000),
       );
-      print("outside");
-      print(isAuthenticated);
 
-      // Wait for authentication to complete
-      //await authenticationCompleter.future;
-
-      // Add a delay before checking isAuthenticated
-      await Future.delayed(Duration(seconds: 10));
-      print("after delay");
-      print(isAuthenticated);
+      /// Add a delay before checking isAuthenticated
+      await Future.delayed(const Duration(seconds: 10));
 
       if (isAuthenticated) {
-        print('Connected to the SSH server.');
       } else {
-        // Perform additional checks if necessary
-        // For example, check if the client is connected to the server,
-        // check for supported SSH versions, etc.
-        print("inside not auth");
         // If the client is not authenticated, indicate a failed connection
         throw Exception('SSH authentication failed');
       }
 
       // Perform other operations on the connected socket
     } catch (e) {
-      print('Failed to connect to the SSH server: $e');
       result = "Failed to connect to the SSH server: $e";
     }
 
-    // print("checking set client");
-    // print(_client!.username);
-    print("after set client the result is:");
-    print(result);
     return result;
   }
 
@@ -185,12 +148,6 @@ class SSHprovider extends ChangeNotifier {
 
   Future<String?> init(BuildContext context) async {
     final settings = Provider.of<Connectionprovider>(context, listen: false);
-    print("inside init in ssh services");
-    print("getting data from provider");
-    print(settings.connectionFormData.username);
-    print(settings.connectionFormData.ip);
-    print(settings.connectionFormData.password);
-    print(settings.connectionFormData.port);
     String? result = await setClient(SSHModel(
       username: settings.connectionFormData.username,
       host: settings.connectionFormData.ip,
@@ -209,29 +166,13 @@ class SSHprovider extends ChangeNotifier {
 
   /// Connects to the current client, executes a command into it and then disconnects.
   Future<SSHSession> execute(String command) async {
-    //String? result = await connect();
-
-    //String? execResult;
     SSHSession execResult;
 
-    //if (result == 'session_connected') {
-    // await _client!.execute(command);
-    //}
-    //try {
     execResult = await _client!.execute(command);
-    //} catch (e) {
-    //  print(e);
-    // }
 
-    //await disconnect();
     notifyListeners();
     return execResult;
   }
-
-  /// Connects to a machine using the current client.
-  // Future<String?> connect() async {
-  //   return _client!.connect();
-  // }
 
   /// Disconnects from the a machine using the current client.
   Future<SSHClient> disconnect() async {
@@ -241,21 +182,6 @@ class SSHprovider extends ChangeNotifier {
 
   /// Connects to the current client through SFTP, uploads a file into it and then disconnects.
   /// uploading kml file
-  // Future<void> uploadKml(String filePath) async {
-  //   // await connect();
-  //   String? result = await _client!.connectSFTP();
-
-  //   if (result == 'sftp_connected') {
-  //     await _client!.sftpUpload(
-  //         path: filePath,
-  //         toPath: '/var/www/html',
-  //         callback: (progress) {
-  //           print('Sent $progress');
-  //         });
-  //   }
-  //   notifyListeners();
-  // }
-
   uploadKml(File inputFile, String filename) async {
     final sftp = await _client?.sftp();
     double anyKindofProgressBar;
@@ -266,8 +192,6 @@ class SSHprovider extends ChangeNotifier {
     var fileSize = await inputFile.length();
     await file?.write(inputFile.openRead().cast(), onProgress: (progress) {
       anyKindofProgressBar = progress / fileSize;
-      print(anyKindofProgressBar);
     });
-    print("finish upload");
   }
 }

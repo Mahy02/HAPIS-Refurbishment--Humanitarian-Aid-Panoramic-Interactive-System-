@@ -7,13 +7,6 @@ class OrbitModel {
   static String tag(LookAtModel lookAt) {
     String content = '';
 
-    print("orbit tag content");
-
-    print(lookAt.latitude);
-    print(lookAt.longitude);
-    print(lookAt.altitude);
-    print(lookAt.range);
-    print(lookAt.altitudeMode);
 
     double heading = double.parse(lookAt.heading);
     int orbit = 0;

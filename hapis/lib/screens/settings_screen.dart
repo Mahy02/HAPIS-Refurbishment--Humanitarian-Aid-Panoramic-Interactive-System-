@@ -1,9 +1,8 @@
-import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
-import '../providers/connection_provider.dart';
+
 import '../providers/ssh_provider.dart';
 import '../reusable_widgets/app_bar.dart';
 import '../utils/drawer.dart';
@@ -43,20 +42,18 @@ class Settings extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.2,
                       isPoly: false,
                       onpressed: () async {
+                        /// retrieving the ssh data from the `ssh provider`
                         final sshData = Provider.of<SSHprovider>(
                           context,
                           listen: false,
                         );
-//                           final connection = Provider.of<Connectionprovider>(context,
-//                                   listen: false);
-// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
-                        print("inside clear kml ");
-                        //print(sshData.client.username);
-                        print(sshData.client != null);
+
+                        ///checking the connection status first
                         if (sshData.client != null) {
-                          print("here");
+                          /// calling `clear kml` from [LGService]
                           LgService(sshData).clearKml(keepLogos: false);
                         } else {
+                          ///Showing error message
                           showDialogConnection(context);
                         }
                       }),
@@ -66,19 +63,16 @@ class Settings extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.2,
                       isPoly: false,
                       onpressed: () async {
+                        /// retrieving the ssh data from the `ssh provider`
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-                        print("inside relaunch ");
-//                           final connection = Provider.of<Connectionprovider>(context,
-//                                   listen: false);
-// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
-                        // print(sshData.client.username);
-                        if (sshData.client != null) {
-                          print(sshData.client!.username);
 
-                          print("here");
+                        ///checking the connection status first
+                        if (sshData.client != null) {
+                          /// calling `relaunch` from `LGService`
                           LgService(sshData).relaunch();
                         } else {
+                          ///Showing error message
                           showDialogConnection(context);
                         }
                       }),
@@ -93,20 +87,16 @@ class Settings extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.2,
                       isPoly: false,
                       onpressed: () async {
+                        /// retrieving the ssh data from the `ssh provider`
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-//                               final connection = Provider.of<Connectionprovider>(context,
-//                                   listen: false);
-// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
-                        print("inside rebootr ");
-                        // print(sshData.client!.username);
-                        if (sshData.client != null) {
-                          print(sshData.client!.username);
 
-                          print("here");
+                        ///checking the connection status first
+                        if (sshData.client != null) {
+                          /// calling `reboot` from `LGService`
                           LgService(sshData).reboot();
                         } else {
-                          print("else");
+                          ///Showing error message
                           showDialogConnection(context);
                         }
                       }),
@@ -116,17 +106,16 @@ class Settings extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.2,
                       isPoly: false,
                       onpressed: () async {
+                        /// retrieving the ssh data from the `ssh provider`
                         final sshData =
                             Provider.of<SSHprovider>(context, listen: false);
-//                               final connection = Provider.of<Connectionprovider>(context,
-//                                   listen: false);
-// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
-                        print("inside shut down ");
-                        // print(sshData.client!.username);
+
+                        ///checking the connection status first
                         if (sshData.client != null) {
-                          print("here");
+                          /// calling `shutdown` from `LGService`
                           LgService(sshData).shutdown();
                         } else {
+                          ///Showing error message
                           showDialogConnection(context);
                         }
                       }),

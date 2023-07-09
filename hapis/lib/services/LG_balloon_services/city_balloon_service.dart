@@ -19,8 +19,6 @@ class CityBalloonService {
   })  {
     LookAtModel lookAtObj;
 
-    //final LatLng coord = await getCoordinates(city.name);
-
     if (lookAt == null) {
       lookAtObj = LookAtModel(
           longitude: city.cityCoordinates.longitude,
@@ -54,7 +52,6 @@ class CityBalloonService {
       name: '${city.name} ',
       lookAt: updatePosition ? lookAtObj : null,
       point: point,
-      //description: satellite.citation,
       balloonContent: balloon ? city.balloonContent() : '',
       icon: 'cityballoon.png',
       line: LineModel(

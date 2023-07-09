@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:flutter_polygon/flutter_polygon.dart';
 import 'package:hapis/constants.dart';
-import 'package:hapis/main.dart';
 
 ///This is a customer elevated button which is reused in many views through our app
 ///[HapisElevatedButton] takes as parameters:
@@ -54,9 +51,7 @@ class HapisElevatedButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   isPoly
-                      ?
-                     
-                      Container(
+                      ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: HapisColors.primary,
@@ -71,7 +66,7 @@ class HapisElevatedButton extends StatelessWidget {
                           ),
                         )
                       : Image.asset(
-                          imagePath!, // Replace with your image path
+                          imagePath!,
                           height: imageHeight,
                           width: imageWidth,
                         ),

@@ -17,7 +17,7 @@ Future<dynamic> showConnectionError(BuildContext context, String errorMessage) {
             style: TextStyle(fontSize: 30, color: HapisColors.lgColor2),
           ),
           content:  Text( errorMessage,
-              style: TextStyle(fontSize: 25)),
+              style: const TextStyle(fontSize: 25)),
           actions: [
             TextButton(
               onPressed: () {

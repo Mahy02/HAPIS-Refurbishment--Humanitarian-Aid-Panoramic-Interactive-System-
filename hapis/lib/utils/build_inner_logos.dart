@@ -6,7 +6,6 @@ import 'colors.dart';
 
 
 ///This is a widget for  [BuildLogos] in the about Page, as well as the text in the about page
-
 Widget BuildLogos() {
   return Column(
     children: [
@@ -58,7 +57,7 @@ Widget BuildLogos() {
                                   fontFamily: GoogleFonts.lato().fontFamily,
                                 ),
                               ),
-                              TextSpan(text: ' '),
+                              const TextSpan(text: ' '),
                             ],
                           ),
                       ],
@@ -127,11 +126,11 @@ Widget BuildLogos() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset("assets/images/EDU.png", scale: 2),
-          SizedBox(
+          const SizedBox(
             width: 30,
           ),
           Image.asset("assets/images/LiquidGalaxyLab.png", scale: 2),
-          SizedBox(
+          const SizedBox(
             width: 30,
           ),
           Image.asset("assets/images/3-removebg-preview.png", scale: 1),
@@ -142,13 +141,13 @@ Widget BuildLogos() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset("assets/images/WomenTech.png", scale: 3),
-          SizedBox(
+          const SizedBox(
             width: 30,
           ),
           Image.asset(
               "assets/images/Laboratoris_TIC_-agrobiotech-removebg-preview-removebg-preview.png",
               scale: 4),
-          SizedBox(
+          const SizedBox(
             width: 30,
           ),
           Image.asset(
@@ -163,7 +162,7 @@ Widget BuildLogos() {
             "assets/images/Android_robot.svg.png",
             scale: 20,
           ),
-          SizedBox(
+          const SizedBox(
             width: 100,
           ),
           Image.asset(

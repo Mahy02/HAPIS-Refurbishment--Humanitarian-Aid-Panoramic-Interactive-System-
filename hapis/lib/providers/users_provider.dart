@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/users_model.dart';
 import 'package:provider/provider.dart';
-
 import '../utils/extract_geocoordinates.dart';
 
 ///This is a [Provider] class of [UserProvider] that extends [ChangeNotifier]
 
 ///They all have setters and getters
 ///We have [saveData] method to save data into the form using [UsersModel]
+///We have [saveSeekers] and [saveGivers] method to save all seekers and givers in the corresponding list
+///We have [clearData] to empty the seekers and givers list before going to another city
 
 class UserProvider extends ChangeNotifier {
   /// Property that defines the user userID

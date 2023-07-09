@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/users_model.dart';
 import 'package:hapis/reusable_widgets/user_elevated_button.dart';
 
+
+/// `UserComponent is for each user in the users page
+/// it is a [StatefulWidget] that simply returns `UserElevatedButton`
 class UserComponent extends StatefulWidget {
   final UsersModel user;
   final String type;

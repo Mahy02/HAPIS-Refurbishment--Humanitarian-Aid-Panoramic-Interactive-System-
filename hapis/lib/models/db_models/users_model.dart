@@ -106,10 +106,7 @@ class UsersModel {
     double altitude = 10000, // Specify the desired altitude for the orbit
   }) {
     
-    // if (cityCoordinates == null) {
-    //   return [];
-    // }
-   // final LatLng userCoordinates=  await getCoordinates(addressLocation!);
+    
 
     List<Map<String, double>> coords = [];
     double displacement = 0;

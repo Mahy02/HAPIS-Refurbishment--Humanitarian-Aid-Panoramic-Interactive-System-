@@ -95,13 +95,3 @@ class LookAtModel {
 
 
 
-/*
-
-int degrees = 45;
-int meters = 1000;
-
-String formattedDegrees = NumberFormat('#,##0.##°').format(degrees);
-String formattedMeters = NumberFormat('#,##0.## m').format(meters);
-
-
-*/

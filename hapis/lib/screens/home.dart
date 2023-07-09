@@ -1,8 +1,6 @@
-import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/models/balloon_models/global_stats_model.dart';
-import 'package:hapis/providers/connection_provider.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/cities.dart';
 import 'package:hapis/services/LG_balloon_services/global_balloon_service.dart';
@@ -19,7 +17,7 @@ import '../services/LG_functionalities.dart';
 import '../services/db_services/global_db_services.dart';
 import '../utils/pop_up_connection.dart';
 
-///This is our Home page. It has 2 main buttons=> Global statistics and Cities
+///This is our Home page. It has 2 main buttons=> Global statistics and Cities from the custom [HapisElevatedButton]
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,16 +27,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ///  `_globePlacemark` to define the city placemark for orbiting, balloons
   PlacemarkModel? _globePlacemark;
 
-  /// Views a `globe stats` into the Google Earth.
+  /// Views a `global stats` into the Google Earth in a Balloon and Fly to the city.
   void _viewGlobeStats(GlobeModel globe, bool showBalloon, BuildContext context,
       {double orbitPeriod = 2.8, bool updatePosition = true}) async {
     final sshData = Provider.of<SSHprovider>(context, listen: false);
-    print("here");
-    final GlobalBalloonService globeService = GlobalBalloonService();
-    print("inside view globe");
 
+    final GlobalBalloonService globeService = GlobalBalloonService();
+
+    /// calling the `buildGlobalPlacemark` that returns the `globe placemark`
     final placemark = globeService.buildGlobalPlacemark(
       globe,
       showBalloon,
@@ -48,8 +47,6 @@ class _HomePageState extends State<HomePage> {
           : null,
       updatePosition: false,
     );
-    //print(placemark.orbitTag);
-    //print(placemark.lookAt);
 
     setState(() {
       _globePlacemark = placemark;
@@ -62,12 +59,14 @@ class _HomePageState extends State<HomePage> {
       print(e);
     }
 
+    /// defining the `kml balloon` content and name
     final kmlBalloon = KMLModel(
       name: 'HAPIS-Global-balloon',
       content: placemark.balloonOnlyTag,
     );
 
     try {
+      /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,
@@ -77,32 +76,29 @@ class _HomePageState extends State<HomePage> {
       print(e);
     }
 
+    ///  `updating postion` to fly to certain city
     if (updatePosition) {
       await LgService(sshData).flyTo(LookAtModel(
         longitude: -45.4518936,
         latitude: 0.0000101,
-        // range: '90000000000',
         range: '31231212.86',
-        //tilt: '0',
         tilt: '0',
-        //altitude: 0,
-        //altitude: 25540.1097385,
         altitude: 50000.1097385,
         heading: '0',
         altitudeMode: 'relativeToSeaFloor',
       ));
     }
+
+    ///building the orbit
     final orbit = globeService.buildOrbit();
-    //await LgService(sshData).clearKml();
 
     try {
+      ///Sending Tour with `orbit details` where the tour would be `Orbit`
       await LgService(sshData).sendTour(orbit, 'Orbit');
     } catch (e) {
       // ignore: avoid_print
       print(e);
     }
-    //await LgService(sshData).startTour('Orbit');
-    // print("end of global function");
   }
 
   @override
@@ -134,19 +130,21 @@ class _HomePageState extends State<HomePage> {
                             onTap: () async {
                               final sshData = Provider.of<SSHprovider>(context,
                                   listen: false);
-//                                 final connection = Provider.of<Connectionprovider>(context,
-//                                   listen: false);
-// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
+
+                              ///checking status of connection first
                               if (sshData.client != null) {
                                 try {
+                                  ///`stopTour` to stop any tour already going now
                                   await LgService(sshData).stopTour();
+
+                                  /// `startTour` to start the new tour
                                   await LgService(sshData).startTour('Orbit');
-                                  print("awaiting orbit");
                                 } catch (e) {
                                   // ignore: avoid_print
                                   print(e);
                                 }
                               } else {
+                                ///show the connection error message
                                 showDialogConnection(context);
                               }
                             },
@@ -176,9 +174,7 @@ class _HomePageState extends State<HomePage> {
                       imageWidth: MediaQuery.of(context).size.height * 0.25,
                       isPoly: false,
                       onpressed: () async {
-                        //will show bubble on LG
-                        ///TO DO:
-
+                        /// retrieving all globe data from the database
                         int numberOfSeekers =
                             await globalDBServices().getNumberOfSeekers();
                         int numberOfGivers =
@@ -193,13 +189,7 @@ class _HomePageState extends State<HomePage> {
                         List<String> topThreeCities =
                             await globalDBServices().getTopCities();
 
-                        print("number of seekers: $numberOfSeekers");
-                        print("number of givers: $numberOfGivers");
-                        print("in progress donations: $inProgressDonations");
-                        print("succ donations: $successfulDonations");
-                        print("top 3 cat: $topThreeCategories");
-                        print("top 3 cities: $topThreeCities");
-
+                        ///defining a new globe instance for `GlobeModel`` with all the retrieved data from the database
                         GlobeModel globe = GlobeModel(
                             id: 'Globe',
                             numberOfSeekers: numberOfSeekers,
@@ -210,18 +200,14 @@ class _HomePageState extends State<HomePage> {
                             topThreeCities: topThreeCities);
 
                         final sshData =
+                            // ignore: use_build_context_synchronously
                             Provider.of<SSHprovider>(context, listen: false);
-//                               final connection = Provider.of<Connectionprovider>(context,
-//                                   listen: false);
-// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
-                        print("inside globe on pressed ");
 
                         if (sshData.client != null) {
-                          print(sshData.client!.username);
-
-                          print("here");
+                          // ignore: use_build_context_synchronously
                           _viewGlobeStats(globe, true, context);
                         } else {
+                          // ignore: use_build_context_synchronously
                           showDialogConnection(context);
                         }
                       }),
@@ -234,8 +220,6 @@ class _HomePageState extends State<HomePage> {
                       imageWidth: MediaQuery.of(context).size.height * 0.25,
                       isPoly: false,
                       onpressed: () {
-                        //will show cities
-                        ///TO DO:
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -244,37 +228,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            /////////////////JUST FOR TESTING, WILL NOT BE IN MAIN UI
-            SizedBox(
-              height: 40,
-            ),
-
-            // HapisElevatedButton(
-            //     elevatedButtonContent:
-            //         'Test orbit (button will be removed later)',
-            //     buttonColor: HapisColors.lgColor4,
-            //     height: MediaQuery.of(context).size.height * 0.2,
-            //     imageHeight: MediaQuery.of(context).size.height * 0.25,
-            //     imageWidth: MediaQuery.of(context).size.height * 0.25,
-            //     isPoly: false,
-            //     onpressed: () async {
-            //       final sshData =
-            //           Provider.of<SSHprovider>(context, listen: false);
-
-            //       if (sshData.client != null) {
-            //         try {
-            //           await LgService(sshData).startTour('Orbit');
-            //           print("awaiting orbit");
-            //         } catch (e) {
-            //           // ignore: avoid_print
-            //           print(e);
-            //         }
-
-            //       } else {
-            //         showDialogConnection(context);
-            //       }
-            //     }),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
           ],

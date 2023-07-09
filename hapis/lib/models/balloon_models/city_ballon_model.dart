@@ -83,41 +83,13 @@ class CityModel {
   ///
   /// Returns a [List] of coordinates with [lat], [lng], and [altitude].
   ///
-
-// Future<List<Map<String, double>>> getCityOrbitCoordinates(String cityName, {double step = 3}) async {
-//   List<Map<String, double>> coords = [];
-
-//   List<Location> locations = await locationFromAddress(cityName);
-//   if (locations.isEmpty) {
-//     return coords;
-//   }
-
-//   Location location = locations.first;
-//   double lat = location.latitude;
-//   double long = location.longitude;
-//   double spot = 0;
-//   while (spot < 361) {
-//     final cityCoords =
-//    // final tleCoords = tle!.read(displacement: displacement / 24.0, lat: latitude, lng: longitude);
-//     coords.add({
-//       'lat': lat,
-//       'lng': long,
-//       'altitude': 0,
-//     });
-//     spot++;
-//   }
-
-//   return coords;
-// }
-
   List<Map<String, double>> getCityOrbitCoordinates(
     String cityName,
-    //LatLng cityCoordinates,
     {
     double step = 3,
     double altitude = 10000, // Specify the desired altitude for the orbit
   }) {
-    //final LatLng cityCoordinates=  await getCoordinates(cityName);
+    
     if (cityCoordinates == null) {
       return [];
     }

@@ -4,10 +4,8 @@ import 'package:hapis/models/kml/look_at_model.dart';
 import 'package:hapis/models/kml/placemark_model.dart';
 import 'package:hapis/models/kml/point_model.dart';
 import 'package:hapis/models/kml/tour_model.dart';
-
-import '../../models/balloon_models/city_ballon_model.dart';
 import '../../models/kml/orbit_model.dart';
-import '../../utils/extract_geocoordinates.dart';
+
 
 class UserBalloonService {
   /// Builds and returns a user `Placemark` entity according to the given [user]

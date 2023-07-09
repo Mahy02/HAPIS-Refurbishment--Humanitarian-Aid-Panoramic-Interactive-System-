@@ -11,7 +11,8 @@ import '../reusable_widgets/sub_text.dart';
 import '../utils/drawer.dart';
 import 'givers.dart';
 
-///This is our Home page. It has 2 main buttons=> Global statistics and Cities
+///This is the `users` class in a certain given `city` as input to the widget
+///It consists of 2 buttons, `seekers` and `givers` from the [HapisElevatedButton] custom widget with an image provided
 
 class Users extends StatefulWidget {
   final String city;
@@ -52,25 +53,12 @@ class _UsersState extends State<Users> {
                       imageWidth: MediaQuery.of(context).size.height * 0.25,
                       isPoly: false,
                       onpressed: () async {
-                        //will show seekers
+                        ///retrieving the `list of seekers` from the `user provider` and saving them in `seekers`
                         UserProvider userProvider =
                             Provider.of<UserProvider>(context, listen: false);
-
                         List<UsersModel> seekers = userProvider.seekers;
 
-                        for (UsersModel seeker in seekers) {
-                          print(
-                              'Seeker: ${seeker.firstName} ${seeker.lastName}');
-                          print('ID: ${seeker.userID}');
-                          print('City: ${seeker.city}');
-                          print(
-                              'seekings for others: ${seeker.seekingForOthers}');
-                          print('seekings for self: ${seeker.seekingsForSelf}');
-                          print(
-                              'coordinates: ${seeker.userCoordinates!.latitude}');
-                          print(
-                              'coordinates: ${seeker.userCoordinates!.longitude}');
-                        }
+                        /// navigating to the `Seekers` page with the `seekers` and the `city` from the widget input
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -86,22 +74,12 @@ class _UsersState extends State<Users> {
                       imageWidth: MediaQuery.of(context).size.height * 0.25,
                       isPoly: false,
                       onpressed: () {
-                        //will show givers
+                        ///retrieving the `list of givers` from the `user provider` and saving them in `givers`
                         UserProvider userProvider =
                             Provider.of<UserProvider>(context, listen: false);
                         List<UsersModel> givers = userProvider.givers;
-                        for (UsersModel giver in givers) {
-                          print('giver: ${giver.firstName} ${giver.lastName}');
-                          print('ID: ${giver.userID}');
-                          print('City: ${giver.city}');
-                          print('givings made: ${giver.givings}');
-                          print(
-                              'coordinates: ${giver.userCoordinates!.latitude}');
-                          print(
-                              'coordinates: ${giver.userCoordinates!.longitude}');
-                        }
-                        //will display placemark for givers on map
-                        ///TO DO:
+
+                        /// navigating to the `Givers` page with the `givers` and the `city` from the widget input
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -111,8 +89,7 @@ class _UsersState extends State<Users> {
                 ],
               ),
             ),
-            /////////////////JUST FOR TESTING, WILL NOT BE IN MAIN UI
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
           ],

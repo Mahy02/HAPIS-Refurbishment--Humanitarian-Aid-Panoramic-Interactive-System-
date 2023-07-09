@@ -20,15 +20,9 @@ class GlobalBalloonService {
     if (lookAt == null) {
       lookAtObj = LookAtModel(
         longitude: -60.4518936,
-        //longitude: -140.4518936,
-        //latitude: 0.0000101,
         latitude: -47.0000101,
-        // range: '90000000000',
         range: '31231212.86',
-        //tilt: '0',
         tilt: '0',
-        //altitude: 0,
-        //altitude: 25540.1097385,
         altitude: 50000.1097385,
         heading: '0',
         altitudeMode: 'relativeToSeaFloor',
@@ -37,21 +31,11 @@ class GlobalBalloonService {
       lookAtObj = lookAt;
     }
 
-    print(lookAtObj.latitude);
-    print(lookAtObj.longitude);
-    print(lookAtObj.altitude);
-    print(lookAtObj.range);
-    print(lookAtObj.heading);
-
     final point = PointModel(
         lat: lookAtObj.latitude,
         lng: lookAtObj.longitude,
         altitude: lookAtObj.altitude);
     final coordinates = globe.getGlobeOrbitCoordinates(step: orbitPeriod);
-    print(coordinates);
-    print(point.lat);
-    print(point.lng);
-    print(point.altitude);
 
     final tour = TourModel(
       name: 'GlobeTour',
@@ -86,19 +70,12 @@ class GlobalBalloonService {
   String buildOrbit({LookAtModel? lookAt}) {
     LookAtModel lookAtObj;
 
-    print("inside build orbit");
     if (lookAt == null) {
       lookAtObj = LookAtModel(
         longitude: -45.4518936,
-        // longitude: -140.4518936,
-        //latitude: 0.0000101,
         latitude: -47.0000101,
-        // range: '90000000000',
         range: '31231212.86',
-        //tilt: '0',
         tilt: '0',
-        //altitude: 0,
-        //altitude: 25540.1097385,
         altitude: 50000.1097385,
         heading: '0',
         altitudeMode: 'relativeToSeaFloor',

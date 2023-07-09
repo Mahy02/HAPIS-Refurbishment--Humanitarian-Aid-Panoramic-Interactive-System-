@@ -22,7 +22,7 @@ Drawer buildDrawer(BuildContext context) {
             height: MediaQuery.of(context).size.height * 0.2,
           ),
           Divider(
-            color: Color.fromARGB(245, 220, 220, 220),
+            color: const Color.fromARGB(245, 220, 220, 220),
             thickness: 2,
             height: MediaQuery.of(context).size.height * 0.05,
           ),
@@ -50,7 +50,7 @@ Drawer buildDrawer(BuildContext context) {
             itemTitle: 'Connect LG',
           ),
           Divider(
-              color: Color.fromARGB(245, 220, 220, 220),
+              color: const Color.fromARGB(245, 220, 220, 220),
               thickness: 2,
               height: MediaQuery.of(context).size.height * 0.05),
           SizedBox(height: MediaQuery.of(context).size.height * 0.2),

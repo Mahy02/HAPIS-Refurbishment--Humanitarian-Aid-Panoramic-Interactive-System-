@@ -2,7 +2,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:csv/csv.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/services.dart';
 
 ///This class [SqlDb] is responsible for functions related to the database
@@ -29,29 +28,24 @@ class SqlDb {
     ///path + name of database
     String path = join(databasePath, 'HAPIS.db');
 
-    //await deleteDatabase(path);
-
     ///creating the database
-    ///Open the database or create it if it doesn't exist
+    ///Open the database or create it if it doesn't exist by calling 'openDatabase' which takes the `path` and `onCreate` call back method and `onUograde` call back method as well as the `version`
     ///The version is needed when we want to update something in our database, like adding a table or deleted a table or so on
     ///Instead of dropping the database and creating it again
     Database mydb = await openDatabase(path,
         onCreate: _onCreate, version: 1, onUpgrade: _onUpgrade);
-    print("Initialized DB successfully");
     return mydb;
   }
 
+  /// [deleteDb] method that drops the database by calling the [deleteDatabase] function that takes in the database `path`
   Future<void> deleteDb() async {
-    // Get the path to the database file
     String databasePath = await getDatabasesPath();
     String path = join(databasePath, 'HAPIS.db');
 
-    // Delete the database file
     await deleteDatabase(path);
   }
 
   ///`_onCreate` function that gets called once the database is created, it creates 4 tables  --IT IS CALLED ONLY ONCE
-
   _onCreate(Database db, int version) async {
     //Note we didnt use autoincrement due to the reason stated in this documentation: https://www.sqlitetutorial.net/sqlite-autoincrement/
     await db.execute('''
@@ -113,78 +107,64 @@ class SqlDb {
         UNIQUE(R_ID)
        );
     ''');
-    print("create DATABASE & TABLES ");
   }
 
-  ///`_onUpgrade` function that
-  _onUpgrade(Database db, int oldVersion, int newVersion) {
-    print("==onUpgrade==");
-  }
+  ///`_onUpgrade` function
+  _onUpgrade(Database db, int oldVersion, int newVersion) {}
 
-  ///`readData` that returns a response coming out of a SELECT sql query statment
+  ///`readData` that returns a response from the SELECT sql query statment where it takes  [selectSql] string for the sql query
   readData(String selectSql) async {
     Database? hapisDb = await db;
     List<Map> response = await hapisDb!.rawQuery(selectSql);
-    //print("Read data");
-    //print(response);
     return response;
   }
 
-  ///`insertData` that uses INSERT statment to insert a new row in a table and return the last inserted rowID
+  ///`insertData` that uses INSERT statment given to the function as string  [selectSql] to insert a new row in a table and return the last inserted rowID
   insertData(String selectSql) async {
     Database? hapisDb = await db;
     int response = await hapisDb!.rawInsert(selectSql);
-    print("insert data");
-    print(response);
     return response;
   }
 
-  ///`updateData` that uses UPDATE statment to update a row in a table and return the number of changes made
+  ///`updateData` that uses UPDATE statment given to the function as string  [selectSql]  to update a row in a table and return the number of changes made
   updateData(String selectSql) async {
     Database? hapisDb = await db;
     int response = await hapisDb!.rawUpdate(selectSql);
-    print("update data");
-    print(response);
     return response;
   }
 
-  ///`deleteData` that uses DELETE statment to delete a row in a table and return the number of changes made
+  ///`deleteData` that uses DELETE statment given to the function as string  [selectSql]  to delete a row in a table and return the number of changes made
   deleteData(String selectSql) async {
     Database? hapisDb = await db;
     int response = await hapisDb!.rawDelete(selectSql);
-    print("delete data");
-    print(response);
     return response;
   }
 
+  ///`importTableFromCSV` function that takes in [tableName] & [csvFileName] to import tables from a given csv file into the database
   Future<void> importTableFromCSV(String tableName, String csvFileName) async {
-    // Read the CSV file from assets
+    /// Read the CSV file from assets
     String csvString = await rootBundle.loadString('assets/$csvFileName');
 
-    // Parse the CSV string
-    List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
+    /// Parse the CSV string
+    List<List<dynamic>> csvData = const CsvToListConverter().convert(csvString);
 
-    // Get a reference to the database
+    /// Get a reference to the database
     Database? hapisDb = await db;
 
-    // Start a database transaction
+    /// Start a database transaction
     await hapisDb!.transaction((txn) async {
       for (int rowIndex = 1; rowIndex < csvData.length; rowIndex++) {
-        // Convert the row data to a map
         Map<String, dynamic> rowData = {};
 
         for (int i = 0; i < csvData[rowIndex].length; i++) {
-          // Get the name of the current column
           String columnName = csvData[0][i].toString();
 
-          // Get the value of the current column for the current row
           dynamic columnValue = csvData[rowIndex][i];
 
-          // Add the column name and value to the row data map
           rowData[columnName] = columnValue;
         }
 
-        // Insert the row into the table
+        /// Insert the row into the table
         try {
           await txn.insert(tableName, rowData);
         } catch (e) {
@@ -198,167 +178,20 @@ class SqlDb {
         }
       }
     });
-
-    print("Imported data from CSV file into table '$tableName'");
   }
 
-  /// Function to import all tables from CSV files
+  /// `importAllTablesFromCSV` Function to import all tables from CSV files where it calls the  [importTableFromCSV] method
   Future<void> importAllTablesFromCSV() async {
-    // Import Users table
+    /// Import Users table
     await importTableFromCSV('Users', 'Users.csv');
 
-    // Import Forms table
+    /// Import Forms table
     await importTableFromCSV('Forms', 'Forms.csv');
 
-    // Import Matchings table
+    /// Import Matchings table
     await importTableFromCSV('Matchings', 'Matchings.csv');
 
-    // Import Requests table
+    /// Import Requests table
     await importTableFromCSV('Requests', 'Requests.csv');
-    print("import all tables");
   }
 }
-
-//  ======================================================REMEMBER TO REMOVE DELETE DATABASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE=====================================
-
-
-
-
-
-// /// Function to import CSV data into a table
-  // Future<void> importTableFromCSV(String tableName, String csvFileName) async {
-  //   // Read the CSV file from assets
-  //   String csvString = await rootBundle.loadString('assets/$csvFileName');
-
-  //   // Parse the CSV string
-  //   List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
-
-  //   // Get a reference to the database
-  //   Database? hapisDb = await db;
-
-  //   // Start a database transaction
-  //   await hapisDb!.transaction((txn) async {
-      
-  //     for (List<dynamic> row in csvData) {
-  //       // Convert the row data to a map
-  //       Map<String, dynamic> rowData = {};
-
-  //       for (int i = 0; i < row.length; i++) {
-  //         // first row contains column names
-  //         String columnName = csvData[0][i].toString();
-  //         rowData[columnName] = row[i];
-  //       }
-
-  //       // Insert the row into the table
-  //       await txn.insert(tableName, rowData);
-  //     }
-  //   });
-  //   print("inside import table from csv");
-  // }
-
-
-// Define a map that maps CSV column names to database column names
-      // Map<String, String> usersMap = {
-      //   'user_ID': 'UserID',
-      //   'username': 'UserName',
-      //   'First_Name': 'FirstName',
-      //   'Last_Name': 'LastName',
-      //   'city': 'City',
-      //   'Country': 'Country',
-      //   'Location_on_google_map': 'AddressLocation',
-      //   'Phone_num': 'PhoneNum',
-      //   'Email': 'Email',
-      //   'Password': 'Password',
-      // };
-
-      //  Map<String, String> formsMap = {
-      //   'Form_ID': 'FormID',
-      //   'User_ID': 'UserID',
-      //   'Type': 'Type',
-      //   'Item': 'Item',
-      //   'Category': 'Category',
-      //   'Dates_available': 'Dates_available',
-      //   'For': 'For',
-      //   'Status': 'Status',
-      // };
-
-      // Map<String, String> matchingsMap = {
-      //   'M_ID': 'M_ID',
-      //   'Seeker_FormID': 'Seeker_FormID',
-      //   'Giver_FormID': 'Giver_FormID',
-      //   'Rec1_Status': 'Rec1_Status',
-      //   'Rec2_status': 'Rec2_status',
-      //   'Donation_Status': 'Donation_Status',
-      // };
-      // Map<String, String> requestsMap = {
-      //   'R_ID': 'R_ID',
-      //   'Sender_ID': 'Sender_ID',
-      //   'Rec_ID': 'Rec_ID',
-      //   'Rec_FormID': 'Rec_FormID',
-      //   'Rec_Status': 'Rec_Status',
-      //   'Donation_Status': 'Donation_Status',
-      // };
-
-      // if (tableName == 'Users') {
-// Iterate over each row in the CSV data
-        // for (int i = 1; i < csvData.length; i++) {
-        //   // Convert the row data to a map
-        //   Map<String, dynamic> rowData = {};
-
-        //   for (int j = 0; j < csvData[i].length; j++) {
-        //     String columnName = csvData[0][j].toString();
-        //     String dbColumnName = usersMap[columnName] ?? columnName;
-        //     rowData[dbColumnName] = csvData[i][j];
-        //   }
-
-        //   // Insert the row into the table
-        //   await txn.insert(tableName, rowData);
-        // }
-      //}
-      // else if(tableName == 'Forms'){
-      //   for (int i = 1; i < csvData.length; i++) {
-      //     // Convert the row data to a map
-      //     Map<String, dynamic> rowData = {};
-
-      //     for (int j = 0; j < csvData[i].length; j++) {
-      //       String columnName = csvData[0][j].toString();
-      //       String dbColumnName = formsMap[columnName] ?? columnName;
-      //       rowData[dbColumnName] = csvData[i][j];
-      //     }
-
-      //     // Insert the row into the table
-      //     await txn.insert(tableName, rowData);
-      //   }
-      // }
-      // else if(tableName=='Matchings'){
-      //   for (int i = 1; i < csvData.length; i++) {
-      //     // Convert the row data to a map
-      //     Map<String, dynamic> rowData = {};
-
-      //     for (int j = 0; j < csvData[i].length; j++) {
-      //       String columnName = csvData[0][j].toString();
-      //       String dbColumnName = matchingsMap[columnName] ?? columnName;
-      //       rowData[dbColumnName] = csvData[i][j];
-      //     }
-
-      //     // Insert the row into the table
-      //     await txn.insert(tableName, rowData);
-      //   }
-
-      // }
-      // else if(tableName =='Requests'){
-      //   for (int i = 1; i < csvData.length; i++) {
-      //     // Convert the row data to a map
-      //     Map<String, dynamic> rowData = {};
-
-      //     for (int j = 0; j < csvData[i].length; j++) {
-      //       String columnName = csvData[0][j].toString();
-      //       String dbColumnName = requestsMap[columnName] ?? columnName;
-      //       rowData[dbColumnName] = csvData[i][j];
-      //     }
-
-      //     // Insert the row into the table
-      //     await txn.insert(tableName, rowData);
-      //   }
-
-     // }

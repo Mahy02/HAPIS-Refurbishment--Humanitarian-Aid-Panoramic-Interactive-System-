@@ -54,7 +54,6 @@ class LgService {
     int numberOfScreen = _sshData.numberOfScreens!;
     screenAmount = numberOfScreen;
     String? result = numberOfScreen.toString();
-
     return result;
   }
 
@@ -63,28 +62,14 @@ class LgService {
   Future<void> relaunch() async {
     final pw = _sshData.passwordOrKey;
     final user = _sshData.username;
-    //final pw = _sshData.passwordOrKey;
-    //client!.passwordOrKey;
-    //final user = _sshData.client!.username;
-
-    // if (await _sshData.client!.isConnected()) {
-    //   print("check connection");
-    // }
-
-    print("inside relaunch function");
-    print(pw);
-    print(user);
 
     final result = await getScreenAmount();
     if (result != null) {
       screenAmount = int.parse(result);
     }
 
-    print(screenAmount);
     for (var i = screenAmount; i >= 1; i--) {
-      print(i);
       try {
-        print(user);
         final relaunchCommand = """RELAUNCH_CMD="\\
 if [ -f /etc/init/lxdm.conf ]; then
   export SERVICE=lxdm
@@ -104,7 +89,6 @@ fi
             .execute("'/home/$user/bin/lg-relaunch' > /home/$user/log.txt");
 
         await _sshData.client!.execute(relaunchCommand);
-        print("after execute");
       } catch (e) {
         // ignore: avoid_print
         print(e);
@@ -115,18 +99,13 @@ fi
   /// Reboots the Liquid Galaxy system.
   /// We used to write sudo reboot  in the terminal, but we need a way to add the password and the LG number too here
   Future<void> reboot() async {
-    // final pw = _sshData.client!.passwordOrKey;
     final pw = _sshData.passwordOrKey;
     final user = _sshData.username;
-    // final pw = _sshData.passwordOrKey;
-    // final user = _sshData.client!.username;
 
     final result = await getScreenAmount();
     if (result != null) {
       screenAmount = int.parse(result);
     }
-
-    print(screenAmount);
 
     for (var i = screenAmount; i >= 1; i--) {
       try {
@@ -144,18 +123,13 @@ fi
 
   /// Shuts down the Liquid Galaxy system.
   Future<void> shutdown() async {
-    //final pw = _sshData.client!.passwordOrKey;
     final pw = _sshData.passwordOrKey;
     final user = _sshData.username;
-    // final pw = _sshData.passwordOrKey;
-    // final user = _sshData.client!.username;
 
     final result = await getScreenAmount();
     if (result != null) {
       screenAmount = int.parse(result);
     }
-
-    print(screenAmount);
 
     for (var i = screenAmount; i >= 1; i--) {
       try {
@@ -230,13 +204,9 @@ fi
 
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
-    print("inside query");
     await _sshData.execute('echo "$content" > /tmp/query.txt');
     //await _sshData.execute('chmod 777 /tmp/query.txt && echo "$content" > /tmp/query.txt');
     //await _sshData.execute('echo "$content" > ~/query.txt');
-
-    print("after execute query");
-    print(content);
   }
 
   ///Fly to functionality:
@@ -244,9 +214,6 @@ fi
   /// Uses the [query] method to fly to some place in Google Earth according to the given [lookAt].
   /// See [LookAtModel].
   Future<void> flyTo(LookAtModel lookAt) async {
-    print("inside fly to fn");
-    print(lookAt.latitude);
-    print(lookAt.linearTag);
     try {
       await query('flytoview=${lookAt.linearTag}');
     } catch (e) {
@@ -259,14 +226,12 @@ fi
   /// Uses the [query] method to play some tour in Google Earth according to  the given [tourName].
   /// Command: 'echo "playtour=Orbit" > /tmp/query.txt'
   Future<void> startTour(String tourName) async {
-    print("inside start tour");
     try {
       await query('playtour=$tourName');
     } catch (e) {
       // ignore: avoid_print
       print(e);
     }
-    print("after query start tour");
   }
 
   /// Uses the [query] method to stop all tours in Google Earth.
@@ -286,7 +251,6 @@ fi
   ///Sending tour to the Google Earth using the KML file and the tourname ex: Orbit
   /// Sends and starts a `tour` into the Google Earth.
   Future<void> sendTour(String tourKml, String tourName) async {
-    print("inside send tour in LG functionalities");
     final fileName = '$tourName.kml';
     try {
       final kmlFile = await _fileService.createFile(fileName, tourKml);
@@ -308,7 +272,6 @@ fi
     String name = 'HAPIS-logos',
     String content = '<name>Logos</name>',
   }) async {
-    print("inside set logos fun");
     final screenOverlay = ScreenOverlayModel.logos();
 
     final kml = KMLModel(
@@ -316,7 +279,6 @@ fi
       content: content,
       screenOverlay: screenOverlay.tag,
     );
-
     try {
       await sendKMLToSlave(logoScreen, kml.body);
     } catch (e) {
@@ -327,21 +289,15 @@ fi
 
   /// Sends a KML [content] to the given slave [screen].
   Future<void> sendKMLToSlave(int screen, String content) async {
-    // await clearKml();
-    print(screen);
-    print('ballon content before sending kml to slave: $content');
     try {
-      print('inside try');
       await _sshData
           .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
-      print('after execute');
       // await _sshData.execute(
       //     "chmod 777 /var/www/html/kml/slave_$screen.kml && echo '$content' > /var/www/html/kml/slave_$screen.kml");
     } catch (e) {
       // ignore: avoid_print
       print(e);
     }
-    print("sent user kml ballon");
   }
 
   /// Sends a the given [kml] to the Liquid Galaxy system.
@@ -396,32 +352,20 @@ fi
 
   /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos
   /// after clearing (default to `true`).
-
   Future<void> clearKml({bool keepLogos = true}) async {
-    print("inside clear kml fn");
-    //print(_sshData.client.username);
-    // if (await _sshData.client!.isConnected()) {
-    //   print("check connection");
-    // }
-
     String query =
         'echo "exittour=true" > /tmp/query.txt && > /var/www/html/kmls.txt';
-
-    print("here");
     for (var i = 2; i <= screenAmount; i++) {
       String blankKml = KMLModel.generateBlank('slave_$i');
       query += " && echo '$blankKml' > /var/www/html/kml/slave_$i.kml";
     }
 
     if (keepLogos) {
-      print("inside keep logos");
       final kml = KMLModel(
         name: 'HAPIS-logos',
         content: '<name>Logos</name>',
         screenOverlay: ScreenOverlayModel.logos().tag,
       );
-
-      print("here");
 
       query +=
           " && echo '${kml.body}' > /var/www/html/kml/slave_$logoScreen.kml";
@@ -440,19 +384,19 @@ In this file, we would add all LG functionalities we might need including the fo
  1. connecting with LG  done
  2. shutting down LG   done
  3. Rebooting LG      done
- 4. Relaunch the LG   done   --not working
+ 4. Relaunch the LG   done   
  
  5. Fly to functionality   done
- 6. orbit functionality
+ 6. orbit functionality   donr
 
  7. determing logo screen (top left screen for the slaves)   done
  8. determing bubble screen (right screen for the slaves)    done
  9. set logos   done
  
- 10. send KML to the LG system    
+ 10. send KML to the LG system    done
  11. clearing KML files          done
  12. send KML to slave           done
 
- 13. set refresh
- 14. reset refresh 
+ 13. set refresh               done
+ 14. reset refresh             done
 */

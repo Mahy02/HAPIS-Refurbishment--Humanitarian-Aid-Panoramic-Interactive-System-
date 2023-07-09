@@ -7,21 +7,10 @@ import '../../helpers/sql_db.dart';
 import '../../providers/users_provider.dart';
 
 class cityDBServices {
+  /// retrieving the [db] database instance
   SqlDb db = SqlDb();
-//retreieve all info needed for city
-/*
-number of seekers in this city
-number of givers in this city
-list of seekers for this city - addresses
-list of givers for this city  - addresses
-number of in progress donations for this city
-number of successful donations for this city
-top 3 donated categories in this city
 
-*/
-//city name is from userstable
-//city coordinates is from users table
-  /// Retrieve the number of seekers in this city
+  /// Retrieve the number of seekers in the given city `cityName`
   Future<int> getNumberOfSeekers(String cityName) async {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS seeker_count
@@ -36,7 +25,7 @@ top 3 donated categories in this city
     return numberOfSeekers;
   }
 
-  /// Retrieve the number of givers in this city
+  /// Retrieve the number of givers in the given city `cityName`
   Future<int> getNumberOfGivers(String cityName) async {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS giver_count
@@ -51,8 +40,7 @@ top 3 donated categories in this city
     return numberOfGivers;
   }
 
-  /// Retrieve the list of seekers for this city - their data
-  //Future<List<UsersModel>>
+  /// Retrieve the list of seekers and all their info for the given city `cityName`
   getSeekersInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
       SELECT  Users.UserID AS UserUserID , UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password,COUNT(CASE WHEN Forms.For = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.For = 'other' THEN Forms.FormID END) AS other_count
@@ -63,70 +51,65 @@ top 3 donated categories in this city
     ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatment);
-    // print('results of query get seekers info: $result');
-    // result will look like this:
-    /*
-        [
-      {
-        'UserID': 1,
-        'UserName': 'johndoe',
-        'FirstName': 'John',
-        'LastName': 'Doe',
-        'City': 'New York',
-        'Country': 'USA',
-        'AddressLocation': '123 Main St',
-        'PhoneNum': '555-1234',
-        'Email': 'johndoe@example.com',
-        'Password': 'password123'
-      },
-      {
-        'UserID': 2,
-        'UserName': 'janedoe',
-        'FirstName': 'Jane',
-        'LastName': 'Doe',
-        'City': 'New York',
-        'Country': 'USA',
-        'AddressLocation': '456 Elm St',
-        'PhoneNum': '555-5678',
-        'Email': 'janedoe@example.com',
-        'Password': 'password456'
-      }
-    ]
-        */
 
-    //List<UsersModel> seekerUsers = [];
+    /// result will look like this:
+    ///     [
+    ///   {
+    ///     'UserID': 1,
+    ///     'UserName': 'johndoe',
+    ///     'FirstName': 'John',
+    ///     'LastName': 'Doe',
+    ///     'City': 'New York',
+    ///     'Country': 'USA',
+    ///     'AddressLocation': '123 Main St',
+    ///     'PhoneNum': '555-1234',
+    ///     'Email': 'johndoe@example.com',
+    ///     'Password': 'password123'
+    ///   },
+    ///   {
+    ///     'UserID': 2,
+    ///     'UserName': 'janedoe',
+    ///     'FirstName': 'Jane',
+    ///     'LastName': 'Doe',
+    ///     'City': 'New York',
+    ///     'Country': 'USA',
+    ///     'AddressLocation': '456 Elm St',
+    ///     'PhoneNum': '555-5678',
+    ///     'Email': 'janedoe@example.com',
+    ///     'Password': 'password456'
+    ///   }
+    /// ]
+
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     for (Map<String, dynamic> row in result) {
-      try{
-      LatLng coords = await getCoordinates(row['AddressLocation']);
-       
-      UsersModel user = UsersModel(
-        userID: row['UserUserID'],
-        userName: row['UserName'],
-        firstName: row['FirstName'],
-        lastName: row['LastName'],
-        city: row['City'],
-        country: row['Country'],
-        addressLocation: row['AddressLocation'],
-        phoneNum: row['PhoneNum'],
-        email: row['Email'],
-        pass: row['Password'],
-        seekingForOthers: row['other_count'],
-        seekingsForSelf: row['self_count'],
-        userCoordinates: coords,
-      );
-      userProvider.saveSeekers(user);
-      } catch (e) {
-                                  // ignore: avoid_print
-                                  print(e);
-                                }
-    }
+      try {
+        LatLng coords = await getCoordinates(row['AddressLocation']);
 
-    //return seekerUsers;
+        UsersModel user = UsersModel(
+          userID: row['UserUserID'],
+          userName: row['UserName'],
+          firstName: row['FirstName'],
+          lastName: row['LastName'],
+          city: row['City'],
+          country: row['Country'],
+          addressLocation: row['AddressLocation'],
+          phoneNum: row['PhoneNum'],
+          email: row['Email'],
+          pass: row['Password'],
+          seekingForOthers: row['other_count'],
+          seekingsForSelf: row['self_count'],
+          userCoordinates: coords,
+        );
+        userProvider.saveSeekers(user);
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    }
   }
 
-  /// Retrieve the list of givers for this city - their data
+  /// Retrieve the list of giversand all their info for the given city `cityName`
   getGiversInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
       SELECT  Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password, COUNT(*) AS numberOfGivings
@@ -138,40 +121,35 @@ top 3 donated categories in this city
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatment);
 
-    print(result);
-
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     for (Map<String, dynamic> row in result) {
+      try {
+        LatLng coords = await getCoordinates(row['AddressLocation']);
 
-      try{
-      LatLng coords = await getCoordinates(row['AddressLocation']);
-      print(
-          "inside query db, the coords: ${coords.latitude} and ${coords.longitude}");
-
-      UsersModel user = UsersModel(
-        userID: row['UserUserID'],
-        userName: row['UserName'],
-        firstName: row['FirstName'],
-        lastName: row['LastName'],
-        city: row['City'],
-        country: row['Country'],
-        addressLocation: row['AddressLocation'],
-        phoneNum: row['PhoneNum'],
-        email: row['Email'],
-        pass: row['Password'],
-        givings: row['numberOfGivings'],
-        userCoordinates: coords,
-      );
-      userProvider.saveGivers(user);
+        UsersModel user = UsersModel(
+          userID: row['UserUserID'],
+          userName: row['UserName'],
+          firstName: row['FirstName'],
+          lastName: row['LastName'],
+          city: row['City'],
+          country: row['Country'],
+          addressLocation: row['AddressLocation'],
+          phoneNum: row['PhoneNum'],
+          email: row['Email'],
+          pass: row['Password'],
+          givings: row['numberOfGivings'],
+          userCoordinates: coords,
+        );
+        userProvider.saveGivers(user);
       } catch (e) {
-                                  // ignore: avoid_print
-                                  print(e);
-                                }
+        // ignore: avoid_print
+        print(e);
+      }
     }
   }
 
-  /// Retrieve the number of successful donations in this city
+  /// Retrieve the number of successful donations in the given city  `cityName`
   Future<int> getNumberOfSuccessfulDonations(String cityName) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS successful_donation_count
@@ -197,7 +175,7 @@ top 3 donated categories in this city
     return numberOfSuccessfulDonations;
   }
 
-  /// Retrieve the number of in progress donations in this city
+  /// Retrieve the number of in progress donations in the given city  `cityName`
   Future<int> getNumberOfInProgressDonations(String cityName) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS Inprogress_donation_count
@@ -223,7 +201,7 @@ top 3 donated categories in this city
     return numberOfInProgressDonations;
   }
 
-  // Retrieve the top 3 donated categories in this city
+  // Retrieve the top 3 donated categories in the given city  `cityName`
   Future<List<String>> getTopDonatedCategories(String cityName) async {
     String sqlStatement = '''
         SELECT Forms.Category, COUNT(*) AS category_count
@@ -246,43 +224,3 @@ top 3 donated categories in this city
     return topCategories;
   }
 }
-
-
-
-
-
-
- // Retrieve the number of in-progress donations for this city
-  // Future<int> getNumberOfInProgressDonations(String cityName)async  {
-  //   String sqlStatment = '''
-  //     SELECT COUNT(*) AS successful_count
-  //     FROM Forms
-  //     JOIN Users ON Forms.UserID = Users.UserID
-  //     WHERE Users.City = '$cityName' AND Forms.Status = 'In progress';
-  //   ''';
-  //   List<Map> result = await db.readData(sqlStatment);
-
-  //   int numberOfSuccessfulDonations=result[0]['giver_count'];
-
-  //   print("number of SuccessfulDonations: $numberOfSuccessfulDonations");
-
-  //   return numberOfSuccessfulDonations;
-  // }
-
-  // Retrieve the number of successful donations for this city
-  // Future<int> getNumberOfSuccessfulDonations(String cityName) async {
-  //   String sqlStatment = '''
-  //     SELECT COUNT(*) AS in_progress_count
-  //     FROM Forms
-  //     JOIN Users ON Forms.UserID = Users.UserID
-  //     WHERE Users.city = '$cityName' AND Forms.Status = 'Completed';
-  //   ''';
-  //   List<Map> result = await db.readData(sqlStatment);
-
-  //   int numberOfSuccessfulDonations=result[0]['giver_count'];
-
-  //   print("number of SuccessfulDonations: $numberOfSuccessfulDonations");
-
-  //   return numberOfSuccessfulDonations;
-   
-  // }

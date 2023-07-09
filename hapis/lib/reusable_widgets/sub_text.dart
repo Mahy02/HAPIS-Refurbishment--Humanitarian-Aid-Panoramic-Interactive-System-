@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
-///This is custom widget for the subText that is reused in different views through the app
+///This is custom widget for the `subText` that is reused in different views through the app
 
 class SubText extends StatelessWidget {
   final String subTextContent;

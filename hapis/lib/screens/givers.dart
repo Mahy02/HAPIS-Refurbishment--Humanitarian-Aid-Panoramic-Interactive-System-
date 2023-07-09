@@ -8,10 +8,14 @@ import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/sub_text.dart';
 import '../reusable_widgets/user_component.dart';
 
+/// this is the [Givers] page that include all givers retrieved from the database
+/// It has a default [HAPISAppBar] and calls [buildDrawer] for the [Drawer]
+/// [GridView] was used for the cities to display 3 items per row
+/// The widget returns a [UserComponent] for each user in the database
+
 class Givers extends StatefulWidget {
   final List<UsersModel> giversList;
   final String city;
-  //const Givers({super.key, required this.giversList, required this.city});
   const Givers({Key? key, required this.giversList, required this.city})
       : super(key: key);
 
@@ -20,21 +24,21 @@ class Givers extends StatefulWidget {
 }
 
 class _GiversState extends State<Givers> {
+  ///`searchController` for the search functionality
   TextEditingController searchController = TextEditingController();
 
+  ///`filteredGiversList` for all filtered givers from `searchController
   List<UsersModel> filteredGiversList = [];
 
   @override
   void initState() {
     super.initState();
-    //print("initialization");
     Future.delayed(Duration.zero, () {
       getGivers();
     });
   }
 
   void getGivers() {
-    //print("get seekers called");
     setState(() {
       filteredGiversList = widget.giversList;
     });
@@ -55,7 +59,7 @@ class _GiversState extends State<Givers> {
                 performSearch(value);
               },
               style: const TextStyle(
-                fontSize: 30, // Increase the font size to your desired value
+                fontSize: 30,
               ),
               decoration: const InputDecoration(
                 hintText: 'Search for a user',
@@ -71,13 +75,12 @@ class _GiversState extends State<Givers> {
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
-                    width: 1.5, // Replace with the desired border color
+                    width: 1.5,
                   ),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: HapisColors.lgColor3, width: 1.5
-                      // Replace with the desired border color when focused
-                      ),
+                  borderSide:
+                      BorderSide(color: HapisColors.lgColor3, width: 1.5),
                 ),
               ),
             ),
@@ -106,7 +109,9 @@ class _GiversState extends State<Givers> {
                         final UsersModel user = filteredGiversList[index];
 
                         return UserComponent(
-                            key: const ValueKey("userComponent"), user: user, type: 'giver');
+                            key: const ValueKey("userComponent"),
+                            user: user,
+                            type: 'giver');
                       },
                     ),
                   ),

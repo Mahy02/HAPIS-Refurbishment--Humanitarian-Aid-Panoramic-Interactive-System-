@@ -10,14 +10,13 @@ class ConnectionModel {
   /// Property that defines the Liquid Galaxy master IP.
   String ip;
 
-  /// Property that defines the Liquid Galaxy master SSH port.
-  /// Defaults is 22.
+  /// Property that defines the Liquid Galaxy master SSH port. Defaults is 22.
   int port;
 
-  ///For connection status
+  /// Property that defines the Liquid Galaxy connection status
   bool isConnected;
 
-  ///For gettings screen amount
+  ///Property that defines the Liquid Galaxy screen amount
   int screenAmount;
 
   ConnectionModel({

@@ -1,40 +1,13 @@
-import 'package:hapis/models/db_models/users_model.dart';
+
 
 import '../../helpers/sql_db.dart';
 
 class UserServices {
+
+  /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
-  // Future<List<Map<String, String>>> getCitiesAndCountries() async {
-  //   List<Map<String, String>> results = [
-  //     {'city': 'Cairo', 'country': 'Egypt'},
-  //     {'city': 'Lleida', 'country': 'Spain'},
-  //     {'city': 'San Francisco', 'country': 'United States'},
-  //     {'city': 'Edinburgh', 'country': 'United Kingdom'},
-  //     {'city': 'Tokyo', 'country': 'Japan'},
-  //     {'city': 'Cairo', 'country': 'Egypt'},
-  //     {'city': 'Lleida', 'country': 'Spain'},
-  //     {'city': 'San Francisco', 'country': 'United States'},
-  //     {'city': 'Edinburgh', 'country': 'United Kingdom'},
-  //     {'city': 'Tokyo', 'country': 'Japan'},
-  //     {'city': 'Cairo', 'country': 'Egypt'},
-  //     {'city': 'Lleida', 'country': 'Spain'},
-  //     {'city': 'San Francisco', 'country': 'United States'},
-  //     {'city': 'Edinburgh', 'country': 'United Kingdom'},
-  //     {'city': 'Tokyo', 'country': 'Japan'},
-  //     // Additional rows...
-  //   ];
-  //   return results;
-  // }
-
-   // Future<List<String>> getCities() async {
-  //    String selectSql = 'SELECT DISTINCT City FROM Users';
-  //    //results is a list of map
-  //   List<Map<String, dynamic>> results = await SqlDb().readData(selectSql);
-  //   List<String> cities = results.map((row) => row['City'] as String).toList();
-  //   return cities;
-
-
+  /// `getCitiesAndCountries` function that retrives all cities and countries from USERS table in database and return the results in List of Maps
   Future<List<Map<String, String>>> getCitiesAndCountries() async {
     String sqlStatement = '''
     SELECT DISTINCT City, Country

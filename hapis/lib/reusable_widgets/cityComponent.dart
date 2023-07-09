@@ -1,10 +1,6 @@
-import 'package:dartssh2/dartssh2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/models/balloon_models/city_ballon_model.dart';
-import 'package:hapis/models/db_models/users_model.dart';
 import 'package:hapis/models/kml/KMLModel.dart';
 import 'package:hapis/models/kml/look_at_model.dart';
 import 'package:hapis/models/kml/placemark_model.dart';
@@ -12,15 +8,14 @@ import 'package:hapis/reusable_widgets/hapis_elevated_button.dart';
 import 'package:hapis/services/LG_balloon_services/city_balloon_service.dart';
 import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/connection_provider.dart';
 import '../providers/ssh_provider.dart';
 import '../providers/users_provider.dart';
 import '../screens/users.dart';
 import '../services/db_services/city_db_services.dart';
-import '../services/db_services/users_services.dart';
 import '../utils/extract_geocoordinates.dart';
 import '../utils/pop_up_connection.dart';
+
+/// This represents the `CityComponent` where for each city it has the name [city], color [buttonColor], Country [country]
 
 class CityComponent extends StatefulWidget {
   final String city;
@@ -37,17 +32,17 @@ class CityComponent extends StatefulWidget {
 }
 
 class _CityComponentState extends State<CityComponent> {
+  ///  `city placemark` to define the city placemark for orbiting, balloons
   PlacemarkModel? _cityPlacemark;
 
-  /// Views a `city stats` into the Google Earth.
+  /// Views a `city stats` into the Google Earth in a Balloon and Fly to the city.
   void _viewCityStats(CityModel city, bool showBalloon, BuildContext context,
       {double orbitPeriod = 2.8, bool updatePosition = true}) async {
     final sshData = Provider.of<SSHprovider>(context, listen: false);
-    print("here");
+
     final CityBalloonService cityService = CityBalloonService();
-    print("inside view city");
-    print(sshData.client!.username);
-    print(cityService);
+
+    /// calling the `buildCityPlacemark` that returns the `city placemark`
     final placemark = cityService.buildCityPlacemark(
       city,
       showBalloon,
@@ -68,12 +63,15 @@ class _CityComponentState extends State<CityComponent> {
       // ignore: avoid_print
       print(e);
     }
+
+    /// defining the `kml balloon` content and name
     final kmlBalloon = KMLModel(
       name: 'HAPIS-City-balloon',
       content: placemark.balloonOnlyTag,
     );
 
     try {
+      /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,
@@ -82,8 +80,8 @@ class _CityComponentState extends State<CityComponent> {
       // ignore: avoid_print
       print(e);
     }
-    //  }
 
+    ///  `updating postion` to fly to certain city
     if (updatePosition) {
       await LgService(sshData).flyTo(LookAtModel(
         latitude: city.cityCoordinates.latitude,
@@ -94,7 +92,11 @@ class _CityComponentState extends State<CityComponent> {
         heading: '0',
       ));
     }
+
+    ///building the orbit with given `city`  Model
     final orbit = cityService.buildOrbit(city);
+
+    ///Sending Tour with `orbit details` where the tour would be `Orbit`
     await LgService(sshData).sendTour(orbit, 'Orbit');
   }
 
@@ -112,12 +114,8 @@ class _CityComponentState extends State<CityComponent> {
       imagePath: imagePath,
       isPoly: true,
       onpressed: () async {
-        //here we should do 2 things
-        //first navigate to users page for each city
-        //then we should show bubble on LG with the city stats
-        //but check connectivity first
+        /// retrieving all city data from the database
 
-        print("inside a city");
         int numberOfSeekers =
             await cityDBServices().getNumberOfSeekers(widget.city);
         int numberOfGivers =
@@ -129,7 +127,7 @@ class _CityComponentState extends State<CityComponent> {
         List<String> topThreeCategories =
             await cityDBServices().getTopDonatedCategories(widget.city);
 
-        //clear before:
+        ///clearing seekers and givers list first:
         UserProvider userProvider =
             Provider.of<UserProvider>(context, listen: false);
         userProvider.clearData();
@@ -139,23 +137,13 @@ class _CityComponentState extends State<CityComponent> {
         await cityDBServices().getGiversInfo(widget.city, context);
 
         try {
+          /// retrieving  `city coordinates`
           final LatLng cityCoordinates = await getCoordinates(widget.city);
 
-          print("city button trial");
-          print(cityCoordinates);
-
-          print("inside city component on pressed ");
-          print("number of seekers: $numberOfSeekers");
-          print("number of givers: $numberOfGivers");
-          print("in progress donations: $inProgressDonations");
-          print("succ donations: $successfulDonations");
-          print("top 3 cat: $topThreeCategories");
-
+          ///defining a new city instance for `cityModel` with all the retrieved data from the database
           CityModel city = CityModel(
               id: widget.city,
               name: widget.city,
-              //seekers: seekers,
-              // givers: givers,
               numberOfSeekers: numberOfSeekers,
               numberOfGivers: numberOfGivers,
               inProgressDonations: inProgressDonations,
@@ -165,12 +153,10 @@ class _CityComponentState extends State<CityComponent> {
 
           // ignore: use_build_context_synchronously
           final sshData = Provider.of<SSHprovider>(context, listen: false);
-//             final connection = Provider.of<Connectionprovider>(context,
-//                                   listen: false);
-// final socket = await SSHSocket.connect(connection.connectionFormData.ip, connection.connectionFormData.port);
 
           if (sshData.client != null) {
             // ignore: use_build_context_synchronously
+            ///calling the function to view the city statstics and fly to the city
             _viewCityStats(city, true, context);
 
             // ignore: use_build_context_synchronously
@@ -190,30 +176,3 @@ class _CityComponentState extends State<CityComponent> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-// print(seekers);
-        // print(givers);
-
-        // List<UsersModel> seekers = userProvider.seekers;
-        // List<UsersModel> givers = userProvider.givers;
-
-        // for (UsersModel seeker in seekers) {
-        //   print('Seeker: ${seeker.firstName} ${seeker.lastName}');
-        //   print('ID: ${seeker.userID}');
-        //   print('City: ${seeker.city}');
-        // }
-        // for (UsersModel giver in givers) {
-        //   print('giver: ${giver.firstName} ${giver.lastName}');
-        //   print('ID: ${giver.userID}');
-        //   print('City: ${giver.city}');
-        // }
