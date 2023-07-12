@@ -1,46 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
+import 'package:hapis/reusable_widgets/sub_text.dart';
 import 'package:hapis/utils/drawer.dart';
 
-import '../constants.dart';
-import '../models/db_models/users_model.dart';
-import '../reusable_widgets/no_component.dart';
-import '../reusable_widgets/sub_text.dart';
-import '../reusable_widgets/user_component.dart';
+import '../../constants.dart';
+import '../../models/db_models/users_model.dart';
+import '../../reusable_widgets/liquid_galaxy/user_component.dart';
+import '../../reusable_widgets/no_component.dart';
 
-/// this is the [Givers] page that include all givers retrieved from the database
+
+/// this is the [Seekers] that include all seekers retrieved from the database
 /// It has a default [HAPISAppBar] and calls [buildDrawer] for the [Drawer]
 /// [GridView] was used for the cities to display 3 items per row
 /// The widget returns a [UserComponent] for each user in the database
 
-class Givers extends StatefulWidget {
-  final List<UsersModel> giversList;
+class Seekers extends StatefulWidget {
+  final List<UsersModel> seekersList;
   final String city;
-  const Givers({Key? key, required this.giversList, required this.city})
-      : super(key: key);
 
+  const Seekers({Key? key, required this.seekersList, required this.city})
+      : super(key: key);
   @override
-  State<Givers> createState() => _GiversState();
+  State<Seekers> createState() => _SeekersState();
 }
 
-class _GiversState extends State<Givers> {
+class _SeekersState extends State<Seekers> {
   ///`searchController` for the search functionality
   TextEditingController searchController = TextEditingController();
 
-  ///`filteredGiversList` for all filtered givers from `searchController
-  List<UsersModel> filteredGiversList = [];
+  ///`filteredSeekersList` for all filtered seekers from `searchController
+  List<UsersModel> filteredSeekersList = [];
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      getGivers();
+      getSeekers();
     });
   }
 
-  void getGivers() {
+  void getSeekers() {
     setState(() {
-      filteredGiversList = widget.giversList;
+      filteredSeekersList = widget.seekersList;
     });
   }
 
@@ -87,10 +88,10 @@ class _GiversState extends State<Givers> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 30.0),
-            child: SubText(subTextContent: 'Donors In ${widget.city} '),
+            child: SubText(subTextContent: 'Seekers In ${widget.city} '),
           ),
           Flexible(
-            child: widget.giversList.isEmpty
+            child: filteredSeekersList.isEmpty
                 ? const NoComponentWidget(
                     displayText: 'Sorry, there are no users available',
                     icon: Icons.people_alt)
@@ -98,7 +99,7 @@ class _GiversState extends State<Givers> {
                     padding:
                         const EdgeInsets.only(top: 50, right: 50, left: 50),
                     child: GridView.builder(
-                      itemCount: filteredGiversList.length,
+                      itemCount: filteredSeekersList.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, // Display 3 items per row
@@ -106,12 +107,12 @@ class _GiversState extends State<Givers> {
                         mainAxisSpacing: 100.0,
                       ),
                       itemBuilder: (context, index) {
-                        final UsersModel user = filteredGiversList[index];
+                        final UsersModel user = filteredSeekersList[index];
 
                         return UserComponent(
                             key: const ValueKey("userComponent"),
                             user: user,
-                            type: 'giver');
+                            type: 'seeker');
                       },
                     ),
                   ),
@@ -123,7 +124,7 @@ class _GiversState extends State<Givers> {
 
   void performSearch(String query) {
     setState(() {
-      filteredGiversList = widget.giversList.where((user) {
+      filteredSeekersList = widget.seekersList.where((user) {
         final String userFirstName = user.firstName!.toLowerCase();
         final String userLastName = user.lastName!.toLowerCase();
         return userFirstName.contains(query.toLowerCase()) ||

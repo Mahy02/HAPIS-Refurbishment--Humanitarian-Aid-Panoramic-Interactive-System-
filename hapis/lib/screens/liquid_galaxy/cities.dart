@@ -3,9 +3,9 @@ import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import 'package:hapis/utils/drawer.dart';
 
-import '../constants.dart';
-import '../reusable_widgets/cityComponent.dart';
-import '../reusable_widgets/no_component.dart';
+import '../../constants.dart';
+import '../../reusable_widgets/liquid_galaxy/cityComponent.dart';
+import '../../reusable_widgets/no_component.dart';
 
 /// this is the [CitiesPage] that include all cities retrieved from the database
 /// It has a default [HAPISAppBar] and calls [buildDrawer] for the [Drawer]

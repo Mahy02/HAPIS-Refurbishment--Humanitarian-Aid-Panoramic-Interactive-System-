@@ -53,8 +53,8 @@ class UsersModel {
 
   UsersModel(
       {
-       // required this.id,
-        this.userID,
+      // required this.id,
+      this.userID,
       this.userName,
       this.firstName,
       this.lastName,
@@ -71,21 +71,21 @@ class UsersModel {
 
   /// Gets the balloon content from the current giver.
   String giverBalloonContent() => '''
-      <b><font size="+2">'Personal Information & statistics'<font color="#5D5D5D"></font></font></b>
+      <b><font size="+2">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
       <br/><br/>
       <b>Name:</b> ${'$firstName $lastName'}
       <br/>
       <b>Phone Number:</b> $phoneNum
       <br/>
-      <b>Enail:</b> $email
+      <b>Email:</b> $email
       <br/>
       <b>Total Number of donations made:</b> $givings
       <br/>
     ''';
 
-      /// Gets the balloon content from the current seeker.
+  /// Gets the balloon content from the current seeker.
   String seekerBalloonContent() => '''
-      <b><font size="+2">'Personal Information & statistics'<font color="#5D5D5D"></font></font></b>
+      <b><font size="+2">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
       <br/><br/>
       <b>Name:</b> ${'$firstName $lastName'}
       <br/>
@@ -99,15 +99,11 @@ class UsersModel {
       <br/>
     ''';
 
-   List<Map<String, double>> getUserOrbitCoordinates(
-    String address,
-    {
+  List<Map<String, double>> getUserOrbitCoordinates(
+    String address, {
     double step = 3,
     double altitude = 10000, // Specify the desired altitude for the orbit
   }) {
-    
-    
-
     List<Map<String, double>> coords = [];
     double displacement = 0;
     double spot = 0;
@@ -137,13 +133,10 @@ class UsersModel {
     return coords;
   }
 
-
-
-
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
-     // id: map['id'],
+      // id: map['id'],
       userID: map['UserID'],
       userName: map['UserName'],
       firstName: map['FirstName'],

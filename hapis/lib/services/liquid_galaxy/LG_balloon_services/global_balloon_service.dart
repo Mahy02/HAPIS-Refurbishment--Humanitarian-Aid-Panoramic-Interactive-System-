@@ -1,10 +1,11 @@
-import 'package:hapis/models/kml/line_model.dart';
-import 'package:hapis/models/kml/look_at_model.dart';
-import 'package:hapis/models/kml/placemark_model.dart';
-import 'package:hapis/models/kml/point_model.dart';
-import 'package:hapis/models/kml/tour_model.dart';
-import '../../models/balloon_models/global_stats_model.dart';
-import '../../models/kml/orbit_model.dart';
+
+import '../../../models/balloon_models/global_stats_model.dart';
+import '../../../models/liquid_galaxy/kml/line_model.dart';
+import '../../../models/liquid_galaxy/kml/look_at_model.dart';
+import '../../../models/liquid_galaxy/kml/orbit_model.dart';
+import '../../../models/liquid_galaxy/kml/placemark_model.dart';
+import '../../../models/liquid_galaxy/kml/point_model.dart';
+import '../../../models/liquid_galaxy/kml/tour_model.dart';
 
 class GlobalBalloonService {
   /// Builds and returns a globe `Placemark` entity

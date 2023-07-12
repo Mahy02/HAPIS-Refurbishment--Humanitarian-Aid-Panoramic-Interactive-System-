@@ -2,21 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hapis/providers/connection_provider.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
-import 'package:hapis/providers/ssh_provider.dart';
+import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
+import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
+
 import 'package:hapis/providers/users_provider.dart';
 import 'package:hapis/screens/about_screen.dart';
-import 'package:hapis/screens/configuration_screen.dart';
-import 'package:hapis/screens/settings_screen.dart';
+import 'package:hapis/screens/liquid_galaxy/configuration_screen.dart';
+import 'package:hapis/screens/liquid_galaxy/settings_screen.dart';
 import 'package:hapis/screens/splash_screen.dart';
+import 'package:hapis/services/liquid_galaxy/LG_functionalities.dart';
 
-import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
 import 'helpers/sql_db.dart';
-import 'models/ssh_model.dart';
+import 'models/liquid_galaxy/ssh_model.dart';
+
 
 ///This is the main starting point of our application
 ///

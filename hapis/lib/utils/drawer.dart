@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/screens/about_screen.dart';
-import 'package:hapis/screens/home.dart';
-
-import '../screens/configuration_screen.dart';
-import '../screens/settings_screen.dart';
 import '../reusable_widgets/item_side_menu.dart';
+import '../screens/liquid_galaxy/configuration_screen.dart';
+import '../screens/liquid_galaxy/home.dart';
+import '../screens/liquid_galaxy/settings_screen.dart';
 
 ///This is a method called [buildDrawer] to build the drawer for the side menu
 ///it returns a [Drawer] which is a flutter built in drawer widget with a [ListView] for all our components

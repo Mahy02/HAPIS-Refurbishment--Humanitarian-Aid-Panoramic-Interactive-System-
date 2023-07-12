@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hapis/screens/seekers.dart';
+import 'package:hapis/screens/liquid_galaxy/seekers.dart';
 import 'package:provider/provider.dart';
 
-import '../constants.dart';
-import '../models/db_models/users_model.dart';
-import '../providers/users_provider.dart';
-import '../reusable_widgets/app_bar.dart';
-import '../reusable_widgets/hapis_elevated_button.dart';
-import '../reusable_widgets/sub_text.dart';
-import '../utils/drawer.dart';
+import '../../constants.dart';
+import '../../models/db_models/users_model.dart';
+import '../../providers/users_provider.dart';
+import '../../reusable_widgets/app_bar.dart';
+import '../../reusable_widgets/hapis_elevated_button.dart';
+import '../../reusable_widgets/sub_text.dart';
+import '../../utils/drawer.dart';
 import 'givers.dart';
+
 
 ///This is the `users` class in a certain given `city` as input to the widget
 ///It consists of 2 buttons, `seekers` and `givers` from the [HapisElevatedButton] custom widget with an image provided

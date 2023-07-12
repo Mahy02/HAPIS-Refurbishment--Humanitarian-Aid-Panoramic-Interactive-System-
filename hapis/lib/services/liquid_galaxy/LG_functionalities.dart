@@ -1,8 +1,10 @@
-import 'package:hapis/services/kml/file_services.dart';
-import '../models/kml/KMLModel.dart';
-import '../models/kml/look_at_model.dart';
-import '../models/kml/screen_overlay_model.dart';
-import '../providers/ssh_provider.dart';
+
+
+import '../../models/liquid_galaxy/kml/KMLModel.dart';
+import '../../models/liquid_galaxy/kml/look_at_model.dart';
+import '../../models/liquid_galaxy/kml/screen_overlay_model.dart';
+import '../../providers/liquid_galaxy/ssh_provider.dart';
+import 'kml/file_services.dart';
 
 ///This class is responsible for the connection between the LG machine and the Tablet application
 ///The LG service needed such as shutting down the LG, Rebooting the LG, Relaunching the LG
@@ -379,24 +381,3 @@ fi
   }
 }
 
-/*
-In this file, we would add all LG functionalities we might need including the following:
- 1. connecting with LG  done
- 2. shutting down LG   done
- 3. Rebooting LG      done
- 4. Relaunch the LG   done   
- 
- 5. Fly to functionality   done
- 6. orbit functionality   donr
-
- 7. determing logo screen (top left screen for the slaves)   done
- 8. determing bubble screen (right screen for the slaves)    done
- 9. set logos   done
- 
- 10. send KML to the LG system    done
- 11. clearing KML files          done
- 12. send KML to slave           done
-
- 13. set refresh               done
- 14. reset refresh             done
-*/

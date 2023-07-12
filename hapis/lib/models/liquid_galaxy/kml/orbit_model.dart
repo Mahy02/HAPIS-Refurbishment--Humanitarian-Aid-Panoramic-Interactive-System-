@@ -1,4 +1,5 @@
-import 'package:hapis/models/kml/look_at_model.dart';
+
+import 'package:hapis/models/liquid_galaxy/kml/look_at_model.dart';
 
 /// Class that defines the `orbit` entity, which contains its properties and
 /// methods.

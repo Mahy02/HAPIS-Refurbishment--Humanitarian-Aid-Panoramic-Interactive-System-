@@ -1,11 +1,11 @@
 import 'package:hapis/models/db_models/users_model.dart';
-import 'package:hapis/models/kml/line_model.dart';
-import 'package:hapis/models/kml/look_at_model.dart';
-import 'package:hapis/models/kml/placemark_model.dart';
-import 'package:hapis/models/kml/point_model.dart';
-import 'package:hapis/models/kml/tour_model.dart';
-import '../../models/kml/orbit_model.dart';
 
+import '../../../models/liquid_galaxy/kml/line_model.dart';
+import '../../../models/liquid_galaxy/kml/look_at_model.dart';
+import '../../../models/liquid_galaxy/kml/orbit_model.dart';
+import '../../../models/liquid_galaxy/kml/placemark_model.dart';
+import '../../../models/liquid_galaxy/kml/point_model.dart';
+import '../../../models/liquid_galaxy/kml/tour_model.dart';
 
 class UserBalloonService {
   /// Builds and returns a user `Placemark` entity according to the given [user]
@@ -58,16 +58,10 @@ class UserBalloonService {
       coordinates: coordinates,
     );
 
-    print("testing balloon content:");
-
-    print(balloon
-        ? (seeker ? user.seekerBalloonContent() : user.giverBalloonContent())
-        : '');
-
     return PlacemarkModel(
       // id: user.userID.toString(),
       id: user.userName!,
-      name: 'Personal Information & statistics',
+      name: user.userName!,
       lookAt: updatePosition ? lookAtObj : null,
       point: point,
       balloonContent: balloon

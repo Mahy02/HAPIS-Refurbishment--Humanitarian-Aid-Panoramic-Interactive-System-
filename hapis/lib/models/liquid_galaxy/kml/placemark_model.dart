@@ -1,6 +1,7 @@
-import 'package:hapis/models/kml/line_model.dart';
-import 'package:hapis/models/kml/point_model.dart';
-import 'package:hapis/models/kml/tour_model.dart';
+
+import 'package:hapis/models/liquid_galaxy/kml/point_model.dart';
+import 'package:hapis/models/liquid_galaxy/kml/tour_model.dart';
+import 'line_model.dart';
 import 'look_at_model.dart';
 
 /// Class that defines the `placemark` entity, which contains its properties and methods.

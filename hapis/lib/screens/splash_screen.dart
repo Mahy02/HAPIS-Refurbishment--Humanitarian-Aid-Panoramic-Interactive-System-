@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
-import 'home.dart';
+import 'liquid_galaxy/home.dart';
+
 
 
 ///This is a splash screen for displaying the logos and the name of the app for 3 seconds, then navigate to home page

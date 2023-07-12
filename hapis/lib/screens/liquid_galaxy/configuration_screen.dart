@@ -3,15 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
-import 'package:hapis/providers/connection_provider.dart';
-import 'package:hapis/providers/ssh_provider.dart';
 import 'package:provider/provider.dart';
-import '../reusable_widgets/app_bar.dart';
-import '../utils/drawer.dart';
-import '../reusable_widgets/sub_text.dart';
-import '../reusable_widgets/text_form_field.dart';
-import '../services/LG_functionalities.dart';
-import '../utils/show_connection_error.dart';
+
+import '../../providers/liquid_galaxy/connection_provider.dart';
+import '../../providers/liquid_galaxy/ssh_provider.dart';
+import '../../reusable_widgets/app_bar.dart';
+import '../../reusable_widgets/sub_text.dart';
+import '../../reusable_widgets/text_form_field.dart';
+import '../../services/liquid_galaxy/LG_functionalities.dart';
+import '../../utils/drawer.dart';
+import '../../utils/show_connection_error.dart';
+
 
 ///This is we configure the connection between the LG and the tablet app
 ///We need a username, password, master IP address and port number as well as number of screens for valid connection

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/models/balloon_models/city_ballon_model.dart';
-import 'package:hapis/models/kml/KMLModel.dart';
-import 'package:hapis/models/kml/look_at_model.dart';
-import 'package:hapis/models/kml/placemark_model.dart';
-import 'package:hapis/reusable_widgets/hapis_elevated_button.dart';
-import 'package:hapis/services/LG_balloon_services/city_balloon_service.dart';
-import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
-import '../providers/ssh_provider.dart';
-import '../providers/users_provider.dart';
-import '../screens/users.dart';
-import '../services/db_services/city_db_services.dart';
-import '../utils/extract_geocoordinates.dart';
-import '../utils/pop_up_connection.dart';
+
+import '../../models/liquid_galaxy/kml/KMLModel.dart';
+import '../../models/liquid_galaxy/kml/look_at_model.dart';
+import '../../models/liquid_galaxy/kml/placemark_model.dart';
+import '../../providers/liquid_galaxy/ssh_provider.dart';
+import '../../providers/users_provider.dart';
+import '../../screens/liquid_galaxy/users.dart';
+import '../../services/db_services/city_db_services.dart';
+import '../../services/liquid_galaxy/LG_balloon_services/city_balloon_service.dart';
+import '../../services/liquid_galaxy/LG_functionalities.dart';
+import '../../utils/extract_geocoordinates.dart';
+import '../../utils/pop_up_connection.dart';
+import '../hapis_elevated_button.dart';
 
 /// This represents the `CityComponent` where for each city it has the name [city], color [buttonColor], Country [country]
 
@@ -72,6 +73,8 @@ class _CityComponentState extends State<CityComponent> {
 
     try {
       /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
+      print("in city");
+      print("kml body ${kmlBalloon.body}");
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,

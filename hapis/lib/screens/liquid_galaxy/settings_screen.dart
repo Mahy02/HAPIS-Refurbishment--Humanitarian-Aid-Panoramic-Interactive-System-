@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
-import 'package:hapis/services/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/ssh_provider.dart';
-import '../reusable_widgets/app_bar.dart';
-import '../utils/drawer.dart';
-import '../reusable_widgets/hapis_elevated_button.dart';
-import '../reusable_widgets/sub_text.dart';
-import '../utils/pop_up_connection.dart';
+import '../../providers/liquid_galaxy/ssh_provider.dart';
+import '../../reusable_widgets/app_bar.dart';
+import '../../reusable_widgets/hapis_elevated_button.dart';
+import '../../reusable_widgets/sub_text.dart';
+import '../../services/liquid_galaxy/LG_functionalities.dart';
+import '../../utils/drawer.dart';
+import '../../utils/pop_up_connection.dart';
+
 
 ///The settings page is the main page for the LG Tasks which are: Clear KML, Reboot LG, Relaunch LG and Shut Down LG
 ///Each of them is a custom elevated button [HapisElevatedButton] and on pressed, we call the appropriate [LgService] functionality

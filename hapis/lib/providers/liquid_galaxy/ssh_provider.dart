@@ -4,8 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dartssh2/dartssh2.dart';
-
-import '../models/ssh_model.dart';
+import '../../models/liquid_galaxy/ssh_model.dart';
 import 'connection_provider.dart';
 
 ///This is a [Provider] class of [SSHprovider] that extends [ChangeNotifier]

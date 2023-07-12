@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/users_model.dart';
-import 'package:hapis/reusable_widgets/user_elevated_button.dart';
+import 'package:hapis/reusable_widgets/liquid_galaxy/user_elevated_button.dart';
 
 
 /// `UserComponent is for each user in the users page

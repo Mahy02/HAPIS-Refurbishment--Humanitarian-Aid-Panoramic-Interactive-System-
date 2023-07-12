@@ -1,18 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/models/db_models/users_model.dart';
-import 'package:hapis/services/LG_balloon_services/user_balloon_service.dart';
 import 'package:provider/provider.dart';
 
-import '../models/kml/KMLModel.dart';
-import '../models/kml/look_at_model.dart';
-import '../models/kml/placemark_model.dart';
-
-import '../providers/ssh_provider.dart';
-import '../services/LG_functionalities.dart';
-import '../utils/pop_up_connection.dart';
+import '../../models/liquid_galaxy/kml/KMLModel.dart';
+import '../../models/liquid_galaxy/kml/look_at_model.dart';
+import '../../models/liquid_galaxy/kml/placemark_model.dart';
+import '../../providers/liquid_galaxy/ssh_provider.dart';
+import '../../services/liquid_galaxy/LG_balloon_services/user_balloon_service.dart';
+import '../../services/liquid_galaxy/LG_functionalities.dart';
+import '../../utils/pop_up_connection.dart';
 
 class UserElevatedButton extends StatefulWidget {
   final String elevatedButtonContent;
@@ -42,12 +40,8 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
       seeker = true;
     }
     final sshData = Provider.of<SSHprovider>(context, listen: false);
-    print("here");
-    final UserBalloonService userService = UserBalloonService();
-    print("inside view user");
 
-    print('seeker: $seeker');
-    print('showBallon: $showBalloon');
+    final UserBalloonService userService = UserBalloonService();
 
     final placemark = userService.buildUserPlacemark(
       user,
@@ -65,31 +59,25 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
     });
 
     try {
-      print('clearing kml before another balloon');
-      debugPrint('debug before clear kml');
       await LgService(sshData).clearKml();
-      debugPrint('debug after clear kml');
     } catch (e) {
       // ignore: avoid_print
       print(e);
     }
-    //  according to user if seeker or giver
+    // according to user if seeker or giver
     final kmlBalloon = KMLModel(
       name: 'HAPIS-USER-balloon',
       content: placemark.balloonOnlyTag,
     );
 
-    print("kml content before sending it to slave");
-    print(kmlBalloon.content);
-    print(kmlBalloon.body);
+    await Future.delayed(Duration(seconds: 3));
     try {
-      debugPrint('debug before send kml');
+      print("in user");
+      print("kml body ${kmlBalloon.body}");
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,
       );
-      debugPrint('debug after send  kml');
-      print('sent');
     } catch (e) {
       // ignore: avoid_print
       print(e);
@@ -176,63 +164,7 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             width: MediaQuery.of(context).size.height * 0.06,
                           ),
                           onTap: () async {
-                            // final connection = Provider.of<Connectionprovider>(
-                            //     context,
-                            //     listen: false);
-                            // final socket = await SSHSocket.connect(
-                            //     connection.connectionFormData.ip,
-                            //     connection.connectionFormData.port);
-                            // final sshData = Provider.of<SSHprovider>(context,
-                            //     listen: false);
-                            // print('before calling view stats');
-                            // try {
-                            //   print('clearing kml before another balloon');
-                            //   debugPrint('debug before clear kml');
-                            //   await LgService(sshData).clearKml();
-                            //   debugPrint('debug after clear kml');
-                            // } catch (e) {
-                            //   // ignore: avoid_print
-                            //   print(e);
-                            // }
-                            // print('after calling clear before view stats');
                             _viewUserStats(widget.user, true, context);
-                            // print('after view user stats');
-                            //                         print(
-                            //                             'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-
-                            //                         await Future.delayed(Duration(seconds: 15));
-                            //                         print(_userPlacemark!.balloonOnlyTag);
-                            //                         String balloon_trial = '''
-                            //   <b><font size="+2">'Personal Information & statistics'<font color="#5D5D5D"></font></font></b>
-                            //   <br/><br/>
-                            //   <b>Name:</b> Mahy
-                            //   <br/>
-                            //   <b>Phone Number:</b> bla
-                            //   <br/>
-                            //   <b>Email:</b> bla
-                            //   <br/>
-                            //   <b>Total Number seekings made for self:</b> bla
-                            //   <br/>
-                            //   <b>Total Number seekings made for others:</b> bla
-                            //   <br/>
-                            // ''';
-                            //                         final kmlBalloon = KMLModel(
-                            //                           name: 'HAPIS-USER-balloon',
-                            //                           // content: _userPlacemark!.balloonOnlyTag,
-                            //                           content: balloon_trial,
-                            //                         );
-                            //                         try {
-                            //                           debugPrint('debug before send kml');
-                            //                           await LgService(sshData).sendKMLToSlave(
-                            //                             1,
-                            //                             kmlBalloon.body,
-                            //                           );
-                            //                           debugPrint('debug after send  kml');
-                            //                           print('sent');
-                            //                         } catch (e) {
-                            //                           // ignore: avoid_print
-                            //                           print(e);
-                            //                         }
                           },
                         ),
                       ),
@@ -254,13 +186,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             onTap: () async {
                               final sshData = Provider.of<SSHprovider>(context,
                                   listen: false);
-
-                              // final connection =
-                              //     Provider.of<Connectionprovider>(context,
-                              //         listen: false);
-                              // final socket = await SSHSocket.connect(
-                              //     connection.connectionFormData.ip,
-                              //     connection.connectionFormData.port);
 
                               if (sshData.client != null) {
                                 try {

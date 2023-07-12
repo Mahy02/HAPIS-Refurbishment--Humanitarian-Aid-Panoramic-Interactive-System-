@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/models/balloon_models/global_stats_model.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
-import 'package:hapis/screens/cities.dart';
-import 'package:hapis/services/LG_balloon_services/global_balloon_service.dart';
-import 'package:hapis/utils/drawer.dart';
+import 'package:hapis/screens/liquid_galaxy/cities.dart';
 import 'package:provider/provider.dart';
-import '../constants.dart';
-import '../models/kml/KMLModel.dart';
-import '../models/kml/look_at_model.dart';
-import '../models/kml/placemark_model.dart';
-import '../providers/ssh_provider.dart';
-import '../reusable_widgets/hapis_elevated_button.dart';
-import '../reusable_widgets/sub_text.dart';
-import '../services/LG_functionalities.dart';
-import '../services/db_services/global_db_services.dart';
-import '../utils/pop_up_connection.dart';
+
+import '../../constants.dart';
+import '../../models/liquid_galaxy/kml/KMLModel.dart';
+import '../../models/liquid_galaxy/kml/look_at_model.dart';
+import '../../models/liquid_galaxy/kml/placemark_model.dart';
+import '../../providers/liquid_galaxy/ssh_provider.dart';
+import '../../reusable_widgets/hapis_elevated_button.dart';
+import '../../reusable_widgets/sub_text.dart';
+import '../../services/db_services/global_db_services.dart';
+import '../../services/liquid_galaxy/LG_balloon_services/global_balloon_service.dart';
+import '../../services/liquid_galaxy/LG_functionalities.dart';
+import '../../utils/drawer.dart';
+import '../../utils/pop_up_connection.dart';
 
 ///This is our Home page. It has 2 main buttons=> Global statistics and Cities from the custom [HapisElevatedButton]
 
