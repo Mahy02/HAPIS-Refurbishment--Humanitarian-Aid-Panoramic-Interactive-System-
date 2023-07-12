@@ -104,6 +104,9 @@ flutter:
       - assets/images/giver.png
       - assets/images/info.png
       - assets/images/globeBallon.png
+      - assets/images/donorpin.png
+      - assets/images/seekerpin.png
+      - assets/images/userspins.png
       #- assets/images/Logos_2.png
       - assets/Forms.csv
       - assets/Matchings.csv

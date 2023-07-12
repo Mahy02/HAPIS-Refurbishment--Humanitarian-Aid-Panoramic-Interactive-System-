@@ -65,10 +65,12 @@ class CityModel {
   /// Gets the balloon content from the current city.
   // ${image!.isNotEmpty ? '<img height="200" src="${getImageAssetString('assets/images/cityballoon.png')}" alt="City Image"><br/><br/>' : ''}
   String balloonContent() => '''
-      <b><font size="+2">$name <font color="#5D5D5D"></font></font></b>
+      <div style="text-align:center;">
+      <b><font size="+3">$name <font color="#5D5D5D"></font></font></b>
+      </div>
       <br/><br/>
       <div style="text-align:center;">
-      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/cityballoon.png?raw=true" style="display: block; margin: auto; width: 200px; height: 200px;"/><br/><br/>
+      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/cityBallon.png?raw=true" style="display: block; margin: auto; width: 150px; height: 100px;"/><br/><br/>
      </div>
       <b>Total Number of Seekers:</b> $numberOfSeekers
       <br/>

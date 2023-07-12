@@ -73,8 +73,7 @@ class _CityComponentState extends State<CityComponent> {
 
     try {
       /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
-      print("in city");
-      print("kml body ${kmlBalloon.body}");
+
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,
@@ -90,7 +89,8 @@ class _CityComponentState extends State<CityComponent> {
         latitude: city.cityCoordinates.latitude,
         longitude: city.cityCoordinates.longitude,
         altitude: 0,
-        range: '13000',
+        // range: '13000',
+        range: '5000',
         tilt: '0',
         heading: '0',
       ));
@@ -160,6 +160,7 @@ class _CityComponentState extends State<CityComponent> {
           if (sshData.client != null) {
             // ignore: use_build_context_synchronously
             ///calling the function to view the city statstics and fly to the city
+            print("clicked");
             _viewCityStats(city, true, context);
 
             // ignore: use_build_context_synchronously

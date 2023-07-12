@@ -1,6 +1,4 @@
-
-
-
+import 'package:hapis/models/db_models/users_model.dart';
 import 'package:hapis/models/liquid_galaxy/kml/look_at_model.dart';
 
 import '../../../models/balloon_models/city_ballon_model.dart';
@@ -18,7 +16,7 @@ class CityBalloonService {
     double orbitPeriod, {
     LookAtModel? lookAt,
     bool updatePosition = true,
-  })  {
+  }) {
     LookAtModel lookAtObj;
 
     if (lookAt == null) {
@@ -26,6 +24,7 @@ class CityBalloonService {
           longitude: city.cityCoordinates.longitude,
           latitude: city.cityCoordinates.latitude,
           range: '4000000',
+          // range: '2000000',
           tilt: '60',
           heading: '0');
     } else {
@@ -65,11 +64,10 @@ class CityBalloonService {
     );
   }
 
-  /// Builds an `orbit` KML based on the given [city] 
+  /// Builds an `orbit` KML based on the given [city]
   ///
   /// Returns a [String] that represents the `orbit` KML.
-  String buildOrbit(CityModel city,
-      {LookAtModel? lookAt})  {
+  String buildOrbit(CityModel city, {LookAtModel? lookAt}) {
     LookAtModel lookAtObj;
 
     if (lookAt == null) {
@@ -78,6 +76,7 @@ class CityBalloonService {
         latitude: city.cityCoordinates.latitude,
         altitude: 0,
         range: '4000000',
+        // range: '2000000',
         tilt: '60',
         heading: '0',
       );

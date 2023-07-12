@@ -52,10 +52,12 @@ class GlobeModel {
 //${image!.isNotEmpty ? '<img height="200" src="assets/images/$image"><br/><br/>' : ''}
 // <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/globeBallon.png?raw=true" width="200" height="200"/><br/><br/>
   String balloonContent() => '''
-      <b><font size="+2">Global Statistics <font color="#5D5D5D"></font></font></b>
+      <div style="text-align:center;">
+      <b><font size="+3">Global Statistics <font color="#5D5D5D"></font></font></b>
+      </div>
       <br/><br/>
       <div style="text-align:center;">
-      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/globeBallon.png?raw=true" style="display: block; margin: auto; width: 200px; height: 200px;"/><br/><br/>
+      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/globeBallon.png?raw=true" style="display: block; margin: auto; width: 200px; height: 180px;"/><br/><br/>
      </div>
       <b>Total Number of Seekers:</b> $numberOfSeekers
       <br/>

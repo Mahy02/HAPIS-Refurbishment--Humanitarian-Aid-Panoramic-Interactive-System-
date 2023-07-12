@@ -1,4 +1,3 @@
-
 import 'package:hapis/models/liquid_galaxy/kml/point_model.dart';
 import 'package:hapis/models/liquid_galaxy/kml/tour_model.dart';
 import 'line_model.dart';
@@ -37,7 +36,7 @@ class PlacemarkModel {
   PointModel point;
 
   /// Property that defines the placemark `line` entity.
-  LineModel line;
+  LineModel? line;
 
   /// Property that defines the placemark `tour` entity.
   TourModel? tour;
@@ -54,7 +53,7 @@ class PlacemarkModel {
     required this.id,
     required this.name,
     required this.point,
-    required this.line,
+    this.line,
   });
 
   /// Property that defines the placemark `tag` according to its current properties.
@@ -121,22 +120,52 @@ class PlacemarkModel {
     ${tour != null ? tour!.tag : ''}
   ''';
 
+  // String get pinOnlyTag => '''
+  //   <Placemark>
+  //     <name>$name</name>
+  //     <description><![CDATA[$description]]></description>
+  //     ${lookAt == null ? '' : lookAt!.tag}
+  //     <styleUrl>$id</styleUrl>
+  //     ${point.tag}
+  //   </Placemark>
+  // ''';
+
+  String get pinOnlyTag => '''
+    <Placemark>
+      <name>$name</name>
+      <description><![CDATA[$description]]></description>
+      ${lookAt == null ? '' : lookAt!.tag}
+      <styleUrl>#${id}_icon</styleUrl>
+      ${point.tag}
+    </Placemark>
+
+    <Style id="${id}_icon">
+      <IconStyle>
+      <scale>5.0</scale> <!-- increase the size of the icon by a factor of 10 -->
+        <Icon>
+          <href>http://lg1:81/$icon</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+  ''';
+
   String get orbitTag => '''
     <Placemark>
       <name>Orbit - $name</name>
       <styleUrl>line-$id</styleUrl>
-      ${line.tag}
+      ${line!.tag}
     </Placemark>
   ''';
 
   /// Property that defines a placemark tag which contains only a balloon.
+  /// FF537DC0
   String get balloonOnlyTag => '''
     <Style id="balloon-$id">
       <BalloonStyle>
-        <bgColor>537DC0</bgColor>
+        <bgColor>000000</bgColor>
         <text><![CDATA[
          <html>
-          <body style="font-family: montserrat, sans-serif; font-size: 24px; width: 400px; display: flex; justify-content: center; align-items: center;">
+          <body style="font-family: montserrat, sans-serif; font-size: 18px; width: 400px; display: flex; justify-content: center; align-items: center;">
             <div style="background-color: #ffffff; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">
               <span style="color: black;">$balloonContent</span> <!-- Content of the balloon with red color -->
             </div>
@@ -172,7 +201,7 @@ class PlacemarkModel {
       'balloonContent': balloonContent,
       'lookAt': lookAt?.toMap(),
       'point': point.toMap(),
-      'line': line.toMap(),
+      'line': line!.toMap(),
       'tour': tour?.toMap(),
     };
   }
