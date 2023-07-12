@@ -1,5 +1,3 @@
-
-
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/screen_overlay_model.dart';
@@ -322,6 +320,9 @@ fi
       {List<Map<String, String>> images = const []}) async {
     final fileName = '${kml.name}.kml';
 
+    print("inside sendKml");
+    print("filename: $fileName");
+
     try {
       await clearKml();
     } catch (e) {
@@ -342,7 +343,7 @@ fi
     try {
       final kmlFile = await _fileService.createFile(fileName, kml.body);
       await _sshData.uploadKml(kmlFile, fileName);
-
+      print("uploaded");
       await _sshData.execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
     } catch (e) {
       // ignore: avoid_print
@@ -350,6 +351,29 @@ fi
     }
     // await _sshData.execute(
     //     'chmod 777 /var/www/html/kmls.txt && echo "$_url/$fileName" > /var/www/html/kmls.txt');
+  }
+
+  Future<void> sendKmlPins(String pinsKml, String placemarkName) async {
+    final fileName = '$placemarkName.kml';
+    try {
+      final kmlFile = await _fileService.createFile(fileName, pinsKml);
+
+      await _sshData.uploadKml(kmlFile, fileName);
+
+      await _sshData
+          .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+
+    // try {
+    //   await _sshData.execute(
+    //       'echo "$content" > /var/www/html/hapis/placemarks/$fileName.kml');
+    // } catch (e) {
+    //   // ignore: avoid_print
+    //   print(e);
+    // }
   }
 
   /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos
@@ -380,4 +404,3 @@ fi
     }
   }
 }
-

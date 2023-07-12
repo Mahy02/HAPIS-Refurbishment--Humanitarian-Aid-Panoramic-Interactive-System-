@@ -1,7 +1,6 @@
 import 'package:hapis/models/liquid_galaxy/kml/look_at_model.dart';
 
 import '../../../models/db_models/users_model.dart';
-import '../../../models/liquid_galaxy/kml/line_model.dart';
 
 import '../../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../../models/liquid_galaxy/kml/point_model.dart';
@@ -12,7 +11,7 @@ class UsersPinsService {
     List<UsersModel> donors,
     double orbitPeriod, {
     LookAtModel? lookAt,
-    bool updatePosition = true,
+    bool updatePosition = false,
   }) {
     List<PlacemarkModel> placemarks = [];
 
@@ -24,7 +23,7 @@ class UsersPinsService {
             longitude: donor.userCoordinates!.longitude,
             latitude: donor.userCoordinates!.latitude,
             range: '4000000',
-            altitude: 10000,
+            altitude: 0,
             tilt: '60',
             heading: '0');
       } else {
@@ -41,7 +40,8 @@ class UsersPinsService {
         name: donor.userName!,
         lookAt: updatePosition ? lookAtObj : null,
         point: point,
-        icon: 'assets/images/donorpin.png',
+        icon:
+            'https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/donorpin.png?raw=true',
       ));
     }
 
@@ -53,7 +53,7 @@ class UsersPinsService {
     List<UsersModel> seekers,
     double orbitPeriod, {
     LookAtModel? lookAt,
-    bool updatePosition = true,
+    bool updatePosition = false,
   }) {
     List<PlacemarkModel> placemarks = [];
 
@@ -64,7 +64,7 @@ class UsersPinsService {
         lookAtObj = LookAtModel(
             longitude: seeker.userCoordinates!.longitude,
             latitude: seeker.userCoordinates!.latitude,
-            altitude: 10000,
+            altitude: 0,
             range: '4000000',
             tilt: '60',
             heading: '0');
@@ -82,10 +82,52 @@ class UsersPinsService {
         name: seeker.userName!,
         lookAt: updatePosition ? lookAtObj : null,
         point: point,
-        icon: 'assets/images/seekerpin.png',
+        icon:
+            'https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/seekerpin.png?raw=true',
       ));
     }
 
     return placemarks;
   }
 }
+
+
+/*
+  public LGCommand showPlacemark(POI poi, LGCommand.Listener listener, String placemarkIcon, String route){
+        currentPOI = new POI(poi);
+        return  sendPlacemarkToLG(listener, placemarkIcon, route);
+    }
+
+
+     private LGCommand sendPlacemarkToLG(LGCommand.Listener listener, String placemarkIcon, String route){
+        LGCommand lgCommand = new LGCommand(buildPlacemark(currentPOI, placemarkIcon, route), CRITICAL_MESSAGE, (String result) -> {
+            //currentPOI = new POI(previousPOI);
+            if(listener != null)
+                listener.onResponse(result);
+        });
+        LGConnectionManager.getInstance().addCommandToLG(lgCommand);
+        return lgCommand;
+    }
+
+POIController.getInstance().showPlacemark(userPoi,null, "https://i.ibb.co/Bg4Lnvk/donor-icon.png", "placemarks/donors");
+
+
+    private static String buildPlacemark(POI poi, String placemarkIcon, String route){
+       return "echo '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+               "<kml xmlns=\"http://www.opengis.net/kml/2.2\"> " +
+               "<Placemark>\n" +
+               "  <Style id=\"homelessIcon\">\n" +
+               "      <IconStyle>\n" +
+               "        <Icon>\n" +
+               "          <href>" + placemarkIcon + "</href>\n" +
+               "        </Icon>\n" +
+               "      </IconStyle>\n" +
+               "    </Style>\n" +
+               "  <styleUrl>#homelessIcon</styleUrl>\n" +
+               " <Point>\n" +
+               " <coordinates>" + poi.getLongitude() + "," + poi.getLatitude() + "," + poi.getAltitude() + "</coordinates>\n" +
+               " </Point>\n" +
+               " </Placemark> </kml>' > /var/www/html/hapis/" + route + "/" + poi.getName() + ".kml";
+    }
+
+*/

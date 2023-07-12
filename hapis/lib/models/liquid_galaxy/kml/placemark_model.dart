@@ -132,22 +132,21 @@ class PlacemarkModel {
 
   String get pinOnlyTag => '''
     <Placemark>
-      <name>$name</name>
-      <description><![CDATA[$description]]></description>
-      ${lookAt == null ? '' : lookAt!.tag}
+      <Style id="${id}_icon">
+        <IconStyle>
+        <scale>1.0</scale> <!-- increase the size of the icon by a factor of 10 -->
+          <Icon>
+            <href>$icon</href>
+          </Icon>
+        </IconStyle>
+      </Style>
       <styleUrl>#${id}_icon</styleUrl>
       ${point.tag}
     </Placemark>
-
-    <Style id="${id}_icon">
-      <IconStyle>
-      <scale>5.0</scale> <!-- increase the size of the icon by a factor of 10 -->
-        <Icon>
-          <href>http://lg1:81/$icon</href>
-        </Icon>
-      </IconStyle>
-    </Style>
+   
   ''';
+
+  
 
   String get orbitTag => '''
     <Placemark>

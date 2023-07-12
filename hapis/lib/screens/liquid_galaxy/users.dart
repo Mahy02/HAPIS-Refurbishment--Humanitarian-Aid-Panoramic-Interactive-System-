@@ -32,23 +32,21 @@ class Users extends StatefulWidget {
 
 class _UsersState extends State<Users> {
   ///  `donors placemark` to define the donors placemark
-  List<PlacemarkModel>? _donorsPlacemarkList;
-
-  List<PlacemarkModel>? _seekersPlacemarkList;
 
   PlacemarkModel? _donorsPlacemark;
 
   PlacemarkModel? _seekersPlacemark;
 
-  /// Views  `donors pins` into the Google Earth
-  void _viewDonorsPins(List<UsersModel> donors, BuildContext context,
+  /// Views  `users pins` into the Google Earth
+  void _viewPins(
+      List<UsersModel> donors, List<UsersModel> seekers, BuildContext context,
       {double orbitPeriod = 2.8, bool updatePosition = true}) async {
     final sshData = Provider.of<SSHprovider>(context, listen: false);
 
     final UsersPinsService usersPinService = UsersPinsService();
 
     /// calling the `buildDonorsPlacemark` that returns the `donors placemark`
-    final placemarks = usersPinService.buildDonorsPlacemark(
+    final donorsPlacemarks = usersPinService.buildDonorsPlacemark(
       donors,
       orbitPeriod,
       lookAt: _donorsPlacemark != null && !updatePosition
@@ -57,7 +55,7 @@ class _UsersState extends State<Users> {
       updatePosition: updatePosition,
     );
 
-    for (PlacemarkModel placemark in placemarks) {
+    for (PlacemarkModel placemark in donorsPlacemarks) {
       /// sending kml to slave where we send the `kml placemark`
       final kmlPlacemark = KMLModel(
         name: 'HAPIS-Donors-pin-${placemark.id}',
@@ -65,28 +63,16 @@ class _UsersState extends State<Users> {
       );
 
       try {
-        await LgService(sshData).sendKml(
-          kmlPlacemark,
-        );
+        await LgService(sshData)
+            .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
       } catch (e) {
         // ignore: avoid_print
         print(e);
       }
     }
-    // setState(() {
-    //   _donorsPlacemarkList = placemark;
-    // });
-  }
 
-  /// Views  `seekers pins` into the Google Earth
-  void _viewSeekersPins(List<UsersModel> seekers, BuildContext context,
-      {double orbitPeriod = 2.8, bool updatePosition = true}) async {
-    final sshData = Provider.of<SSHprovider>(context, listen: false);
-
-    final UsersPinsService usersPinService = UsersPinsService();
-
-    /// calling the `buildCityPlacemark` that returns the `city placemark`
-    final placemarks = usersPinService.buildSeekersPlacemark(
+    /// calling the `buildSeekersPlacemark` that returns the `seeker placemark`
+    final seekersPlacemarks = usersPinService.buildSeekersPlacemark(
       seekers,
       orbitPeriod,
       lookAt: _seekersPlacemark != null && !updatePosition
@@ -95,7 +81,7 @@ class _UsersState extends State<Users> {
       updatePosition: updatePosition,
     );
 
-    for (PlacemarkModel placemark in placemarks) {
+    for (PlacemarkModel placemark in seekersPlacemarks) {
       /// sending kml to slave where we send the `kml placemark`
       final kmlPlacemark = KMLModel(
         name: 'HAPIS-Seekers-pin-${placemark.id}',
@@ -103,20 +89,86 @@ class _UsersState extends State<Users> {
       );
 
       try {
-        print("sending kml");
-        await LgService(sshData).sendKml(
-          kmlPlacemark,
-        );
+        await LgService(sshData)
+            .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
       } catch (e) {
         // ignore: avoid_print
         print(e);
       }
-      print("here");
     }
-    // setState(() {
-    //   _donorsPlacemarkList = placemark;
-    // });
   }
+
+  // /// Views  `donors pins` into the Google Earth
+  // void _viewDonorsPins(List<UsersModel> donors, BuildContext context,
+  //     {double orbitPeriod = 2.8, bool updatePosition = true}) async {
+  //   final sshData = Provider.of<SSHprovider>(context, listen: false);
+
+  //   final UsersPinsService usersPinService = UsersPinsService();
+
+  //   /// calling the `buildDonorsPlacemark` that returns the `donors placemark`
+  //   final placemarks = usersPinService.buildDonorsPlacemark(
+  //     donors,
+  //     orbitPeriod,
+  //     lookAt: _donorsPlacemark != null && !updatePosition
+  //         ? _donorsPlacemark!.lookAt
+  //         : null,
+  //     updatePosition: updatePosition,
+  //   );
+
+  //   for (PlacemarkModel placemark in placemarks) {
+  //     /// sending kml to slave where we send the `kml placemark`
+  //     final kmlPlacemark = KMLModel(
+  //       name: 'HAPIS-Donors-pin-${placemark.id}',
+  //       content: placemark.pinOnlyTag,
+  //     );
+
+  //     try {
+  //       await LgService(sshData)
+  //           .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
+  //     } catch (e) {
+  //       // ignore: avoid_print
+  //       print(e);
+  //     }
+  //   }
+
+  // }
+
+  // /// Views  `seekers pins` into the Google Earth
+  // void _viewSeekersPins(List<UsersModel> seekers, BuildContext context,
+  //     {double orbitPeriod = 2.8, bool updatePosition = true}) async {
+  //   final sshData = Provider.of<SSHprovider>(context, listen: false);
+
+  //   final UsersPinsService usersPinService = UsersPinsService();
+
+  //   /// calling the `buildSeekersPlacemark` that returns the `seeker placemark`
+  //   final placemarks = usersPinService.buildSeekersPlacemark(
+  //     seekers,
+  //     orbitPeriod,
+  //     lookAt: _seekersPlacemark != null && !updatePosition
+  //         ? _seekersPlacemark!.lookAt
+  //         : null,
+  //     updatePosition: updatePosition,
+  //   );
+
+  //   for (PlacemarkModel placemark in placemarks) {
+  //     /// sending kml to slave where we send the `kml placemark`
+  //     final kmlPlacemark = KMLModel(
+  //       name: 'HAPIS-Seekers-pin-${placemark.id}',
+  //       content: placemark.pinOnlyTag,
+  //     );
+
+  //     try {
+
+  //       await LgService(sshData)
+  //           .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
+  //     } catch (e) {
+  //       // ignore: avoid_print
+  //       print(e);
+  //     }
+
+  //   }
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -146,16 +198,29 @@ class _UsersState extends State<Users> {
                                     MediaQuery.of(context).size.height * 0.12,
                                 width: MediaQuery.of(context).size.width * 0.12,
                               ),
-                              onTap: () {
+                              onTap: () async {
                                 UserProvider userProvider =
                                     Provider.of<UserProvider>(context,
                                         listen: false);
                                 List<UsersModel> seekers = userProvider.seekers;
                                 List<UsersModel> givers = userProvider.givers;
+                                final sshData = Provider.of<SSHprovider>(
+                                    context,
+                                    listen: false);
+                                try {
+                                  await LgService(sshData).clearKml();
+                                } catch (e) {
+                                  // ignore: avoid_print
+                                  print(e);
+                                }
+                                _viewPins(givers, seekers, context);
 
-                                _viewDonorsPins(givers, context);
-
-                                _viewSeekersPins(seekers, context);
+                                //print("before view donors");
+                                //_viewDonorsPins(givers, context);
+                                //await Future.delayed(Duration(seconds: 10));
+                                // print("before view seekers");
+                                //_viewSeekersPins(seekers, context);
+                                // print("after both");
                               },
                             ),
                             Text(' Show Users Pins ',
