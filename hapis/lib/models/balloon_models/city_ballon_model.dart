@@ -44,8 +44,8 @@ class CityModel {
     required this.id,
     required this.name,
     this.image,
-     this.seekers,
-     this.givers,
+    this.seekers,
+    this.givers,
     required this.numberOfSeekers,
     required this.numberOfGivers,
     required this.inProgressDonations,
@@ -67,6 +67,9 @@ class CityModel {
   String balloonContent() => '''
       <b><font size="+2">$name <font color="#5D5D5D"></font></font></b>
       <br/><br/>
+      <div style="text-align:center;">
+      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/cityballoon.png?raw=true" style="display: block; margin: auto; width: 200px; height: 200px;"/><br/><br/>
+     </div>
       <b>Total Number of Seekers:</b> $numberOfSeekers
       <br/>
       <b>Total Number of Givers:</b> $numberOfGivers
@@ -84,12 +87,10 @@ class CityModel {
   /// Returns a [List] of coordinates with [lat], [lng], and [altitude].
   ///
   List<Map<String, double>> getCityOrbitCoordinates(
-    String cityName,
-    {
+    String cityName, {
     double step = 3,
     double altitude = 10000, // Specify the desired altitude for the orbit
   }) {
-    
     if (cityCoordinates == null) {
       return [];
     }

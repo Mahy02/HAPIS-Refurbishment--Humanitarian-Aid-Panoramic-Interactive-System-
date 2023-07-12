@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import '../../constants.dart';
 
-
 /// Entity that represents the `Globe`, with all of its properties and methods.
 class GlobeModel {
   /// Property that defines the Globe `uuid`.
@@ -50,10 +49,14 @@ class GlobeModel {
   }
 
   /// Gets the balloon content from the current city.
-  // ${image!.isNotEmpty ? '<img height="200" src="${getImageAssetString('assets/images/cityballoon.png')}" alt="City Image"><br/><br/>' : ''}
+//${image!.isNotEmpty ? '<img height="200" src="assets/images/$image"><br/><br/>' : ''}
+// <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/globeBallon.png?raw=true" width="200" height="200"/><br/><br/>
   String balloonContent() => '''
       <b><font size="+2">Global Statistics <font color="#5D5D5D"></font></font></b>
       <br/><br/>
+      <div style="text-align:center;">
+      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/globeBallon.png?raw=true" style="display: block; margin: auto; width: 200px; height: 200px;"/><br/><br/>
+     </div>
       <b>Total Number of Seekers:</b> $numberOfSeekers
       <br/>
       <b>Total Number of Givers:</b> $numberOfGivers
@@ -71,10 +74,7 @@ class GlobeModel {
   List<Map<String, double>> getGlobeOrbitCoordinates({
     double step = 3,
     double altitude = 25512.1097385,
-   
   }) {
-   
-
     List<Map<String, double>> coords = [];
     double displacement = 0;
     double spot = 0;
