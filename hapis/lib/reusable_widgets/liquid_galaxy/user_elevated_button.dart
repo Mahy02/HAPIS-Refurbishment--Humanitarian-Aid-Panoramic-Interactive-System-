@@ -8,7 +8,7 @@ import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
-import '../../services/liquid_galaxy/LG_balloon_services/user_balloon_service.dart';
+import '../../services/liquid_galaxy/LG_placemarks_services/user_balloon_service.dart';
 import '../../services/liquid_galaxy/LG_functionalities.dart';
 import '../../utils/pop_up_connection.dart';
 

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/models/balloon_models/global_stats_model.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/liquid_galaxy/cities.dart';
+import 'package:hapis/services/liquid_galaxy/tour_services.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -13,7 +14,7 @@ import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
 import '../../reusable_widgets/sub_text.dart';
 import '../../services/db_services/global_db_services.dart';
-import '../../services/liquid_galaxy/LG_balloon_services/global_balloon_service.dart';
+import '../../services/liquid_galaxy/LG_placemarks_services/global_balloon_service.dart';
 import '../../services/liquid_galaxy/LG_functionalities.dart';
 import '../../utils/drawer.dart';
 import '../../utils/pop_up_connection.dart';
@@ -206,7 +207,10 @@ class _HomePageState extends State<HomePage> {
 
                         if (sshData.client != null) {
                           // ignore: use_build_context_synchronously
-                          _viewGlobeStats(globe, true, context);
+                            _viewGlobeStats(globe, true, context);
+                          
+                          //TourService.viewGlobe(globe, true, context);
+
                         } else {
                           // ignore: use_build_context_synchronously
                           showDialogConnection(context);

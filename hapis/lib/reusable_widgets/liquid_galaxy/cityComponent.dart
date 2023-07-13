@@ -10,7 +10,7 @@ import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../providers/users_provider.dart';
 import '../../screens/liquid_galaxy/users.dart';
 import '../../services/db_services/city_db_services.dart';
-import '../../services/liquid_galaxy/LG_balloon_services/city_balloon_service.dart';
+import '../../services/liquid_galaxy/LG_placemarks_services/city_balloon_service.dart';
 import '../../services/liquid_galaxy/LG_functionalities.dart';
 import '../../utils/extract_geocoordinates.dart';
 import '../../utils/pop_up_connection.dart';
