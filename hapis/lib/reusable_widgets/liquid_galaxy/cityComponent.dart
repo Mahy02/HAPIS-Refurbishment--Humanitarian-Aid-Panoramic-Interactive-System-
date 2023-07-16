@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
-import 'package:hapis/models/balloon_models/city_ballon_model.dart';
+
 import 'package:provider/provider.dart';
 
+import '../../models/liquid_galaxy/balloon_models/city_ballon_model.dart';
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
@@ -22,11 +23,17 @@ class CityComponent extends StatefulWidget {
   final String city;
   final Color buttonColor;
   final String country;
+  final double fontSize;
+  final double imageHeight;
+  final double imageWidth;
   const CityComponent(
       {super.key,
       required this.city,
       required this.buttonColor,
-      required this.country});
+      required this.country,
+      required this.fontSize,
+      required this.imageHeight,
+      required this.imageWidth});
 
   @override
   State<CityComponent> createState() => _CityComponentState();
@@ -109,11 +116,19 @@ class _CityComponentState extends State<CityComponent> {
     final buttonContent = '${widget.city}\n${widget.country}';
 
     return HapisElevatedButton(
+      //   fontSize: 35,
+      //fontSize: 16,
+      fontSize: widget.fontSize,
       buttonColor: widget.buttonColor,
       elevatedButtonContent: buttonContent,
       height: MediaQuery.of(context).size.height * 0.2,
-      imageHeight: MediaQuery.of(context).size.height * 0.15,
-      imageWidth: MediaQuery.of(context).size.height * 0.15,
+      width: MediaQuery.of(context).size.width * 0.4,
+      // imageHeight: MediaQuery.of(context).size.height * 0.15,
+      // imageWidth: MediaQuery.of(context).size.height * 0.15,
+      imageHeight: widget.imageHeight,
+      imageWidth: widget.imageWidth,
+      //imageHeight: MediaQuery.of(context).size.height * 0.1,
+      //imageWidth: MediaQuery.of(context).size.height * 0.1,
       imagePath: imagePath,
       isPoly: true,
       onpressed: () async {
@@ -159,8 +174,8 @@ class _CityComponentState extends State<CityComponent> {
 
           if (sshData.client != null) {
             // ignore: use_build_context_synchronously
-            ///calling the function to view the city statstics and fly to the city
-            print("clicked");
+            // /calling the function to view the city statstics and fly to the city
+
             _viewCityStats(city, true, context);
 
             // ignore: use_build_context_synchronously

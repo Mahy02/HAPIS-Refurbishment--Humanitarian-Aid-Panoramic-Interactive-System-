@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 
+import '../responsive/responsive_layout.dart';
 
 ///This is the custom app bar for our application
 class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -13,6 +14,53 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ResponsiveLayout(
+      mobileBody: buildMobileLayout(context),
+      tabletBody: buildTabletLayout(context),
+    );
+  }
+
+  Widget buildMobileLayout(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.menu_open_rounded,
+          size: 30,
+          color: HapisColors.secondary,
+        ),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+      ),
+
+      title: Row(
+        children: [
+          Expanded(
+            child: Center(
+              child: Text(
+                'HAPIS',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
+                    color: HapisColors.secondary,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Image.asset(
+            'assets/images/earth-day.png',
+            width: 30,
+            height: 30,
+          ),
+        ],
+      ), //our title
+      backgroundColor: HapisColors.primary,
+      actions: const [],
+    );
+  }
+
+  Widget buildTabletLayout(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
       leading: IconButton(

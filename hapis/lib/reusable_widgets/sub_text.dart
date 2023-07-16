@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 ///This is custom widget for the `subText` that is reused in different views through the app
 
 class SubText extends StatelessWidget {
   final String subTextContent;
+  final double fontSize;
   const SubText({
     required this.subTextContent,
+    required this.fontSize,
     super.key,
   });
 
@@ -16,7 +17,7 @@ class SubText extends StatelessWidget {
     return Text(
       subTextContent,
       style: TextStyle(
-          fontSize: 35,
+          fontSize: fontSize,
           color: Colors.black,
           fontFamily: GoogleFonts.montserrat().fontFamily,
           fontWeight: FontWeight.bold),

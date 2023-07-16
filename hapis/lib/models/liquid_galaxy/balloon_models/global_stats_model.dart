@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart';
-import '../../constants.dart';
+
+import '../../../constants.dart';
+
 
 /// Entity that represents the `Globe`, with all of its properties and methods.
 class GlobeModel {

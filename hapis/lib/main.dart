@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
@@ -19,6 +20,7 @@ import 'constants.dart';
 import 'helpers/sql_db.dart';
 import 'models/liquid_galaxy/ssh_model.dart';
 
+import 'package:responsive_framework/responsive_framework.dart';
 
 ///This is the main starting point of our application
 ///
@@ -78,11 +80,45 @@ class HAPIS extends StatelessWidget {
     LgService(sshData).setLogos();
 
     return MaterialApp(
+      builder: (context, child) => ResponsiveBreakpoints.builder(
+        child: child!,
+        breakpoints: [
+          const Breakpoint(start: 0, end: 450, name: MOBILE),
+          const Breakpoint(start: 451, end: 800, name: TABLET),
+          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+        ],
+      ),
       theme: ThemeData(
           fontFamily: GoogleFonts.montserrat().fontFamily,
           primaryColor: HapisColors.primary),
       title: 'HAPIS',
-      home: const SplashScreen(),
+      home: OrientationBuilder(
+        builder: (context, orientation) {
+          // Get the device's screen size and aspect ratio
+          final screenSize = MediaQuery.of(context).size;
+          final screenAspectRatio = screenSize.width / screenSize.height;
+
+          // If the device is a tablet (large screen size and square or landscape aspect ratio)
+          if (screenSize.shortestSide >= 600 && screenAspectRatio >= 1) {
+            // Lock the screen orientation to landscape mode
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ]);
+          } else {
+            // Allow the screen orientation to be determined by the device's physical orientation
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ]);
+          }
+          //const SplashScreen(),
+          return const SplashScreen();
+        },
+      ),
       navigatorKey: navigatorKey,
       routes: {
         '/settings': (context) => const Settings(),

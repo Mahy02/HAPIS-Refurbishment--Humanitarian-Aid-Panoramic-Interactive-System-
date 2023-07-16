@@ -320,8 +320,6 @@ fi
       {List<Map<String, String>> images = const []}) async {
     final fileName = '${kml.name}.kml';
 
-    print("inside sendKml");
-    print("filename: $fileName");
 
     try {
       await clearKml();
@@ -343,7 +341,6 @@ fi
     try {
       final kmlFile = await _fileService.createFile(fileName, kml.body);
       await _sshData.uploadKml(kmlFile, fileName);
-      print("uploaded");
       await _sshData.execute('echo "$_url/$fileName" > /var/www/html/kmls.txt');
     } catch (e) {
       // ignore: avoid_print
@@ -366,14 +363,6 @@ fi
       // ignore: avoid_print
       print(e);
     }
-
-    // try {
-    //   await _sshData.execute(
-    //       'echo "$content" > /var/www/html/hapis/placemarks/$fileName.kml');
-    // } catch (e) {
-    //   // ignore: avoid_print
-    //   print(e);
-    // }
   }
 
   /// Clears all `KMLs` from the Google Earth. The [keepLogos] keeps the logos

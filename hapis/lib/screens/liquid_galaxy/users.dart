@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/screens/liquid_galaxy/seekers.dart';
 import 'package:provider/provider.dart';
 
@@ -173,128 +174,253 @@ class _UsersState extends State<Users> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HAPISAppBar(appBarText: ''),
-      drawer: buildDrawer(context),
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 60.0, left: 80),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SubText(subTextContent: 'HAPIS Users in ${widget.city}'),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 50.0),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              child: Image.asset(
-                                "assets/images/userspins.png",
-                                height:
-                                    MediaQuery.of(context).size.height * 0.12,
-                                width: MediaQuery.of(context).size.width * 0.12,
-                              ),
-                              onTap: () async {
-                                UserProvider userProvider =
-                                    Provider.of<UserProvider>(context,
-                                        listen: false);
-                                List<UsersModel> seekers = userProvider.seekers;
-                                List<UsersModel> givers = userProvider.givers;
-                                final sshData = Provider.of<SSHprovider>(
-                                    context,
-                                    listen: false);
-                                try {
-                                  await LgService(sshData).clearKml();
-                                } catch (e) {
-                                  // ignore: avoid_print
-                                  print(e);
-                                }
-                                _viewPins(givers, seekers, context);
+        appBar: const HAPISAppBar(appBarText: ''),
+        drawer: buildDrawer(context),
+        backgroundColor: Colors.white,
+        body: ResponsiveLayout(
+            mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));
+  }
 
-                                //print("before view donors");
-                                //_viewDonorsPins(givers, context);
-                                //await Future.delayed(Duration(seconds: 10));
-                                // print("before view seekers");
-                                //_viewSeekersPins(seekers, context);
-                                // print("after both");
-                              },
-                            ),
-                            Text(' Show Users Pins ',
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.black,
-                                  fontFamily:
-                                      GoogleFonts.montserrat().fontFamily,
-                                ))
-                          ],
-                        ),
-                      )
-                    ],
+  Widget buildMobileLayout() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40.0, left: 20),
+                child: SubText(
+                  subTextContent: 'HAPIS Users in ${widget.city}',
+                  fontSize: 20,
+                ),
+              )),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              children: [
+                GestureDetector(
+                  child: Image.asset(
+                    "assets/images/userspins.png",
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    width: MediaQuery.of(context).size.width * 0.12,
                   ),
-                )),
-            Padding(
-              padding: const EdgeInsets.only(top: 110.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  HapisElevatedButton(
-                      elevatedButtonContent: 'Seekers',
-                      buttonColor: HapisColors.lgColor2,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      imagePath: 'assets/images/seekers.png',
-                      imageHeight: MediaQuery.of(context).size.height * 0.25,
-                      imageWidth: MediaQuery.of(context).size.height * 0.25,
-                      isPoly: false,
-                      onpressed: () async {
-                        ///retrieving the `list of seekers` from the `user provider` and saving them in `seekers`
-                        UserProvider userProvider =
-                            Provider.of<UserProvider>(context, listen: false);
-                        List<UsersModel> seekers = userProvider.seekers;
+                  onTap: () async {
+                    UserProvider userProvider =
+                        Provider.of<UserProvider>(context, listen: false);
+                    List<UsersModel> seekers = userProvider.seekers;
+                    List<UsersModel> givers = userProvider.givers;
+                    final sshData =
+                        Provider.of<SSHprovider>(context, listen: false);
+                    try {
+                      await LgService(sshData).clearKml();
+                    } catch (e) {
+                      // ignore: avoid_print
+                      print(e);
+                    }
+                    _viewPins(givers, seekers, context);
+                  },
+                ),
+                Text(' Show Users Pins ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                    ))
+              ],
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              HapisElevatedButton(
+                  fontSize: 18,
+                  elevatedButtonContent: 'Seekers',
+                  buttonColor: HapisColors.lgColor2,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  imagePath: 'assets/images/seekers.png',
+                  imageHeight: MediaQuery.of(context).size.height * 0.15,
+                  imageWidth: MediaQuery.of(context).size.height * 0.15,
+                  isPoly: false,
+                  onpressed: () async {
+                    ///retrieving the `list of seekers` from the `user provider` and saving them in `seekers`
+                    UserProvider userProvider =
+                        Provider.of<UserProvider>(context, listen: false);
+                    List<UsersModel> seekers = userProvider.seekers;
 
-                        // _viewSeekersPins(seekers, context);
+                    // _viewSeekersPins(seekers, context);
 
-                        /// navigating to the `Seekers` page with the `seekers` and the `city` from the widget input
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Seekers(
-                                    seekersList: seekers, city: widget.city)));
-                      }),
-                  HapisElevatedButton(
-                      elevatedButtonContent: 'Donors',
-                      buttonColor: HapisColors.lgColor4,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      imagePath: 'assets/images/giver.png',
-                      imageHeight: MediaQuery.of(context).size.height * 0.25,
-                      imageWidth: MediaQuery.of(context).size.height * 0.25,
-                      isPoly: false,
-                      onpressed: () {
-                        ///retrieving the `list of givers` from the `user provider` and saving them in `givers`
-                        UserProvider userProvider =
-                            Provider.of<UserProvider>(context, listen: false);
-                        List<UsersModel> givers = userProvider.givers;
-
-                        //_viewDonorsPins(givers, context);
-
-                        /// navigating to the `Givers` page with the `givers` and the `city` from the widget input
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Givers(
-                                    giversList: givers, city: widget.city)));
-                      }),
-                ],
+                    /// navigating to the `Seekers` page with the `seekers` and the `city` from the widget input
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Seekers(
+                                seekersList: seekers, city: widget.city)));
+                  }),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
+              HapisElevatedButton(
+                  fontSize: 18,
+                  elevatedButtonContent: 'Donors',
+                  buttonColor: HapisColors.lgColor4,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  imagePath: 'assets/images/giver.png',
+                  imageHeight: MediaQuery.of(context).size.height * 0.15,
+                  imageWidth: MediaQuery.of(context).size.height * 0.15,
+                  isPoly: false,
+                  onpressed: () {
+                    ///retrieving the `list of givers` from the `user provider` and saving them in `givers`
+                    UserProvider userProvider =
+                        Provider.of<UserProvider>(context, listen: false);
+                    List<UsersModel> givers = userProvider.givers;
+
+                    //_viewDonorsPins(givers, context);
+
+                    /// navigating to the `Givers` page with the `givers` and the `city` from the widget input
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                Givers(giversList: givers, city: widget.city)));
+                  }),
+            ],
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTabletLayout() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 60.0, left: 80),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SubText(
+                      subTextContent: 'HAPIS Users in ${widget.city}',
+                      fontSize: 35,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 50.0),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            child: Image.asset(
+                              "assets/images/userspins.png",
+                              height: MediaQuery.of(context).size.height * 0.12,
+                              width: MediaQuery.of(context).size.width * 0.12,
+                            ),
+                            onTap: () async {
+                              UserProvider userProvider =
+                                  Provider.of<UserProvider>(context,
+                                      listen: false);
+                              List<UsersModel> seekers = userProvider.seekers;
+                              List<UsersModel> givers = userProvider.givers;
+                              final sshData = Provider.of<SSHprovider>(context,
+                                  listen: false);
+                              try {
+                                await LgService(sshData).clearKml();
+                              } catch (e) {
+                                // ignore: avoid_print
+                                print(e);
+                              }
+                              _viewPins(givers, seekers, context);
+
+                              //print("before view donors");
+                              //_viewDonorsPins(givers, context);
+                              //await Future.delayed(Duration(seconds: 10));
+                              // print("before view seekers");
+                              //_viewSeekersPins(seekers, context);
+                              // print("after both");
+                            },
+                          ),
+                          Text(' Show Users Pins ',
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.black,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
+                              ))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )),
+          Padding(
+            padding: const EdgeInsets.only(top: 110.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                HapisElevatedButton(
+                    fontSize: 35,
+                    elevatedButtonContent: 'Seekers',
+                    buttonColor: HapisColors.lgColor2,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    imagePath: 'assets/images/seekers.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.25,
+                    imageWidth: MediaQuery.of(context).size.height * 0.25,
+                    isPoly: false,
+                    onpressed: () async {
+                      ///retrieving the `list of seekers` from the `user provider` and saving them in `seekers`
+                      UserProvider userProvider =
+                          Provider.of<UserProvider>(context, listen: false);
+                      List<UsersModel> seekers = userProvider.seekers;
+
+                      // _viewSeekersPins(seekers, context);
+
+                      /// navigating to the `Seekers` page with the `seekers` and the `city` from the widget input
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Seekers(
+                                  seekersList: seekers, city: widget.city)));
+                    }),
+                HapisElevatedButton(
+                    fontSize: 35,
+                    elevatedButtonContent: 'Donors',
+                    buttonColor: HapisColors.lgColor4,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    imagePath: 'assets/images/giver.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.25,
+                    imageWidth: MediaQuery.of(context).size.height * 0.25,
+                    isPoly: false,
+                    onpressed: () {
+                      ///retrieving the `list of givers` from the `user provider` and saving them in `givers`
+                      UserProvider userProvider =
+                          Provider.of<UserProvider>(context, listen: false);
+                      List<UsersModel> givers = userProvider.givers;
+
+                      //_viewDonorsPins(givers, context);
+
+                      /// navigating to the `Givers` page with the `givers` and the `city` from the widget input
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Givers(
+                                  giversList: givers, city: widget.city)));
+                    }),
+              ],
             ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
       ),
     );
   }

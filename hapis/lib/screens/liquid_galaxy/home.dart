@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hapis/models/balloon_models/global_stats_model.dart';
+
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/liquid_galaxy/cities.dart';
-import 'package:hapis/services/liquid_galaxy/tour_services.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
+import '../../models/liquid_galaxy/balloon_models/global_stats_model.dart';
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
+import '../../responsive/responsive_layout.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
 import '../../reusable_widgets/sub_text.dart';
 import '../../services/db_services/global_db_services.dart';
@@ -109,135 +111,290 @@ class _HomePageState extends State<HomePage> {
       appBar: const HAPISAppBar(appBarText: ''),
       drawer: buildDrawer(context),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 50.0, left: 80, right: 80),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SubText(subTextContent: 'Welcome to HAPIS !'),
-                      Column(
-                        children: [
-                          GestureDetector(
-                            child: Image.asset(
-                              'assets/images/orbit.png',
-                              height: MediaQuery.of(context).size.height * 0.15,
-                              width: MediaQuery.of(context).size.width * 0.15,
-                            ),
-                            onTap: () async {
-                              final sshData = Provider.of<SSHprovider>(context,
-                                  listen: false);
+      body: ResponsiveLayout(
+        mobileBody: buildMobileLayout(context),
+        tabletBody: buildTabletLayout(context),
+      ),
+    );
+  }
 
-                              ///checking status of connection first
-                              if (sshData.client != null) {
-                                try {
-                                  ///`stopTour` to stop any tour already going now
-                                  await LgService(sshData).stopTour();
-
-                                  /// `startTour` to start the new tour
-                                  await LgService(sshData).startTour('Orbit');
-                                } catch (e) {
-                                  // ignore: avoid_print
-                                  print(e);
-                                }
-                              } else {
-                                ///show the connection error message
-                                showDialogConnection(context);
-                              }
-                            },
+  Widget buildMobileLayout(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 50.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const SubText(
+                      subTextContent: 'Welcome to HAPIS !',
+                      fontSize: 20,
+                    ),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          child: Image.asset(
+                            'assets/images/orbit.png',
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.15,
                           ),
-                          Text(' Orbit ',
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                                fontFamily: GoogleFonts.montserrat().fontFamily,
-                              ))
-                        ],
-                      ),
-                    ],
-                  ),
-                )),
-            Padding(
-              padding: const EdgeInsets.only(top: 80.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  HapisElevatedButton(
-                      elevatedButtonContent: 'Global Statistics',
-                      buttonColor: HapisColors.lgColor1,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      imagePath: 'assets/images/growth.png',
-                      imageHeight: MediaQuery.of(context).size.height * 0.25,
-                      imageWidth: MediaQuery.of(context).size.height * 0.25,
-                      isPoly: false,
-                      onpressed: () async {
-                        /// retrieving all globe data from the database
-                        int numberOfSeekers =
-                            await globalDBServices().getNumberOfSeekers();
-                        int numberOfGivers =
-                            await globalDBServices().getNumberOfGivers();
+                          onTap: () async {
+                            final sshData = Provider.of<SSHprovider>(context,
+                                listen: false);
 
-                        int inProgressDonations = await globalDBServices()
-                            .getNumberOfInProgressDonations();
-                        int successfulDonations = await globalDBServices()
-                            .getNumberOfSuccessfulDonations();
-                        List<String> topThreeCategories =
-                            await globalDBServices().getTopDonatedCategories();
-                        List<String> topThreeCities =
-                            await globalDBServices().getTopCities();
+                            ///checking status of connection first
+                            if (sshData.client != null) {
+                              try {
+                                ///`stopTour` to stop any tour already going now
+                                await LgService(sshData).stopTour();
 
-                        ///defining a new globe instance for `GlobeModel`` with all the retrieved data from the database
-                        GlobeModel globe = GlobeModel(
-                            id: 'Globe',
-                            numberOfSeekers: numberOfSeekers,
-                            numberOfGivers: numberOfGivers,
-                            inProgressDonations: inProgressDonations,
-                            successfulDonations: successfulDonations,
-                            topThreeCategories: topThreeCategories,
-                            topThreeCities: topThreeCities);
+                                /// `startTour` to start the new tour
+                                await LgService(sshData).startTour('Orbit');
+                              } catch (e) {
+                                // ignore: avoid_print
+                                print(e);
+                              }
+                            } else {
+                              ///show the connection error message
+                              showDialogConnection(context);
+                            }
+                          },
+                        ),
+                        Text(' Orbit ',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
+                            ))
+                      ],
+                    ),
+                  ],
+                ),
+              )),
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0),
+            // padding: EdgeInsets.only(top: screenSize.height * 0.08),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                HapisElevatedButton(
+                    elevatedButtonContent: 'Global Statistics',
+                    buttonColor: HapisColors.lgColor1,
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    imagePath: 'assets/images/growth.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.15,
+                    imageWidth: MediaQuery.of(context).size.height * 0.15,
+                    fontSize: 20,
+                    isPoly: false,
+                    onpressed: () async {
+                      /// retrieving all globe data from the database
+                      int numberOfSeekers =
+                          await globalDBServices().getNumberOfSeekers();
+                      int numberOfGivers =
+                          await globalDBServices().getNumberOfGivers();
 
-                        final sshData =
-                            // ignore: use_build_context_synchronously
-                            Provider.of<SSHprovider>(context, listen: false);
+                      int inProgressDonations = await globalDBServices()
+                          .getNumberOfInProgressDonations();
+                      int successfulDonations = await globalDBServices()
+                          .getNumberOfSuccessfulDonations();
+                      List<String> topThreeCategories =
+                          await globalDBServices().getTopDonatedCategories();
+                      List<String> topThreeCities =
+                          await globalDBServices().getTopCities();
 
-                        if (sshData.client != null) {
+                      ///defining a new globe instance for `GlobeModel`` with all the retrieved data from the database
+                      GlobeModel globe = GlobeModel(
+                          id: 'Globe',
+                          numberOfSeekers: numberOfSeekers,
+                          numberOfGivers: numberOfGivers,
+                          inProgressDonations: inProgressDonations,
+                          successfulDonations: successfulDonations,
+                          topThreeCategories: topThreeCategories,
+                          topThreeCities: topThreeCities);
+
+                      final sshData =
                           // ignore: use_build_context_synchronously
-                            _viewGlobeStats(globe, true, context);
-                          
-                          //TourService.viewGlobe(globe, true, context);
+                          Provider.of<SSHprovider>(context, listen: false);
 
-                        } else {
+                      if (sshData.client != null) {
+                        // ignore: use_build_context_synchronously
+                        _viewGlobeStats(globe, true, context);
+
+                        //TourService.viewGlobe(globe, true, context);
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showDialogConnection(context);
+                      }
+                    }),
+                const SizedBox(
+                  height: 80,
+                ),
+                HapisElevatedButton(
+                    elevatedButtonContent: 'Cities',
+                    buttonColor: HapisColors.lgColor3,
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    imagePath: 'assets/images/architecture-and-city.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.15,
+                    imageWidth: MediaQuery.of(context).size.height * 0.15,
+                    fontSize: 20,
+                    isPoly: false,
+                    onpressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CitiesPage()));
+                    }),
+                const SizedBox(
+                  height: 40,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTabletLayout(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 50.0, left: 80, right: 80),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SubText(
+                      subTextContent: 'Welcome to HAPIS !',
+                      fontSize: 35,
+                    ),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          child: Image.asset(
+                            'assets/images/orbit.png',
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.15,
+                          ),
+                          onTap: () async {
+                            final sshData = Provider.of<SSHprovider>(context,
+                                listen: false);
+
+                            ///checking status of connection first
+                            if (sshData.client != null) {
+                              try {
+                                ///`stopTour` to stop any tour already going now
+                                await LgService(sshData).stopTour();
+
+                                /// `startTour` to start the new tour
+                                await LgService(sshData).startTour('Orbit');
+                              } catch (e) {
+                                // ignore: avoid_print
+                                print(e);
+                              }
+                            } else {
+                              ///show the connection error message
+                              showDialogConnection(context);
+                            }
+                          },
+                        ),
+                        Text(' Orbit ',
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.black,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
+                            ))
+                      ],
+                    ),
+                  ],
+                ),
+              )),
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0),
+            // padding: EdgeInsets.only(top: screenSize.height * 0.08),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                HapisElevatedButton(
+                    elevatedButtonContent: 'Global Statistics',
+                    buttonColor: HapisColors.lgColor1,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    imagePath: 'assets/images/growth.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.25,
+                    imageWidth: MediaQuery.of(context).size.height * 0.25,
+                    fontSize: 35,
+                    isPoly: false,
+                    onpressed: () async {
+                      /// retrieving all globe data from the database
+                      int numberOfSeekers =
+                          await globalDBServices().getNumberOfSeekers();
+                      int numberOfGivers =
+                          await globalDBServices().getNumberOfGivers();
+
+                      int inProgressDonations = await globalDBServices()
+                          .getNumberOfInProgressDonations();
+                      int successfulDonations = await globalDBServices()
+                          .getNumberOfSuccessfulDonations();
+                      List<String> topThreeCategories =
+                          await globalDBServices().getTopDonatedCategories();
+                      List<String> topThreeCities =
+                          await globalDBServices().getTopCities();
+
+                      ///defining a new globe instance for `GlobeModel`` with all the retrieved data from the database
+                      GlobeModel globe = GlobeModel(
+                          id: 'Globe',
+                          numberOfSeekers: numberOfSeekers,
+                          numberOfGivers: numberOfGivers,
+                          inProgressDonations: inProgressDonations,
+                          successfulDonations: successfulDonations,
+                          topThreeCategories: topThreeCategories,
+                          topThreeCities: topThreeCities);
+
+                      final sshData =
                           // ignore: use_build_context_synchronously
-                          showDialogConnection(context);
-                        }
-                      }),
-                  HapisElevatedButton(
-                      elevatedButtonContent: 'Cities',
-                      buttonColor: HapisColors.lgColor3,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      imagePath: 'assets/images/architecture-and-city.png',
-                      imageHeight: MediaQuery.of(context).size.height * 0.25,
-                      imageWidth: MediaQuery.of(context).size.height * 0.25,
-                      isPoly: false,
-                      onpressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CitiesPage()));
-                      }),
-                ],
-              ),
+                          Provider.of<SSHprovider>(context, listen: false);
+
+                      if (sshData.client != null) {
+                        // ignore: use_build_context_synchronously
+                        _viewGlobeStats(globe, true, context);
+
+                        //TourService.viewGlobe(globe, true, context);
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        showDialogConnection(context);
+                      }
+                    }),
+                HapisElevatedButton(
+                    elevatedButtonContent: 'Cities',
+                    buttonColor: HapisColors.lgColor3,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    imagePath: 'assets/images/architecture-and-city.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.25,
+                    imageWidth: MediaQuery.of(context).size.height * 0.25,
+                    fontSize: 35,
+                    isPoly: false,
+                    onpressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CitiesPage()));
+                    }),
+              ],
             ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
       ),
     );
   }

@@ -34,6 +34,7 @@ class TextFormFieldWidget extends StatelessWidget {
     bool? isHidden,
     this.onChanged,
     this.onEditingComplete,
+    required this.fontSize,
   })  : _textController = textController,
         _label = label,
         _hint = hint,
@@ -60,8 +61,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final Icon? _PrefixIcon;
   final bool? _enabled;
   final bool? _isHidden;
-
-  
+  final double fontSize;
 
   @override
   Key? get key => super.key;
@@ -80,14 +80,13 @@ class TextFormFieldWidget extends StatelessWidget {
         autofocus: true,
         enabled: _enabled,
         controller: _textController,
-
-        maxLength: _maxLength, 
+        maxLength: _maxLength,
         initialValue: _initialValue,
         obscureText: _isHidden!,
         decoration: InputDecoration(
           labelText: _label,
           labelStyle: TextStyle(
-            fontSize: 30,
+            fontSize: fontSize,
             fontFamily: GoogleFonts.montserrat().fontFamily,
             fontWeight: FontWeight.bold,
             color: HapisColors.lgColor1,
@@ -107,12 +106,10 @@ class TextFormFieldWidget extends StatelessWidget {
               width: 2.0,
             ),
           ),
-
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 40, horizontal: 80),
+          // contentPadding:
+          //     const EdgeInsets.symmetric(vertical: 40, horizontal: 80),
           filled: true,
           fillColor: Color.fromARGB(156, 240, 240, 240),
-
           suffixIcon: _isSuffixRequired!
               ? const Text(
                   '*',
@@ -125,7 +122,7 @@ class TextFormFieldWidget extends StatelessWidget {
         style: TextStyle(
           color: Colors.black,
           fontFamily: GoogleFonts.montserrat().fontFamily,
-          fontSize: 30,
+          fontSize: fontSize,
         ),
         onEditingComplete: onEditingComplete,
         validator: (value) {

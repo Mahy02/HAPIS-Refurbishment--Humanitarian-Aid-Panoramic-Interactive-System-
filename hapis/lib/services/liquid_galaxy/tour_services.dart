@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/balloon_models/global_stats_model.dart';
+
 import '../../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../../providers/liquid_galaxy/ssh_provider.dart';
-import '../../models/balloon_models/city_ballon_model.dart';
+
 import '../../models/db_models/users_model.dart';
+import '../../models/liquid_galaxy/balloon_models/city_ballon_model.dart';
+import '../../models/liquid_galaxy/balloon_models/global_stats_model.dart';
 import 'LG_placemarks_services/city_balloon_service.dart';
 import 'LG_placemarks_services/global_balloon_service.dart';
 import 'LG_functionalities.dart';

@@ -16,11 +16,15 @@ class UserElevatedButton extends StatefulWidget {
   final String elevatedButtonContent;
   final String type;
   final UsersModel user;
+  final double height;
+  final double width;
 
   const UserElevatedButton({
     required this.elevatedButtonContent,
     required this.type,
     required this.user,
+    required this.height,
+    required this.width,
     super.key,
   });
 
@@ -115,8 +119,12 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
   Widget build(BuildContext context) {
     return FittedBox(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.2,
-        width: MediaQuery.of(context).size.width * 0.15,
+        // height: MediaQuery.of(context).size.height * 0.2,
+        // width: MediaQuery.of(context).size.width * 0.15,
+        // height: MediaQuery.of(context).size.height * 0.2,
+        // width: MediaQuery.of(context).size.width * 0.4,
+        height: widget.height,
+        width: widget.width,
         child: ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(

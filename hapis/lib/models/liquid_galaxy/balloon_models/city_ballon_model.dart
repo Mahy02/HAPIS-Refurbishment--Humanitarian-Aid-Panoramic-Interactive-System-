@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart';
 
-import '../../constants.dart';
-import '../../utils/extract_geocoordinates.dart';
+import '../../../constants.dart';
+import '../../../utils/extract_geocoordinates.dart';
+
 
 /// Entity that represents the `City`, with all of its properties and methods.
 class CityModel {

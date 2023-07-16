@@ -16,6 +16,8 @@ class HapisElevatedButton extends StatelessWidget {
   final Function onpressed;
   final double height;
   final bool isPoly;
+  final double fontSize;
+  final double width;
   double? imageHeight;
   double? imageWidth;
   String? imagePath;
@@ -24,6 +26,8 @@ class HapisElevatedButton extends StatelessWidget {
     required this.buttonColor,
     required this.onpressed,
     required this.height,
+    required this.width,
+    required this.fontSize,
     this.imagePath,
     this.imageHeight,
     this.imageWidth,
@@ -35,7 +39,7 @@ class HapisElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: width,
       child: ElevatedButton(
         onPressed: () {
           onpressed();
@@ -54,8 +58,9 @@ class HapisElevatedButton extends StatelessWidget {
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: HapisColors.primary,
-                              width: 3.0,
+                              //color: HapisColors.primary,
+                              color: buttonColor,
+                              width: 0.0,
                             ),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
@@ -76,7 +81,8 @@ class HapisElevatedButton extends StatelessWidget {
                       elevatedButtonContent,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 35,
+                        //fontSize: 35,
+                        fontSize: fontSize,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                         fontWeight: FontWeight.bold,
                       ),
@@ -84,12 +90,17 @@ class HapisElevatedButton extends StatelessWidget {
                   ),
                 ],
               )
-            : Text(
-                elevatedButtonContent,
-                style: TextStyle(
-                  fontSize: 35,
-                  fontFamily: GoogleFonts.montserrat().fontFamily,
-                  fontWeight: FontWeight.bold,
+            : Align(
+                alignment: Alignment.center,
+                child: Text(
+                  elevatedButtonContent,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    // fontSize: 35,
+                    fontSize: fontSize,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
       ),

@@ -1,7 +1,8 @@
-import 'package:hapis/models/db_models/users_model.dart';
+
 import 'package:hapis/models/liquid_galaxy/kml/look_at_model.dart';
 
-import '../../../models/balloon_models/city_ballon_model.dart';
+
+import '../../../models/liquid_galaxy/balloon_models/city_ballon_model.dart';
 import '../../../models/liquid_galaxy/kml/line_model.dart';
 import '../../../models/liquid_galaxy/kml/orbit_model.dart';
 import '../../../models/liquid_galaxy/kml/placemark_model.dart';
