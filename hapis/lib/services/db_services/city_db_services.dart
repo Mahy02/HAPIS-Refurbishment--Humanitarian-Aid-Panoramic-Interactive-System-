@@ -4,7 +4,7 @@ import 'package:hapis/utils/extract_geocoordinates.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/sql_db.dart';
-import '../../providers/users_provider.dart';
+import '../../providers/liquid_galaxy/users_provider.dart';
 
 class cityDBServices {
   /// retrieving the [db] database instance

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
+import 'package:hapis/screens/app_home.dart';
 import '../constants.dart';
 import 'liquid_galaxy/home.dart';
 
@@ -22,8 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 5));
     // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => const HomePage()));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => const AppHomePage()));
   }
 
   @override

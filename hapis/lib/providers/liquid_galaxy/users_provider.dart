@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/users_model.dart';
 import 'package:provider/provider.dart';
-import '../utils/extract_geocoordinates.dart';
+import '../../utils/extract_geocoordinates.dart';
 
 ///This is a [Provider] class of [UserProvider] that extends [ChangeNotifier]
 

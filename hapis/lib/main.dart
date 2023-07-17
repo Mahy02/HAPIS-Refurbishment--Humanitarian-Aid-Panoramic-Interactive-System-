@@ -7,7 +7,8 @@ import 'package:hapis/providers/icon_state_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
 
-import 'package:hapis/providers/users_provider.dart';
+import 'package:hapis/providers/liquid_galaxy/users_provider.dart';
+import 'package:hapis/providers/user_provider.dart';
 import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/liquid_galaxy/configuration_screen.dart';
 import 'package:hapis/screens/liquid_galaxy/settings_screen.dart';
@@ -47,7 +48,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => Connectionprovider()),
         ChangeNotifierProvider(create: (_) => IconState()),
         ChangeNotifierProvider(create: (_) => SSHprovider()),
-        ChangeNotifierProvider(create: (_) => UserProvider())
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => UserAppProvider()),
       ],
       child: const HAPIS(),
     ),
@@ -123,8 +125,9 @@ class HAPIS extends StatelessWidget {
       routes: {
         '/settings': (context) => const Settings(),
         '/connections': (context) => const Configuration(),
-        '/about': (context) => const About(),
+       
       },
+      // '/about': (context) => const About(),
     );
   }
 }

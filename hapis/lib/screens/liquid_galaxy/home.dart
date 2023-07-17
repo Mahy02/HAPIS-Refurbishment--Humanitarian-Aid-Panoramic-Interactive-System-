@@ -23,14 +23,14 @@ import '../../utils/pop_up_connection.dart';
 
 ///This is our Home page. It has 2 main buttons=> Global statistics and Cities from the custom [HapisElevatedButton]
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class LgHomePage extends StatefulWidget {
+  const LgHomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<LgHomePage> createState() => _LgHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _LgHomePageState extends State<LgHomePage> {
   ///  `_globePlacemark` to define the city placemark for orbiting, balloons
   PlacemarkModel? _globePlacemark;
 
@@ -108,8 +108,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HAPISAppBar(appBarText: ''),
-      drawer: buildDrawer(context),
+      appBar: const HAPISAppBar(appBarText: '', isLg: true,),
+      drawer: buildDrawer(context, true),
       backgroundColor: Colors.white,
       body: ResponsiveLayout(
         mobileBody: buildMobileLayout(context),

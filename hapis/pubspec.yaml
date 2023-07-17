@@ -110,11 +110,13 @@ flutter:
       - assets/images/donorpin.png
       - assets/images/seekerpin.png
       - assets/images/userspins.png
+      - assets/images/lg.png
       #- assets/images/Logos_2.png
       - assets/Forms.csv
       - assets/Matchings.csv
       - assets/Requests.csv
       - assets/Users.csv
+
       
 
 

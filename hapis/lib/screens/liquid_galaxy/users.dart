@@ -10,7 +10,7 @@ import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
-import '../../providers/users_provider.dart';
+import '../../providers/liquid_galaxy/users_provider.dart';
 import '../../reusable_widgets/app_bar.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
 import '../../reusable_widgets/sub_text.dart';
@@ -174,8 +174,8 @@ class _UsersState extends State<Users> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const HAPISAppBar(appBarText: ''),
-        drawer: buildDrawer(context),
+        appBar: const HAPISAppBar(appBarText: '', isLg: true,),
+        drawer: buildDrawer(context, true),
         backgroundColor: Colors.white,
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));

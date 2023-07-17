@@ -38,8 +38,9 @@ class _ConfigurationState extends State<Configuration> {
     return Scaffold(
         appBar: const HAPISAppBar(
           appBarText: '',
+          isLg: true,
         ),
-        drawer: Drawer(child: buildDrawer(context)),
+        drawer: Drawer(child: buildDrawer(context, true)),
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(context),
             tabletBody: buildTabletLayout(context)));

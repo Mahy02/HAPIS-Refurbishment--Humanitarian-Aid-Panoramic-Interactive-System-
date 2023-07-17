@@ -48,8 +48,8 @@ class _SeekersState extends State<Seekers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const HAPISAppBar(appBarText: ''),
-        drawer: buildDrawer(context),
+        appBar: const HAPISAppBar(appBarText: '', isLg: true,),
+        drawer: buildDrawer(context, true),
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));
   }

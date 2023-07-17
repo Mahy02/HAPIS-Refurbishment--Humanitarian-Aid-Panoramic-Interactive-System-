@@ -23,10 +23,11 @@ class Settings extends StatelessWidget {
     return Scaffold(
         appBar: const HAPISAppBar(
           appBarText: 'Settings',
+          isLg: true,
         ),
         drawer: Drawer(
             // Drawer content goes here
-            child: buildDrawer(context)),
+            child: buildDrawer(context, true)),
         body: ResponsiveLayout(
           mobileBody: buildMobileLayout(context),
           tabletBody: buildTabletLayout(context),

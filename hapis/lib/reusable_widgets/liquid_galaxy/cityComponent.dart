@@ -8,7 +8,7 @@ import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
-import '../../providers/users_provider.dart';
+import '../../providers/liquid_galaxy/users_provider.dart';
 import '../../screens/liquid_galaxy/users.dart';
 import '../../services/db_services/city_db_services.dart';
 import '../../services/liquid_galaxy/LG_placemarks_services/city_balloon_service.dart';
