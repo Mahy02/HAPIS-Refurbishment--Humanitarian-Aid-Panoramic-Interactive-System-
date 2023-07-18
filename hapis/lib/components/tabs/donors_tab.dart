@@ -68,7 +68,20 @@ class _DonorsTabState extends State<DonorsTab> {
 
                   return Column(
                     children: [
-                      UserAppComponent(user: user),
+                      UserAppComponent(
+                        user: user,
+                        expansionTitleFontSize: 22,
+                        imageHeight: MediaQuery.of(context).size.height * 0.03,
+                        imageWidth: MediaQuery.of(context).size.width * 0.07,
+                        userImageHeight:
+                            MediaQuery.of(context).size.height * 0.1,
+                        userImageWidth: MediaQuery.of(context).size.width * 0.1,
+                        headerFontSize: 18,
+                        textFontSize: 16,
+                        containerHeight:
+                            MediaQuery.of(context).size.height * 0.8,
+                        containerWidth: MediaQuery.of(context).size.width * 0.9,
+                      ),
                       Divider(
                         height: 3,
                         thickness: 0.5,
@@ -93,7 +106,10 @@ class _DonorsTabState extends State<DonorsTab> {
             displayText: 'You don\'t have any donors', icon: Icons.person)
         : Scaffold(
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
+              child: Icon(
+                Icons.add,
+                size: 40,
+              ),
               backgroundColor: HapisColors.primary,
               onPressed: () {},
             ),
@@ -106,7 +122,26 @@ class _DonorsTabState extends State<DonorsTab> {
 
                   return Column(
                     children: [
-                      UserAppComponent(user: user),
+                      UserAppComponent(
+                        user: user,
+                        expansionTitleFontSize: 28,
+                        imageHeight: MediaQuery.of(context).size.height * 0.04,
+                        imageWidth: MediaQuery.of(context).size.width * 0.03,
+                        userImageHeight:
+                            MediaQuery.of(context).size.height * 0.15,
+                        userImageWidth:
+                            MediaQuery.of(context).size.width * 0.15,
+                        headerFontSize: 30,
+                        textFontSize: 28,
+                        containerHeight:
+                            MediaQuery.of(context).size.height * 1.5,
+                        containerWidth: MediaQuery.of(context).size.width * 0.8,
+                      ),
+                      Divider(
+                        height: 3,
+                        thickness: 0.5,
+                        color: HapisColors.lgColor3,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.05,
                       )
@@ -118,3 +153,11 @@ class _DonorsTabState extends State<DonorsTab> {
           );
   }
 }
+
+// width: MediaQuery.of(context).size.width * 0.07,
+            //height: MediaQuery.of(context).size.height * 0.03,
+
+            //fontsize 22
+            // 18
+            //16
+            //

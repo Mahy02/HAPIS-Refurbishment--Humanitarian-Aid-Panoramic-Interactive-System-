@@ -68,7 +68,20 @@ class _SeekersTabState extends State<SeekersTab> {
 
                   return Column(
                     children: [
-                      UserAppComponent(user: user),
+                      UserAppComponent(
+                        user: user,
+                        expansionTitleFontSize: 22,
+                        imageHeight: MediaQuery.of(context).size.height * 0.03,
+                        imageWidth: MediaQuery.of(context).size.width * 0.07,
+                        userImageHeight:
+                            MediaQuery.of(context).size.height * 0.1,
+                        userImageWidth: MediaQuery.of(context).size.width * 0.1,
+                        headerFontSize: 18,
+                        textFontSize: 16,
+                        containerHeight:
+                            MediaQuery.of(context).size.height * 0.8,
+                        containerWidth: MediaQuery.of(context).size.width * 0.9,
+                      ),
                       Divider(
                         height: 3,
                         thickness: 0.5,
@@ -104,7 +117,33 @@ class _SeekersTabState extends State<SeekersTab> {
                 itemBuilder: (context, index) {
                   final UserModel user = usersList[index];
 
-                  return UserAppComponent(user: user);
+                  return Column(
+                    children: [
+                      UserAppComponent(
+                        user: user,
+                        expansionTitleFontSize: 28,
+                        imageHeight: MediaQuery.of(context).size.height * 0.04,
+                        imageWidth: MediaQuery.of(context).size.width * 0.03,
+                        userImageHeight:
+                            MediaQuery.of(context).size.height * 0.15,
+                        userImageWidth:
+                            MediaQuery.of(context).size.width * 0.15,
+                        headerFontSize: 30,
+                        textFontSize: 28,
+                        containerHeight:
+                            MediaQuery.of(context).size.height * 1.5,
+                        containerWidth: MediaQuery.of(context).size.width * 0.8,
+                      ),
+                      Divider(
+                        height: 3,
+                        thickness: 0.5,
+                        color: HapisColors.lgColor3,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                      )
+                    ],
+                  );
                 },
               ),
             ),

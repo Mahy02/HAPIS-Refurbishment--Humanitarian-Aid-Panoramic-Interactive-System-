@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import 'package:provider/provider.dart';
 
@@ -24,30 +25,25 @@ class _UsersPageState extends State<UsersPage> {
     return DefaultTabController(
       length: 2,
       child: Column(
-        children: const [
+        children: [
           TabBar(indicatorColor: HapisColors.lgColor3, tabs: [
             Tab(
-              child: Text(
-                'Donors',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color.fromARGB(236, 77, 77, 77),
-
-                  /// set the text color here
-                ),
-              ),
-            ),
+                child: ResponsiveLayout(
+                    mobileBody: buildMobileLayout('Donors'),
+                    tabletBody: buildTabletLayout('Donors'))),
             Tab(
-              child: Text(
-                'Seekers',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color.fromARGB(236, 77, 77, 77),
-
-                  /// set the text color here
-                ),
-              ),
+              child: ResponsiveLayout(
+                  mobileBody: buildMobileLayout('Seekers'),
+                  tabletBody: buildTabletLayout('Seekers')),
             ),
+            // child: Text(
+            //   'Seekers',
+            //   style: TextStyle(
+            //     fontSize: 20,
+            //     color: Color.fromARGB(236, 77, 77, 77),
+
+            //     /// set the text color here
+            //   ),
           ]),
 
           ///we need a tab bar view for the content of our 3 tabs:
@@ -61,6 +57,30 @@ class _UsersPageState extends State<UsersPage> {
             ]),
           )
         ],
+      ),
+    );
+  }
+
+  Widget buildMobileLayout(String type) {
+    return Text(
+      type,
+      style: TextStyle(
+        fontSize: 20,
+        color: Color.fromARGB(236, 77, 77, 77),
+
+        /// set the text color here
+      ),
+    );
+  }
+
+  Widget buildTabletLayout(String type) {
+    return Text(
+      type,
+      style: TextStyle(
+        fontSize: 40,
+        color: Color.fromARGB(236, 77, 77, 77),
+
+        /// set the text color here
       ),
     );
   }

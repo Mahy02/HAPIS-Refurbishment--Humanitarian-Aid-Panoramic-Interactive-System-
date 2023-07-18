@@ -7,8 +7,17 @@ import 'package:hapis/models/db_models/user_model.dart';
 
 class UserAppComponent extends StatelessWidget {
   final UserModel user;
+  final double imageHeight;
+  final double imageWidth;
+  final double expansionTitleFontSize;
+  final double containerHeight;
+  final double containerWidth;
+  final double userImageHeight;
+  final double userImageWidth;
+  final double headerFontSize;
+  final double textFontSize;
 
-  const UserAppComponent({Key? key, required this.user}) : super(key: key);
+  const UserAppComponent({Key? key, required this.user, required this.imageHeight, required this.imageWidth, required this.expansionTitleFontSize, required this.containerHeight, required this.containerWidth, required this.userImageHeight, required this.userImageWidth, required this.headerFontSize, required this.textFontSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +37,10 @@ class UserAppComponent extends StatelessWidget {
           child: Ink.image(
             image: AssetImage('$imagePath'),
             fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width * 0.07,
-            height: MediaQuery.of(context).size.height * 0.03,
+            // width: MediaQuery.of(context).size.width * 0.07,
+            // height: MediaQuery.of(context).size.height * 0.03,
+            width: imageWidth,
+            height: imageHeight,
             child: InkWell(
               onTap: () {
                 // add your onTap logic here
@@ -46,8 +57,9 @@ class UserAppComponent extends StatelessWidget {
         //Icon(Icons.person),
         title: Text(
           '${user.firstName} ${user.lastName}',
-          style: const TextStyle(
-            fontSize: 22,
+          style:  TextStyle(
+           // fontSize: 22,
+           fontSize: expansionTitleFontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -56,8 +68,10 @@ class UserAppComponent extends StatelessWidget {
         collapsedIconColor: HapisColors.lgColor3,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            width: MediaQuery.of(context).size.width * 0.9,
+            // height: MediaQuery.of(context).size.height * 0.8,
+            // width: MediaQuery.of(context).size.width * 0.9,
+            height: containerHeight,
+            width: containerWidth,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               border: Border.all(color: HapisColors.lgColor3),
@@ -72,13 +86,16 @@ class UserAppComponent extends StatelessWidget {
                   children: [
                     Image.asset(
                       'assets/images/donorpin.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.1,
+                      // height: MediaQuery.of(context).size.height * 0.1,
+                      // width: MediaQuery.of(context).size.width * 0.1,
+                      height: userImageHeight,
+                      width: userImageWidth,
                     ),
                     Text(
                       ' ${user.firstName} ${user.lastName}',
-                      style: const TextStyle(
-                        fontSize: 24,
+                      style:  TextStyle(
+                       // fontSize: 24,
+                       fontSize: expansionTitleFontSize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -90,10 +107,11 @@ class UserAppComponent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                     Text(
                       'CONTACT INFO',
                       style: TextStyle(
-                        fontSize: 18,
+                       // fontSize: 18,
+                       fontSize: headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
@@ -101,7 +119,8 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       user.email ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                        //fontSize: 16,
+                        fontSize: textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
@@ -110,7 +129,8 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       user.phoneNum ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                        //fontSize: 16,
+                        fontSize: textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
@@ -124,10 +144,11 @@ class UserAppComponent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text(
+                     Text(
                       'ADDRESS LOCATION',
                       style: TextStyle(
-                        fontSize: 18,
+                        //fontSize: 18,
+                        fontSize: headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
@@ -135,7 +156,8 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       user.addressLocation ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                        //fontSize: 16,
+                        fontSize: textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
@@ -149,10 +171,11 @@ class UserAppComponent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                     Text(
                       'COUNTRY',
                       style: TextStyle(
-                        fontSize: 18,
+                        //fontSize: 18,
+                        fontSize: headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
@@ -160,7 +183,8 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       user.country ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                        //fontSize: 16,
+                        fontSize: textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
@@ -174,10 +198,11 @@ class UserAppComponent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                     Text(
                       'CITY',
                       style: TextStyle(
-                        fontSize: 18,
+                        //fontSize: 18,
+                        fontSize: headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
@@ -185,7 +210,8 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       user.city ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                       // fontSize: 16,
+                       fontSize: textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
@@ -200,17 +226,19 @@ class UserAppComponent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     user.type == 'seeker'
-                        ? const Text(
+                        ?  Text(
                             'SEEKING',
                             style: TextStyle(
-                              fontSize: 18,
+                              //fontSize: 18,
+                              fontSize: headerFontSize,
                               color: Colors.grey,
                             ),
                           )
-                        : const Text(
+                        :  Text(
                             'DONATING',
                             style: TextStyle(
-                              fontSize: 18,
+                              //fontSize: 18,
+                              fontSize: headerFontSize,
                               color: Colors.grey,
                             ),
                           ),
@@ -218,7 +246,8 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       user.item ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                        //fontSize: 16,
+                        fontSize: textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
@@ -238,10 +267,11 @@ class UserAppComponent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                         Text(
                           'CATEGORY',
                           style: TextStyle(
-                            fontSize: 18,
+                            //fontSize: 18,
+                            fontSize: headerFontSize,
                             color: Colors.grey,
                           ),
                         ),
@@ -249,7 +279,8 @@ class UserAppComponent extends StatelessWidget {
                         Text(
                           user.category ?? '',
                           style: TextStyle(
-                            fontSize: 16,
+                           // fontSize: 16,
+                           fontSize: textFontSize,
                             color: Colors.black,
                             fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
@@ -261,10 +292,11 @@ class UserAppComponent extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                               Text(
                                 'FOR',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                 // fontSize: 18,
+                                 fontSize: headerFontSize,
                                   color: Colors.grey,
                                 ),
                               ),
@@ -272,7 +304,8 @@ class UserAppComponent extends StatelessWidget {
                               Text(
                                 user.forWho ?? '',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                //  fontSize: 16,
+                                fontSize: textFontSize,
                                   color: Colors.black,
                                   fontFamily:
                                       GoogleFonts.montserrat().fontFamily,
@@ -293,10 +326,11 @@ class UserAppComponent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                     Text(
                       'AVAILABLE DATES',
                       style: TextStyle(
-                        fontSize: 18,
+                        //fontSize: 18,
+                        fontSize: headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
@@ -304,7 +338,8 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       user.multiDates ?? '',
                       style: TextStyle(
-                        fontSize: 16,
+                       // fontSize: 16,
+                       fontSize: textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/users.dart';
 import 'package:hapis/utils/drawer.dart';
@@ -34,36 +35,77 @@ class _AppHomePageState extends State<AppHomePage> {
         ),
         drawer: buildDrawer(context, false),
         body: screens[currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-            //selectedFontSize
-            //unselectedFontSize
-            //iconSize
-            //selectedItemColor:,
-            //unselectedItemColor
+        bottomNavigationBar: ResponsiveLayout(
+            mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));
+  }
 
-            currentIndex: currentIndex,
-            onTap: (index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
-                  backgroundColor: HapisColors.lgColor1),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person_add_alt_1_rounded),
-                  label: 'Requests',
-                  backgroundColor: HapisColors.lgColor2),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.compare_arrows),
-                  label: 'Matchings',
-                  backgroundColor: HapisColors.lgColor3),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite),
-                  label: 'Donations',
-                  backgroundColor: HapisColors.lgColor4),
-            ]));
+  Widget buildMobileLayout() {
+    return BottomNavigationBar(
+        //selectedFontSize
+        //unselectedFontSize
+        //iconSize
+        //selectedItemColor:,
+        //unselectedItemColor
+
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: HapisColors.lgColor1),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_add_alt_1_rounded),
+              label: 'Requests',
+              backgroundColor: HapisColors.lgColor2),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.compare_arrows),
+              label: 'Matchings',
+              backgroundColor: HapisColors.lgColor3),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite),
+              label: 'Donations',
+              backgroundColor: HapisColors.lgColor4),
+        ]);
+  }
+
+  Widget buildTabletLayout() {
+    return BottomNavigationBar(
+        //selectedFontSize
+        //unselectedFontSize
+        //iconSize
+        //selectedItemColor:,
+        //unselectedItemColor
+        selectedFontSize: 25,
+        unselectedFontSize: 24,
+        iconSize: 40,
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: HapisColors.lgColor1),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_add_alt_1_rounded),
+              label: 'Requests',
+              backgroundColor: HapisColors.lgColor2),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.compare_arrows),
+              label: 'Matchings',
+              backgroundColor: HapisColors.lgColor3),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite),
+              label: 'Donations',
+              backgroundColor: HapisColors.lgColor4),
+        ]);
   }
 }
