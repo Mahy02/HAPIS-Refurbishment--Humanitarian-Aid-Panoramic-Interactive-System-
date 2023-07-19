@@ -15,7 +15,14 @@ class AppHomePage extends StatefulWidget {
 class _AppHomePageState extends State<AppHomePage> {
   int currentIndex = 0;
   final screens = const [
-    UsersPage(),
+    //UsersPage(),
+    ResponsiveLayout(
+        mobileBody: UsersPage(
+          fontSize: 20,
+        ),
+        tabletBody: UsersPage(
+          fontSize: 30,
+        )),
     Center(
       child: Text('bla'),
     ),

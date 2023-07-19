@@ -10,7 +10,8 @@ import '../models/db_models/user_model.dart';
 import '../providers/user_provider.dart';
 
 class UsersPage extends StatefulWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  final double fontSize;
+  const UsersPage({Key? key, required this.fontSize}) : super(key: key);
 
   @override
   State<UsersPage> createState() => _UsersPageState();
@@ -28,26 +29,32 @@ class _UsersPageState extends State<UsersPage> {
         children: [
           TabBar(indicatorColor: HapisColors.lgColor3, tabs: [
             Tab(
-                child: ResponsiveLayout(
-                    mobileBody: buildMobileLayout('Donors'),
-                    tabletBody: buildTabletLayout('Donors'))),
-            Tab(
-              child: ResponsiveLayout(
-                  mobileBody: buildMobileLayout('Seekers'),
-                  tabletBody: buildTabletLayout('Seekers')),
-            ),
-            // child: Text(
-            //   'Seekers',
-            //   style: TextStyle(
-            //     fontSize: 20,
-            //     color: Color.fromARGB(236, 77, 77, 77),
+              child: Text(
+                'Donors',
+                style: TextStyle(
+                  fontSize: widget.fontSize,
+                  color: Color.fromARGB(236, 77, 77, 77),
 
-            //     /// set the text color here
-            //   ),
+                ),
+              ),
+            ),
+            Tab(
+              child: Text(
+                'Seekers',
+                style: TextStyle(
+                  fontSize: widget.fontSize,
+                  color: Color.fromARGB(236, 77, 77, 77),
+
+                  /// set the text color here
+                ),
+              ),
+            
+            ),
+           
           ]),
 
           ///we need a tab bar view for the content of our 3 tabs:
-          Expanded(
+          const Expanded(
             child: TabBarView(children: [
               //1st tab:
               DonorsTab(),
@@ -61,27 +68,5 @@ class _UsersPageState extends State<UsersPage> {
     );
   }
 
-  Widget buildMobileLayout(String type) {
-    return Text(
-      type,
-      style: TextStyle(
-        fontSize: 20,
-        color: Color.fromARGB(236, 77, 77, 77),
-
-        /// set the text color here
-      ),
-    );
-  }
-
-  Widget buildTabletLayout(String type) {
-    return Text(
-      type,
-      style: TextStyle(
-        fontSize: 40,
-        color: Color.fromARGB(236, 77, 77, 77),
-
-        /// set the text color here
-      ),
-    );
-  }
+ 
 }

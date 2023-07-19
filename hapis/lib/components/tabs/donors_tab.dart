@@ -81,8 +81,9 @@ class _DonorsTabState extends State<DonorsTab> {
                         containerHeight:
                             MediaQuery.of(context).size.height * 0.8,
                         containerWidth: MediaQuery.of(context).size.width * 0.9,
+                        isMobile: true,
                       ),
-                      Divider(
+                     const Divider(
                         height: 3,
                         thickness: 0.5,
                         color: HapisColors.lgColor3,
@@ -106,12 +107,12 @@ class _DonorsTabState extends State<DonorsTab> {
             displayText: 'You don\'t have any donors', icon: Icons.person)
         : Scaffold(
             floatingActionButton: FloatingActionButton(
-              child: Icon(
+              backgroundColor: HapisColors.primary,
+              onPressed: () {},
+              child: const Icon(
                 Icons.add,
                 size: 40,
               ),
-              backgroundColor: HapisColors.primary,
-              onPressed: () {},
             ),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -136,8 +137,9 @@ class _DonorsTabState extends State<DonorsTab> {
                         containerHeight:
                             MediaQuery.of(context).size.height * 1.5,
                         containerWidth: MediaQuery.of(context).size.width * 0.8,
+                        isMobile: false,
                       ),
-                      Divider(
+                      const Divider(
                         height: 3,
                         thickness: 0.5,
                         color: HapisColors.lgColor3,

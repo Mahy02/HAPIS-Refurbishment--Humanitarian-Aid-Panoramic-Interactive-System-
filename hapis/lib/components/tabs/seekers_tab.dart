@@ -36,8 +36,7 @@ class _SeekersTabState extends State<SeekersTab> {
 
     setState(() {
       usersList = userProvider.seekersApp;
-      print("seekers length");
-      print(usersList.length);
+     
     });
   }
 
@@ -55,9 +54,9 @@ class _SeekersTabState extends State<SeekersTab> {
             displayText: 'You don\'t have any seekers', icon: Icons.person)
         : Scaffold(
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
               backgroundColor: HapisColors.primary,
               onPressed: () {},
+              child: const Icon(Icons.add),
             ),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -81,8 +80,9 @@ class _SeekersTabState extends State<SeekersTab> {
                         containerHeight:
                             MediaQuery.of(context).size.height * 0.8,
                         containerWidth: MediaQuery.of(context).size.width * 0.9,
+                        isMobile: true,
                       ),
-                      Divider(
+                      const Divider(
                         height: 3,
                         thickness: 0.5,
                         color: HapisColors.lgColor3,
@@ -106,9 +106,9 @@ class _SeekersTabState extends State<SeekersTab> {
             displayText: 'You don\'t have any seekers', icon: Icons.person)
         : Scaffold(
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
               backgroundColor: HapisColors.primary,
               onPressed: () {},
+              child: const Icon(Icons.add),
             ),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -133,8 +133,9 @@ class _SeekersTabState extends State<SeekersTab> {
                         containerHeight:
                             MediaQuery.of(context).size.height * 1.5,
                         containerWidth: MediaQuery.of(context).size.width * 0.8,
+                        isMobile: false,
                       ),
-                      Divider(
+                     const Divider(
                         height: 3,
                         thickness: 0.5,
                         color: HapisColors.lgColor3,
