@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hapis/providers/date_selection.dart';
+import 'package:hapis/providers/drop_down_state.dart';
 import 'package:hapis/providers/form_provider.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
@@ -52,6 +54,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => UserAppProvider()),
         ChangeNotifierProvider(create: (_) => FormProvider()),
+        ChangeNotifierProvider(create: (_) => DropdownState()),
+        ChangeNotifierProvider(create: (_) => DateSelectionModel())
       ],
       child: const HAPIS(),
     ),

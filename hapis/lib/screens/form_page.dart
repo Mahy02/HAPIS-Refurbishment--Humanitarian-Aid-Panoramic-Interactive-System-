@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hapis/constants.dart';
 import 'package:hapis/models/db_models/forms_model.dart';
+import 'package:hapis/providers/form_provider.dart';
+import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../reusable_widgets/date_field_component.dart';
+import '../reusable_widgets/drop_down_list_component.dart';
 import '../reusable_widgets/text_form_field.dart';
 
 class CreateForm extends StatefulWidget {
@@ -23,8 +28,14 @@ class _CreateFormState extends State<CreateForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<FormsModel>(
+      appBar: HAPISAppBar(isLg: false, appBarText: ''),
+      body: Consumer<FormProvider>(
           builder: (BuildContext context, model, Widget? child) {
+        //old model
+        int typeIndex = typeList.indexOf(model.type);
+        int categoryIndex = categoryList.indexOf(model.category);
+        int forWhoIndex = forWhoList.indexOf(model.forWho);
+        //int statusIndex = statusList.indexOf(model.status);
         return Stack(
           children: [
             ListView(shrinkWrap: true, children: [
@@ -38,15 +49,79 @@ class _CreateFormState extends State<CreateForm> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        // TextFormFieldWidget(
-                        //     key: const ValueKey("ticketname"),
-                        //     textController: model.ticketNameController,
-                        //     //initialValue: _eventTitle,
-                        //     hint: 'Enter a short, distinct name.',
-                        //     maxLength: 50,
-                        //     isSuffixRequired: true,
-                        //     label: 'Name ',
-                        //   ),
+                        Text('Fill the Donation Form'),
+                        Text(
+                            'Choose whether you want to donate something, seek something or both'),
+                        DropDownListWidget(
+                          key: const ValueKey("type"),
+                          items: typeList,
+                          selectedValue: typeIndex != -1
+                              ? typeList[typeIndex]
+                              : typeList[0],
+                          hinttext: 'Type',
+                          onChanged: (value) {
+                            setState(() {
+                              //update new value
+                              /// newmodel.organizer = value;
+                              model.type = value;
+                            });
+                          },
+                        ),
+                        if (model.type == 'seeker') Text('For Who?'),
+                        if (model.type == 'seeker')
+                          DropDownListWidget(
+                            key: const ValueKey("forWho"),
+                            items: forWhoList,
+                            selectedValue: forWhoIndex != -1
+                                ? forWhoList[forWhoIndex]
+                                : forWhoList[0],
+                            hinttext: 'For Who',
+                            onChanged: (value) {
+                              setState(() {
+                                //update new value
+                                /// newmodel.organizer = value;
+                                model.forWho = value;
+                              });
+                            },
+                          ),
+                        Text('Choose the Category'),
+                        DropDownListWidget(
+                          key: const ValueKey("category"),
+                          items: categoryList,
+                          selectedValue: categoryIndex != -1
+                              ? categoryList[categoryIndex]
+                              : categoryList[0],
+                          hinttext: 'Category',
+                          onChanged: (value) {
+                            setState(() {
+                              //update new value
+                              /// newmodel.organizer = value;
+                              model.category = value;
+                            });
+                          },
+                        ),
+                        Text('Specify the item'),
+                        TextFormFieldWidget(
+                          key: const ValueKey("item"),
+                          textController: model.formItemController,
+                          //initialValue: _eventTitle,
+                          hint: 'Enter the item you prefer',
+                          maxLength: 50,
+                          isHidden: false,
+                          isSuffixRequired: true,
+                          label: 'Item ', fontSize: 16,
+                        ),
+                        Text('Specify the available dates for you'),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            DateSelectionWidget(
+                              startDay: 'Event Start',
+                              // endDay: 'Event Ends',
+                              // isCheckBoxVisibile: true,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

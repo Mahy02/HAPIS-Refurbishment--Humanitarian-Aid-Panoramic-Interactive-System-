@@ -7,6 +7,7 @@ import 'package:hapis/screens/requests.dart';
 import 'package:hapis/screens/users.dart';
 import 'package:hapis/utils/drawer.dart';
 
+import 'form_page.dart';
 import 'matchings.dart';
 
 class AppHomePage extends StatefulWidget {
@@ -51,7 +52,10 @@ class _AppHomePageState extends State<AppHomePage> {
   Widget buildMobileFloatLayout() {
     return FloatingActionButton(
       backgroundColor: HapisColors.primary,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CreateForm()));
+      },
       child: const Icon(
         Icons.add,
         size: 30,
@@ -62,7 +66,10 @@ class _AppHomePageState extends State<AppHomePage> {
   Widget buildTabletFloatLayout() {
     return FloatingActionButton(
       backgroundColor: HapisColors.primary,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CreateForm()));
+      },
       child: const Icon(
         Icons.add,
         size: 40,

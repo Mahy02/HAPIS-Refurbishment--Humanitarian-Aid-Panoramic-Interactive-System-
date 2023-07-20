@@ -23,10 +23,22 @@ const mobileWidth = 770;
 const tabletWidth = 1280;
 
 ///For drop down List of Donation form
-final List<String> categoryList = ['organizer', 'Mahinour Alaa'];
-final List<String> statusList = ['Not Completed', 'Completed'];
+final List<String> categoryList = [
+  'Clothing',
+  'Household',
+  'Books and Media',
+  'Toys and Games',
+  'Sports Equipment',
+  'Baby item',
+  'Hygiene Products',
+  'Medical Supplies',
+  'Pet supplies',
+  'Food',
+  'Electronics'
+];
+//final List<String> statusList = ['Not Completed', 'Completed'];
 final List<String> forWhoList = ['self', 'other'];
-final List<String> typeList = ['giver', 'seeker'];
+final List<String> typeList = ['giver', 'seeker', 'both'];
 
 /// Mapping each country and its corresponding flag image from the assets folder in [countryMap]
 const countryMap = {

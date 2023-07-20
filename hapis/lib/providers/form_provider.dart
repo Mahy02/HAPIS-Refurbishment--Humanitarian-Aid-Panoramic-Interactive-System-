@@ -8,16 +8,15 @@ import 'package:hapis/constants.dart';
 ///They all have setters and getters
 ///We have [saveData] method to save data into the form using [FormsModel]
 
-
 class FormProvider extends ChangeNotifier {
-
   int? _formID;
   int? _userID;
   String _type = typeList[0];
   String _forWho = forWhoList[0];
   String _category = categoryList[0];
-  String _status = statusList[0];
-
+  //String _status = statusList[0];
+  String? _status;
+  String? _multiDates;
 
   final TextEditingController _formItemController = TextEditingController();
 //date
@@ -32,7 +31,12 @@ class FormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set status(String value) {
+  set multiDates(String? value) {
+    _multiDates = value;
+    notifyListeners();
+  }
+
+  set status(String? value) {
     _status = value;
     notifyListeners();
   }
@@ -63,30 +67,31 @@ class FormProvider extends ChangeNotifier {
   String get type => _type;
   String get category => _category;
   String get forWho => _forWho;
-  String get status => _status;
+  String? get status => _status;
+  String? get multiDates => _multiDates;
 
   final FormsModel _form = FormsModel();
   FormsModel get form => _form;
 
-//   void saveData(
-//     int formID,
-//     int userID,
-//     String type,
-//     String item,
-//     String category,
-//     String multiDates,
-//     String forWho,
-//     String status,
-//   ) {
-//     _form.formID = formID;
-//     _form.userID = userID;
-//     _form.type = type;
-//     _form.item = item;
-//     _form.category = category;
-//     _form.multiDates = multiDates;
-//     _form.forWho = forWho;
-//     _form.status = status;
+  void saveData(
+    int formID,
+    int userID,
+    String type,
+    TextEditingController item,
+    String category,
+    String multiDates,
+    String forWho,
+    String status,
+  ) {
+    _form.formID = formID;
+    _form.userID = userID;
+    _form.type = type;
+    _form.item = item.text;
+    _form.category = category;
+    _form.multiDates = multiDates;
+    _form.forWho = forWho;
+    _form.status = status;
 
-//     notifyListeners();
-//   }
+    notifyListeners();
+  }
 }
