@@ -23,10 +23,10 @@ const mobileWidth = 770;
 const tabletWidth = 1280;
 
 ///For drop down List of Donation form
-const List<String> category = ['organizer', 'Mahinour Alaa'];
-const List<String> status = ['Not Completed', 'Completed'];
-const List<String> forWho = ['self', 'other'];
-const List<String> type = ['giver', 'seeker'];
+final List<String> categoryList = ['organizer', 'Mahinour Alaa'];
+final List<String> statusList = ['Not Completed', 'Completed'];
+final List<String> forWhoList = ['self', 'other'];
+final List<String> typeList = ['giver', 'seeker'];
 
 /// Mapping each country and its corresponding flag image from the assets folder in [countryMap]
 const countryMap = {

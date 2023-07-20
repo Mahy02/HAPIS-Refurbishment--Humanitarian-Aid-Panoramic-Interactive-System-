@@ -13,11 +13,11 @@ class FormProvider extends ChangeNotifier {
 
   int? _formID;
   int? _userID;
-  String _type = type[0];
-  String _forWho = forWho[0];
-  String _category = category[0];
-  String _status = status[0];
-  
+  String _type = typeList[0];
+  String _forWho = forWhoList[0];
+  String _category = categoryList[0];
+  String _status = statusList[0];
+
 
   final TextEditingController _formItemController = TextEditingController();
 //date
