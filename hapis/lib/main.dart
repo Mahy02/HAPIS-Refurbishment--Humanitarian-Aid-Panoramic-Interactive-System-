@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hapis/providers/form_provider.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
@@ -50,6 +51,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SSHprovider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => UserAppProvider()),
+        ChangeNotifierProvider(create: (_) => FormProvider()),
       ],
       child: const HAPIS(),
     ),

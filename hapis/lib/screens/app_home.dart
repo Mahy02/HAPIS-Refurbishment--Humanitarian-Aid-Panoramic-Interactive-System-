@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
+import 'package:hapis/screens/donations.dart';
+import 'package:hapis/screens/requests.dart';
 import 'package:hapis/screens/users.dart';
 import 'package:hapis/utils/drawer.dart';
+
+import 'matchings.dart';
 
 class AppHomePage extends StatefulWidget {
   const AppHomePage({super.key});
@@ -23,27 +27,47 @@ class _AppHomePageState extends State<AppHomePage> {
         tabletBody: UsersPage(
           fontSize: 30,
         )),
-    Center(
-      child: Text('bla'),
-    ),
-    Center(
-      child: Text('blaa'),
-    ),
-    Center(
-      child: Text('blaaaaaa'),
-    ),
+    Requests(),
+    Matchings(),
+    Donations(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const HAPISAppBar(
-          appBarText: '',
-          isLg: false,
-        ),
-        drawer: buildDrawer(context, false),
-        body: screens[currentIndex],
-        bottomNavigationBar: ResponsiveLayout(
-            mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));
+      appBar: const HAPISAppBar(
+        appBarText: '',
+        isLg: false,
+      ),
+      drawer: buildDrawer(context, false),
+      body: screens[currentIndex],
+      bottomNavigationBar: ResponsiveLayout(
+          mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()),
+      floatingActionButton: ResponsiveLayout(
+          mobileBody: buildMobileFloatLayout(),
+          tabletBody: buildTabletFloatLayout()),
+    );
+  }
+
+  Widget buildMobileFloatLayout() {
+    return FloatingActionButton(
+      backgroundColor: HapisColors.primary,
+      onPressed: () {},
+      child: const Icon(
+        Icons.add,
+        size: 30,
+      ),
+    );
+  }
+
+  Widget buildTabletFloatLayout() {
+    return FloatingActionButton(
+      backgroundColor: HapisColors.primary,
+      onPressed: () {},
+      child: const Icon(
+        Icons.add,
+        size: 40,
+      ),
+    );
   }
 
   Widget buildMobileLayout() {

@@ -22,6 +22,12 @@ const double earthRadius = 6371000; // Average radius of the Earth in meters
 const mobileWidth = 770;
 const tabletWidth = 1280;
 
+///For drop down List of Donation form
+const List<String> category = ['organizer', 'Mahinour Alaa'];
+const List<String> status = ['Not Completed', 'Completed'];
+const List<String> forWho = ['self', 'other'];
+const List<String> type = ['giver', 'seeker'];
+
 /// Mapping each country and its corresponding flag image from the assets folder in [countryMap]
 const countryMap = {
   'Albania': 'assets/flags/albania--3591-512.png',

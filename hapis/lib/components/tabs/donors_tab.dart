@@ -53,13 +53,15 @@ class _DonorsTabState extends State<DonorsTab> {
     return noSeekers
         ? const NoComponentWidget(
             displayText: 'You don\'t have any donors', icon: Icons.person)
-        : Scaffold(
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              backgroundColor: HapisColors.primary,
-              onPressed: () {},
-            ),
-            body: Padding(
+        // : Scaffold(
+        //     floatingActionButton: FloatingActionButton(
+        //       child: Icon(Icons.add),
+        //       backgroundColor: HapisColors.primary,
+        //       onPressed: () {},
+        //     ),
+        //     body: 
+        :
+            Padding(
               padding: const EdgeInsets.all(20.0),
               child: ListView.builder(
                 itemCount: usersList.length,
@@ -95,7 +97,7 @@ class _DonorsTabState extends State<DonorsTab> {
                   );
                 },
               ),
-            ),
+           // ),
           );
   }
 
@@ -105,16 +107,18 @@ class _DonorsTabState extends State<DonorsTab> {
     return noSeekers
         ? const NoComponentWidget(
             displayText: 'You don\'t have any donors', icon: Icons.person)
-        : Scaffold(
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: HapisColors.primary,
-              onPressed: () {},
-              child: const Icon(
-                Icons.add,
-                size: 40,
-              ),
-            ),
-            body: Padding(
+        : 
+        // Scaffold(
+        //     floatingActionButton: FloatingActionButton(
+        //       backgroundColor: HapisColors.primary,
+        //       onPressed: () {},
+        //       child: const Icon(
+        //         Icons.add,
+        //         size: 40,
+        //       ),
+        //     ),
+        //     body:
+             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ListView.builder(
                 itemCount: usersList.length,
@@ -151,7 +155,7 @@ class _DonorsTabState extends State<DonorsTab> {
                   );
                 },
               ),
-            ),
+           // ),
           );
   }
 }
