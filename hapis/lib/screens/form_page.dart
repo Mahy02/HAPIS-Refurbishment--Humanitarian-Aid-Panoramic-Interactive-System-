@@ -25,6 +25,7 @@ class CreateForm extends StatefulWidget {
 class _CreateFormState extends State<CreateForm> {
   /// A GlobalKey [_formKey] that can be used to access the FormState for this form.
   final _formKey = GlobalKey<FormState>();
+  bool addDate = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +36,11 @@ class _CreateFormState extends State<CreateForm> {
         int typeIndex = typeList.indexOf(model.type);
         int categoryIndex = categoryList.indexOf(model.category);
         int forWhoIndex = forWhoList.indexOf(model.forWho);
+        List<DateSelectionWidget> dateSelectionWidgets = [
+          DateSelectionWidget(startDay: 'Event Start')
+        ];
+        List<String> selectedDates = [];
+
         //int statusIndex = statusList.indexOf(model.status);
         return Stack(
           children: [
@@ -111,17 +117,77 @@ class _CreateFormState extends State<CreateForm> {
                           isSuffixRequired: true,
                           label: 'Item ', fontSize: 16,
                         ),
-                        Text('Specify the available dates for you'),
                         Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            DateSelectionWidget(
-                              startDay: 'Event Start',
-                              // endDay: 'Event Ends',
-                              // isCheckBoxVisibile: true,
+                          children: [
+                            Text('Specify the available dates for you'),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: selectedDates.length,
+                              itemBuilder: (context, index) {
+                                return DateSelectionnWidget(
+                                  date: selectedDates[index],
+                                  onDelete: () {
+                                    setState(() {
+                                      selectedDates.removeAt(index);
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                            GestureDetector(
+                              child: CircleAvatar(
+                                backgroundColor: HapisColors.lgColor3,
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  selectedDates.add('Event Start');
+                                });
+                              },
                             ),
                           ],
-                        ),
+                        )
+
+                        // Text('Specify the available dates for you'),
+                        // Column(
+                        //   mainAxisSize: MainAxisSize.min,
+                        //   children: const [
+                        //     DateSelectionWidget(
+                        //       startDay: 'Event Start',
+                        //       // endDay: 'Event Ends',
+                        //       // isCheckBoxVisibile: true,
+                        //     ),
+                        //   ],
+                        // ),
+                        // GestureDetector(
+                        //   child: const CircleAvatar(
+                        //     backgroundColor: HapisColors.lgColor3,
+                        //     child: Icon(
+                        //       Icons.add,
+                        //       color: Colors.white,
+                        //     ),
+                        //   ),
+                        //   onTap: () {
+                        //     setState(() {
+                        //       addDate = true;
+                        //     });
+                        //   },
+                        // ),
+                        // if (addDate == true)
+                        //   Column(
+                        //     mainAxisSize: MainAxisSize.min,
+                        //     children: const [
+                        //       DateSelectionWidget(
+                        //         startDay: 'Event Start',
+                        //         // endDay: 'Event Ends',
+                        //         // isCheckBoxVisibile: true,
+                        //       ),
+                        //     ],
+                        //   ),
                       ],
                     ),
                   ),
@@ -131,6 +197,28 @@ class _CreateFormState extends State<CreateForm> {
           ],
         );
       }),
+    );
+  }
+}
+
+class DateSelectionnWidget extends StatelessWidget {
+  final String date;
+  final VoidCallback onDelete;
+
+  DateSelectionnWidget({required this.date, required this.onDelete});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(date), // Replace this with your date selection UI
+
+        // Remove button
+        IconButton(
+          icon: Icon(Icons.remove_circle),
+          onPressed: onDelete,
+        ),
+      ],
     );
   }
 }
