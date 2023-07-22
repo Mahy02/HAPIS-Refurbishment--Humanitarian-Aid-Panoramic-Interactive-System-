@@ -13,6 +13,7 @@ import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/users_provider.dart';
 import 'package:hapis/providers/user_provider.dart';
 import 'package:hapis/screens/about_screen.dart';
+import 'package:hapis/screens/google_signup.dart';
 import 'package:hapis/screens/liquid_galaxy/configuration_screen.dart';
 import 'package:hapis/screens/liquid_galaxy/settings_screen.dart';
 import 'package:hapis/screens/login.dart';
@@ -125,7 +126,8 @@ class HAPIS extends StatelessWidget {
             ]);
           }
           //const SplashScreen(),
-          return const SplashScreen();
+          //return const SplashScreen();
+          return const GoogleSignUp();
           //return const SignUpScreen();
           //return const SignInScreen();
         },
