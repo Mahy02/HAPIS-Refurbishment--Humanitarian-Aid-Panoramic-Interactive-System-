@@ -15,6 +15,7 @@ import 'package:hapis/providers/user_provider.dart';
 import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/liquid_galaxy/configuration_screen.dart';
 import 'package:hapis/screens/liquid_galaxy/settings_screen.dart';
+import 'package:hapis/screens/login.dart';
 import 'package:hapis/screens/splash_screen.dart';
 import 'package:hapis/services/liquid_galaxy/LG_functionalities.dart';
 
@@ -125,13 +126,14 @@ class HAPIS extends StatelessWidget {
           }
           //const SplashScreen(),
           return const SplashScreen();
+          //return const SignUpScreen();
+          //return const SignInScreen();
         },
       ),
       navigatorKey: navigatorKey,
       routes: {
         '/settings': (context) => const Settings(),
         '/connections': (context) => const Configuration(),
-       
       },
       // '/about': (context) => const About(),
     );
