@@ -101,8 +101,29 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
+                // RichText(
+                //   text: const TextSpan(
+                //     children: [
+                //       TextSpan(
+                //         text: "Don't have an account? ",
+                //         style: TextStyle(
+                //           color: Colors.black,
+                //           fontSize: 16.0,
+                //         ),
+                //       ),
+                //       TextSpan(
+                //         text: "Sign Up!",
+                //         style: TextStyle(
+                //           color: Colors.blue,
+                //           fontSize: 16.0,
+                //           decoration: TextDecoration.underline,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: [
                       TextSpan(
                         text: "Don't have an account? ",
@@ -111,12 +132,19 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                           fontSize: 16.0,
                         ),
                       ),
-                      TextSpan(
-                        text: "Sign Up!",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16.0,
-                          decoration: TextDecoration.underline,
+                      WidgetSpan(
+                        child: GestureDetector(
+                          onTap: () {
+                            signUp();
+                          },
+                          child: Text(
+                            "Sign Up!",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16.0,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -131,7 +159,42 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
   }
 
   Future signIn() async {
-    final user = await GoogleSignInApi.login();
-    print(user);
+    try {
+      final user = await GoogleSignInApi.login();
+      print(user);
+      print(user.displayName);
+      //here we should check if user exists in databse or not
+      //if exist then sign in is complete and he can access all pages
+
+      if (user == Null) {
+      } else {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AppHomePage()));
+      }
+    } on Exception catch (e) {
+      // Handle the sign-in error.
+      print('Sign-in error: $e');
+    }
+  }
+
+  Future signUp() async {
+    try {
+      await GoogleSignInApi.login();
+      await GoogleSignInApi.logout();
+      final user = await GoogleSignInApi.login();
+      print(user);
+      print(user.displayName);
+      //here we should check if user exists in databse or not
+      //if exist then sign in is complete and he can access all pages
+
+      if (user == Null) {
+      } else {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AppHomePage()));
+      }
+    } on Exception catch (e) {
+      // Handle the sign-in error.
+      print('Sign-in error: $e');
+    }
   }
 }
