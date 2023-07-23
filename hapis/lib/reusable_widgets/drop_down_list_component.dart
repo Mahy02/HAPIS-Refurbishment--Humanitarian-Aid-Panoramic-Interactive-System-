@@ -34,6 +34,8 @@ class DropDownListWidget extends StatelessWidget {
   ///For hint text"
   final String? hinttext;
 
+  final double fontSize;
+
   /// A callback function that will be called whenever the selected item changes.
   final void Function(String)? onChanged;
 
@@ -46,6 +48,7 @@ class DropDownListWidget extends StatelessWidget {
     this.selectedValue,
     this.hinttext,
     this.onChanged,
+    required this.fontSize,
   }) : super(key: key);
 
   @override
@@ -90,7 +93,10 @@ class DropDownListWidget extends StatelessWidget {
             size: 36,
           ),
           //iconSize: 36,
-          items: items.map(buildMenuItem).toList(),
+          // items: items.map(buildMenuItem).toList(),
+          items: items.map((String item) {
+            return buildMenuItem(item, fontSize);
+          }).toList(),
           value: selectedValue ?? items[0],
           //onChanged: (value) => state.selectedIndex = items.indexOf(value!)),
           onChanged: (value) {
@@ -99,8 +105,7 @@ class DropDownListWidget extends StatelessWidget {
             // onChanged!(value);
             onChanged?.call(value);
           },
-          style: TextStyle(fontSize: 16, color: Colors.black),
-          
+          style: TextStyle(fontSize: fontSize, color: Colors.black),
         ),
       ),
     );

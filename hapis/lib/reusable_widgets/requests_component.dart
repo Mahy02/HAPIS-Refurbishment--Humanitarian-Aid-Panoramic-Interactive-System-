@@ -5,11 +5,22 @@ class RequestComponent extends StatelessWidget {
   final bool isSent;
   final bool isMatching;
   final bool isDonation;
+  final double fontSize;
+  final double buttonFontSize;
+  // final double buttonHeight;
+  // final double finishButtonHeight;
+  // final double pendingButtonHeight;
+  //   final double buttonWidth;
+  // final double finishButtonWidth;
+  // final double pendingButtonWidth;
   const RequestComponent({
     super.key,
     required this.isSent,
     required this.isMatching,
     required this.isDonation,
+    required this.fontSize,
+    required this.buttonFontSize,
+    // required this.buttonHeight, required this.finishButtonHeight, required this.pendingButtonHeight, required this.buttonWidth, required this.finishButtonWidth, required this.pendingButtonWidth,
   });
 
   @override
@@ -36,9 +47,10 @@ class RequestComponent extends StatelessWidget {
               Expanded(
                 child: isSent
                     ? RichText(
-                        text: const TextSpan(
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                          children: [
+                        text: TextSpan(
+                          style: TextStyle(
+                              fontSize: fontSize, color: Colors.black),
+                          children: const [
                             TextSpan(
                               text: 'Request sent to ',
                             ),
@@ -51,10 +63,10 @@ class RequestComponent extends StatelessWidget {
                       )
                     : isMatching
                         ? RichText(
-                            text: const TextSpan(
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.black),
-                              children: [
+                            text: TextSpan(
+                              style: TextStyle(
+                                  fontSize: fontSize, color: Colors.black),
+                              children: const [
                                 TextSpan(
                                   text: 'Person Name',
                                   style: TextStyle(fontWeight: FontWeight.bold),
@@ -67,10 +79,10 @@ class RequestComponent extends StatelessWidget {
                           )
                         : isDonation
                             ? RichText(
-                                text: const TextSpan(
+                                text: TextSpan(
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.black),
-                                  children: [
+                                      fontSize: fontSize, color: Colors.black),
+                                  children: const [
                                     TextSpan(text: 'You and  '),
                                     TextSpan(
                                       text: 'Person Name ',
@@ -84,10 +96,10 @@ class RequestComponent extends StatelessWidget {
                                 ),
                               )
                             : RichText(
-                                text: const TextSpan(
+                                text: TextSpan(
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.black),
-                                  children: [
+                                      fontSize: fontSize, color: Colors.black),
+                                  children: const [
                                     TextSpan(
                                       text: 'Person Name',
                                       style: TextStyle(
@@ -110,21 +122,29 @@ class RequestComponent extends StatelessWidget {
           isSent
               ? Align(
                   alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle button click here
-                    },
-                    child: Text('PENDING'),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          HapisColors.lgColor1), // Button background color
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          EdgeInsets.all(15)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(5), // Button border radius
-                          // You can also set other properties like borderColor, borderWidth, etc. here
+                  child: SizedBox(
+                    // height: MediaQuery.of(context).size.height * 0.08,
+                    // width: MediaQuery.of(context).size.width * 0.15,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle button click here
+                      },
+                      child: Text(
+                        'PENDING',
+                        style: TextStyle(fontSize: buttonFontSize),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            HapisColors.lgColor1), // Button background color
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.all(15)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                5), // Button border radius
+                            // You can also set other properties like borderColor, borderWidth, etc. here
+                          ),
                         ),
                       ),
                     ),
@@ -134,60 +154,17 @@ class RequestComponent extends StatelessWidget {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            // Handle button click here
-                          },
-                          child: Text('REQUEST'),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                HapisColors
-                                    .lgColor4), // Button background color
-                            padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                    EdgeInsets.all(15)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    5), // Button border radius
-                                // You can also set other properties like borderColor, borderWidth, etc. here
-                              ),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Handle button click here
-                          },
-                          child: Text('IGNORE'),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                HapisColors
-                                    .lgColor2), // Button background color
-                            padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                    EdgeInsets.all(15)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    5), // Button border radius
-                                // You can also set other properties like borderColor, borderWidth, etc. here
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : isDonation
-                      ? Align(
-                          alignment: Alignment.center,
+                        SizedBox(
+                          // height: MediaQuery.of(context).size.height * 0.08,
+                          // width: MediaQuery.of(context).size.width * 0.1,
                           child: ElevatedButton(
                             onPressed: () {
                               // Handle button click here
                             },
-                            child: Text('FINISH PROCESS'),
+                            child: Text(
+                              'REQUEST',
+                              style: TextStyle(fontSize: buttonFontSize),
+                            ),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   HapisColors
@@ -205,15 +182,52 @@ class RequestComponent extends StatelessWidget {
                               ),
                             ),
                           ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
+                        ),
+                        SizedBox(
+                          // height: MediaQuery.of(context).size.height * 0.08,
+                          // width: MediaQuery.of(context).size.width * 0.1,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Handle button click here
+                            },
+                            child: Text(
+                              'IGNORE',
+                              style: TextStyle(fontSize: buttonFontSize),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  HapisColors
+                                      .lgColor2), // Button background color
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                      EdgeInsets.all(15)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      5), // Button border radius
+                                  // You can also set other properties like borderColor, borderWidth, etc. here
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : isDonation
+                      ? Align(
+                          alignment: Alignment.bottomRight,
+                          child: SizedBox(
+                            // height: MediaQuery.of(context).size.height * 0.08,
+                            // width: MediaQuery.of(context).size.width * 0.2,
+                            child: ElevatedButton(
                               onPressed: () {
                                 // Handle button click here
                               },
-                              child: Text('ACCEPT'),
+                              child: Text(
+                                'FINISH PROCESS',
+                                style: TextStyle(fontSize: buttonFontSize),
+                              ),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(HapisColors
@@ -230,23 +244,63 @@ class RequestComponent extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Handle button click here
-                              },
-                              child: Text('DECLINE'),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(HapisColors
-                                        .lgColor2), // Button background color
-                                padding: MaterialStateProperty.all<
-                                    EdgeInsetsGeometry>(EdgeInsets.all(15)),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        5), // Button border radius
-                                    // You can also set other properties like borderColor, borderWidth, etc. here
+                          ),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              // height: MediaQuery.of(context).size.height * 0.08,
+                              // width: MediaQuery.of(context).size.width * 0.1,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Handle button click here
+                                },
+                                child: Text(
+                                  'ACCEPT',
+                                  style: TextStyle(fontSize: buttonFontSize),
+                                ),
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty
+                                      .all<Color>(HapisColors
+                                          .lgColor4), // Button background color
+                                  padding: MaterialStateProperty.all<
+                                      EdgeInsetsGeometry>(EdgeInsets.all(15)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          5), // Button border radius
+                                      // You can also set other properties like borderColor, borderWidth, etc. here
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              // height: MediaQuery.of(context).size.height * 0.08,
+                              // width: MediaQuery.of(context).size.width * 0.1,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Handle button click here
+                                },
+                                child: Text(
+                                  'DECLINE',
+                                  style: TextStyle(fontSize: buttonFontSize),
+                                ),
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty
+                                      .all<Color>(HapisColors
+                                          .lgColor2), // Button background color
+                                  padding: MaterialStateProperty.all<
+                                      EdgeInsetsGeometry>(EdgeInsets.all(15)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          5), // Button border radius
+                                      // You can also set other properties like borderColor, borderWidth, etc. here
+                                    ),
                                   ),
                                 ),
                               ),

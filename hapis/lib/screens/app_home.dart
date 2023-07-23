@@ -28,9 +28,48 @@ class _AppHomePageState extends State<AppHomePage> {
         tabletBody: UsersPage(
           fontSize: 30,
         )),
-    Requests(),
-    Matchings(),
-    Donations(),
+    ResponsiveLayout(
+        mobileBody: Requests(
+          fontSize: 18,
+          subHeadFontSize: 20,
+          buttonFontSize: 14,
+        ),
+        tabletBody: Requests(
+          fontSize: 24,
+          subHeadFontSize: 28,
+          buttonFontSize: 20,
+          // buttonHeight: MediaQuery.of(context).size.height * 0.08,
+          // buttonWidth:  MediaQuery.of(context).size.width * 0.1,
+          // pendingButtonHeight: ,
+          // pendingButtonWidth: ,
+          // finishButtonHeight: ,
+          // finishButtonWidth: ,
+        )),
+
+    ResponsiveLayout(
+      mobileBody: Matchings(
+        fontSize: 18,
+        subHeadFontSize: 22,
+        buttonFontSize: 14,
+      ),
+      tabletBody: Matchings(
+        fontSize: 24,
+        subHeadFontSize: 28,
+        buttonFontSize: 20,
+      ),
+    ),
+    ResponsiveLayout(
+      mobileBody: Donations(
+        fontSize: 18,
+        subHeadFontSize: 22,
+        buttonFontSize: 14,
+      ),
+      tabletBody: Donations(
+        fontSize: 24,
+        subHeadFontSize: 28,
+        buttonFontSize: 20,
+      ),
+    )
   ];
   @override
   Widget build(BuildContext context) {

@@ -5,9 +5,13 @@ import '../constants.dart';
 import '../providers/date_selection.dart';
 
 class DateDayComponent extends StatelessWidget {
+  final double fontSize;
+  final double? iconSize;
   const DateDayComponent({
     super.key,
     required this.dateModel,
+    required this.fontSize,
+    this.iconSize,
   });
 
   final DateSelectionModel dateModel;
@@ -17,6 +21,7 @@ class DateDayComponent extends StatelessWidget {
     return TextFormField(
       controller: dateModel.dateControllerStart,
       onTap: () => dateModel.showDatePickerStart(context),
+      style: TextStyle(fontSize: fontSize),
       decoration: InputDecoration(
           prefixIcon: const Icon(
             Icons.calendar_month_outlined,
@@ -24,7 +29,7 @@ class DateDayComponent extends StatelessWidget {
           ),
           labelText: 'Day',
           labelStyle: TextStyle(
-            fontSize: 16,
+            fontSize: fontSize,
             fontFamily: GoogleFonts.montserrat().fontFamily,
             fontWeight: FontWeight.bold,
             color: HapisColors.lgColor1,
