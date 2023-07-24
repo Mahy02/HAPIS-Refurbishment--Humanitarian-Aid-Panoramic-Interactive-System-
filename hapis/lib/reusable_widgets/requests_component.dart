@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 
+import '../utils/date_popup.dart';
+
 class RequestComponent extends StatelessWidget {
   final bool isSent;
   final bool isMatching;
   final bool isDonation;
   final double fontSize;
   final double buttonFontSize;
+  final String? personName;
+  final String? item;
+  final String? status;
+  final String? type;
+  final String? city;
+  final String? category;
+  final String? email;
+  final String? phone;
+  final String? location;
+  final String? dates;
+
   // final double buttonHeight;
   // final double finishButtonHeight;
   // final double pendingButtonHeight;
@@ -20,6 +33,16 @@ class RequestComponent extends StatelessWidget {
     required this.isDonation,
     required this.fontSize,
     required this.buttonFontSize,
+    this.personName,
+    this.item,
+    this.type,
+    this.status,
+    this.city,
+    this.category,
+    this.email,
+    this.phone,
+    this.location,
+    this.dates,
     // required this.buttonHeight, required this.finishButtonHeight, required this.pendingButtonHeight, required this.buttonWidth, required this.finishButtonWidth, required this.pendingButtonWidth,
   });
 
@@ -50,30 +73,109 @@ class RequestComponent extends StatelessWidget {
                         text: TextSpan(
                           style: TextStyle(
                               fontSize: fontSize, color: Colors.black),
-                          children: const [
-                            TextSpan(
+                          children: [
+                            const TextSpan(
                               text: 'Request sent to ',
                             ),
                             TextSpan(
-                              text: 'Person Name',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              //text: 'Person Name',
+                              text: personName,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
                       )
                     : isMatching
+                        // ? RichText(
+                        //     text: TextSpan(
+                        //       style: TextStyle(
+                        //           fontSize: fontSize, color: Colors.black),
+                        //       children: [
+                        //         TextSpan(
+                        //           //text: 'Person Name',
+                        //           text: personName,
+                        //           style: const TextStyle(
+                        //               fontWeight: FontWeight.bold,
+                        //               decoration: TextDecoration.underline,
+                        //               color: Color.fromARGB(255, 27, 120, 196)),
+                        //         ),
+                        //         if (type == 'giver')
+                        //           const TextSpan(
+                        //               text:
+                        //                   ' is a good match for your wish to donate '),
+                        //         if (type == 'seeker')
+                        //           const TextSpan(
+                        //               text:
+                        //                   ' is a good match for your need for '),
+                        //         TextSpan(
+                        //           text: '$item. ',
+                        //           style: const TextStyle(
+                        //               fontWeight: FontWeight.bold),
+                        //         ),
+                        //         const TextSpan(text: "Want to Contact?"),
+                        //       ],
+                        //     ),
+                        //   )
                         ? RichText(
                             text: TextSpan(
                               style: TextStyle(
                                   fontSize: fontSize, color: Colors.black),
-                              children: const [
-                                TextSpan(
-                                  text: 'Person Name',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                              children: [
+                                WidgetSpan(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (type == 'giver') {
+                                        _showUserDetails(
+                                            context,
+                                            personName,
+                                            email,
+                                            phone,
+                                            city,
+                                            category,
+                                            item,
+                                            dates,
+                                            location,
+                                            'seeker');
+                                      } else {
+                                        _showUserDetails(
+                                            context,
+                                            personName,
+                                            email,
+                                            phone,
+                                            city,
+                                            category,
+                                            item,
+                                            dates,
+                                            location,
+                                            'giver');
+                                      }
+                                    },
+                                    child: Text(
+                                      personName ?? '',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                        color:
+                                            Color.fromARGB(255, 27, 120, 196),
+                                      ),
+                                    ),
+                                  ),
                                 ),
+                                if (type == 'giver')
+                                  const TextSpan(
+                                      text:
+                                          ' is a good match for your wish to donate '),
+                                if (type == 'seeker')
+                                  const TextSpan(
+                                      text:
+                                          ' is a good match for your need for '),
                                 TextSpan(
-                                    text:
-                                        ' is a good match for your needs. Want to Contact him? '),
+                                  text: '$item. ',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const TextSpan(text: "Want to Contact?"),
                               ],
                             ),
                           )
@@ -82,15 +184,16 @@ class RequestComponent extends StatelessWidget {
                                 text: TextSpan(
                                   style: TextStyle(
                                       fontSize: fontSize, color: Colors.black),
-                                  children: const [
-                                    TextSpan(text: 'You and  '),
+                                  children: [
+                                    const TextSpan(text: 'You and  '),
                                     TextSpan(
-                                      text: 'Person Name ',
-                                      style: TextStyle(
+                                      //text: 'Person Name ',
+                                      text: personName,
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    TextSpan(
-                                      text: 'are now in contact',
+                                    const TextSpan(
+                                      text: ' are now in contact',
                                     ),
                                   ],
                                 ),
@@ -99,18 +202,25 @@ class RequestComponent extends StatelessWidget {
                                 text: TextSpan(
                                   style: TextStyle(
                                       fontSize: fontSize, color: Colors.black),
-                                  children: const [
+                                  children: [
                                     TextSpan(
-                                      text: 'Person Name',
-                                      style: TextStyle(
+                                      //text: 'Person Name',
+                                      text: personName,
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
+                                    if (type == 'seeker')
+                                      const TextSpan(
+                                          text:
+                                              ' requested to contact you about your need for '),
+                                    if (type == 'giver')
+                                      const TextSpan(
+                                          text:
+                                              ' requested to contact you about your offered '),
                                     TextSpan(
-                                        text:
-                                            ' requested to contact you about your offered/need for '),
-                                    TextSpan(
-                                      text: 'item',
-                                      style: TextStyle(
+                                      //  text: 'item',
+                                      text: item,
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ],
@@ -130,14 +240,15 @@ class RequestComponent extends StatelessWidget {
                         // Handle button click here
                       },
                       child: Text(
-                        'PENDING',
+                        // 'PENDING',
+                        status!,
                         style: TextStyle(fontSize: buttonFontSize),
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             HapisColors.lgColor1), // Button background color
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.all(15)),
+                            const EdgeInsets.all(15)),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -171,7 +282,7 @@ class RequestComponent extends StatelessWidget {
                                       .lgColor4), // Button background color
                               padding:
                                   MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      EdgeInsets.all(15)),
+                                      const EdgeInsets.all(15)),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -200,7 +311,7 @@ class RequestComponent extends StatelessWidget {
                                       .lgColor2), // Button background color
                               padding:
                                   MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      EdgeInsets.all(15)),
+                                      const EdgeInsets.all(15)),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -233,7 +344,8 @@ class RequestComponent extends StatelessWidget {
                                     MaterialStateProperty.all<Color>(HapisColors
                                         .lgColor4), // Button background color
                                 padding: MaterialStateProperty.all<
-                                    EdgeInsetsGeometry>(EdgeInsets.all(15)),
+                                        EdgeInsetsGeometry>(
+                                    const EdgeInsets.all(15)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -265,7 +377,8 @@ class RequestComponent extends StatelessWidget {
                                       .all<Color>(HapisColors
                                           .lgColor4), // Button background color
                                   padding: MaterialStateProperty.all<
-                                      EdgeInsetsGeometry>(EdgeInsets.all(15)),
+                                          EdgeInsetsGeometry>(
+                                      const EdgeInsets.all(15)),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -293,7 +406,8 @@ class RequestComponent extends StatelessWidget {
                                       .all<Color>(HapisColors
                                           .lgColor2), // Button background color
                                   padding: MaterialStateProperty.all<
-                                      EdgeInsetsGeometry>(EdgeInsets.all(15)),
+                                          EdgeInsetsGeometry>(
+                                      const EdgeInsets.all(15)),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -311,6 +425,197 @@ class RequestComponent extends StatelessWidget {
       ),
 
       //Text('Item $index'),
+    );
+  }
+
+  void _showUserDetails(
+      BuildContext context,
+      String? personName,
+      String? email,
+      String? phone,
+      String? city,
+      String? category,
+      String? item,
+      String? dates,
+      String? location,
+      String? type) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Column(
+            children: [
+              const Icon(
+                Icons.keyboard_double_arrow_up,
+                size: 30,
+                color: HapisColors.lgColor3,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
+              ),
+              Center(
+                child: Text(
+                  personName ?? '',
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (type == 'seeker')
+                    const Text(
+                      'Seeking',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  if (type == 'giver')
+                    const Text(
+                      'Donating',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  Text(
+                    item ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'City',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    city ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Phone Number',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    phone ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Email',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    email ?? '',
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 32, 132, 214),
+                        decoration: TextDecoration.underline),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Location',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      location ?? '',
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.03,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Dates available',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  GestureDetector(
+                    child: const Text(
+                      'click to see available dates',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 32, 132, 214),
+                          decoration: TextDecoration.underline),
+                    ),
+                    onTap: () {
+                      List<String> listDates = dates!.split(',');
+                      showDatesDialog(listDates, context);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

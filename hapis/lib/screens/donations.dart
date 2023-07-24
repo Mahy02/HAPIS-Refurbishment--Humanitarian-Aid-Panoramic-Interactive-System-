@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hapis/providers/inprogress_donation_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../reusable_widgets/requests_component.dart';
 
@@ -19,6 +21,9 @@ class Donations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    InProgressDonationsProvider inProgressDonationProvider =
+        Provider.of<InProgressDonationsProvider>(context, listen: false);
+    inProgressDonationProvider.fetchInProgressDonations();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -32,11 +37,15 @@ class Donations extends StatelessWidget {
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           ListView.builder(
-            itemCount: 20,
+            //itemCount: 20,
+            itemCount: inProgressDonationProvider.inProgressDonations.length,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               //check for the no component if none available
+               final matching = inProgressDonationProvider.inProgressDonations[index];
+           
+              final personName = '${matching.firstName} ${matching.lastName}';
               return ListTile(
                   title: RequestComponent(
                 isSent: false,
@@ -44,6 +53,7 @@ class Donations extends StatelessWidget {
                 isDonation: true,
                 fontSize: fontSize,
                 buttonFontSize: buttonFontSize,
+                personName: personName,
                   // buttonHeight: buttonHeight,
                   // finishButtonHeight:finishButtonHeight ,
                   // pendingButtonHeight: pendingButtonHeight,

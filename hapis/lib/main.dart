@@ -3,14 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hapis/providers/all_matchings_provider.dart';
 import 'package:hapis/providers/date_selection.dart';
 import 'package:hapis/providers/drop_down_state.dart';
 import 'package:hapis/providers/form_provider.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
+import 'package:hapis/providers/inprogress_donation_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
 
 import 'package:hapis/providers/liquid_galaxy/users_provider.dart';
+import 'package:hapis/providers/requests_recieved_provider.dart';
+import 'package:hapis/providers/requests_sent_provider.dart';
 import 'package:hapis/providers/user_provider.dart';
 import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/google_signup.dart';
@@ -57,7 +61,11 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UserAppProvider()),
         ChangeNotifierProvider(create: (_) => FormProvider()),
         ChangeNotifierProvider(create: (_) => DropdownState()),
-        ChangeNotifierProvider(create: (_) => DateSelectionModel())
+        ChangeNotifierProvider(create: (_) => DateSelectionModel()),
+        ChangeNotifierProvider(create: (_) => RequestsSentProvider()),
+        ChangeNotifierProvider(create: (_) => RequestsReceivedProvider()),
+        ChangeNotifierProvider(create: (_) => MatchingsProvider()),
+        ChangeNotifierProvider(create: (_) => InProgressDonationsProvider()),
       ],
       child: const HAPIS(),
     ),
@@ -127,7 +135,7 @@ class HAPIS extends StatelessWidget {
           }
           //const SplashScreen(),
           return const SplashScreen();
-         // return const GoogleSignUp();
+          // return const GoogleSignUp();
           //return const SignUpScreen();
           //return const SignInScreen();
         },

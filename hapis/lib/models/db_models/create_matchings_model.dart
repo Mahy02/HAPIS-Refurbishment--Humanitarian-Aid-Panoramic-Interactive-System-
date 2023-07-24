@@ -1,6 +1,6 @@
 /// Model that represents the `MatchingsModel`, with all of its properties and methods.
 
-class MatchingsModel {
+class CreateMatchingsModel {
   /// Property that defines the matching mID 
   int? mID;
 
@@ -21,7 +21,7 @@ class MatchingsModel {
 
  
 
-  MatchingsModel(
+  CreateMatchingsModel(
       {this.mID,
         this.seekerFormID,
         this.giverFormID,
@@ -31,8 +31,8 @@ class MatchingsModel {
      });
 
   /// Turns a `Map` into a `MatchingsModel`.  "Map From the database"
-  factory MatchingsModel.fromMap(Map<String, dynamic> map) {
-    return MatchingsModel(
+  factory CreateMatchingsModel.fromMap(Map<String, dynamic> map) {
+    return CreateMatchingsModel(
       mID: map['M_ID'],
       seekerFormID: map['Seeker_FormID'],
       giverFormID: map['Giver_FormID'],
