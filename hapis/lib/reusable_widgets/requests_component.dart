@@ -153,11 +153,12 @@ class RequestComponent extends StatelessWidget {
                                     },
                                     child: Text(
                                       personName ?? '',
-                                      style: const TextStyle(
+                                      style: TextStyle(
+                                        fontSize: fontSize,
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.underline,
-                                        color:
-                                            Color.fromARGB(255, 27, 120, 196),
+                                        color: const Color.fromARGB(
+                                            255, 27, 120, 196),
                                       ),
                                     ),
                                   ),
@@ -463,8 +464,8 @@ class RequestComponent extends StatelessWidget {
               Center(
                 child: Text(
                   personName ?? '',
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: fontSize + 4, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -474,25 +475,25 @@ class RequestComponent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (type == 'seeker')
-                    const Text(
+                    Text(
                       'Seeking',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: fontSize + 2,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic),
                     ),
                   if (type == 'giver')
-                    const Text(
+                    Text(
                       'Donating',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize + 2,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   Text(
                     item ?? '',
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: TextStyle(
+                      fontSize: fontSize,
                     ),
                   ),
                 ],
@@ -503,17 +504,17 @@ class RequestComponent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'City',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize + 2,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     city ?? '',
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: TextStyle(
+                      fontSize: fontSize,
                     ),
                   ),
                 ],
@@ -524,17 +525,17 @@ class RequestComponent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Phone Number',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize + 2,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     phone ?? '',
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: TextStyle(
+                      fontSize: fontSize,
                     ),
                   ),
                 ],
@@ -545,18 +546,18 @@ class RequestComponent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Email',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize + 2,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     email ?? '',
-                    style: const TextStyle(
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 32, 132, 214),
+                    style: TextStyle(
+                        fontSize: fontSize,
+                        color: const Color.fromARGB(255, 32, 132, 214),
                         decoration: TextDecoration.underline),
                   ),
                 ],
@@ -567,18 +568,18 @@ class RequestComponent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Location',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize + 2,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Flexible(
                     child: Text(
                       location ?? '',
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: fontSize,
                       ),
                     ),
                   ),
@@ -590,18 +591,18 @@ class RequestComponent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Dates available',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize + 2,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   GestureDetector(
-                    child: const Text(
+                    child: Text(
                       'click to see available dates',
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: fontSize,
                           color: Color.fromARGB(255, 32, 132, 214),
                           decoration: TextDecoration.underline),
                     ),
