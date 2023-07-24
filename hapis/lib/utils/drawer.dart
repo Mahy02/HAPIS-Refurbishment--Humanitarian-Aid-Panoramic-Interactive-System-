@@ -84,13 +84,13 @@ Drawer buildDrawer(BuildContext context, bool isLg) {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 const IconSideMenuWidget(
                   itemNumber: '2',
-                  page: LgHomePage(),
+                  page: AppHomePage(),
                   itemTitle: 'How it works',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 const IconSideMenuWidget(
                   itemNumber: '3',
-                  page: Settings(),
+                  page: AppHomePage(),
                   itemTitle: 'Settings',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
