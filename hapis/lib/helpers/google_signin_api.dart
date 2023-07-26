@@ -7,4 +7,12 @@ class GoogleSignInApi {
 
   static Future logout() => _googleSignIn.disconnect();
 
+  bool isUserSignedIn() {
+  return _googleSignIn.currentUser != null;
+}
+
+GoogleSignInAccount? getCurrentUser() {
+  return _googleSignIn.currentUser;
+}
+
 }

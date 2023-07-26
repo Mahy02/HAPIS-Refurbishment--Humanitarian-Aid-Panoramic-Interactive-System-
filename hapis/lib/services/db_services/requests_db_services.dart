@@ -1,10 +1,13 @@
+import 'package:hapis/models/db_models/get_requests_recieved_model.dart';
+import 'package:hapis/models/db_models/get_requests_sent_model.dart';
+
 import '../../helpers/sql_db.dart';
 
 class RequestsServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
-  Future<List<Map<String, dynamic>>> getRequestsSent() async {
+  Future<List<RequestSentModel>> getRequestsSent() async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Rec_Status
     FROM Requests
@@ -12,14 +15,20 @@ class RequestsServices {
     WHERE Requests.Sender_ID =14
   ''';
 
-   
-
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 
-    return queryResult;
+    List<RequestSentModel> requests = queryResult
+        .map((result) => RequestSentModel(
+              firstName: result['FirstName'],
+              lastName: result['LastName'],
+              recipientStatus: result['Rec_Status'],
+            ))
+        .toList();
+
+    return requests;
   }
 
-  Future<List<Map<String, dynamic>>> getRequestsReceived() async {
+  Future<List<RequestReceivedModel>> getRequestsReceived() async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Item, Type
     FROM Requests
@@ -30,7 +39,15 @@ class RequestsServices {
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 
-    print(queryResult);
-    return queryResult;
+    List<RequestReceivedModel> requests = queryResult
+        .map((result) => RequestReceivedModel(
+              firstName: result['FirstName'],
+              lastName: result['LastName'],
+              item: result['Item'],
+              type: result['Type'],
+            ))
+        .toList();
+
+    return requests;
   }
 }

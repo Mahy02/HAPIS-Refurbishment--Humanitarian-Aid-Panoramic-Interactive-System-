@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hapis/providers/all_matchings_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:hapis/models/db_models/get_matchings_model.dart';
 
+import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/requests_component.dart';
+import '../services/db_services/matchings_db_services.dart';
 
-class Matchings extends StatelessWidget {
+class Matchings extends StatefulWidget {
   final double fontSize;
   final double subHeadFontSize;
   final double buttonFontSize;
@@ -23,72 +24,98 @@ class Matchings extends StatelessWidget {
   });
 
   @override
+  State<Matchings> createState() => _MatchingsState();
+}
+
+class _MatchingsState extends State<Matchings> {
+  @override
   Widget build(BuildContext context) {
-    MatchingsProvider matchingsProvider =
-        Provider.of<MatchingsProvider>(context, listen: false);
-    matchingsProvider.loadMatchings();
+   
+    return FutureBuilder<List<MatchingsModel>>(
+        future: MatchingsServices().getMatchings(),
+     
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Center(child: Text('Error fetching matchings'));
+          }
+          final matchingsList = snapshot.data ?? [];
+          final noMatchings = matchingsList.isEmpty;
+          //print(noDrafts); //false
+          return noMatchings!
+              ? const NoComponentWidget(
+                  displayText: 'You don\'t have any matchings',
+                  icon: Icons.compare_arrows)
+              :
+              SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                          'Matchings For You',
+                          style: TextStyle(
+                              fontSize: widget.subHeadFontSize,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
+                      ListView.builder(
+                        // itemCount: 20,
+                        itemCount: matchingsList.length,
+                        //matchingsProvider.matchings.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final MatchingsModel matching = matchingsList[index];
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              'Matchings For You',
-              style: TextStyle(
-                  fontSize: subHeadFontSize, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          ListView.builder(
-            // itemCount: 20,
-            itemCount: matchingsProvider.matchings.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              //check for the no component if none available
+                          // final matching = matchingsProvider.matchings[index];
+                          final type = matching.type;
+                          final personName =
+                              '${matching.firstName} ${matching.lastName}';
 
-              final matching = matchingsProvider.matchings[index];
-              final type = matching.type;
-              final personName = '${matching.firstName} ${matching.lastName}';
+                          //we need to retrieve all data of the other user
+                          final city = matching.city;
+                          final category = matching.category;
+                          final item = matching.item;
+                          final email = matching.email;
+                          final phone = matching.phoneNum;
+                          final dates = matching.datesAvailable;
+                          final location = matching.addressLocation;
 
-              //we need to retrieve all data of the other user
-              final city= matching.city;
-              final category= matching.category;
-              final item= matching.item;
-              final email= matching.email;
-              final phone= matching.phoneNum;
-              final dates= matching.datesAvailable;
-              final location= matching.addressLocation;
-              
-              return ListTile(
-                  title: RequestComponent(
-                isSent: false,
-                isMatching: true,
-                isDonation: false,
-                fontSize: fontSize,
-                buttonFontSize: buttonFontSize,
-                personName: personName,
-                type: type,
-                item: item,
-                email: email,
-                city: city,
-                category: category,
-                phone: phone,
-                dates: dates,
-                location: location,
-                // buttonHeight: buttonHeight,
-                // finishButtonHeight:finishButtonHeight ,
-                // pendingButtonHeight: pendingButtonHeight,
-                // buttonWidth:buttonWidth ,
-                // pendingButtonWidth:pendingButtonWidth ,
-                // finishButtonWidth: finishButtonWidth,
-              ));
-            },
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-        ],
-      ),
-    );
+                          return ListTile(
+                              title: RequestComponent(
+                            isSent: false,
+                            isMatching: true,
+                            isDonation: false,
+                            fontSize: widget.fontSize,
+                            buttonFontSize: widget.buttonFontSize,
+                            personName: personName,
+                            type: type,
+                            item: item,
+                            email: email,
+                            city: city,
+                            category: category,
+                            phone: phone,
+                            dates: dates,
+                            location: location,
+                            // buttonHeight: buttonHeight,
+                            // finishButtonHeight:finishButtonHeight ,
+                            // pendingButtonHeight: pendingButtonHeight,
+                            // buttonWidth:buttonWidth ,
+                            // pendingButtonWidth:pendingButtonWidth ,
+                            // finishButtonWidth: finishButtonWidth,
+                          ));
+                        },
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
+                    ],
+                  ),
+                );
+        });
   }
 }

@@ -1,11 +1,11 @@
 import '../../helpers/sql_db.dart';
+import '../../models/db_models/get_matchings_model.dart';
 
 class MatchingsServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
-  Future<List<Map<String, dynamic>>> getMatchings() async {
-
+  Future<List<MatchingsModel>> getMatchings() async {
     String sqlStatement = '''
     SELECT
     CASE
@@ -61,13 +61,24 @@ JOIN Users U2 ON F2.UserID = U2.UserID
 WHERE F1.UserID = 32 OR F2.UserID = 32
 ''';
 
-
-
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 
-    print(queryResult);
+    List<MatchingsModel> matchings = queryResult
+        .map((matchingMap) => MatchingsModel(
+              type: matchingMap['Type'],
+              firstName: matchingMap['FirstName'],
+              lastName: matchingMap['LastName'],
+              city: matchingMap['City'],
+              addressLocation: matchingMap['AddressLocation'],
+              phoneNum: matchingMap['PhoneNum'],
+              email: matchingMap['Email'],
+              item: matchingMap['Item'],
+              category: matchingMap['Category'],
+              datesAvailable: matchingMap['Dates_available'],
+            ))
+        .toList();
 
-    return queryResult;
+    return matchings;
   }
 }
 

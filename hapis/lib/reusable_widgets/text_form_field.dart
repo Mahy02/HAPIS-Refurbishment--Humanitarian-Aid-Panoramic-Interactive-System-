@@ -35,6 +35,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.onChanged,
     this.onEditingComplete,
     required this.fontSize,
+    this.fillColor,
   })  : _textController = textController,
         _label = label,
         _hint = hint,
@@ -62,6 +63,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final bool? _enabled;
   final bool? _isHidden;
   final double fontSize;
+  final Color? fillColor;
 
   @override
   Key? get key => super.key;
@@ -109,7 +111,7 @@ class TextFormFieldWidget extends StatelessWidget {
           // contentPadding:
           //     const EdgeInsets.symmetric(vertical: 40, horizontal: 80),
           filled: true,
-          fillColor: Color.fromARGB(156, 240, 240, 240),
+          fillColor: fillColor ?? Color.fromARGB(156, 240, 240, 240),
           suffixIcon: _isSuffixRequired!
               ? const Text(
                   '*',

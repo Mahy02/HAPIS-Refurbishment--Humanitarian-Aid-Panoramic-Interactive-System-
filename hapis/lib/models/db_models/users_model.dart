@@ -10,7 +10,7 @@ class UsersModel {
   //String id;
 
   /// Property that defines the user userID
-  int? userID;
+  String? userID;
 
   /// Property that defines the user userName
   String? userName;

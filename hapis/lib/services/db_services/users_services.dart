@@ -68,4 +68,73 @@ class UserServices {
       }
     }
   }
+
+  Future<int> createNewUser(
+      {required String userID,
+      required String userName,
+      required String firstName,
+      required String lastName,
+      required String counrty,
+      required String city,
+      required String phoneNum,
+      required String address,
+      required String email,
+      String? password}) async {
+    String sqlStatment = '''
+      INSERT INTO Users (
+        UserID,
+        UserName,
+        FirstName,
+        LastName,
+        City,
+        Country,
+        AddressLocation,
+        PhoneNum,
+        Email,
+        Password
+      ) VALUES ($userID, '$userName', '$firstName', '$lastName', '$city', '$counrty', '$address', '$phoneNum', '$email', '${password ?? ''}')
+    ''';
+
+    int result = await db.insertData(sqlStatment);
+
+    return result;
+  }
+
+  Future<int> doesGoogleUserExist(String userId, String email) async {
+    String sqlStatment = '''
+      SELECT COUNT(*) AS count FROM Users WHERE UserID = $userId AND Email = "$email"
+      ''';
+
+    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+    int count = result[0]['count'];
+    return count;
+  }
+
+  // Future<Map<String, dynamic>> getRow() async {
+  //   final List<Map<String, dynamic>> result =
+  //       await db.readData('SELECT * FROM Users WHERE UserID = 50 ');
+  //   if (result.isNotEmpty) {
+  //     return result.first;
+  //   } else {
+  //     return Map<String, dynamic>();
+  //     ;
+  //   }
+  // }
+
+  // Future<List<Map<String, dynamic>>> getAllUsers() async {
+  //   final List<Map<String, dynamic>> result =
+  //       await db.readData('SELECT * FROM Users');
+  //   return result;
+  // }
+
+  Future<int> doesNormalUserExist(String password, String email) async {
+    String sqlStatment = '''
+      SELECT COUNT(*) AS count FROM Users WHERE Password = '$password' AND Email = '$email'
+      ''';
+
+    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+    int count = result[0]['count'];
+
+    return count;
+  }
 }

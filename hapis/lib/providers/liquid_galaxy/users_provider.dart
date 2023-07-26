@@ -12,7 +12,7 @@ import '../../utils/extract_geocoordinates.dart';
 
 class UserProvider extends ChangeNotifier {
   /// Property that defines the user userID
-  int? _userID;
+  String? _userID;
 
   /// Property that defines the user userName
   String? _userName;
@@ -109,7 +109,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set userID(int? value) {
+  set userID(String? value) {
     _userID = value;
     notifyListeners();
   }
@@ -148,7 +148,7 @@ class UserProvider extends ChangeNotifier {
   String? get lastName => _lastName;
   String? get firstName => _firstName;
   String? get userName => _userName;
-  int? get userID => _userID;
+  String? get userID => _userID;
   int? get givings => _givings;
   int? get seekingsForSelf => _seekingsForSelf;
   int? get seekingsForOthers => _seekingForOthers;
@@ -160,7 +160,7 @@ class UserProvider extends ChangeNotifier {
   UsersModel get user => _user;
 
   void saveData(
-      int userID,
+      String userID,
       String userName,
       String firstName,
       String lastName,

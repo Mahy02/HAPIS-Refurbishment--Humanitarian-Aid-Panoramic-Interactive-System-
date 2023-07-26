@@ -50,7 +50,7 @@ class SqlDb {
     //Note we didnt use autoincrement due to the reason stated in this documentation: https://www.sqlitetutorial.net/sqlite-autoincrement/
     await db.execute('''
        CREATE TABLE IF NOT EXISTS Users (
-        UserID INTEGER  NOT NULL PRIMARY KEY ,
+        UserID TEXT  NOT NULL PRIMARY KEY ,
         UserName TEXT NOT NULL,
         FirstName TEXT NOT NULL,
         LastName TEXT NOT NULL,
@@ -59,7 +59,7 @@ class SqlDb {
         AddressLocation TEXT NOT NULL,
         PhoneNum TEXT NOT NULL,
         Email TEXT NOT NULL,
-        Password TEXT NOT NULL,
+        Password TEXT,
         UNIQUE(UserID)
        );
     ''');

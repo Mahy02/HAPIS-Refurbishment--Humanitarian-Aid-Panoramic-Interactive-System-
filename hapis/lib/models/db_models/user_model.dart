@@ -5,7 +5,7 @@
 class UserModel {
 
   /// Property that defines the user userID
-  int? userID;
+  String? userID;
 
   /// Property that defines the user userName
   String? userName;

@@ -7,6 +7,7 @@ import 'package:hapis/screens/requests.dart';
 import 'package:hapis/screens/users.dart';
 import 'package:hapis/utils/drawer.dart';
 
+import '../utils/signup_popup.dart';
 import 'form_page.dart';
 import 'matchings.dart';
 
@@ -92,8 +93,12 @@ class _AppHomePageState extends State<AppHomePage> {
     return FloatingActionButton(
       backgroundColor: HapisColors.primary,
       onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const CreateForm()));
+        if (false) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CreateForm()));
+        } else {
+          showDialogSignUp(context);
+        }
       },
       child: const Icon(
         Icons.add,
@@ -106,8 +111,12 @@ class _AppHomePageState extends State<AppHomePage> {
     return FloatingActionButton(
       backgroundColor: HapisColors.primary,
       onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const CreateForm()));
+        if (false) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CreateForm()));
+        } else {
+          showDialogSignUp(context);
+        }
       },
       child: const Icon(
         Icons.add,
@@ -126,9 +135,18 @@ class _AppHomePageState extends State<AppHomePage> {
 
         currentIndex: currentIndex,
         onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+          //we have to check authentication status first
+
+          // setState(() {
+          //   currentIndex = index;
+          // });
+          if (index == 0) {
+            setState(() {
+              currentIndex = index;
+            });
+          } else {
+            showDialogSignUp(context);
+          }
         },
         items: const [
           BottomNavigationBarItem(
@@ -162,9 +180,16 @@ class _AppHomePageState extends State<AppHomePage> {
         iconSize: 40,
         currentIndex: currentIndex,
         onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+          // setState(() {
+          //   currentIndex = index;
+          // });
+          if (index == 0) {
+            setState(() {
+              currentIndex = index;
+            });
+          } else {
+            showDialogSignUp(context);
+          }
         },
         items: const [
           BottomNavigationBarItem(

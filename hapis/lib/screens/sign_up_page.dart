@@ -3,6 +3,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/screens/app_home.dart';
+import 'package:hapis/screens/google_signup.dart';
+import 'package:hapis/services/db_services/users_services.dart';
 //import 'package:image_picker/image_picker.dart';
 import '../helpers/api.dart';
 import '../models/place_autocomplete.dart';
@@ -12,6 +15,7 @@ import '../reusable_widgets/text_form_field.dart';
 
 class SignUpPage extends StatefulWidget {
   final GoogleSignInAccount user;
+
   const SignUpPage({super.key, required this.user});
 
   @override
@@ -49,14 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  String? _username;
-  String? _firstName;
-  String? _lastName;
-  String? _city;
   String? _country;
-  String? _address;
-  String? _phoneNumber;
-
   final _usernameController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -64,7 +61,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final _cityController = TextEditingController();
   final _addressController = TextEditingController();
   final _phoneNumberController = TextEditingController();
-
   String _selectedLocationInput = '';
 
   @override
@@ -238,13 +234,29 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  onPressed: () {
-                    // if (_formKey.currentState?.validate()) {
-                    //   _formKey.currentState.save();
-                    //   // TODO: Implement submitting data to database
-                    // }
+                  onPressed: () async {
+                    final result = await UserServices().createNewUser(
+                      userID: widget.user.id,
+                      userName: _usernameController.text,
+                      firstName: _firstNameController.text,
+                      lastName: _lastNameController.text,
+                      counrty: _countryController.text,
+                      city: _cityController.text,
+                      phoneNum: _phoneNumberController.text,
+                      address: _addressController.text,
+                      email: widget.user.email,
+                    );
+                    print(result);
+                    print(widget.user.id);
+                    if (result >= 0) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const GoogleSignUp()));
+                    }
                   },
-                  child: Text(
+                  child: const Text(
                     'SAVE',
                     style: TextStyle(
                       fontSize: 18,

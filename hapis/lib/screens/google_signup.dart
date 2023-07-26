@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/screens/app_home.dart';
 import 'package:hapis/screens/sign_up_page.dart';
 
 import '../helpers/google_signin_api.dart';
+import '../reusable_widgets/text_form_field.dart';
+import '../services/db_services/users_services.dart';
 import '../utils/color_utils.dart';
 
 class GoogleSignUp extends StatefulWidget {
@@ -16,6 +19,9 @@ class GoogleSignUp extends StatefulWidget {
 }
 
 class _GoogleSignUpState extends State<GoogleSignUp> {
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +43,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
   Widget buildMobileLayout() {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
+        padding: EdgeInsets.fromLTRB(20, 80, 20, 0),
         child: Column(
           children: <Widget>[
             GestureDetector(
@@ -53,7 +59,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             ),
             Image.asset("assets/images/HAPIS_Logo.png"),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: MediaQuery.of(context).size.height * 0.002,
             ),
             const Align(
                 alignment: Alignment.centerLeft,
@@ -70,10 +76,55 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                   ),
                 )),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            TextFormFieldWidget(
+              key: const ValueKey("email"),
+              fillColor: Color.fromARGB(0, 255, 255, 255),
+              textController: _emailController,
+              hint: 'Enter your Email',
+              isHidden: false,
+              isSuffixRequired: true,
+              label: 'Email',
+              fontSize: 16,
+            ),
+            TextFormFieldWidget(
+              fillColor: Color.fromARGB(0, 255, 255, 255),
+              key: const ValueKey("pass"),
+              textController: _passController,
+              hint: 'Enter your password',
+              isHidden: true,
+              isSuffixRequired: true,
+              label: 'Password',
+              fontSize: 16,
             ),
             ElevatedButton(
-              onPressed: signIn,
+              onPressed: () => signIn(false),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  )),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                child: Text(
+                  "Sign in",
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.04,
+            ),
+            ElevatedButton(
+              onPressed: () => signIn(true),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -106,7 +157,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             RichText(
               text: TextSpan(
@@ -184,7 +235,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
               height: MediaQuery.of(context).size.height * 0.05,
             ),
             ElevatedButton(
-              onPressed: signIn,
+              onPressed: () => signIn(true),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -253,22 +304,41 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
     );
   }
 
-  Future signIn() async {
-    try {
-      final user = await GoogleSignInApi.login();
-      print(user);
-      print(user.displayName);
-      //here we should check if user exists in databse or not
-      //if exist then sign in is complete and he can access all pages
+  Future signIn(bool isGoogleUser) async {
+    if (isGoogleUser) {
+      try {
+        final user = await GoogleSignInApi.login();
 
-      if (user == Null) {
-      } else {
+        if (user == Null) {
+        } else {
+         
+          final userExists =
+              await UserServices().doesGoogleUserExist(user.id, user.email);
+          if (userExists != 0) {
+            // ignore: use_build_context_synchronously
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AppHomePage()));
+          } else {
+            //user doesnt exist message, check email and password
+            print(userExists);
+          }
+        }
+      } on Exception catch (e) {
+        // Handle the sign-in error.
+        print('Sign-in error: $e');
+      }
+    } else {
+      String pass = _passController.text;
+      String email = _emailController.text;
+      final userExists = await UserServices().doesNormalUserExist(pass, email);
+      if (userExists != 0) {
+// ignore: use_build_context_synchronously
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AppHomePage()));
+      } else {
+        //user doesnt exist message, check email and password
+        print(userExists);
       }
-    } on Exception catch (e) {
-      // Handle the sign-in error.
-      print('Sign-in error: $e');
     }
   }
 
@@ -277,10 +347,6 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
       await GoogleSignInApi.login();
       await GoogleSignInApi.logout();
       final user = await GoogleSignInApi.login();
-      print(user);
-      print(user.displayName);
-      //here we should check if user exists in databse or not
-      //if exist then sign in is complete and he can access all pages
 
       if (user == Null) {
       } else {
@@ -298,3 +364,16 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
     }
   }
 }
+
+/*
+ // final GoogleSignInAuthentication googleAuth = await user.authentication;
+          // final String? accessToken = googleAuth.accessToken;
+          // print(accessToken);
+
+ // if (googleAuth.idToken != null) {
+        //   final String idToken = googleAuth.idToken!;
+        // } else {
+        //   print('id null');
+        //   throw Exception('Google Sign-In error: ID token is null');
+        // }
+*/

@@ -1,0 +1,36 @@
+  import 'dart:convert';
+import 'package:jwt/json_web_token.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+//we want to save the Id
+
+class LoginSessionSharedPreferences{
+
+  static SharedPreferences _prefs;
+
+  static Future init() async => _prefs= await SharedPreferences.getInstance();
+  
+
+// Generate a JWT for the user
+Future<void> generateJWT(String userIdentifier, String secret) async {
+  // Set the expiration time to 1 hour from now
+  int expirationTime = DateTime.now().add(Duration(hours: 1)).millisecondsSinceEpoch ~/ 1000;
+  
+  Map<String, dynamic> payload = {
+    'sub': userIdentifier,
+    'exp': expirationTime,
+  };
+  
+  String token = JWT.encode(payload, secret);
+  
+  await _prefs.setString('jwt', token);
+}
+
+// Retrieve the JWT from SharedPreferences
+Future<String> getJWT() async {
+  String jwt = _prefs.getString('jwt') ?? '';
+  return jwt;
+}
+}

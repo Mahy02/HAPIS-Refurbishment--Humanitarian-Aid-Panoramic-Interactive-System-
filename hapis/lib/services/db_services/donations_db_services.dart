@@ -1,10 +1,11 @@
 import '../../helpers/sql_db.dart';
+import '../../models/db_models/get_inprogress_donations_model.dart';
 
 class DonationsServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
-  Future<List<Map<String, dynamic>>> getDonationsInProgress() async {
+  Future<List<InProgressDonationModel>> getDonationsInProgress() async {
     String sqlStatement = '''
     SELECT
 
@@ -46,8 +47,12 @@ WHERE R.Donation_Status = 'In progress' AND (R.Sender_ID = 7 OR R.Rec_ID = 7);
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 
-    print(queryResult);
+   List<InProgressDonationModel> donations = queryResult
+        .map((result) => InProgressDonationModel(
+               firstName: result['FirstName'], lastName: result['LastName']))
+            
+        .toList();
 
-    return queryResult;
+    return donations;
   }
 }

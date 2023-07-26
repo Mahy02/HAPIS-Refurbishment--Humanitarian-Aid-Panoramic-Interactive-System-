@@ -12,7 +12,7 @@ import '../models/db_models/user_model.dart';
 
 class UserAppProvider extends ChangeNotifier {
   /// Property that defines the user userID
-  int? _userID;
+  String? _userID;
 
   /// Property that defines the user userName
   String? _userName;
@@ -134,7 +134,7 @@ class UserAppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set userID(int? value) {
+  set userID(String? value) {
     _userID = value;
     notifyListeners();
   }
@@ -147,7 +147,7 @@ class UserAppProvider extends ChangeNotifier {
   String? get lastName => _lastName;
   String? get firstName => _firstName;
   String? get userName => _userName;
-  int? get userID => _userID;
+  String? get userID => _userID;
   String? get type => _type;
   String? get item => _item;
   String? get category => _category;
@@ -160,7 +160,7 @@ class UserAppProvider extends ChangeNotifier {
   UserModel get user => _user;
 
   void saveData(
-    int userID,
+    String userID,
     String userName,
     String firstName,
     String lastName,
