@@ -24,6 +24,7 @@ import 'package:hapis/services/liquid_galaxy/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
+import 'helpers/login_session_shared_preferences.dart';
 import 'helpers/sql_db.dart';
 import 'models/liquid_galaxy/ssh_model.dart';
 
@@ -48,7 +49,8 @@ void main() async {
   SqlDb sqlDb = SqlDb();
   await sqlDb.importAllTablesFromCSV();
 
- // await LoginSessionSharedPreferences.init();
+ await LoginSessionSharedPreferences.init();
+ 
   runApp(
     MultiProvider(
       providers: [

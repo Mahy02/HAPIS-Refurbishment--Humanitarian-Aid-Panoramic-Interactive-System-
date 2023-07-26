@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/app_home.dart';
 import '../reusable_widgets/item_side_menu.dart';
+import '../screens/app_settings.dart';
 import '../screens/liquid_galaxy/configuration_screen.dart';
 import '../screens/liquid_galaxy/home.dart';
 import '../screens/liquid_galaxy/settings_screen.dart';
@@ -90,7 +91,7 @@ Drawer buildDrawer(BuildContext context, bool isLg) {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                 const IconSideMenuWidget(
                   itemNumber: '3',
-                  page: AppHomePage(),
+                  page: AppSettings(),
                   itemTitle: 'Settings',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),

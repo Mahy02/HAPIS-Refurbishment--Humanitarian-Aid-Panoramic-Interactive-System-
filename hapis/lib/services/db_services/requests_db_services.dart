@@ -7,12 +7,12 @@ class RequestsServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
-  Future<List<RequestSentModel>> getRequestsSent() async {
+  Future<List<RequestSentModel>> getRequestsSent(String id) async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Rec_Status
     FROM Requests
     JOIN Users ON Requests.Rec_ID = Users.UserID
-    WHERE Requests.Sender_ID =14
+    WHERE Requests.Sender_ID = $id
   ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
@@ -28,13 +28,13 @@ class RequestsServices {
     return requests;
   }
 
-  Future<List<RequestReceivedModel>> getRequestsReceived() async {
+  Future<List<RequestReceivedModel>> getRequestsReceived(String id) async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Item, Type
     FROM Requests
     JOIN Users ON Requests.Sender_ID = Users.UserID
     JOIN Forms ON Requests.Rec_FormID = Forms.FormID
-    WHERE Requests.Rec_ID =14
+    WHERE Requests.Rec_ID = $id
   ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);

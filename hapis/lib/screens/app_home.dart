@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/helpers/google_signin_api.dart';
+import 'package:hapis/helpers/login_session_shared_preferences.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/donations.dart';
@@ -93,7 +95,8 @@ class _AppHomePageState extends State<AppHomePage> {
     return FloatingActionButton(
       backgroundColor: HapisColors.primary,
       onPressed: () {
-        if (false) {
+        if (GoogleSignInApi().isUserSignedIn() == true ||
+            LoginSessionSharedPreferences.getLoggedIn() == true) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const CreateForm()));
         } else {
@@ -111,7 +114,8 @@ class _AppHomePageState extends State<AppHomePage> {
     return FloatingActionButton(
       backgroundColor: HapisColors.primary,
       onPressed: () {
-        if (false) {
+        if (GoogleSignInApi().isUserSignedIn() == true ||
+            LoginSessionSharedPreferences.getLoggedIn() == true) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const CreateForm()));
         } else {
@@ -140,7 +144,8 @@ class _AppHomePageState extends State<AppHomePage> {
           // setState(() {
           //   currentIndex = index;
           // });
-          if (index == 0) {
+          if (GoogleSignInApi().isUserSignedIn() == true ||
+              LoginSessionSharedPreferences.getLoggedIn() == true) {
             setState(() {
               currentIndex = index;
             });
@@ -183,7 +188,8 @@ class _AppHomePageState extends State<AppHomePage> {
           // setState(() {
           //   currentIndex = index;
           // });
-          if (index == 0) {
+          if (GoogleSignInApi().isUserSignedIn() == true ||
+              LoginSessionSharedPreferences.getLoggedIn() == true) {
             setState(() {
               currentIndex = index;
             });

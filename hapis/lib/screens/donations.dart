@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/get_inprogress_donations_model.dart';
 import 'package:hapis/services/db_services/donations_db_services.dart';
 
+import '../helpers/google_signin_api.dart';
+import '../helpers/login_session_shared_preferences.dart';
 import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/requests_component.dart';
 
@@ -30,8 +32,15 @@ class Donations extends StatefulWidget {
 class _DonationsState extends State<Donations> {
   @override
   Widget build(BuildContext context) {
+      String id;
+    final user = GoogleSignInApi().getCurrentUser();
+    if (user != null) {
+      id = user.id;
+    } else {
+      id = LoginSessionSharedPreferences.getNormalUserID()!;
+    }
     return FutureBuilder<List<InProgressDonationModel>>(
-        future: DonationsServices().getDonationsInProgress(),
+        future: DonationsServices().getDonationsInProgress(id),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/models/db_models/get_matchings_model.dart';
 
+import '../helpers/google_signin_api.dart';
+import '../helpers/login_session_shared_preferences.dart';
 import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/requests_component.dart';
 import '../services/db_services/matchings_db_services.dart';
@@ -30,9 +32,16 @@ class Matchings extends StatefulWidget {
 class _MatchingsState extends State<Matchings> {
   @override
   Widget build(BuildContext context) {
+      String id;
+    final user = GoogleSignInApi().getCurrentUser();
+    if (user != null) {
+      id = user.id;
+    } else {
+      id = LoginSessionSharedPreferences.getNormalUserID()!;
+    }
    
     return FutureBuilder<List<MatchingsModel>>(
-        future: MatchingsServices().getMatchings(),
+        future: MatchingsServices().getMatchings(id),
      
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

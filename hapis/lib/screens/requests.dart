@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hapis/helpers/google_signin_api.dart';
+import 'package:hapis/helpers/login_session_shared_preferences.dart';
 import 'package:hapis/models/db_models/get_requests_recieved_model.dart';
 import 'package:hapis/models/db_models/get_requests_sent_model.dart';
+import 'package:hapis/screens/google_signup.dart';
 import 'package:hapis/services/db_services/requests_db_services.dart';
 import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/requests_component.dart';
@@ -30,6 +33,13 @@ class Requests extends StatefulWidget {
 class _RequestsState extends State<Requests> {
   @override
   Widget build(BuildContext context) {
+    String id;
+    final user = GoogleSignInApi().getCurrentUser();
+    if (user != null) {
+      id = user.id;
+    } else {
+      id = LoginSessionSharedPreferences.getNormalUserID()!;
+    }
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -44,7 +54,7 @@ class _RequestsState extends State<Requests> {
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           FutureBuilder<List<RequestReceivedModel>>(
-              future: RequestsServices().getRequestsReceived(),
+              future: RequestsServices().getRequestsReceived(id),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -56,9 +66,23 @@ class _RequestsState extends State<Requests> {
                 final noRequestsRec = requestsRecList.isEmpty;
 
                 return noRequestsRec!
-                    ? const NoComponentWidget(
-                        displayText: 'You don\'t have any requests recieved',
-                        icon: Icons.person_add_alt_1_rounded)
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: Center(
+                          child: NoComponentWidget(
+                            displayText:
+                                'You don\'t have any requests recieved',
+                            icon: Icons.person_add_alt_1_rounded,
+                          ),
+                        ),
+                      )
+                    // const Align(
+                    //     child: Text('You don\'t have any requests recieved :('),
+                    //     alignment: Alignment.center,
+                    //   )
+                    // const NoComponentWidget(
+                    //     displayText: 'You don\'t have any requests recieved',
+                    //     icon: Icons.person_add_alt_1_rounded)
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * 0.35,
                         child: ListView.builder(
@@ -93,6 +117,9 @@ class _RequestsState extends State<Requests> {
                       );
               }),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+          Divider(
+            thickness: 2,
+          ),
           Container(
             padding: const EdgeInsets.all(20),
             child: Text(
@@ -103,7 +130,7 @@ class _RequestsState extends State<Requests> {
             ),
           ),
           FutureBuilder<List<RequestSentModel>>(
-              future: RequestsServices().getRequestsSent(),
+              future: RequestsServices().getRequestsSent(id),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -115,9 +142,22 @@ class _RequestsState extends State<Requests> {
                 final noRequestsSent = requestsSentList.isEmpty;
 
                 return noRequestsSent!
-                    ? const NoComponentWidget(
-                        displayText: 'You don\'t have any requests sent',
-                        icon: Icons.person_add_alt_1_rounded)
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: Center(
+                          child: NoComponentWidget(
+                            displayText: 'You don\'t have any requests sent',
+                            icon: Icons.person_add_alt_1_rounded,
+                          ),
+                        ),
+                      )
+                    // const Align(
+                    //     child: Text('You don\'t have any requests sent :('),
+                    //     alignment: Alignment.center,
+                    //   )
+                    // const NoComponentWidget(
+                    //     displayText: 'You don\'t have any requests sent',
+                    //     icon: Icons.person_add_alt_1_rounded)
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * 0.35,
                         child: ListView.builder(

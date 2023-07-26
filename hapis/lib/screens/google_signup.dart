@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hapis/helpers/login_session_shared_preferences.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/screens/app_home.dart';
 import 'package:hapis/screens/sign_up_page.dart';
@@ -311,10 +312,21 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
 
         if (user == Null) {
         } else {
-         
           final userExists =
               await UserServices().doesGoogleUserExist(user.id, user.email);
           if (userExists != 0) {
+            //get authentication access token:
+            final GoogleSignInAuthentication googleAuth =
+                await user.authentication;
+            //set the expiration time in seconds (e.g. 2 hours)
+            final int expirationTimeSeconds = 7200;
+            final DateTime expiryTime =
+                DateTime.now().add(Duration(seconds: expirationTimeSeconds));
+            final String? accessToken = googleAuth.accessToken;
+            print(accessToken);
+            //save it in shared preferences:
+            await LoginSessionSharedPreferences.saveToken(
+                accessToken!, expiryTime);
             // ignore: use_build_context_synchronously
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AppHomePage()));
@@ -330,14 +342,18 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
     } else {
       String pass = _passController.text;
       String email = _emailController.text;
-      final userExists = await UserServices().doesNormalUserExist(pass, email);
-      if (userExists != 0) {
-// ignore: use_build_context_synchronously
+      final userID = await UserServices().doesNormalUserExist(pass, email);
+      if (userID.isNotEmpty) {
+        //save ID
+        LoginSessionSharedPreferences.setNormalUserID(userID);
+        //set login to tryue
+        LoginSessionSharedPreferences.setLoggedIn(true);
+         // ignore: use_build_context_synchronously
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AppHomePage()));
       } else {
         //user doesnt exist message, check email and password
-        print(userExists);
+        print(userID);
       }
     }
   }

@@ -127,14 +127,26 @@ class UserServices {
   //   return result;
   // }
 
-  Future<int> doesNormalUserExist(String password, String email) async {
-    String sqlStatment = '''
-      SELECT COUNT(*) AS count FROM Users WHERE Password = '$password' AND Email = '$email'
-      ''';
+  // Future<int> doesNormalUserExist(String password, String email) async {
+  //   String sqlStatment = '''
+  //     SELECT COUNT(*) AS count FROM Users WHERE Password = '$password' AND Email = '$email'
+  //     ''';
 
-    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
-    int count = result[0]['count'];
+  //   List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+  //   int count = result[0]['count'];
 
-    return count;
+  //   return count;
+  // }
+  Future<String> doesNormalUserExist(String password, String email) async {
+  String sqlStatement = '''
+    SELECT UserID FROM Users WHERE Password = '$password' AND Email = '$email'
+    ''';
+
+  List<Map<String, dynamic>> result = await db.readData(sqlStatement);
+  if (result.isEmpty) {
+    return '';
+  } else {
+    return result[0]['UserID'];
   }
+}
 }

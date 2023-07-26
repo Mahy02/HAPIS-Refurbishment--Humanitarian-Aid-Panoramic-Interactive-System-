@@ -53,6 +53,9 @@ dependencies:
   http: ^0.13.6
   image_picker: ^1.0.1
   shared_preferences: ^2.2.0
+  dart_jsonwebtoken: ^2.8.0
+  geolocator: ^9.0.2
+  get: ^4.6.5
 
 
  
