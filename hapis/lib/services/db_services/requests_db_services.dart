@@ -12,7 +12,7 @@ class RequestsServices {
     SELECT FirstName, LastName, Rec_Status
     FROM Requests
     JOIN Users ON Requests.Rec_ID = Users.UserID
-    WHERE Requests.Sender_ID = $id
+    WHERE Requests.Sender_ID = $id AND Requests.Donation_Status= 'Not Started'
   ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
@@ -34,7 +34,7 @@ class RequestsServices {
     FROM Requests
     JOIN Users ON Requests.Sender_ID = Users.UserID
     JOIN Forms ON Requests.Rec_FormID = Forms.FormID
-    WHERE Requests.Rec_ID = $id
+    WHERE Requests.Rec_ID = $id AND Requests.Donation_Status= 'Not Started'
   ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);

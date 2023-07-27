@@ -40,6 +40,7 @@ class _RequestsState extends State<Requests> {
     } else {
       id = LoginSessionSharedPreferences.getNormalUserID()!;
     }
+    print(id);
     return SingleChildScrollView(
       child: Column(
         children: [
