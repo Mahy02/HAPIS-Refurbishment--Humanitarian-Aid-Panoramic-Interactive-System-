@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hapis/helpers/login_session_shared_preferences.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
@@ -197,16 +195,13 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
   Widget buildTabletLayout() {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(40, 50, 20, 0),
+        padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
         child: Column(
           children: <Widget>[
             GestureDetector(
               child: const Align(
                   alignment: Alignment.centerLeft,
-                  child: Icon(
-                    Icons.arrow_back,
-                    size: 40,
-                  )),
+                  child: Icon(Icons.arrow_back)),
               onTap: () {
                 Navigator.push(
                     context,
@@ -214,26 +209,74 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                         builder: (context) => const AppHomePage()));
               },
             ),
-            Image.asset("assets/images/HAPIS_Logo.png", scale: 3.5),
+            Image.asset(
+              "assets/images/HAPIS_Logo.png",
+              scale: 4,
+            ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.01,
+              height: MediaQuery.of(context).size.height * 0.001,
             ),
             const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Hey there! \nWelcome Back \n',
-                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 )),
             const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Login to your account to continue',
                   style: TextStyle(
-                    fontSize: 40,
+                    fontSize: 30,
                   ),
                 )),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            TextFormFieldWidget(
+              key: const ValueKey("email"),
+              fillColor: Color.fromARGB(0, 255, 255, 255),
+              textController: _emailController,
+              hint: 'Enter your Email',
+              isHidden: false,
+              isSuffixRequired: true,
+              label: 'Email',
+              fontSize: 20,
+            ),
+            TextFormFieldWidget(
+              fillColor: Color.fromARGB(0, 255, 255, 255),
+              key: const ValueKey("pass"),
+              textController: _passController,
+              hint: 'Enter your password',
+              isHidden: true,
+              isSuffixRequired: true,
+              label: 'Password',
+              fontSize: 20,
+            ),
+            ElevatedButton(
+              onPressed: () => signIn(false),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  )),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                child: Text(
+                  "Sign in",
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.04,
             ),
             ElevatedButton(
               onPressed: () => signIn(true),
@@ -253,13 +296,13 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                   children: const <Widget>[
                     Image(
                       image: AssetImage("assets/images/google.png"),
-                      height: 40.0,
+                      height: 30.0,
                     ),
                     SizedBox(width: 10.0),
                     Text(
                       "Sign in with Google",
                       style: TextStyle(
-                        fontSize: 40.0,
+                        fontSize: 30.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.black54,
                       ),
@@ -269,7 +312,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             RichText(
               text: TextSpan(
@@ -278,7 +321,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                     text: "Don't have an account? ",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 35.0,
+                      fontSize: 25.0,
                     ),
                   ),
                   WidgetSpan(
@@ -290,7 +333,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                         "Sign Up!",
                         style: TextStyle(
                           color: Colors.blue,
-                          fontSize: 35.0,
+                          fontSize: 25.0,
                           decoration: TextDecoration.underline,
                         ),
                       ),
@@ -348,7 +391,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
         LoginSessionSharedPreferences.setNormalUserID(userID);
         //set login to tryue
         LoginSessionSharedPreferences.setLoggedIn(true);
-         // ignore: use_build_context_synchronously
+        // ignore: use_build_context_synchronously
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AppHomePage()));
       } else {

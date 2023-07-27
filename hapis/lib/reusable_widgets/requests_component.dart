@@ -478,7 +478,7 @@ class RequestComponent extends StatelessWidget {
                     Text(
                       'Seeking',
                       style: TextStyle(
-                          fontSize: fontSize + 2,
+                          fontSize: fontSize + 1,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic),
                     ),
@@ -486,7 +486,7 @@ class RequestComponent extends StatelessWidget {
                     Text(
                       'Donating',
                       style: TextStyle(
-                        fontSize: fontSize + 2,
+                        fontSize: fontSize + 1,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -507,7 +507,7 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'City',
                     style: TextStyle(
-                      fontSize: fontSize + 2,
+                      fontSize: fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -528,7 +528,7 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Phone Number',
                     style: TextStyle(
-                      fontSize: fontSize + 2,
+                      fontSize: fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -549,16 +549,18 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Email',
                     style: TextStyle(
-                      fontSize: fontSize + 2,
+                      fontSize: fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    email ?? '',
-                    style: TextStyle(
-                        fontSize: fontSize,
-                        color: const Color.fromARGB(255, 32, 132, 214),
-                        decoration: TextDecoration.underline),
+                  Flexible(
+                    child: Text(
+                      email ?? '',
+                      style: TextStyle(
+                          fontSize: fontSize,
+                          color: const Color.fromARGB(255, 32, 132, 214),
+                          decoration: TextDecoration.underline),
+                    ),
                   ),
                 ],
               ),
@@ -571,7 +573,7 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Location',
                     style: TextStyle(
-                      fontSize: fontSize + 2,
+                      fontSize: fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -594,13 +596,13 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Dates available',
                     style: TextStyle(
-                      fontSize: fontSize + 2,
+                      fontSize: fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   GestureDetector(
                     child: Text(
-                      'click to see available dates',
+                      'click here to view',
                       style: TextStyle(
                           fontSize: fontSize,
                           color: Color.fromARGB(255, 32, 132, 214),

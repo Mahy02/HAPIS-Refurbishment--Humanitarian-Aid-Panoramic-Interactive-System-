@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/providers/date_selection.dart';
 import 'package:hapis/providers/drop_down_state.dart';
+import 'package:hapis/providers/filter_provider.dart';
 import 'package:hapis/providers/form_provider.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
@@ -13,8 +14,6 @@ import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/users_provider.dart';
 
 import 'package:hapis/providers/user_provider.dart';
-import 'package:hapis/screens/about_screen.dart';
-import 'package:hapis/screens/google_signup.dart';
 import 'package:hapis/screens/liquid_galaxy/configuration_screen.dart';
 import 'package:hapis/screens/liquid_galaxy/settings_screen.dart';
 
@@ -44,8 +43,8 @@ void main() async {
 
   /// Import the database tables from CSV files
 
-  SqlDb sqlDbb = SqlDb();
-  await sqlDbb.deleteDb();
+  // SqlDb sqlDbb = SqlDb();
+  // await sqlDbb.deleteDb();
   SqlDb sqlDb = SqlDb();
   await sqlDb.importAllTablesFromCSV();
 
@@ -62,6 +61,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => FormProvider()),
         ChangeNotifierProvider(create: (_) => DropdownState()),
         ChangeNotifierProvider(create: (_) => DateSelectionModel()),
+        ChangeNotifierProvider(create: (_) => FilterSettingsModel()),
       ],
       child: const HAPIS(),
     ),

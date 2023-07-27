@@ -32,7 +32,7 @@ class Donations extends StatefulWidget {
 class _DonationsState extends State<Donations> {
   @override
   Widget build(BuildContext context) {
-      String id;
+    String id;
     final user = GoogleSignInApi().getCurrentUser();
     if (user != null) {
       id = user.id;
@@ -53,7 +53,7 @@ class _DonationsState extends State<Donations> {
 
           return noDonations!
               ? const NoComponentWidget(
-                  displayText: 'You don\'t have any current conations',
+                  displayText: 'You don\'t have any current donations',
                   icon: Icons.favorite)
               : SingleChildScrollView(
                   child: Column(

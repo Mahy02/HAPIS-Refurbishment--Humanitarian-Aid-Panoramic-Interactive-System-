@@ -27,33 +27,34 @@ class _UsersPageState extends State<UsersPage> {
       length: 2,
       child: Column(
         children: [
-          TabBar(indicatorColor: HapisColors.lgColor3, tabs: [
-            Tab(
-              child: Text(
-                'Donors',
-                style: TextStyle(
-                  fontSize: widget.fontSize,
-                  color: Color.fromARGB(236, 77, 77, 77),
-
+          TabBar(
+            indicatorColor: HapisColors.lgColor3,
+            tabs: [
+              Tab(
+                child: Text(
+                  'Donors',
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                    color: Color.fromARGB(236, 77, 77, 77),
+                  ),
                 ),
               ),
-            ),
-            Tab(
-              child: Text(
-                'Seekers',
-                style: TextStyle(
-                  fontSize: widget.fontSize,
-                  color: Color.fromARGB(236, 77, 77, 77),
+              Tab(
+                child: Text(
+                  'Seekers',
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                    color: Color.fromARGB(236, 77, 77, 77),
 
-                  /// set the text color here
+                    /// set the text color here
+                  ),
                 ),
               ),
-            
-            ),
-           
-          ]),
+            ],
+          ),
+         
 
-          ///we need a tab bar view for the content of our 3 tabs:
+          //we need a tab bar view for the content of our 3 tabs:
           const Expanded(
             child: TabBarView(children: [
               //1st tab:
@@ -67,6 +68,4 @@ class _UsersPageState extends State<UsersPage> {
       ),
     );
   }
-
- 
 }

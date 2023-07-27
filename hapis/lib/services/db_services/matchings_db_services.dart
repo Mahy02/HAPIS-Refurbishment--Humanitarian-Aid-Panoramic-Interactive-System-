@@ -58,7 +58,7 @@ JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
 JOIN Forms F2 ON M.Giver_FormID = F2.FormID
 JOIN Users U1 ON F1.UserID = U1.UserID
 JOIN Users U2 ON F2.UserID = U2.UserID
-WHERE F1.UserID = $id OR F2.UserID = $id
+WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'Not Started'
 ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
