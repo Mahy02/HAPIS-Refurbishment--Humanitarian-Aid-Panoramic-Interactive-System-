@@ -1,6 +1,6 @@
 
 
-/// Model that represents the `SeekerModel`, with all of its properties and methods.
+/// Model that represents the `UserModel`, with all of its properties and methods.
 
 class UserModel {
 
@@ -49,7 +49,6 @@ class UserModel {
 
   UserModel(
       {
-      // required this.id,
       this.userID,
       this.userName,
       this.firstName,

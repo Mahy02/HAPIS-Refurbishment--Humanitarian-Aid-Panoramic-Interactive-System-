@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,23 +9,15 @@ import 'package:hapis/providers/form_provider.dart';
 import 'package:hapis/providers/icon_state_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
-
 import 'package:hapis/providers/liquid_galaxy/users_provider.dart';
-
 import 'package:hapis/providers/user_provider.dart';
-import 'package:hapis/screens/liquid_galaxy/configuration_screen.dart';
-import 'package:hapis/screens/liquid_galaxy/settings_screen.dart';
-
 import 'package:hapis/screens/splash_screen.dart';
 import 'package:hapis/services/liquid_galaxy/LG_functionalities.dart';
-
 import 'package:provider/provider.dart';
-
 import 'constants.dart';
 import 'helpers/login_session_shared_preferences.dart';
 import 'helpers/sql_db.dart';
 import 'models/liquid_galaxy/ssh_model.dart';
-
 import 'package:responsive_framework/responsive_framework.dart';
 
 ///This is the main starting point of our application
@@ -48,6 +39,7 @@ void main() async {
   SqlDb sqlDb = SqlDb();
   await sqlDb.importAllTablesFromCSV();
 
+/// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
  await LoginSessionSharedPreferences.init();
  
   runApp(
@@ -129,19 +121,13 @@ class HAPIS extends StatelessWidget {
               DeviceOrientation.landscapeRight,
             ]);
           }
-          //const SplashScreen(),
+         
           return const SplashScreen();
-          // return const GoogleSignUp();
-          //return const SignUpScreen();
-          //return const SignInScreen();
+         
         },
       ),
       navigatorKey: navigatorKey,
-      routes: {
-        '/settings': (context) => const Settings(),
-        '/connections': (context) => const Configuration(),
-      },
-      // '/about': (context) => const About(),
+      
     );
   }
 }

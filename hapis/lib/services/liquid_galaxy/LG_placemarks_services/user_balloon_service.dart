@@ -1,4 +1,4 @@
-import 'package:hapis/models/db_models/users_model.dart';
+import 'package:hapis/models/liquid_galaxy/balloon_models/users_model.dart';
 
 import '../../../models/liquid_galaxy/kml/line_model.dart';
 import '../../../models/liquid_galaxy/kml/look_at_model.dart';
@@ -19,7 +19,7 @@ class UserBalloonService {
   }) {
     LookAtModel lookAtObj;
 
-    // final LatLng coord = await getCoordinates(user.addressLocation!);
+    
 
     String type;
 
@@ -48,7 +48,6 @@ class UserBalloonService {
         user.getUserOrbitCoordinates(user.addressLocation!, step: orbitPeriod);
     final tour = TourModel(
       name: 'UserTour',
-      // placemarkId: 'p-${user.userID.toString()}',
       placemarkId: 'p-${user.userName}',
       initialCoordinate: {
         'lat': point.lat,
@@ -59,7 +58,6 @@ class UserBalloonService {
     );
 
     return PlacemarkModel(
-      // id: user.userID.toString(),
       id: user.userName!,
       name: user.userName!,
       lookAt: updatePosition ? lookAtObj : null,
@@ -68,7 +66,6 @@ class UserBalloonService {
           ? (seeker ? user.seekerBalloonContent() : user.giverBalloonContent())
           : '',
       line: LineModel(
-        // id: user.userID.toString(),
         id: user.userName!,
         altitudeMode: 'absolute',
         coordinates: coordinates,

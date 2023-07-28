@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hapis/models/db_models/users_model.dart';
+import 'package:hapis/models/liquid_galaxy/balloon_models/users_model.dart';
 import 'package:hapis/reusable_widgets/liquid_galaxy/user_elevated_button.dart';
 
 /// `UserComponent is for each user in the users page
 /// it is a [StatefulWidget] that simply returns `UserElevatedButton`
+/// It takes the following paramters
+///   -   `user` [UsersModel] to be displayed
+///   -   `type` for the user type
+///   -   `height` and `width` for adapting to different scales and being responsive 
 class UserComponent extends StatefulWidget {
   final UsersModel user;
   final String type;

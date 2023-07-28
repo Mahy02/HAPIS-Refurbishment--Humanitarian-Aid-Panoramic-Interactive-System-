@@ -2,12 +2,12 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
+/// This class is reponsible for getting the current location of the user in form of address from the geolocator package
 class LocationController extends GetxController {
   Position? currentPosition;
   var isLoading = false.obs;
   String? currentLocation;
  
-  // if there is no location premission, then we need that
 
   Future<Position> getPosition() async {
     LocationPermission? permission;
@@ -36,9 +36,6 @@ class LocationController extends GetxController {
       print(e);
     }
   }
-
-  
-  
 
   Future<void> getCurrentLocation() async {
     try {

@@ -9,7 +9,9 @@ import '../screens/liquid_galaxy/settings_screen.dart';
 
 ///This is a method called [buildDrawer] to build the drawer for the side menu
 ///it returns a [Drawer] which is a flutter built in drawer widget with a [ListView] for all our components
-///It helps navigate between these pages=> [HomePage] , [About], [Configuration] & [Settings]
+///It takes a boolean `isLg` to check which view we are in to display the appropriate drawer
+///It helps navigate between these pages=> [LgHomePage] , [About], [Configuration] & [Settings] in the LG part view
+///It helps navigate between these pages=> [About], [], [AppSettings] and [AppHomePage] in the main app view
 ///We use  [IconSideMenuWidget] to represent each item in the sidemenu
 
 Drawer buildDrawer(BuildContext context, bool isLg) {

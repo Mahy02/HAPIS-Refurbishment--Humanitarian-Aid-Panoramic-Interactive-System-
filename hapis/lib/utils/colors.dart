@@ -5,6 +5,7 @@ import '../constants.dart';
 ///This is where we define some functionalities related to the colors of the text 
 ///[getColorForLetter] is used to to display the text with different colors according to a letter
 ///[getColorForWord] is used to display the text with different colors according to the word
+///[hexStringToColor] to convert a hex color to `Color`
 
 Color getColorForLetter(String letter) {
   switch (letter) {
@@ -38,4 +39,13 @@ Color getColorForWord(String word) {
   } else {
     return Colors.black;
   }
+}
+
+/// a function `hexStringToColor` that takes a hex color and change it to `Color` 
+hexStringToColor(String hexColor) {
+  hexColor = hexColor.toUpperCase().replaceAll("#", "");
+  if (hexColor.length == 6) {
+    hexColor = "FF" + hexColor;
+  }
+  return Color(int.parse(hexColor, radix: 16));
 }

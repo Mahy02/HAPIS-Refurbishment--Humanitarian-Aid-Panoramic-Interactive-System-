@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
-import 'package:hapis/models/db_models/users_model.dart';
+import 'package:hapis/models/liquid_galaxy/balloon_models/users_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
@@ -11,6 +11,13 @@ import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../services/liquid_galaxy/LG_placemarks_services/user_balloon_service.dart';
 import '../../services/liquid_galaxy/LG_functionalities.dart';
 import '../../utils/pop_up_connection.dart';
+
+/// This is a custom widget, `UserElevatedButton` for displaying the user button in the liquid galaxy view
+/// It takes the following inputs
+/// - * [elevatedButtonContent] which is required for content displayed on the button
+/// - * [type] which is a required to determine whether user was seeker or giver
+/// - * [user] which is a required [UsersModel] for displaying the user statistics 
+/// - * [height] and [width] which are required for having a responsive layout
 
 class UserElevatedButton extends StatefulWidget {
   final String elevatedButtonContent;
@@ -68,7 +75,7 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
       // ignore: avoid_print
       print(e);
     }
-    // according to user if seeker or giver
+
     final kmlBalloon = KMLModel(
       name: 'HAPIS-USER-balloon',
       content: placemark.balloonOnlyTag,
@@ -76,8 +83,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
 
     await Future.delayed(Duration(seconds: 3));
     try {
-      print("in user");
-      print("kml body ${kmlBalloon.body}");
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,
@@ -119,10 +124,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
   Widget build(BuildContext context) {
     return FittedBox(
       child: SizedBox(
-        // height: MediaQuery.of(context).size.height * 0.2,
-        // width: MediaQuery.of(context).size.width * 0.15,
-        // height: MediaQuery.of(context).size.height * 0.2,
-        // width: MediaQuery.of(context).size.width * 0.4,
         height: widget.height,
         width: widget.width,
         child: ElevatedButton(
@@ -177,38 +178,38 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                         ),
                       ),
                       Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: HapisColors.lgColor4,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(2),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: HapisColors.lgColor4,
+                            width: 1.5,
                           ),
-                          height: MediaQuery.of(context).size.height * 0.05,
-                          child: GestureDetector(
-                            child: Image.asset(
-                              'assets/images/orbit.png',
-                              height: MediaQuery.of(context).size.height * 0.18,
-                              width: MediaQuery.of(context).size.height * 0.06,
-                            ),
-                            onTap: () async {
-                              final sshData = Provider.of<SSHprovider>(context,
-                                  listen: false);
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        child: GestureDetector(
+                          child: Image.asset(
+                            'assets/images/orbit.png',
+                            height: MediaQuery.of(context).size.height * 0.18,
+                            width: MediaQuery.of(context).size.height * 0.06,
+                          ),
+                          onTap: () async {
+                            final sshData = Provider.of<SSHprovider>(context,
+                                listen: false);
 
-                              if (sshData.client != null) {
-                                try {
-                                  await LgService(sshData).stopTour();
-                                  await LgService(sshData).startTour('Orbit');
-                                  print("awaiting orbit");
-                                } catch (e) {
-                                  // ignore: avoid_print
-                                  print(e);
-                                }
-                              } else {
-                                showDialogConnection(context);
+                            if (sshData.client != null) {
+                              try {
+                                await LgService(sshData).stopTour();
+                                await LgService(sshData).startTour('Orbit');
+                              } catch (e) {
+                                // ignore: avoid_print
+                                print(e);
                               }
-                            },
-                          )),
+                            } else {
+                              showDialogConnection(context);
+                            }
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 )

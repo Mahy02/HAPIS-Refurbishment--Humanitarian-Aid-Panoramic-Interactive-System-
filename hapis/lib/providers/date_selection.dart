@@ -71,7 +71,6 @@ class DateSelectionModel extends ChangeNotifier {
     });
   }
 
-  
 
   TimeOfDay _timeOfDay = const TimeOfDay(hour: 8, minute: 30);
   void showTimePickerStart(BuildContext context) {

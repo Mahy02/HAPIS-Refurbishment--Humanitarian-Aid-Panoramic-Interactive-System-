@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import '../models/db_models/user_model.dart';
 
 
-///This is a [Provider] class of [UserProvider] that extends [ChangeNotifier]
+///This is a [Provider] class of [UserAppProvider] that extends [ChangeNotifier]
 
 ///They all have setters and getters
-///We have [saveData] method to save data into the form using [UsersModel]
-///We have [saveSeekers] and [saveGivers] method to save all seekers and givers in the corresponding list
-///We have [clearData] to empty the seekers and givers list before going to another city
+///We have [saveData] method to save data into the form using [UserModel]
+///We have [saveSeekersApp] and [saveGiversApp] method to save all seekers and givers in the corresponding list
+///We have [clearDataApp] to empty the seekers and givers list before going to another city
 
 class UserAppProvider extends ChangeNotifier {
   /// Property that defines the user userID

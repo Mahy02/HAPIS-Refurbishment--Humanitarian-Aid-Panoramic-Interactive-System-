@@ -22,7 +22,6 @@ class IconSideMenuWidget extends StatelessWidget {
     required this.itemTitle,
     required this.itemNumber,
     required this.page,
-    // required this.iconState,
   }) : super(key: key);
 
   @override
@@ -39,7 +38,6 @@ class IconSideMenuWidget extends StatelessWidget {
               color: iconState
                   ? Colors.white
                   : const Color.fromARGB(100, 255, 255, 255),
-              //color: Color.fromARGB(100, 255, 255, 255),
               width: 1,
             ),
           ),
@@ -68,8 +66,7 @@ class IconSideMenuWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                  const SizedBox(
-                      width: 30), // add space between the CircleAvatar and Text
+                  const SizedBox(width: 30),
                 ],
               ),
               title: Text(

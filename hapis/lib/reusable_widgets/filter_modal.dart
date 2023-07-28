@@ -1,11 +1,16 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:hapis/providers/filter_provider.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:provider/provider.dart';
-
 import '../constants.dart';
 import 'filter_card_component.dart';
 
+/// This is a custom Widget `FilterModal` which displays the filter UI bottom sheetmodal and the components inside
+/// It takes as input required List of [cities] for displaying cities
+/// as well as a call back function to what will happen when user press on filter or cancel [onFiltered]
+/// It returns a [ResponsiveLayout] for mobile and tablet layouts
 class FilterModal extends StatefulWidget {
   final List<String> cities;
   final VoidCallback onFiltered;
@@ -25,6 +30,7 @@ class _FilterModalState extends State<FilterModal> {
         mobileBody: buildMobileModal(), tabletBody: buildTabletModal());
   }
 
+  ///This function returns a [Widget] which is a [Container] of the modal and its content in mobile view
   Widget buildMobileModal() {
     FilterSettingsModel filterSetting =
         Provider.of<FilterSettingsModel>(context, listen: false);
@@ -137,7 +143,7 @@ class _FilterModalState extends State<FilterModal> {
                   widget.onFiltered();
                   Navigator.pop(context);
                 },
-                child: Text('FILTER'),
+                child: const Text('FILTER'),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: HapisColors.lgColor2),
@@ -146,7 +152,7 @@ class _FilterModalState extends State<FilterModal> {
                   widget.onFiltered();
                   Navigator.pop(context);
                 },
-                child: Text('CLEAR'),
+                child: const Text('CLEAR'),
               ),
             ],
           ),
@@ -155,6 +161,7 @@ class _FilterModalState extends State<FilterModal> {
     );
   }
 
+  ///This function returns a [Widget] which is a [Container] of the modal and its content in tablet view
   Widget buildTabletModal() {
     FilterSettingsModel filterSetting =
         Provider.of<FilterSettingsModel>(context, listen: false);
@@ -268,7 +275,7 @@ class _FilterModalState extends State<FilterModal> {
                   widget.onFiltered();
                   Navigator.pop(context);
                 },
-                child: Text(
+                child: const Text(
                   'FILTER',
                   style: TextStyle(fontSize: 25),
                 ),
@@ -280,7 +287,7 @@ class _FilterModalState extends State<FilterModal> {
                   widget.onFiltered();
                   Navigator.pop(context);
                 },
-                child: Text(
+                child: const Text(
                   'CLEAR',
                   style: TextStyle(fontSize: 25),
                 ),

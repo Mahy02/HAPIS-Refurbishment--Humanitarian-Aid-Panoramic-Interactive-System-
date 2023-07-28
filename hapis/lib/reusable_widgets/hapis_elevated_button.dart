@@ -1,6 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hapis/constants.dart';
 
 ///This is a customer elevated button which is reused in many views through our app
 ///[HapisElevatedButton] takes as parameters:
@@ -58,14 +59,13 @@ class HapisElevatedButton extends StatelessWidget {
                       ? Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              //color: HapisColors.primary,
                               color: buttonColor,
                               width: 0.0,
                             ),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           child: Image.asset(
-                            imagePath!, // Replace with your image path
+                            imagePath!,
                             height: imageHeight,
                             width: imageWidth,
                           ),
@@ -81,7 +81,6 @@ class HapisElevatedButton extends StatelessWidget {
                       elevatedButtonContent,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        //fontSize: 35,
                         fontSize: fontSize,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                         fontWeight: FontWeight.bold,
@@ -96,7 +95,6 @@ class HapisElevatedButton extends StatelessWidget {
                   elevatedButtonContent,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    // fontSize: 35,
                     fontSize: fontSize,
                     fontFamily: GoogleFonts.montserrat().fontFamily,
                     fontWeight: FontWeight.bold,

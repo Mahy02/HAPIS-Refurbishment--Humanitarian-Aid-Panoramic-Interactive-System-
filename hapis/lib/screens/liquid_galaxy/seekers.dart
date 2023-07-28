@@ -5,7 +5,7 @@ import 'package:hapis/reusable_widgets/sub_text.dart';
 import 'package:hapis/utils/drawer.dart';
 
 import '../../constants.dart';
-import '../../models/db_models/users_model.dart';
+import '../../models/liquid_galaxy/balloon_models/users_model.dart';
 import '../../reusable_widgets/liquid_galaxy/user_component.dart';
 import '../../reusable_widgets/no_component.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hapis/models/db_models/users_model.dart';
+import 'package:hapis/models/liquid_galaxy/balloon_models/users_model.dart';
 import 'package:hapis/utils/extract_geocoordinates.dart';
 import 'package:provider/provider.dart';
 

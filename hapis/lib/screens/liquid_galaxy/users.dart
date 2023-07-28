@@ -5,7 +5,7 @@ import 'package:hapis/screens/liquid_galaxy/seekers.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
-import '../../models/db_models/users_model.dart';
+import '../../models/liquid_galaxy/balloon_models/users_model.dart';
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';

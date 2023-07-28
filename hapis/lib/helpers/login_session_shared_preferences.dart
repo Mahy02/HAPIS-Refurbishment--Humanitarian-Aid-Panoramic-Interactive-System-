@@ -1,19 +1,25 @@
-import 'dart:convert';
-//import 'package:jwt/json_web_token.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-//we want to save the Id
+///`LoginSessionSharedPreferences` to presist data in the app locally
 
 class LoginSessionSharedPreferences {
+  /// instantce of  `SharedPreferences`
   static SharedPreferences? _prefs;
 
+  /// key property of token
   static const _keyAccessToken = 'token';
+
+  /// key property of expirty time
   static const String _expiryTimeKey = 'expiryTime';
 
+  /// key property of userID
   static const String _keyNormalUserID = 'userID';
 
+  /// key property of isLoggedIn
   static const String _keyIsLoggedIn = 'isLoggedIn';
 
+   ///initialization
   static Future init() async => _prefs = await SharedPreferences.getInstance();
 
   

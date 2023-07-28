@@ -8,7 +8,8 @@ import 'package:hapis/screens/sign_up_page.dart';
 import '../helpers/google_signin_api.dart';
 import '../reusable_widgets/text_form_field.dart';
 import '../services/db_services/users_services.dart';
-import '../utils/color_utils.dart';
+import '../utils/colors.dart';
+
 
 class GoogleSignUp extends StatefulWidget {
   const GoogleSignUp({super.key});

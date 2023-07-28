@@ -1,5 +1,7 @@
 import '../../helpers/sql_db.dart';
 
+///   `globalDBServices` class that contains everything related to the global statistics query and interactions with the database
+
 class globalDBServices {
   SqlDb db = SqlDb();
 

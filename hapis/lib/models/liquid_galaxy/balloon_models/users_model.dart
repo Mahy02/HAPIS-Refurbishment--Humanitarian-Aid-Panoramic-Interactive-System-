@@ -1,14 +1,12 @@
 import 'dart:math';
 
-import '../../constants.dart';
-import '../../utils/extract_geocoordinates.dart';
+import '../../../constants.dart';
+import '../../../utils/extract_geocoordinates.dart';
 
 /// Model that represents the `UsersModel`, with all of its properties and methods.
 
 class UsersModel {
-  /// Property that defines the user `uuid`.
-  //String id;
-
+  
   /// Property that defines the user userID
   String? userID;
 
@@ -144,7 +142,7 @@ class UsersModel {
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
-      // id: map['id'],
+     
       userID: map['UserID'],
       userName: map['UserName'],
       firstName: map['FirstName'],

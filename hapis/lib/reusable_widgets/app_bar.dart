@@ -6,7 +6,11 @@ import 'package:hapis/screens/liquid_galaxy/home.dart';
 
 import '../responsive/responsive_layout.dart';
 
-///This is the custom app bar for our application
+///This is the custom app bar for our application `HAPISAppBar`
+///It takes as input:
+/// * [appBarText] which is required for displaying the content of the appbar
+/// * [isLg] which is required for knowing whether we are in liquid galaxy view or main app view
+/// It returns [ResponsiveLayout] Which is responsible for having a responsive app
 class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String appBarText;
   final bool isLg;
@@ -24,6 +28,7 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  /// This is a function `buildMobileLayout` that returns the `AppBar` Widget for the mobile view
   Widget buildMobileLayout(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -31,14 +36,12 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(
           Icons.menu_open_rounded,
           size: 30,
-          // color: HapisColors.secondary,
           color: Colors.white,
         ),
         onPressed: () {
           Scaffold.of(context).openDrawer();
         },
       ),
-
       title: Row(
         children: [
           Expanded(
@@ -48,7 +51,6 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(
                     fontSize: 30,
                     fontFamily: GoogleFonts.montserrat().fontFamily,
-                    // color: HapisColors.secondary,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
@@ -69,7 +71,6 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
                           height: MediaQuery.of(context).size.width * 0.1,
                         ),
                   onTap: () {
-                    //switch to app view or liquid galaxy view
                     if (isLg == false) {
                       Navigator.push(
                           context,
@@ -87,19 +88,19 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(
                     fontSize: 14,
                     fontFamily: GoogleFonts.montserrat().fontFamily,
-                    //color: HapisColors.secondary,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               )
             ],
           ),
         ],
-      ), //our title
+      ),
       backgroundColor: HapisColors.primary,
       actions: const [],
     );
   }
 
+  /// This is a function `buildTabletLayout` that returns the `AppBar` Widget for the tablet view
   Widget buildTabletLayout(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -107,14 +108,12 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(
           Icons.menu_open_rounded,
           size: 50,
-          //color: HapisColors.secondary,
           color: Colors.white,
         ),
         onPressed: () {
           Scaffold.of(context).openDrawer();
         },
       ),
-
       title: Row(
         children: [
           Expanded(
@@ -124,7 +123,6 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(
                     fontSize: 40,
                     fontFamily: GoogleFonts.montserrat().fontFamily,
-                    //  color: HapisColors.secondary,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
@@ -137,7 +135,6 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(
                     fontSize: 24,
                     fontFamily: GoogleFonts.montserrat().fontFamily,
-                    //color: HapisColors.secondary,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
@@ -157,7 +154,6 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
                           height: MediaQuery.of(context).size.width * 0.05,
                         ),
                   onTap: () {
-                    //switch to app view or liquid galaxy view
                     if (isLg == false) {
                       Navigator.push(
                           context,
@@ -172,13 +168,8 @@ class HAPISAppBar extends StatelessWidget implements PreferredSizeWidget {
                   }),
             ],
           ),
-          // Image.asset(
-          //   'assets/images/earth-day.png',
-          //   width: 50,
-          //   height: 50,
-          // ),
         ],
-      ), //our title
+      ),
       backgroundColor: HapisColors.primary,
       actions: const [],
     );

@@ -111,9 +111,6 @@ fi
       try {
         await _sshData
             .execute('sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"');
-
-        //OR:   .execute("'/home/$user/bin/lg-reboot' > /home/$user/log.txt");
-        //OR:   'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S reboot"'
       } catch (e) {
         // ignore: avoid_print
         print(e);
@@ -136,8 +133,7 @@ fi
         await _sshData.execute(
             'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S poweroff"');
 
-        //OR: "'/home/$user/bin/lg-poweroff' > /home/$user/log.txt"
-        //OR: 'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S poweroff"'
+      
       } catch (e) {
         // ignore: avoid_print
         print(e);
@@ -205,8 +201,7 @@ fi
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
     await _sshData.execute('echo "$content" > /tmp/query.txt');
-    //await _sshData.execute('chmod 777 /tmp/query.txt && echo "$content" > /tmp/query.txt');
-    //await _sshData.execute('echo "$content" > ~/query.txt');
+ 
   }
 
   ///Fly to functionality:
@@ -263,8 +258,7 @@ fi
       // ignore: avoid_print
       print(e);
     }
-    // await _sshData.execute(
-    //     'chmod 777 /var/www/html/kmls.txt && echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
+   
   }
 
   /// Sets the logos KML into the Liquid Galaxy rig. A KML [name] and [content] may be passed, but it's not required.
@@ -292,8 +286,7 @@ fi
     try {
       await _sshData
           .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
-      // await _sshData.execute(
-      //     "chmod 777 /var/www/html/kml/slave_$screen.kml && echo '$content' > /var/www/html/kml/slave_$screen.kml");
+     
     } catch (e) {
       // ignore: avoid_print
       print(e);
@@ -346,8 +339,7 @@ fi
       // ignore: avoid_print
       print(e);
     }
-    // await _sshData.execute(
-    //     'chmod 777 /var/www/html/kmls.txt && echo "$_url/$fileName" > /var/www/html/kmls.txt');
+   
   }
 
   Future<void> sendKmlPins(String pinsKml, String placemarkName) async {

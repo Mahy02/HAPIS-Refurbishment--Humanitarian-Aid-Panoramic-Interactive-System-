@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 
+
+/// [ResponsiveLayout] class which is responsible for returning a [LayoutBuilder] for both `mobileBody` and `TabletBody`
+
 class ResponsiveLayout extends StatelessWidget {
   final Widget mobileBody;
   final Widget tabletBody;
@@ -18,12 +21,8 @@ class ResponsiveLayout extends StatelessWidget {
       if (constraints.maxWidth < mobileWidth) {
         return mobileBody;
       } else {
-        // if (constraints.maxWidth < tabletWidth && constraints.maxWidth >= mobileWidth ) {
         return tabletBody;
       }
-      // } else {
-      //   return desktopBody!;
-      // }
     });
   }
 }

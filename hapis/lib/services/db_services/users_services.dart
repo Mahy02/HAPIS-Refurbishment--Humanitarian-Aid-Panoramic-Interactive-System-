@@ -5,6 +5,7 @@ import '../../helpers/sql_db.dart';
 import '../../models/db_models/user_model.dart';
 import '../../providers/user_provider.dart';
 
+///   `userServices` class that contains everything related to the users query and interactions with the database
 class UserServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
@@ -27,6 +28,9 @@ class UserServices {
     return results;
   }
 
+  /// `getUsersInfo` that retrieves all users info for those who filled out a form as a seeker or a giver
+  /// the function takes in  `type` of user and retrieves the form info and user info from both Forms and Users tables
+  /// It creates a new `UserModel` with the data and use the `UserAppProvider` to save list of seekers and givers
   getUsersInfo(String type, BuildContext context) async {
     String sqlStatment = '''
       SELECT Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For
@@ -69,6 +73,8 @@ class UserServices {
     }
   }
 
+///  `createNewUser` that creats a new user during sign up and adds him to database
+/// It returns a Future<int> for whether the transaction was sucessful or not
   Future<int> createNewUser(
       {required String userID,
       required String userName,
@@ -100,6 +106,8 @@ class UserServices {
     return result;
   }
 
+/// `doesGoogleUserExist` function that checks if a user signed in by google exists or not from taking the `userId` and `email`
+/// It returns a Future<int> for the count found , if it was >0 then user was found
   Future<int> doesGoogleUserExist(String userId, String email) async {
     String sqlStatment = '''
       SELECT COUNT(*) AS count FROM Users WHERE UserID = $userId AND Email = "$email"
@@ -110,43 +118,18 @@ class UserServices {
     return count;
   }
 
-  // Future<Map<String, dynamic>> getRow() async {
-  //   final List<Map<String, dynamic>> result =
-  //       await db.readData('SELECT * FROM Users WHERE UserID = 50 ');
-  //   if (result.isNotEmpty) {
-  //     return result.first;
-  //   } else {
-  //     return Map<String, dynamic>();
-  //     ;
-  //   }
-  // }
-
-  // Future<List<Map<String, dynamic>>> getAllUsers() async {
-  //   final List<Map<String, dynamic>> result =
-  //       await db.readData('SELECT * FROM Users');
-  //   return result;
-  // }
-
-  // Future<int> doesNormalUserExist(String password, String email) async {
-  //   String sqlStatment = '''
-  //     SELECT COUNT(*) AS count FROM Users WHERE Password = '$password' AND Email = '$email'
-  //     ''';
-
-  //   List<Map<String, dynamic>> result = await db.readData(sqlStatment);
-  //   int count = result[0]['count'];
-
-  //   return count;
-  // }
+/// `doesNormalUserExist` function that checks if a user signed in with email and password exists or not from taking the `password` and `email`
+/// It returns a Future<String> for the userID if the user was found and retuns 0 if wasn't found
   Future<String> doesNormalUserExist(String password, String email) async {
-  String sqlStatement = '''
+    String sqlStatement = '''
     SELECT UserID FROM Users WHERE Password = '$password' AND Email = '$email'
     ''';
 
-  List<Map<String, dynamic>> result = await db.readData(sqlStatement);
-  if (result.isEmpty) {
-    return '';
-  } else {
-    return result[0]['UserID'];
+    List<Map<String, dynamic>> result = await db.readData(sqlStatement);
+    if (result.isEmpty) {
+      return '';
+    } else {
+      return result[0]['UserID'];
+    }
   }
-}
 }

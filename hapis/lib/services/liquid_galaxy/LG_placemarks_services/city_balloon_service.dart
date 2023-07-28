@@ -25,7 +25,6 @@ class CityBalloonService {
           longitude: city.cityCoordinates.longitude,
           latitude: city.cityCoordinates.latitude,
           range: '4000000',
-          // range: '2000000',
           tilt: '60',
           heading: '0');
     } else {

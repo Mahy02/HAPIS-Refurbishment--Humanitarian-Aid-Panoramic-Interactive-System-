@@ -18,6 +18,7 @@ class TextFormFieldWidget extends StatelessWidget {
   /// * [isSuffixRequired] - to check if the field is required or not to display a red (*)
   /// * [enabled] - optional enabled to check if the textfield will be enabled or not
   /// *[onEditingComplete] -optional callback function to be called when we want to do something when user finish editing the field
+  ///  `fontSize` for the responsive layout
 
   const TextFormFieldWidget({
     Key? key,
@@ -70,11 +71,6 @@ class TextFormFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// Returns a [TextFormField] widget wrapped in [Padding] widget with a set of attributes such as [maxLength], [decoration], [validator].
-    ///
-    /// [_isRequired] boolean is used to show error message if the field is empty and required.
-    ///
-
     return Padding(
       key: key,
       padding: const EdgeInsets.all(10.0),
@@ -108,8 +104,6 @@ class TextFormFieldWidget extends StatelessWidget {
               width: 2.0,
             ),
           ),
-          // contentPadding:
-          //     const EdgeInsets.symmetric(vertical: 40, horizontal: 80),
           filled: true,
           fillColor: fillColor ?? Color.fromARGB(156, 240, 240, 240),
           suffixIcon: _isSuffixRequired!

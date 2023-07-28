@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hapis/screens/sign_up_page.dart';
 
 import '../constants.dart';
 import '../screens/google_signup.dart';
 
-///This is a function [showDialogConnection] that calls [showDialog] built in function in flutter
+///This is a function [showDialogSignUp] that calls [showDialog] built in function in flutter
 ///This is used for displayed a pop up to the user regarding sign up
 ///It returns an [AlertDialog]
-///
 
 Future<dynamic> showDialogSignUp(BuildContext context) {
   return showDialog(

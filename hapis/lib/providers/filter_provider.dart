@@ -1,5 +1,13 @@
 import 'package:flutter/foundation.dart';
 
+///This is a [Provider] class of [FilterSettingsModel] that extends [ChangeNotifier]
+
+///They all have setters and getters
+///We have [toggleSelectedCountry] method to add or remove an item from `_selectedCountries`
+///We have [toggleSelectedCity] method to add or remove an item from `_selectedCities`
+///We have [toggleSelectedCategory] method to add or remove an item from `_selectedCategories`
+///We have [clearFilters] method to clear filter
+
 class FilterSettingsModel extends ChangeNotifier {
   String? _selectedDate;
   Set<String> _selectedCountries = {};
@@ -42,6 +50,7 @@ class FilterSettingsModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
   void clearFilters() {
     _selectedDate = null;
     _selectedCountries.clear();

@@ -4,6 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import '../constants.dart';
 import '../providers/date_selection.dart';
 
+
+/// The [DateDayComponent] class that is a custom widget for displaying a [TextFormField] with the [DateSelectionModel] that shows the date picker
+/// It takes [fontSize] and [iconSize] which are required for having responsive layout
+/// It also has a required [dateModel] 
 class DateDayComponent extends StatelessWidget {
   final double fontSize;
   final double? iconSize;
@@ -34,9 +38,7 @@ class DateDayComponent extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: HapisColors.lgColor1,
           ),
-          //border: OutlineInputBorder(),
-          // contentPadding:
-          //     const EdgeInsets.symmetric(vertical: 32, horizontal: 10),
+         
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
             borderSide: const BorderSide(
@@ -51,8 +53,7 @@ class DateDayComponent extends StatelessWidget {
               width: 2.0,
             ),
           ),
-          // contentPadding:
-          //     const EdgeInsets.symmetric(vertical: 40, horizontal: 80),
+        
           filled: true,
           fillColor: const Color.fromARGB(156, 240, 240, 240),
           suffixIcon: const Text(

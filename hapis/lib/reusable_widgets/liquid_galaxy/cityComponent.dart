@@ -18,7 +18,7 @@ import '../../utils/pop_up_connection.dart';
 import '../hapis_elevated_button.dart';
 
 /// This represents the `CityComponent` where for each city it has the name [city], color [buttonColor], Country [country]
-
+/// It also has [fontSize], [imageHeight] and [imageWidth] to adapt to different layouts and be responsive
 class CityComponent extends StatefulWidget {
   final String city;
   final Color buttonColor;
@@ -116,24 +116,17 @@ class _CityComponentState extends State<CityComponent> {
     final buttonContent = '${widget.city}\n${widget.country}';
 
     return HapisElevatedButton(
-      //   fontSize: 35,
-      //fontSize: 16,
       fontSize: widget.fontSize,
       buttonColor: widget.buttonColor,
       elevatedButtonContent: buttonContent,
       height: MediaQuery.of(context).size.height * 0.2,
       width: MediaQuery.of(context).size.width * 0.4,
-      // imageHeight: MediaQuery.of(context).size.height * 0.15,
-      // imageWidth: MediaQuery.of(context).size.height * 0.15,
       imageHeight: widget.imageHeight,
       imageWidth: widget.imageWidth,
-      //imageHeight: MediaQuery.of(context).size.height * 0.1,
-      //imageWidth: MediaQuery.of(context).size.height * 0.1,
       imagePath: imagePath,
       isPoly: true,
       onpressed: () async {
         /// retrieving all city data from the database
-
         int numberOfSeekers =
             await cityDBServices().getNumberOfSeekers(widget.city);
         int numberOfGivers =

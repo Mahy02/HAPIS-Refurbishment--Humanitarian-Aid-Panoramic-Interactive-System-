@@ -3,10 +3,14 @@ import 'package:hapis/models/db_models/get_requests_sent_model.dart';
 
 import '../../helpers/sql_db.dart';
 
+///   `RequestsServices` class that contains everything related to the requests query and interactions with the database
+
 class RequestsServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
+/// `getRequestsSent` function that retrives all requests sent for a certain user taking his `id`
+/// It returns Future list of `RequestSentModel`
   Future<List<RequestSentModel>> getRequestsSent(String id) async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Rec_Status
@@ -27,7 +31,8 @@ class RequestsServices {
 
     return requests;
   }
-
+/// `getRequestsReceived` function that retrives all requests received for a certain user taking his `id`
+/// It returns Future list of `RequestReceivedModel`
   Future<List<RequestReceivedModel>> getRequestsReceived(String id) async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Item, Type

@@ -24,9 +24,10 @@ const double earthRadius = 6371000; // Average radius of the Earth in meters
 const mobileWidth = 770;
 const tabletWidth = 1280;
 
-//API key for geolocation
+///API key for place prediction geolocation
 const String apiKey = "AIzaSyCCK4oTJvUUCiu779l_HXak8cqeUqC2u9A";
 
+///List of placePredictions
 List<AutocompletePrediction> placePredictions = [];
 
 ///For drop down List of Donation form
@@ -315,6 +316,7 @@ const countryMap = {
   'Afghanistan': 'assets/flags/afghanistan--3603-512.png'
 };
 
+///all the `countries` for the drop down menu
 final countries = [
   'Afghanistan',
   'Albania',
