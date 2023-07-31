@@ -7,9 +7,10 @@ class MatchingsServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
- /// `getMatchings` function that retrieves all matches for a certain user given his `id`
- /// It returns a future List of `MatchingsModel`
+  /// `getMatchings` function that retrieves all matches for a certain user given his `id`
+  /// It returns a future List of `MatchingsModel`
   Future<List<MatchingsModel>> getMatchings(String id) async {
+    //type of current user
     String sqlStatement = '''
     SELECT
     CASE
@@ -55,7 +56,17 @@ class MatchingsServices {
     CASE
         WHEN F1.UserID = $id THEN F2.Dates_available
         ELSE F1.Dates_available
-    END AS Dates_available
+    END AS Dates_available,
+    CASE
+        WHEN F1.UserID = $id THEN F2.UserID
+        ELSE F1.UserID
+    END AS UserID,
+    CASE
+        WHEN F1.UserID = $id THEN F2.FormID
+        ELSE F1.FormID
+    END AS FormID,
+
+    M_ID, Rec1_Status, Rec2_Status
     
 FROM Matchings M
 JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
@@ -66,22 +77,75 @@ WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'Not Started'
 ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    print(queryResult);
 
     List<MatchingsModel> matchings = queryResult
         .map((matchingMap) => MatchingsModel(
-              type: matchingMap['Type'],
-              firstName: matchingMap['FirstName'],
-              lastName: matchingMap['LastName'],
-              city: matchingMap['City'],
-              addressLocation: matchingMap['AddressLocation'],
-              phoneNum: matchingMap['PhoneNum'],
-              email: matchingMap['Email'],
-              item: matchingMap['Item'],
-              category: matchingMap['Category'],
-              datesAvailable: matchingMap['Dates_available'],
-            ))
+            matchingID: matchingMap['M_ID'],
+            formID: matchingMap['FormID'],
+            userID: matchingMap['UserID'],
+            type: matchingMap['Type'],
+            firstName: matchingMap['FirstName'],
+            lastName: matchingMap['LastName'],
+            city: matchingMap['City'],
+            addressLocation: matchingMap['AddressLocation'],
+            phoneNum: matchingMap['PhoneNum'],
+            email: matchingMap['Email'],
+            item: matchingMap['Item'],
+            category: matchingMap['Category'],
+            datesAvailable: matchingMap['Dates_available'],
+            seekerStatus: matchingMap['Rec1_Status'] ?? '',
+            giverStatus: matchingMap['Rec2_Status'] ?? ''))
         .toList();
 
     return matchings;
   }
+
+  Future<int> updateMatching(int id, String type) async {
+    String sqlStatement;
+    if (type == 'seeker') {
+      sqlStatement = '''
+        UPDATE  Matchings
+        SET Rec1_Status= 'Accepted',
+            Donation_Status = 
+                          CASE 
+                            WHEN Rec2_Status = 'Accepted' 
+                          THEN 
+                            'In progress'  
+                          ELSE 
+                            Donation_Status 
+                          END
+        WHERE M_ID = $id
+      ''';
+    } else {
+      sqlStatement = '''
+        UPDATE  Matchings
+        SET Rec2_Status= 'Accepted',
+        Donation_Status = 
+                          CASE 
+                          WHEN Rec1_Status = 'Accepted'  
+                          THEN 
+                            'In progress'  
+                          ELSE 
+                            Donation_Status 
+                          END
+           
+        WHERE M_ID = $id
+      ''';
+    }
+    int queryResult = await db.updateData(sqlStatement);
+    return queryResult;
+  }
+
+  Future<int> deleteMatching(int id) async {
+    String sqlStatement = '''
+    DELETE FROM Matchings
+    WHERE  M_ID= $id
+    ''';
+    int queryResult = await db.deleteData(sqlStatement);
+    return queryResult;
+  }
 }
+
+/*
+*/

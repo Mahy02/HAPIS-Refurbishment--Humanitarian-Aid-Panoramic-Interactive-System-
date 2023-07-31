@@ -49,7 +49,7 @@ class DonationsServices {
     ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-
+    print(queryResult);
     List<InProgressDonationModel> donations = queryResult
         .map((result) => InProgressDonationModel(
             firstName: result['FirstName'], lastName: result['LastName']))

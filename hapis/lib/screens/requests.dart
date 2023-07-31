@@ -69,7 +69,7 @@ class _RequestsState extends State<Requests> {
                 return noRequestsRec!
                     ? SizedBox(
                         height: MediaQuery.of(context).size.height * 0.3,
-                        child: Center(
+                        child: const Center(
                           child: NoComponentWidget(
                             displayText:
                                 'You don\'t have any requests recieved',
@@ -77,17 +77,9 @@ class _RequestsState extends State<Requests> {
                           ),
                         ),
                       )
-                    // const Align(
-                    //     child: Text('You don\'t have any requests recieved :('),
-                    //     alignment: Alignment.center,
-                    //   )
-                    // const NoComponentWidget(
-                    //     displayText: 'You don\'t have any requests recieved',
-                    //     icon: Icons.person_add_alt_1_rounded)
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * 0.35,
                         child: ListView.builder(
-                          //itemCount: 20,
                           itemCount: requestsRecList.length,
                           itemBuilder: (context, index) {
                             final RequestReceivedModel requestRec =
@@ -96,6 +88,7 @@ class _RequestsState extends State<Requests> {
                                 '${requestRec.firstName} ${requestRec.lastName}';
                             final type = requestRec.type;
                             final item = requestRec.item;
+                            final id = requestRec.RId;
                             return ListTile(
                                 title: RequestComponent(
                               isSent: false,
@@ -106,6 +99,10 @@ class _RequestsState extends State<Requests> {
                               personName: personName,
                               type: type,
                               item: item,
+                              id: id,
+                              onPressed: () {
+                                setState(() {});
+                              },
                               //   buttonHeight: buttonHeight,
                               // finishButtonHeight:finishButtonHeight ,
                               // pendingButtonHeight: pendingButtonHeight,
@@ -118,7 +115,7 @@ class _RequestsState extends State<Requests> {
                       );
               }),
           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          Divider(
+          const Divider(
             thickness: 2,
           ),
           Container(
@@ -145,20 +142,13 @@ class _RequestsState extends State<Requests> {
                 return noRequestsSent!
                     ? SizedBox(
                         height: MediaQuery.of(context).size.height * 0.3,
-                        child: Center(
+                        child: const Center(
                           child: NoComponentWidget(
                             displayText: 'You don\'t have any requests sent',
                             icon: Icons.person_add_alt_1_rounded,
                           ),
                         ),
                       )
-                    // const Align(
-                    //     child: Text('You don\'t have any requests sent :('),
-                    //     alignment: Alignment.center,
-                    //   )
-                    // const NoComponentWidget(
-                    //     displayText: 'You don\'t have any requests sent',
-                    //     icon: Icons.person_add_alt_1_rounded)
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * 0.35,
                         child: ListView.builder(
@@ -168,7 +158,9 @@ class _RequestsState extends State<Requests> {
                                 requestsSentList[index];
                             final personName =
                                 '${requestSent.firstName} ${requestSent.lastName}';
+
                             final statusText = requestSent.recipientStatus;
+
                             return ListTile(
                                 title: RequestComponent(
                               isSent: true,

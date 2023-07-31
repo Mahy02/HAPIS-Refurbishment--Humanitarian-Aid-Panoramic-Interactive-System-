@@ -16,6 +16,7 @@ import 'package:hapis/services/liquid_galaxy/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
 import 'helpers/login_session_shared_preferences.dart';
+import 'helpers/matching_status_shared_pref.dart';
 import 'helpers/sql_db.dart';
 import 'models/liquid_galaxy/ssh_model.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -34,14 +35,15 @@ void main() async {
 
   /// Import the database tables from CSV files
 
-  // SqlDb sqlDbb = SqlDb();
-  // await sqlDbb.deleteDb();
+  SqlDb sqlDbb = SqlDb();
+  await sqlDbb.deleteDb();
   SqlDb sqlDb = SqlDb();
   await sqlDb.importAllTablesFromCSV();
 
-/// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
- await LoginSessionSharedPreferences.init();
- 
+  /// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
+  await LoginSessionSharedPreferences.init();
+  // await MatchingsSharedPreferences.init();
+
   runApp(
     MultiProvider(
       providers: [
@@ -121,13 +123,11 @@ class HAPIS extends StatelessWidget {
               DeviceOrientation.landscapeRight,
             ]);
           }
-         
+
           return const SplashScreen();
-         
         },
       ),
       navigatorKey: navigatorKey,
-      
     );
   }
 }

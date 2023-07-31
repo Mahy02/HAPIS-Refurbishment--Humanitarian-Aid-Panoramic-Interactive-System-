@@ -10,7 +10,6 @@ import '../reusable_widgets/text_form_field.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/colors.dart';
 
-
 class GoogleSignUp extends StatefulWidget {
   const GoogleSignUp({super.key});
 
@@ -387,6 +386,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
       String pass = _passController.text;
       String email = _emailController.text;
       final userID = await UserServices().doesNormalUserExist(pass, email);
+      print(userID);
       if (userID.isNotEmpty) {
         //save ID
         LoginSessionSharedPreferences.setNormalUserID(userID);

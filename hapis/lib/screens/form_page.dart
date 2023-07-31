@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/models/db_models/forms_model.dart';
 
 import 'package:hapis/providers/form_provider.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
+import 'package:hapis/services/db_services/users_services.dart';
 import 'package:hapis/utils/drawer.dart';
 
 import 'package:provider/provider.dart';
 
+import '../helpers/google_signin_api.dart';
+import '../helpers/login_session_shared_preferences.dart';
 import '../providers/date_selection.dart';
 import '../reusable_widgets/date_day_component.dart';
 import '../reusable_widgets/date_time_component.dart';
@@ -31,6 +35,13 @@ class _CreateFormState extends State<CreateForm> {
 
   @override
   Widget build(BuildContext context) {
+    String id;
+    final user = GoogleSignInApi().getCurrentUser();
+    if (user != null) {
+      id = user.id;
+    } else {
+      id = LoginSessionSharedPreferences.getNormalUserID()!;
+    }
     return Scaffold(
       appBar: const HAPISAppBar(isLg: false, appBarText: ''),
       drawer: buildDrawer(context, false),
@@ -53,7 +64,8 @@ class _CreateFormState extends State<CreateForm> {
                   typeIndexDonor,
                   categoryIndexDonor,
                   categoryIndexSeeker,
-                  forWhoIndexSeeker),
+                  forWhoIndexSeeker,
+                  id),
               tabletBody: buildTabletLayout(
                   donorModel,
                   seekerModel,
@@ -61,7 +73,8 @@ class _CreateFormState extends State<CreateForm> {
                   typeIndexDonor,
                   categoryIndexDonor,
                   categoryIndexSeeker,
-                  forWhoIndexSeeker));
+                  forWhoIndexSeeker,
+                  id));
         },
       ),
     );
@@ -74,370 +87,433 @@ class _CreateFormState extends State<CreateForm> {
       int typeIndexDonor,
       int categoryIndexDonor,
       int categoryIndexSeeker,
-      int forWhoIndexSeeker) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 8, right: 8),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Fill the Donation Form',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: GoogleFonts.montserrat().fontFamily,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                      const FormSubHeading(
-                        subtext: 'Donate ? Seek? or Both?',
-                        fontSize: 18,
-                      ),
-                      Column(
-                        children: [
-                          DropDownListWidget(
-                            key: const ValueKey("type"),
-                            fontSize: 16,
-                            items: typeList,
-                            selectedValue: typeIndexDonor != -1
-                                ? typeList[typeIndexDonor]
-                                : typeList[0],
-                            hinttext: 'Type',
-                            onChanged: (value) {
-                              setState(() {
-                                donorModel.type = value;
-                                seekerModel.type = value;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.03,
-                          ),
-                        ],
-                      ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Seeking for Who?',
-                          fontSize: 18,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            DropDownListWidget(
-                              key: const ValueKey("forWho"),
-                              fontSize: 16,
-                              items: forWhoList,
-                              selectedValue: forWhoIndexSeeker != -1
-                                  ? forWhoList[forWhoIndexSeeker]
-                                  : forWhoList[0],
-                              hinttext: 'For Who',
-                              onChanged: (value) {
-                                setState(() {
-                                  seekerModel.forWho = value;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Choose the category you are seeking',
-                          fontSize: 18,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            DropDownListWidget(
-                              key: const ValueKey("category"),
-                              fontSize: 16,
-                              items: categoryList,
-                              selectedValue: categoryIndexSeeker != -1
-                                  ? categoryList[categoryIndexSeeker]
-                                  : categoryList[0],
-                              hinttext: 'Category',
-                              onChanged: (value) {
-                                setState(() {
-                                  seekerModel.category = value;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Choose the category you wish to donate',
-                          fontSize: 18,
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            DropDownListWidget(
-                              key: const ValueKey("category"),
-                              fontSize: 16,
-                              items: categoryList,
-                              selectedValue: categoryIndexDonor != -1
-                                  ? categoryList[categoryIndexDonor]
-                                  : categoryList[0],
-                              hinttext: 'Category',
-                              onChanged: (value) {
-                                setState(() {
-                                  donorModel.category = value;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Specify the item you wish to donate',
-                          fontSize: 18,
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            TextFormFieldWidget(
-                              key: const ValueKey("item"),
-                              textController: donorModel.formItemController,
-                              hint: 'Enter the item you prefer',
-                              maxLength: 50,
-                              isHidden: false,
-                              isSuffixRequired: true,
-                              label: 'Item ',
-                              fontSize: 16,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Specify the item you need',
-                          fontSize: 18,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            TextFormFieldWidget(
-                              key: const ValueKey("item"),
-                              textController: seekerModel.formItemController,
-                              hint: 'Enter the item you prefer',
-                              maxLength: 50,
-                              isHidden: false,
-                              isSuffixRequired: true,
-                              label: 'Item ',
-                              fontSize: 16,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext:
-                              'Specify all available dates for you to pick the item you need',
-                          fontSize: 18,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        CircleAvatar(
-                          backgroundColor: HapisColors.lgColor3,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedDatesSeeker.add(DateSelectionModel());
-                              });
-                            },
-                          ),
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _selectedDatesSeeker.length,
-                          itemBuilder: (context, index) {
-                            final dateModel = _selectedDatesSeeker[index];
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20.0, top: 30),
-                                    child: Column(
-                                      children: [
-                                        DateDayComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 16,
-                                        ),
-                                        SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.05),
-                                        DateTimeComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 16,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.05),
-                                CircleAvatar(
-                                  backgroundColor: HapisColors.lgColor3,
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.remove,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedDatesSeeker.removeAt(index);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      if (donorModel.type == 'both')
+      int forWhoIndexSeeker,
+      String id) {
+    return Stack(children: [
+      SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8, right: 8),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext:
-                              'Specify all available dates for you to donate the item',
-                          fontSize: 18,
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        CircleAvatar(
-                          backgroundColor: HapisColors.lgColor3,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.white,
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Fill the Donation Form',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedDatesGiver.add(DateSelectionModel());
-                              });
-                            },
                           ),
                         ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _selectedDatesGiver.length,
-                          itemBuilder: (context, index) {
-                            final dateModel = _selectedDatesGiver[index];
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20.0, top: 30),
-                                    child: Column(
-                                      children: [
-                                        DateDayComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 16,
-                                        ),
-                                        SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.05),
-                                        DateTimeComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 16,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.05),
-                                CircleAvatar(
-                                  backgroundColor: HapisColors.lgColor3,
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.remove,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedDatesGiver.removeAt(index);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.05,
                         ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.03,
-                      ),
-                    ],
+                        const FormSubHeading(
+                          subtext: 'Donate ? Seek? or Both?',
+                          fontSize: 18,
+                        ),
+                        Column(
+                          children: [
+                            DropDownListWidget(
+                              key: const ValueKey("type"),
+                              fontSize: 16,
+                              items: typeList,
+                              selectedValue: typeIndexDonor != -1
+                                  ? typeList[typeIndexDonor]
+                                  : typeList[0],
+                              hinttext: 'Type',
+                              onChanged: (value) {
+                                setState(() {
+                                  donorModel.type = value;
+                                  seekerModel.type = value;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.03,
+                            ),
+                          ],
+                        ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Seeking for Who?',
+                            fontSize: 18,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              DropDownListWidget(
+                                key: const ValueKey("forWho"),
+                                fontSize: 16,
+                                items: forWhoList,
+                                selectedValue: forWhoIndexSeeker != -1
+                                    ? forWhoList[forWhoIndexSeeker]
+                                    : forWhoList[0],
+                                hinttext: 'For Who',
+                                onChanged: (value) {
+                                  setState(() {
+                                    seekerModel.forWho = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Choose the category you are seeking',
+                            fontSize: 18,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              DropDownListWidget(
+                                key: const ValueKey("category"),
+                                fontSize: 16,
+                                items: categoryList,
+                                selectedValue: categoryIndexSeeker != -1
+                                    ? categoryList[categoryIndexSeeker]
+                                    : categoryList[0],
+                                hinttext: 'Category',
+                                onChanged: (value) {
+                                  setState(() {
+                                    seekerModel.category = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Choose the category you wish to donate',
+                            fontSize: 18,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              DropDownListWidget(
+                                key: const ValueKey("category"),
+                                fontSize: 16,
+                                items: categoryList,
+                                selectedValue: categoryIndexDonor != -1
+                                    ? categoryList[categoryIndexDonor]
+                                    : categoryList[0],
+                                hinttext: 'Category',
+                                onChanged: (value) {
+                                  setState(() {
+                                    donorModel.category = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Specify the item you wish to donate',
+                            fontSize: 18,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              TextFormFieldWidget(
+                                key: const ValueKey("itemgiver"),
+                                textController: donorModel.formItemController,
+                                hint: 'Enter the item you prefer',
+                                maxLength: 50,
+                                isHidden: false,
+                                isSuffixRequired: true,
+                                label: 'Item ',
+                                fontSize: 16,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Specify the item you need',
+                            fontSize: 18,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              TextFormFieldWidget(
+                                key: const ValueKey("itemseek"),
+                                textController: seekerModel.formItemController,
+                                hint: 'Enter the item you prefer',
+                                maxLength: 50,
+                                isHidden: false,
+                                isSuffixRequired: true,
+                                label: 'Item ',
+                                fontSize: 16,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext:
+                                'Specify all available dates for you to pick the item you need',
+                            fontSize: 18,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          CircleAvatar(
+                            backgroundColor: HapisColors.lgColor3,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedDatesSeeker
+                                      .add(DateSelectionModel());
+                                });
+                              },
+                            ),
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _selectedDatesSeeker.length,
+                            itemBuilder: (context, index) {
+                              final dateModel = _selectedDatesSeeker[index];
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, top: 30),
+                                      child: Column(
+                                        children: [
+                                          DateDayComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 16,
+                                          ),
+                                          SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05),
+                                          DateTimeComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 16,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.05),
+                                  CircleAvatar(
+                                    backgroundColor: HapisColors.lgColor3,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _selectedDatesSeeker.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        if (donorModel.type == 'both')
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.04,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext:
+                                'Specify all available dates for you to donate the item',
+                            fontSize: 18,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          CircleAvatar(
+                            backgroundColor: HapisColors.lgColor3,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedDatesGiver.add(DateSelectionModel());
+                                });
+                              },
+                            ),
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _selectedDatesGiver.length,
+                            itemBuilder: (context, index) {
+                              final dateModel = _selectedDatesGiver[index];
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, top: 30),
+                                      child: Column(
+                                        children: [
+                                          DateDayComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 16,
+                                          ),
+                                          SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05),
+                                          DateTimeComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 16,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.05),
+                                  CircleAvatar(
+                                    backgroundColor: HapisColors.lgColor3,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _selectedDatesGiver.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    );
+      GestureDetector(
+        onTap: () async {
+          if (donorModel.type == 'seeker') {
+            await UserServices().createNewForm(
+                id,
+                'seeker',
+                seekerModel.formItemController.text,
+                seekerModel.category,
+                '2023-09-01 18:00:00',
+                seekerModel.forWho,
+                'Not Completed');
+          } else if (donorModel.type == 'giver') {
+            await UserServices().createNewForm(
+                id,
+                'giver',
+                donorModel.formItemController.text,
+                donorModel.category,
+                '2023-09-01 18:00:00',
+                null,
+                'Not Completed');
+          } else {
+            await UserServices().createNewForm(
+                id,
+                'seeker',
+                seekerModel.formItemController.text,
+                seekerModel.category,
+                '2023-09-01 18:00:00',
+                seekerModel.forWho,
+                'Not Completed');
+
+            await UserServices().createNewForm(
+                id,
+                'giver',
+                donorModel.formItemController.text,
+                donorModel.category,
+                '2023-09-01 18:00:00',
+                null,
+                'Not Completed');
+          }
+        },
+        child: const Padding(
+          padding: EdgeInsets.only(right: 20.0, bottom: 20),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: CircleAvatar(
+              backgroundColor: HapisColors.lgColor4,
+              child: Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ]);
   }
 
   Widget buildTabletLayout(
@@ -447,370 +523,433 @@ class _CreateFormState extends State<CreateForm> {
       int typeIndexDonor,
       int categoryIndexDonor,
       int categoryIndexSeeker,
-      int forWhoIndexSeeker) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 8, right: 8),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Fill the Donation Form',
-                          style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: GoogleFonts.montserrat().fontFamily,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                      const FormSubHeading(
-                        subtext: 'Donate ? Seek? or Both?',
-                        fontSize: 25,
-                      ),
-                      Column(
-                        children: [
-                          DropDownListWidget(
-                            key: const ValueKey("type"),
-                            fontSize: 22,
-                            items: typeList,
-                            selectedValue: typeIndexDonor != -1
-                                ? typeList[typeIndexDonor]
-                                : typeList[0],
-                            hinttext: 'Type',
-                            onChanged: (value) {
-                              setState(() {
-                                donorModel.type = value;
-                                seekerModel.type = value;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.03,
-                          ),
-                        ],
-                      ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Seeking for Who?',
-                          fontSize: 25,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            DropDownListWidget(
-                              key: const ValueKey("forWho"),
-                              fontSize: 22,
-                              items: forWhoList,
-                              selectedValue: forWhoIndexSeeker != -1
-                                  ? forWhoList[forWhoIndexSeeker]
-                                  : forWhoList[0],
-                              hinttext: 'For Who',
-                              onChanged: (value) {
-                                setState(() {
-                                  seekerModel.forWho = value;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Choose the category you are seeking',
-                          fontSize: 25,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            DropDownListWidget(
-                              key: const ValueKey("category"),
-                              fontSize: 22,
-                              items: categoryList,
-                              selectedValue: categoryIndexSeeker != -1
-                                  ? categoryList[categoryIndexSeeker]
-                                  : categoryList[0],
-                              hinttext: 'Category',
-                              onChanged: (value) {
-                                setState(() {
-                                  seekerModel.category = value;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Choose the category you wish to donate',
-                          fontSize: 25,
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            DropDownListWidget(
-                              key: const ValueKey("category"),
-                              fontSize: 22,
-                              items: categoryList,
-                              selectedValue: categoryIndexDonor != -1
-                                  ? categoryList[categoryIndexDonor]
-                                  : categoryList[0],
-                              hinttext: 'Category',
-                              onChanged: (value) {
-                                setState(() {
-                                  donorModel.category = value;
-                                });
-                              },
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Specify the item you wish to donate',
-                          fontSize: 25,
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            TextFormFieldWidget(
-                              key: const ValueKey("item"),
-                              textController: donorModel.formItemController,
-                              hint: 'Enter the item you prefer',
-                              maxLength: 50,
-                              isHidden: false,
-                              isSuffixRequired: true,
-                              label: 'Item ',
-                              fontSize: 22,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext: 'Specify the item you need',
-                          fontSize: 25,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        Column(
-                          children: [
-                            TextFormFieldWidget(
-                              key: const ValueKey("item"),
-                              textController: seekerModel.formItemController,
-                              hint: 'Enter the item you prefer',
-                              maxLength: 50,
-                              isHidden: false,
-                              isSuffixRequired: true,
-                              label: 'Item ',
-                              fontSize: 20,
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.03,
-                            ),
-                          ],
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext:
-                              'Specify all available dates for you to pick the item you need',
-                          fontSize: 25,
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        CircleAvatar(
-                          backgroundColor: HapisColors.lgColor3,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedDatesSeeker.add(DateSelectionModel());
-                              });
-                            },
-                          ),
-                        ),
-                      if (donorModel.type == 'seeker' ||
-                          donorModel.type == 'both')
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _selectedDatesSeeker.length,
-                          itemBuilder: (context, index) {
-                            final dateModel = _selectedDatesSeeker[index];
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20.0, top: 30),
-                                    child: Column(
-                                      children: [
-                                        DateDayComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 22,
-                                        ),
-                                        SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.05),
-                                        DateTimeComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 22,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.05),
-                                CircleAvatar(
-                                  backgroundColor: HapisColors.lgColor3,
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.remove,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedDatesSeeker.removeAt(index);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      if (donorModel.type == 'both')
+      int forWhoIndexSeeker,
+      String id) {
+    return Stack(children: [
+      SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8, right: 8),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        const FormSubHeading(
-                          subtext:
-                              'Specify all available dates for you to donate the item',
-                          fontSize: 25,
-                        ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        CircleAvatar(
-                          backgroundColor: HapisColors.lgColor3,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.add,
-                              color: Colors.white,
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Fill the Donation Form',
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _selectedDatesGiver.add(DateSelectionModel());
-                              });
-                            },
                           ),
                         ),
-                      if (donorModel.type == 'giver' ||
-                          donorModel.type == 'both')
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _selectedDatesGiver.length,
-                          itemBuilder: (context, index) {
-                            final dateModel = _selectedDatesGiver[index];
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20.0, top: 30),
-                                    child: Column(
-                                      children: [
-                                        DateDayComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 22,
-                                        ),
-                                        SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.05),
-                                        DateTimeComponent(
-                                          dateModel: dateModel,
-                                          fontSize: 22,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.05),
-                                CircleAvatar(
-                                  backgroundColor: HapisColors.lgColor3,
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.remove,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _selectedDatesGiver.removeAt(index);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.05,
                         ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.03,
-                      ),
-                    ],
+                        const FormSubHeading(
+                          subtext: 'Donate ? Seek? or Both?',
+                          fontSize: 25,
+                        ),
+                        Column(
+                          children: [
+                            DropDownListWidget(
+                              key: const ValueKey("type"),
+                              fontSize: 22,
+                              items: typeList,
+                              selectedValue: typeIndexDonor != -1
+                                  ? typeList[typeIndexDonor]
+                                  : typeList[0],
+                              hinttext: 'Type',
+                              onChanged: (value) {
+                                setState(() {
+                                  donorModel.type = value;
+                                  seekerModel.type = value;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.03,
+                            ),
+                          ],
+                        ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Seeking for Who?',
+                            fontSize: 25,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              DropDownListWidget(
+                                key: const ValueKey("forWho"),
+                                fontSize: 22,
+                                items: forWhoList,
+                                selectedValue: forWhoIndexSeeker != -1
+                                    ? forWhoList[forWhoIndexSeeker]
+                                    : forWhoList[0],
+                                hinttext: 'For Who',
+                                onChanged: (value) {
+                                  setState(() {
+                                    seekerModel.forWho = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Choose the category you are seeking',
+                            fontSize: 25,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              DropDownListWidget(
+                                key: const ValueKey("category"),
+                                fontSize: 22,
+                                items: categoryList,
+                                selectedValue: categoryIndexSeeker != -1
+                                    ? categoryList[categoryIndexSeeker]
+                                    : categoryList[0],
+                                hinttext: 'Category',
+                                onChanged: (value) {
+                                  setState(() {
+                                    seekerModel.category = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Choose the category you wish to donate',
+                            fontSize: 25,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              DropDownListWidget(
+                                key: const ValueKey("category"),
+                                fontSize: 22,
+                                items: categoryList,
+                                selectedValue: categoryIndexDonor != -1
+                                    ? categoryList[categoryIndexDonor]
+                                    : categoryList[0],
+                                hinttext: 'Category',
+                                onChanged: (value) {
+                                  setState(() {
+                                    donorModel.category = value;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Specify the item you wish to donate',
+                            fontSize: 25,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              TextFormFieldWidget(
+                                key: const ValueKey("item"),
+                                textController: donorModel.formItemController,
+                                hint: 'Enter the item you prefer',
+                                maxLength: 50,
+                                isHidden: false,
+                                isSuffixRequired: true,
+                                label: 'Item ',
+                                fontSize: 22,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext: 'Specify the item you need',
+                            fontSize: 25,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          Column(
+                            children: [
+                              TextFormFieldWidget(
+                                key: const ValueKey("item"),
+                                textController: seekerModel.formItemController,
+                                hint: 'Enter the item you prefer',
+                                maxLength: 50,
+                                isHidden: false,
+                                isSuffixRequired: true,
+                                label: 'Item ',
+                                fontSize: 20,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                            ],
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext:
+                                'Specify all available dates for you to pick the item you need',
+                            fontSize: 25,
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          CircleAvatar(
+                            backgroundColor: HapisColors.lgColor3,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedDatesSeeker
+                                      .add(DateSelectionModel());
+                                });
+                              },
+                            ),
+                          ),
+                        if (donorModel.type == 'seeker' ||
+                            donorModel.type == 'both')
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _selectedDatesSeeker.length,
+                            itemBuilder: (context, index) {
+                              final dateModel = _selectedDatesSeeker[index];
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, top: 30),
+                                      child: Column(
+                                        children: [
+                                          DateDayComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 22,
+                                          ),
+                                          SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05),
+                                          DateTimeComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 22,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.05),
+                                  CircleAvatar(
+                                    backgroundColor: HapisColors.lgColor3,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _selectedDatesSeeker.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        if (donorModel.type == 'both')
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.04,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          const FormSubHeading(
+                            subtext:
+                                'Specify all available dates for you to donate the item',
+                            fontSize: 25,
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          CircleAvatar(
+                            backgroundColor: HapisColors.lgColor3,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedDatesGiver.add(DateSelectionModel());
+                                });
+                              },
+                            ),
+                          ),
+                        if (donorModel.type == 'giver' ||
+                            donorModel.type == 'both')
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _selectedDatesGiver.length,
+                            itemBuilder: (context, index) {
+                              final dateModel = _selectedDatesGiver[index];
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, top: 30),
+                                      child: Column(
+                                        children: [
+                                          DateDayComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 22,
+                                          ),
+                                          SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05),
+                                          DateTimeComponent(
+                                            dateModel: dateModel,
+                                            fontSize: 22,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.05),
+                                  CircleAvatar(
+                                    backgroundColor: HapisColors.lgColor3,
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _selectedDatesGiver.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    );
+      GestureDetector(
+        onTap: () async {
+          if (donorModel.type == 'seeker') {
+            await UserServices().createNewForm(
+                id,
+                'seeker',
+                seekerModel.formItemController.text,
+                seekerModel.category,
+                '2023-09-01 18:00:00',
+                seekerModel.forWho,
+                'Not Completed');
+          } else if (donorModel.type == 'giver') {
+            await UserServices().createNewForm(
+                id,
+                'giver',
+                donorModel.formItemController.text,
+                donorModel.category,
+                '2023-09-01 18:00:00',
+                null,
+                'Not Completed');
+          } else {
+            await UserServices().createNewForm(
+                id,
+                'seeker',
+                seekerModel.formItemController.text,
+                seekerModel.category,
+                '2023-09-01 18:00:00',
+                seekerModel.forWho,
+                'Not Completed');
+
+            await UserServices().createNewForm(
+                id,
+                'giver',
+                donorModel.formItemController.text,
+                donorModel.category,
+                '2023-09-01 18:00:00',
+                null,
+                'Not Completed');
+          }
+        },
+        child: const Padding(
+          padding: EdgeInsets.only(right: 20.0, bottom: 20),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: CircleAvatar(
+              backgroundColor: HapisColors.lgColor4,
+              child: Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ]);
   }
 }
 

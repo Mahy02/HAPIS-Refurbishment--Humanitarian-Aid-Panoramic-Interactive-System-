@@ -67,7 +67,7 @@ class SqlDb {
     await db.execute('''
        CREATE TABLE IF NOT EXISTS Forms (
         FormID INTEGER  NOT NULL PRIMARY KEY ,
-        UserID INTEGER NOT NULL,
+        UserID TEXT NOT NULL,
         Type TEXT NOT NULL CHECK (Type IN ('seeker', 'giver')) ,
         Item TEXT NOT NULL,
         Category TEXT NOT NULL CHECK (Category IN ('Clothing', 'Household', 'Books and Media', 'Toys and Games', 'Sports Equipment', 'Baby item', 'Hygiene Products', 'Medical Supplies', 'Pet supplies', 'Food', 'Electronics')) ,
@@ -82,8 +82,8 @@ class SqlDb {
     await db.execute('''
        CREATE TABLE IF NOT EXISTS Matchings (
         M_ID INTEGER  NOT NULL PRIMARY KEY ,
-        Seeker_FormID INTEGER NOT NULL,
-        Giver_FormID INTEGER NOT NULL,
+        Seeker_FormID TEXT NOT NULL,
+        Giver_FormID TEXT NOT NULL,
         Rec1_Status  TEXT NOT NULL  CHECK (Rec1_Status IN ('Pending', 'Accepted', 'Rejected')) ,
         Rec2_status TEXT NOT NULL CHECK (Rec2_status IN ('Pending', 'Accepted', 'Rejected')) ,
         Donation_Status TEXT NOT NULL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,
@@ -96,8 +96,8 @@ class SqlDb {
     await db.execute('''
        CREATE TABLE IF NOT EXISTS Requests (
         R_ID INTEGER  NOT NULL PRIMARY KEY ,
-        Sender_ID INTEGER NOT NULL,
-        Rec_ID INTEGER NOT NULL,
+        Sender_ID TEXT NOT NULL,
+        Rec_ID TEXT NOT NULL,
         Rec_FormID INTEGER NOT NULL,
         Rec_Status  TEXT NOT NULL  CHECK (Rec_Status IN ('Pending', 'Accepted', 'Rejected')) ,
         Donation_Status TEXT NOT NULL CHECK (Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,

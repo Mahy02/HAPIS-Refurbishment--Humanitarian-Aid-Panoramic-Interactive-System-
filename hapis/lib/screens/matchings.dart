@@ -30,19 +30,47 @@ class Matchings extends StatefulWidget {
 }
 
 class _MatchingsState extends State<Matchings> {
+  late String id;
+  late Future<List<MatchingsModel>>? _future;
+
   @override
-  Widget build(BuildContext context) {
-      String id;
+  void initState() {
+    super.initState();
     final user = GoogleSignInApi().getCurrentUser();
     if (user != null) {
       id = user.id;
     } else {
       id = LoginSessionSharedPreferences.getNormalUserID()!;
     }
-   
+    _future = MatchingsServices().getMatchings(id);
+  }
+
+  Future<void> _refreshData() async {
+    final user = GoogleSignInApi().getCurrentUser();
+    if (user != null) {
+      id = user.id;
+    } else {
+      id = LoginSessionSharedPreferences.getNormalUserID()!;
+    }
+
+    setState(() {
+      _future = MatchingsServices().getMatchings(id);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // String id;
+    // final user = GoogleSignInApi().getCurrentUser();
+    // if (user != null) {
+    //   id = user.id;
+    // } else {
+    //   id = LoginSessionSharedPreferences.getNormalUserID()!;
+    // }
+
     return FutureBuilder<List<MatchingsModel>>(
-        future: MatchingsServices().getMatchings(id),
-     
+        future: _future,
+        // MatchingsServices().getMatchings(id),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -51,14 +79,14 @@ class _MatchingsState extends State<Matchings> {
             return const Center(child: Text('Error fetching matchings'));
           }
           final matchingsList = snapshot.data ?? [];
+          // print(matchingsList);
           final noMatchings = matchingsList.isEmpty;
           //print(noDrafts); //false
           return noMatchings!
               ? const NoComponentWidget(
                   displayText: 'You don\'t have any matchings',
                   icon: Icons.compare_arrows)
-              :
-              SingleChildScrollView(
+              : SingleChildScrollView(
                   child: Column(
                     children: [
                       Container(
@@ -86,6 +114,9 @@ class _MatchingsState extends State<Matchings> {
                           final personName =
                               '${matching.firstName} ${matching.lastName}';
 
+                          final userID = matching.userID;
+                          final matchingID = matching.matchingID;
+
                           //we need to retrieve all data of the other user
                           final city = matching.city;
                           final category = matching.category;
@@ -94,6 +125,9 @@ class _MatchingsState extends State<Matchings> {
                           final phone = matching.phoneNum;
                           final dates = matching.datesAvailable;
                           final location = matching.addressLocation;
+
+                          final seekerStatus = matching.seekerStatus;
+                          final giverStatus = matching.giverStatus;
 
                           return ListTile(
                               title: RequestComponent(
@@ -111,6 +145,14 @@ class _MatchingsState extends State<Matchings> {
                             phone: phone,
                             dates: dates,
                             location: location,
+                            userID: userID,
+                            id: matchingID,
+                            seekerStatus: seekerStatus,
+                            giverStatus: giverStatus,
+                            onPressed: () {
+                              _refreshData();
+                            },
+
                             // buttonHeight: buttonHeight,
                             // finishButtonHeight:finishButtonHeight ,
                             // pendingButtonHeight: pendingButtonHeight,

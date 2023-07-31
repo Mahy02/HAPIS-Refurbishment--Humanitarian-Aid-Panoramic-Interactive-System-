@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/services/db_services/matchings_db_services.dart';
+import 'package:hapis/services/db_services/requests_db_services.dart';
 
+import '../helpers/matching_status_shared_pref.dart';
 import '../utils/date_popup.dart';
 
 /// [RequestComponent] is a custom widget that displays the component shown in main app view for either Requests, Donations or Matchings page
@@ -19,7 +22,7 @@ import '../utils/date_popup.dart';
 /// * [phone] - Optional if its required to provide the phone
 /// * [location] - Optional if its required to provide the location
 /// * [dates] - Optional if its required to provide the dates
-class RequestComponent extends StatelessWidget {
+class RequestComponent extends StatefulWidget {
   final bool isSent;
   final bool isMatching;
   final bool isDonation;
@@ -35,6 +38,11 @@ class RequestComponent extends StatelessWidget {
   final String? phone;
   final String? location;
   final String? dates;
+  final int? id;
+  final String? userID;
+  final String? seekerStatus;
+  final String? giverStatus;
+  final VoidCallback? onPressed;
 
   const RequestComponent({
     super.key,
@@ -53,7 +61,22 @@ class RequestComponent extends StatelessWidget {
     this.phone,
     this.location,
     this.dates,
+    this.id,
+    this.onPressed,
+    this.userID,
+    this.seekerStatus,
+    this.giverStatus,
   });
+
+  @override
+  State<RequestComponent> createState() => _RequestComponentState();
+}
+
+class _RequestComponentState extends State<RequestComponent> {
+  bool _accepted = false;
+  // bool isMatchAccepted = MatchingsSharedPreferences.isMatchAccepted();
+
+  // bool isMatchAccepted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,62 +99,63 @@ class RequestComponent extends StatelessWidget {
               ),
               SizedBox(width: MediaQuery.of(context).size.width * 0.05),
               Expanded(
-                child: isSent
+                child: widget.isSent
                     ? RichText(
                         text: TextSpan(
                           style: TextStyle(
-                              fontSize: fontSize, color: Colors.black),
+                              fontSize: widget.fontSize, color: Colors.black),
                           children: [
                             const TextSpan(
                               text: 'Request sent to ',
                             ),
                             TextSpan(
-                              text: personName,
+                              text: widget.personName,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
                       )
-                    : isMatching
+                    : widget.isMatching
                         ? RichText(
                             text: TextSpan(
                               style: TextStyle(
-                                  fontSize: fontSize, color: Colors.black),
+                                  fontSize: widget.fontSize,
+                                  color: Colors.black),
                               children: [
                                 WidgetSpan(
                                   child: GestureDetector(
                                     onTap: () {
-                                      if (type == 'giver') {
+                                      if (widget.type == 'giver') {
                                         _showUserDetails(
                                             context,
-                                            personName,
-                                            email,
-                                            phone,
-                                            city,
-                                            category,
-                                            item,
-                                            dates,
-                                            location,
+                                            widget.personName,
+                                            widget.email,
+                                            widget.phone,
+                                            widget.city,
+                                            widget.category,
+                                            widget.item,
+                                            widget.dates,
+                                            widget.location,
                                             'seeker');
                                       } else {
                                         _showUserDetails(
                                             context,
-                                            personName,
-                                            email,
-                                            phone,
-                                            city,
-                                            category,
-                                            item,
-                                            dates,
-                                            location,
+                                            widget.personName,
+                                            widget.email,
+                                            widget.phone,
+                                            widget.city,
+                                            widget.category,
+                                            widget.item,
+                                            widget.dates,
+                                            widget.location,
                                             'giver');
                                       }
                                     },
                                     child: Text(
-                                      personName ?? '',
+                                      widget.personName ?? '',
                                       style: TextStyle(
-                                        fontSize: fontSize,
+                                        fontSize: widget.fontSize,
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.underline,
                                         color: const Color.fromARGB(
@@ -140,16 +164,16 @@ class RequestComponent extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                if (type == 'giver')
+                                if (widget.type == 'giver')
                                   const TextSpan(
                                       text:
                                           ' is a good match for your wish to donate '),
-                                if (type == 'seeker')
+                                if (widget.type == 'seeker')
                                   const TextSpan(
                                       text:
                                           ' is a good match for your need for '),
                                 TextSpan(
-                                  text: '$item. ',
+                                  text: '${widget.item}. ',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -157,15 +181,16 @@ class RequestComponent extends StatelessWidget {
                               ],
                             ),
                           )
-                        : isDonation
+                        : widget.isDonation
                             ? RichText(
                                 text: TextSpan(
                                   style: TextStyle(
-                                      fontSize: fontSize, color: Colors.black),
+                                      fontSize: widget.fontSize,
+                                      color: Colors.black),
                                   children: [
                                     const TextSpan(text: 'You and  '),
                                     TextSpan(
-                                      text: personName,
+                                      text: widget.personName,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -178,24 +203,25 @@ class RequestComponent extends StatelessWidget {
                             : RichText(
                                 text: TextSpan(
                                   style: TextStyle(
-                                      fontSize: fontSize, color: Colors.black),
+                                      fontSize: widget.fontSize,
+                                      color: Colors.black),
                                   children: [
                                     TextSpan(
-                                      text: personName,
+                                      text: widget.personName,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    if (type == 'seeker')
+                                    if (widget.type == 'seeker')
                                       const TextSpan(
                                           text:
                                               ' requested to contact you about your need for '),
-                                    if (type == 'giver')
+                                    if (widget.type == 'giver')
                                       const TextSpan(
                                           text:
                                               ' requested to contact you about your offered '),
                                     TextSpan(
                                       //  text: 'item',
-                                      text: item,
+                                      text: widget.item,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -205,7 +231,7 @@ class RequestComponent extends StatelessWidget {
               ),
             ],
           ),
-          isSent
+          widget.isSent
               ? Align(
                   alignment: Alignment.bottomRight,
                   child: SizedBox(
@@ -224,63 +250,121 @@ class RequestComponent extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        status!,
-                        style: TextStyle(fontSize: buttonFontSize),
+                        widget.status!.toUpperCase(),
+                        style: TextStyle(fontSize: widget.buttonFontSize),
                       ),
                     ),
                   ),
                 )
-              : isMatching
+              : widget.isMatching
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        SizedBox(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  HapisColors.lgColor4),
-                              padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      const EdgeInsets.all(15)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
+                        if ((widget.type == 'seeker' &&
+                                widget.seekerStatus != 'Accepted') ||
+                            (widget.type == 'giver' &&
+                                widget.giverStatus != 'Accepted'))
+                          SizedBox(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                //change status
+                                int result = await MatchingsServices()
+                                    .updateMatching(widget.id!, widget.type!);
+
+                                //referesh
+                                widget.onPressed!();
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        HapisColors.lgColor4),
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    const EdgeInsets.all(15)),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                'ACCEPT',
+                                style:
+                                    TextStyle(fontSize: widget.buttonFontSize),
+                              ),
+                            ),
+                          ),
+                        if ((widget.type == 'seeker' &&
+                                widget.seekerStatus != 'Accepted') ||
+                            (widget.type == 'giver' &&
+                                widget.giverStatus != 'Accepted'))
+                          SizedBox(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                //delete matching
+                                int result = await MatchingsServices()
+                                    .deleteMatching(widget.id!);
+
+                                //referesh
+                                widget.onPressed!();
+                                //send push notification to other person
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        HapisColors.lgColor2),
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    const EdgeInsets.all(15)),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                'IGNORE',
+                                style:
+                                    TextStyle(fontSize: widget.buttonFontSize),
+                              ),
+                            ),
+                          ),
+                        if ((widget.type == 'seeker' &&
+                                widget.seekerStatus == 'Accepted') ||
+                            (widget.type == 'giver' &&
+                                widget.giverStatus == 'Accepted'))
+                          SizedBox(
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        HapisColors.lgColor1),
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    const EdgeInsets.all(15)),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                              ),
+                              child: Tooltip(
+                                message: 'Waiting for others..',
+                                child: Text(
+                                  'PENDING',
+                                  style: TextStyle(
+                                      fontSize: widget.buttonFontSize),
                                 ),
                               ),
                             ),
-                            child: Text(
-                              'REQUEST',
-                              style: TextStyle(fontSize: buttonFontSize),
-                            ),
                           ),
-                        ),
-                        SizedBox(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  HapisColors.lgColor2),
-                              padding:
-                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                      const EdgeInsets.all(15)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              'IGNORE',
-                              style: TextStyle(fontSize: buttonFontSize),
-                            ),
-                          ),
-                        ),
                       ],
                     )
-                  : isDonation
+                  : widget.isDonation
                       ? Align(
                           alignment: Alignment.bottomRight,
                           child: SizedBox(
@@ -302,7 +386,8 @@ class RequestComponent extends StatelessWidget {
                               ),
                               child: Text(
                                 'FINISH PROCESS',
-                                style: TextStyle(fontSize: buttonFontSize),
+                                style:
+                                    TextStyle(fontSize: widget.buttonFontSize),
                               ),
                             ),
                           ),
@@ -312,7 +397,14 @@ class RequestComponent extends StatelessWidget {
                           children: [
                             SizedBox(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  //change status in database
+                                  int result = await RequestsServices()
+                                      .acceptRequest(widget.id!);
+                                  //refresh:
+                                  widget.onPressed!();
+                                  //send push notification
+                                },
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
@@ -329,13 +421,21 @@ class RequestComponent extends StatelessWidget {
                                 ),
                                 child: Text(
                                   'ACCEPT',
-                                  style: TextStyle(fontSize: buttonFontSize),
+                                  style: TextStyle(
+                                      fontSize: widget.buttonFontSize),
                                 ),
                               ),
                             ),
                             SizedBox(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  //change status in database
+                                  int result = await RequestsServices()
+                                      .deleteRequest(widget.id!);
+                                  //refresh:
+                                  widget.onPressed!();
+                                  //send push notification
+                                },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty
                                       .all<Color>(HapisColors
@@ -352,7 +452,8 @@ class RequestComponent extends StatelessWidget {
                                 ),
                                 child: Text(
                                   'DECLINE',
-                                  style: TextStyle(fontSize: buttonFontSize),
+                                  style: TextStyle(
+                                      fontSize: widget.buttonFontSize),
                                 ),
                               ),
                             ),
@@ -401,7 +502,8 @@ class RequestComponent extends StatelessWidget {
                 child: Text(
                   personName ?? '',
                   style: TextStyle(
-                      fontSize: fontSize + 4, fontWeight: FontWeight.bold),
+                      fontSize: widget.fontSize + 4,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -414,7 +516,7 @@ class RequestComponent extends StatelessWidget {
                     Text(
                       'Seeking',
                       style: TextStyle(
-                          fontSize: fontSize + 1,
+                          fontSize: widget.fontSize + 1,
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic),
                     ),
@@ -422,14 +524,14 @@ class RequestComponent extends StatelessWidget {
                     Text(
                       'Donating',
                       style: TextStyle(
-                        fontSize: fontSize + 1,
+                        fontSize: widget.fontSize + 1,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   Text(
                     item ?? '',
                     style: TextStyle(
-                      fontSize: fontSize,
+                      fontSize: widget.fontSize,
                     ),
                   ),
                 ],
@@ -443,14 +545,14 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'City',
                     style: TextStyle(
-                      fontSize: fontSize + 1,
+                      fontSize: widget.fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     city ?? '',
                     style: TextStyle(
-                      fontSize: fontSize,
+                      fontSize: widget.fontSize,
                     ),
                   ),
                 ],
@@ -464,14 +566,14 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Phone Number',
                     style: TextStyle(
-                      fontSize: fontSize + 1,
+                      fontSize: widget.fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     phone ?? '',
                     style: TextStyle(
-                      fontSize: fontSize,
+                      fontSize: widget.fontSize,
                     ),
                   ),
                 ],
@@ -485,7 +587,7 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Email',
                     style: TextStyle(
-                      fontSize: fontSize + 1,
+                      fontSize: widget.fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -493,7 +595,7 @@ class RequestComponent extends StatelessWidget {
                     child: Text(
                       email ?? '',
                       style: TextStyle(
-                          fontSize: fontSize,
+                          fontSize: widget.fontSize,
                           color: const Color.fromARGB(255, 32, 132, 214),
                           decoration: TextDecoration.underline),
                     ),
@@ -509,7 +611,7 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Location',
                     style: TextStyle(
-                      fontSize: fontSize + 1,
+                      fontSize: widget.fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -517,7 +619,7 @@ class RequestComponent extends StatelessWidget {
                     child: Text(
                       location ?? '',
                       style: TextStyle(
-                        fontSize: fontSize,
+                        fontSize: widget.fontSize,
                       ),
                     ),
                   ),
@@ -532,7 +634,7 @@ class RequestComponent extends StatelessWidget {
                   Text(
                     'Dates available',
                     style: TextStyle(
-                      fontSize: fontSize + 1,
+                      fontSize: widget.fontSize + 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -540,7 +642,7 @@ class RequestComponent extends StatelessWidget {
                     child: Text(
                       'click here to view',
                       style: TextStyle(
-                          fontSize: fontSize,
+                          fontSize: widget.fontSize,
                           color: Color.fromARGB(255, 32, 132, 214),
                           decoration: TextDecoration.underline),
                     ),

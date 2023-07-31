@@ -73,8 +73,19 @@ class UserServices {
     }
   }
 
-///  `createNewUser` that creats a new user during sign up and adds him to database
-/// It returns a Future<int> for whether the transaction was sucessful or not
+  createNewForm( String userID, String type, String item,
+      String category, String dates, String? forWho, String status) async {
+    String sqlStatment = '''
+    INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
+        VALUES ('$userID' , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
+    ''';
+    int result = await db.insertData(sqlStatment);
+
+    return result;
+  }
+
+  ///  `createNewUser` that creats a new user during sign up and adds him to database
+  /// It returns a Future<int> for whether the transaction was sucessful or not
   Future<int> createNewUser(
       {required String userID,
       required String userName,
@@ -106,8 +117,8 @@ class UserServices {
     return result;
   }
 
-/// `doesGoogleUserExist` function that checks if a user signed in by google exists or not from taking the `userId` and `email`
-/// It returns a Future<int> for the count found , if it was >0 then user was found
+  /// `doesGoogleUserExist` function that checks if a user signed in by google exists or not from taking the `userId` and `email`
+  /// It returns a Future<int> for the count found , if it was >0 then user was found
   Future<int> doesGoogleUserExist(String userId, String email) async {
     String sqlStatment = '''
       SELECT COUNT(*) AS count FROM Users WHERE UserID = $userId AND Email = "$email"
@@ -118,8 +129,8 @@ class UserServices {
     return count;
   }
 
-/// `doesNormalUserExist` function that checks if a user signed in with email and password exists or not from taking the `password` and `email`
-/// It returns a Future<String> for the userID if the user was found and retuns 0 if wasn't found
+  /// `doesNormalUserExist` function that checks if a user signed in with email and password exists or not from taking the `password` and `email`
+  /// It returns a Future<String> for the userID if the user was found and retuns 0 if wasn't found
   Future<String> doesNormalUserExist(String password, String email) async {
     String sqlStatement = '''
     SELECT UserID FROM Users WHERE Password = '$password' AND Email = '$email'
