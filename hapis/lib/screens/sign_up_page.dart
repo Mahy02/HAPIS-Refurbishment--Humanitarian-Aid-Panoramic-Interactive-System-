@@ -57,7 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _usernameController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _countryController = TextEditingController();
+  final _countryController = TextEditingController(text: countries[0]);
   final _cityController = TextEditingController();
   final _addressController = TextEditingController();
   final _phoneNumberController = TextEditingController();
@@ -127,7 +127,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           label: 'UserName ',
                           fontSize: 16,
                         ),
-
                         TextFormFieldWidget(
                           key: const ValueKey("firstname"),
                           textController: _firstNameController,
@@ -138,7 +137,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           label: 'First Name ',
                           fontSize: 16,
                         ),
-
                         TextFormFieldWidget(
                           key: const ValueKey("lastname"),
                           textController: _lastNameController,
@@ -149,7 +147,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           label: 'Last Name ',
                           fontSize: 16,
                         ),
-
                         DropDownListWidget(
                           key: const ValueKey("countries"),
                           fontSize: 16,
@@ -165,7 +162,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             });
                           },
                         ),
-
                         TextFormFieldWidget(
                           key: const ValueKey("city"),
                           textController: _cityController,
@@ -176,7 +172,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           label: 'city ',
                           fontSize: 16,
                         ),
-
                         TextFormFieldWidget(
                           key: const ValueKey("phonenum"),
                           textController: _phoneNumberController,
@@ -187,7 +182,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           label: 'Phone number ',
                           fontSize: 16,
                         ),
-
                         TextFormFieldWidget(
                           key: const ValueKey("location"),
                           textController: _addressController,
@@ -200,7 +194,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           fontSize: 16,
                         ),
-
                         ElevatedButton(
                           onPressed: () async {
                             try {
@@ -219,38 +212,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           child: const Text('Show Location'),
                         ),
-
-                        // setState(() {
-                        //   _selectedLocationInput = value;
-                        // });
-                        // placeAutoComplete(value);
-                        //       const Divider(
-                        //         height: 2,
-                        //         thickness: 2,
-                        //         color: Color.fromARGB(255, 215, 215, 215),
-                        //       ),
-                        //       //created own components for suggestion
-                        //       //to show the results:
-                        //       SizedBox(
-                        //         height: MediaQuery.of(context).size.height * 0.2,
-                        //         child: ListView.builder(
-                        //           itemCount: placePredictions.length,
-                        //           itemBuilder: (context, index) => LocationListTitle(
-                        //             onSelect: (value) {
-                        //               setState(() {
-                        //                 _selectedLocationInput = value;
-
-                        //                 placePredictions.clear();
-                        //               });
-                        //               _addressController.text = value;
-                        //             },
-                        //             location: placePredictions[index].description!,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.06,
                         ),
@@ -276,8 +237,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 address: _addressController.text,
                                 email: widget.user.email,
                               );
-                              print(result);
-                              print(widget.user.id);
+                              print('after signup');
+
+                              //await UserServices().blabla();
                               if (result >= 0) {
                                 // ignore: use_build_context_synchronously
                                 Navigator.push(

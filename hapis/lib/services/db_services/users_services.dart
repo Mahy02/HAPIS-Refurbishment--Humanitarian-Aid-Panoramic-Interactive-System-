@@ -32,12 +32,26 @@ class UserServices {
     String sqlStatement = '''
         SELECT City
         FROM Users
-        WHERE UserID = '$id'
+        WHERE UserID = $id
     ''';
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    print(queryResult);
 
     return queryResult.first['City'];
   }
+
+  //temp:
+  // blabla() async {
+  //   String sqlStatement = '''
+  //       SELECT *
+  //       FROM Users
+  //       WHERE UserID = 102628421386596844304
+  //   ''';
+  //   //
+  //   final queryResult = await db.readData(sqlStatement);
+  //   print('query result');
+  //   print(queryResult);
+  // }
 
   /// `getUsersInfo` that retrieves all users info for those who filled out a form as a seeker or a giver
   /// the function takes in  `type` of user and retrieves the form info and user info from both Forms and Users tables
@@ -56,6 +70,7 @@ class UserServices {
 
     for (Map<String, dynamic> row in result) {
       try {
+        // print(row);
         UserModel user = UserModel(
           userID: row['UserUserID'],
           formID: row['FormID'],
@@ -89,15 +104,18 @@ class UserServices {
       String category, String dates, String? forWho, String status) async {
     String sqlStatment = '''
     INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
-        VALUES ('$userID' , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
+        VALUES ($userID , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
     ''';
+    print('hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     int rowID = await db.insertData(sqlStatment);
-
+    print('inside create new form');
+    print(rowID);
+    print(userID);
     return rowID;
   }
 
   /// `deleteForm` deletes a form given an id
-  Future<int> deleteForm(int id) async{
+  Future<int> deleteForm(int id) async {
     String sqlStatement = '''
     DELETE FROM Forms
     WHERE FormID= $id
@@ -105,8 +123,6 @@ class UserServices {
     int queryResult = await db.deleteData(sqlStatement);
     return queryResult;
   }
-
- 
 
   ///  `createNewUser` that creats a new user during sign up and adds him to database
   /// It returns a Future<int> for whether the transaction was sucessful or not
@@ -137,7 +153,8 @@ class UserServices {
     ''';
 
     int result = await db.insertData(sqlStatment);
-
+    print('after creating new user');
+    print(result);
     return result;
   }
 

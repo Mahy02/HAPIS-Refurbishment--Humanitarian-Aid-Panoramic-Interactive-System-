@@ -43,7 +43,7 @@ class _CreateFormState extends State<CreateForm> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getNormalUserID() ?? '0';
     }
     return Scaffold(
       appBar: const HAPISAppBar(isLg: false, appBarText: ''),
@@ -535,6 +535,7 @@ class _CreateFormState extends State<CreateForm> {
               if (datesG.isEmpty) {
                 showDatePopUp(context);
               } else {
+                print('hereeeee before');
                 int rowID = await UserServices().createNewForm(
                     id,
                     'giver',
@@ -543,7 +544,9 @@ class _CreateFormState extends State<CreateForm> {
                     datesG,
                     null,
                     'Not Completed');
-                
+                // print(rowID);
+                // print(id);
+                // await UserServices().blabla();
                 //check match
                 String city = await UserServices().getCity(id);
 
@@ -559,10 +562,8 @@ class _CreateFormState extends State<CreateForm> {
                   for (int i = 0; i < formIds.length; i++) {
                     int matchID = await MatchingsServices()
                         .createMatch(formIds[i]!, rowID);
-                  
                   }
                 }
-                
               }
             } else {
               if (datesG.isEmpty || datesS.isEmpty) {
@@ -619,11 +620,9 @@ class _CreateFormState extends State<CreateForm> {
               }
             }
           }
-            // ignore: use_build_context_synchronously
-            Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AppHomePage()));
+          // ignore: use_build_context_synchronously
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AppHomePage()));
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 20.0, bottom: 20),
@@ -1102,7 +1101,7 @@ class _CreateFormState extends State<CreateForm> {
                     datesG,
                     null,
                     'Not Completed');
-                
+
                 //check match
                 String city = await UserServices().getCity(id);
 
@@ -1118,10 +1117,8 @@ class _CreateFormState extends State<CreateForm> {
                   for (int i = 0; i < formIds.length; i++) {
                     int matchID = await MatchingsServices()
                         .createMatch(formIds[i]!, rowID);
-                  
                   }
                 }
-                
               }
             } else {
               if (datesG.isEmpty || datesS.isEmpty) {
@@ -1178,11 +1175,9 @@ class _CreateFormState extends State<CreateForm> {
               }
             }
           }
-           // ignore: use_build_context_synchronously
-           Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AppHomePage()));
+          // ignore: use_build_context_synchronously
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AppHomePage()));
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 20.0, bottom: 20),
