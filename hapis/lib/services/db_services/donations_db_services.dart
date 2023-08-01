@@ -13,7 +13,9 @@ class DonationsServices {
       String id) async {
     String sqlStatement = '''
     SELECT
-
+    M_ID AS MID,
+    NULL AS ReqID,
+    Donation_Status,
     CASE
         WHEN F1.UserID = $id THEN U2.FirstName
         ELSE U1.FirstName
@@ -33,7 +35,9 @@ class DonationsServices {
     UNION ALL
 
     SELECT 
-      
+      NULL AS MID,
+      R_ID AS ReqID,
+       Donation_Status,
         CASE 
             WHEN R.Sender_ID = $id THEN U1.FirstName
             ELSE U2.FirstName
@@ -52,9 +56,37 @@ class DonationsServices {
     print(queryResult);
     List<InProgressDonationModel> donations = queryResult
         .map((result) => InProgressDonationModel(
-            firstName: result['FirstName'], lastName: result['LastName']))
+            mID: result['MID'] ?? 0,
+            rID: result['ReqID'] ?? 0,
+            firstName: result['FirstName'],
+            lastName: result['LastName']))
         .toList();
 
     return donations;
+  }
+
+  Future<int> updateDonation(int rid, int mid) async {
+    int queryResultRequest = 0;
+    int queryResultMatching = 0;
+    if (rid != 0) {
+      String sqlStatementRequest = '''
+        UPDATE Requests
+        SET Donation_Status = 'Finished'          
+        WHERE R_ID = $rid
+      ''';
+      queryResultRequest = await db.updateData(sqlStatementRequest);
+      print('requests: $queryResultRequest');
+    }
+    if (mid != 0) {
+      String sqlStatementMatching = '''
+        UPDATE Matchings
+        SET Donation_Status = 'Finished'          
+        WHERE M_ID = $mid
+      ''';
+      queryResultMatching = await db.updateData(sqlStatementMatching);
+      print('matchings: $queryResultMatching');
+    }
+
+    return queryResultMatching + queryResultRequest;
   }
 }

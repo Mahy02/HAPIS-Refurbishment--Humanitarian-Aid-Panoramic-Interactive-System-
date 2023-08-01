@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/models/db_models/user_model.dart';
+import 'package:hapis/services/db_services/requests_db_services.dart';
 
+import '../helpers/google_signin_api.dart';
+import '../helpers/login_session_shared_preferences.dart';
 import '../utils/date_popup.dart';
+import '../utils/signup_popup.dart';
 
 /// custom widget `UserAppComponent` that displays the user component in the main app view
 /// It takes:
 /// - `user` which represents a [UserModel]
 /// - `imageHeight`  `imageWidth` `expansionTitleFontSize` `containerHeight` `containerWidth` `userImageHeight` `userImageWidth` `headerFontSize` `textFontSize` `isMobile`  which are resposible for having responsive layput
 
-class UserAppComponent extends StatelessWidget {
+class UserAppComponent extends StatefulWidget {
   final UserModel user;
   final double imageHeight;
   final double imageWidth;
@@ -39,10 +43,46 @@ class UserAppComponent extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final imagePath = countryMap[user.country];
+  State<UserAppComponent> createState() => _UserAppComponentState();
+}
 
-    List<String> dates = user.multiDates!.split(',');
+class _UserAppComponentState extends State<UserAppComponent> {
+  late String id;
+  bool requested = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // requested =  RequestsServices()
+    //     .checkFriendshipRequest(id, widget.user.userID!);
+    if (LoginSessionSharedPreferences.getLoggedIn()) {
+      final currentUser = GoogleSignInApi().getCurrentUser();
+      if (currentUser != null) {
+        id = currentUser.id;
+      } else {
+        id = LoginSessionSharedPreferences.getNormalUserID()!;
+      }
+      checkFriendshipRequest(id, widget.user.userID!).then((result) {
+        // Set the state when the Future completes
+        setState(() {
+          requested = result;
+        });
+      });
+    }
+  }
+
+  Future<bool> checkFriendshipRequest(String userId, String friendId) async {
+    final request =
+        await RequestsServices().checkFriendshipRequest(userId, friendId);
+    return request;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final imagePath = countryMap[widget.user.country];
+
+    List<String> dates = widget.user.multiDates!.split(',');
 
     return ExpansionTile(
         leading: Material(
@@ -58,17 +98,17 @@ class UserAppComponent extends StatelessWidget {
           child: Ink.image(
             image: AssetImage('$imagePath'),
             fit: BoxFit.cover,
-            width: imageWidth,
-            height: imageHeight,
+            width: widget.imageWidth,
+            height: widget.imageHeight,
             child: InkWell(
               onTap: () {},
             ),
           ),
         ),
         title: Text(
-          '${user.firstName} ${user.lastName}',
+          '${widget.user.firstName} ${widget.user.lastName}',
           style: TextStyle(
-            fontSize: expansionTitleFontSize,
+            fontSize: widget.expansionTitleFontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -77,8 +117,8 @@ class UserAppComponent extends StatelessWidget {
         collapsedIconColor: HapisColors.lgColor3,
         children: [
           Container(
-            height: containerHeight,
-            width: containerWidth,
+            height: widget.containerHeight,
+            width: widget.containerWidth,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               border: Border.all(color: HapisColors.lgColor3),
@@ -93,20 +133,45 @@ class UserAppComponent extends StatelessWidget {
                   children: [
                     Image.asset(
                       'assets/images/donorpin.png',
-                      height: userImageHeight,
-                      width: userImageWidth,
+                      height: widget.userImageHeight,
+                      width: widget.userImageWidth,
                     ),
                     Text(
-                      ' ${user.firstName} ${user.lastName}',
+                      ' ${widget.user.firstName} ${widget.user.lastName}',
                       style: TextStyle(
-                        fontSize: expansionTitleFontSize,
+                        fontSize: widget.expansionTitleFontSize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 8),
+                    StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                      return GestureDetector(
+                        onTap: () async {
+                          //Make new request
+                          if (LoginSessionSharedPreferences.getLoggedIn()) {
+                            await RequestsServices().createRequest(
+                                id, widget.user.userID!, widget.user.formID!);
+
+                            //referesh:
+                            setState(() {
+                              requested = true;
+                            });
+                          } else {
+                            showDialogSignUp(context);
+                          }
+                        },
+                        //we should checkfriendship to see which icon to use
+                        child: requested
+                            ? const Icon(Icons.check,
+                                color: HapisColors.lgColor4)
+                            : const Icon(Icons.person_add_alt_1_rounded,
+                                color: HapisColors.lgColor1),
+                      );
+                    }),
                   ],
                 ),
-                if (isMobile)
+                if (widget.isMobile)
                   SizedBox(height: MediaQuery.of(context).size.height * 0),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -115,29 +180,29 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       'CONTACT INFO',
                       style: TextStyle(
-                        fontSize: headerFontSize,
+                        fontSize: widget.headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
                     Text(
-                      user.email ?? '',
+                      widget.user.email ?? '',
                       style: TextStyle(
-                        fontSize: textFontSize,
+                        fontSize: widget.textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                     Text(
-                      user.phoneNum ?? '',
+                      widget.user.phoneNum ?? '',
                       style: TextStyle(
-                        fontSize: textFontSize,
+                        fontSize: widget.textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
                 ),
-                if (isMobile)
+                if (widget.isMobile)
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.05,
                   ),
@@ -148,22 +213,22 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       'ADDRESS LOCATION',
                       style: TextStyle(
-                        fontSize: headerFontSize,
+                        fontSize: widget.headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
                     Text(
-                      user.addressLocation ?? '',
+                      widget.user.addressLocation ?? '',
                       style: TextStyle(
                         //fontSize: 16,
-                        fontSize: textFontSize,
+                        fontSize: widget.textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
                 ),
-                if (isMobile)
+                if (widget.isMobile)
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.05,
                   ),
@@ -174,21 +239,21 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       'COUNTRY',
                       style: TextStyle(
-                        fontSize: headerFontSize,
+                        fontSize: widget.headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
                     Text(
-                      user.country ?? '',
+                      widget.user.country ?? '',
                       style: TextStyle(
-                        fontSize: textFontSize,
+                        fontSize: widget.textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
                 ),
-                if (isMobile)
+                if (widget.isMobile)
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.05,
                   ),
@@ -199,21 +264,21 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       'CITY',
                       style: TextStyle(
-                        fontSize: headerFontSize,
+                        fontSize: widget.headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
                     Text(
-                      user.city ?? '',
+                      widget.user.city ?? '',
                       style: TextStyle(
-                        fontSize: textFontSize,
+                        fontSize: widget.textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
                 ),
-                if (isMobile)
+                if (widget.isMobile)
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.05,
                   ),
@@ -221,25 +286,25 @@ class UserAppComponent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    user.type == 'seeker'
+                    widget.user.type == 'seeker'
                         ? Text(
                             'SEEKING',
                             style: TextStyle(
-                              fontSize: headerFontSize,
+                              fontSize: widget.headerFontSize,
                               color: Colors.grey,
                             ),
                           )
                         : Text(
                             'DONATING',
                             style: TextStyle(
-                              fontSize: headerFontSize,
+                              fontSize: widget.headerFontSize,
                               color: Colors.grey,
                             ),
                           ),
                     Text(
-                      user.item ?? '',
+                      widget.user.item ?? '',
                       style: TextStyle(
-                        fontSize: textFontSize,
+                        fontSize: widget.textFontSize,
                         color: Colors.black,
                         fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
@@ -249,7 +314,7 @@ class UserAppComponent extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (isMobile)
+                if (widget.isMobile)
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.05,
                   ),
@@ -263,21 +328,21 @@ class UserAppComponent extends StatelessWidget {
                         Text(
                           'CATEGORY',
                           style: TextStyle(
-                            fontSize: headerFontSize,
+                            fontSize: widget.headerFontSize,
                             color: Colors.grey,
                           ),
                         ),
                         Text(
-                          user.category ?? '',
+                          widget.user.category ?? '',
                           style: TextStyle(
-                            fontSize: textFontSize,
+                            fontSize: widget.textFontSize,
                             color: Colors.black,
                             fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
                         ),
                       ],
                     ),
-                    if (user.type == 'seeker')
+                    if (widget.user.type == 'seeker')
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,14 +350,14 @@ class UserAppComponent extends StatelessWidget {
                           Text(
                             'FOR',
                             style: TextStyle(
-                              fontSize: headerFontSize,
+                              fontSize: widget.headerFontSize,
                               color: Colors.grey,
                             ),
                           ),
                           Text(
-                            user.forWho ?? '',
+                            widget.user.forWho ?? '',
                             style: TextStyle(
-                              fontSize: textFontSize,
+                              fontSize: widget.textFontSize,
                               color: Colors.black,
                               fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
@@ -301,7 +366,7 @@ class UserAppComponent extends StatelessWidget {
                       )
                   ],
                 ),
-                if (isMobile)
+                if (widget.isMobile)
                   //  ?
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.05,
@@ -313,7 +378,7 @@ class UserAppComponent extends StatelessWidget {
                     Text(
                       'AVAILABLE DATES',
                       style: TextStyle(
-                        fontSize: headerFontSize,
+                        fontSize: widget.headerFontSize,
                         color: Colors.grey,
                       ),
                     ),
@@ -321,7 +386,7 @@ class UserAppComponent extends StatelessWidget {
                       child: Text(
                         'click here to view available dates',
                         style: TextStyle(
-                          fontSize: textFontSize,
+                          fontSize: widget.textFontSize,
                           color: Color.fromARGB(255, 7, 115, 203),
                           fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
@@ -337,5 +402,4 @@ class UserAppComponent extends StatelessWidget {
           ),
         ]);
   }
-  //2023-08-22 11:00:00,2023-08-02 14:00:00,2023-08-01 13:00:00
 }

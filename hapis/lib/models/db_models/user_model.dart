@@ -1,11 +1,11 @@
-
-
 /// Model that represents the `UserModel`, with all of its properties and methods.
 
 class UserModel {
-
   /// Property that defines the user userID
   String? userID;
+
+  ///property that defines the user formid
+  int? formID;
 
   /// Property that defines the user userName
   String? userName;
@@ -46,10 +46,9 @@ class UserModel {
   /// Property that defines for who -only if seeker  so it could be null or empty
   String? forWho;
 
-
   UserModel(
-      {
-      this.userID,
+      {this.userID,
+      this.formID,
       this.userName,
       this.firstName,
       this.lastName,
@@ -62,10 +61,7 @@ class UserModel {
       this.item,
       this.category,
       this.multiDates,
-      this.forWho
-     });
-
- 
+      this.forWho});
 
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UserModel.fromMap(Map<String, dynamic> map) {

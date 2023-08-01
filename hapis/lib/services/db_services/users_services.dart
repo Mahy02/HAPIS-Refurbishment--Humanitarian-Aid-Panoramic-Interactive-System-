@@ -28,12 +28,23 @@ class UserServices {
     return results;
   }
 
+  Future<String> getCity(String id) async {
+    String sqlStatement = '''
+        SELECT City
+        FROM Users
+        WHERE UserID = '$id'
+    ''';
+    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+
+    return queryResult.first['City'];
+  }
+
   /// `getUsersInfo` that retrieves all users info for those who filled out a form as a seeker or a giver
   /// the function takes in  `type` of user and retrieves the form info and user info from both Forms and Users tables
   /// It creates a new `UserModel` with the data and use the `UserAppProvider` to save list of seekers and givers
   getUsersInfo(String type, BuildContext context) async {
     String sqlStatment = '''
-      SELECT Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For
+      SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
       WHERE Forms.Type = '$type' AND Forms.Status = 'Not Completed'
@@ -47,6 +58,7 @@ class UserServices {
       try {
         UserModel user = UserModel(
           userID: row['UserUserID'],
+          formID: row['FormID'],
           userName: row['UserName'],
           firstName: row['FirstName'],
           lastName: row['LastName'],
@@ -73,16 +85,28 @@ class UserServices {
     }
   }
 
-  createNewForm( String userID, String type, String item,
+  Future<int> createNewForm(String userID, String type, String item,
       String category, String dates, String? forWho, String status) async {
     String sqlStatment = '''
     INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
         VALUES ('$userID' , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
     ''';
-    int result = await db.insertData(sqlStatment);
+    int rowID = await db.insertData(sqlStatment);
 
-    return result;
+    return rowID;
   }
+
+  /// `deleteForm` deletes a form given an id
+  Future<int> deleteForm(int id) async{
+    String sqlStatement = '''
+    DELETE FROM Forms
+    WHERE FormID= $id
+    ''';
+    int queryResult = await db.deleteData(sqlStatement);
+    return queryResult;
+  }
+
+ 
 
   ///  `createNewUser` that creats a new user during sign up and adds him to database
   /// It returns a Future<int> for whether the transaction was sucessful or not

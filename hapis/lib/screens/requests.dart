@@ -47,7 +47,7 @@ class _RequestsState extends State<Requests> {
           Container(
             padding: const EdgeInsets.all(20),
             child: Text(
-              'Requests Recieved',
+              'Requests Received',
               style: TextStyle(
                   fontSize: widget.subHeadFontSize,
                   fontWeight: FontWeight.bold),

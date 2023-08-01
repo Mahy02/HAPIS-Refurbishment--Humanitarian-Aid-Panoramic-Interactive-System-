@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/models/db_models/get_inprogress_donations_model.dart';
+import 'package:hapis/services/db_services/donations_db_services.dart';
 import 'package:hapis/services/db_services/matchings_db_services.dart';
 import 'package:hapis/services/db_services/requests_db_services.dart';
+import 'package:hapis/services/db_services/users_services.dart';
 
 import '../helpers/matching_status_shared_pref.dart';
 import '../utils/date_popup.dart';
@@ -39,6 +42,7 @@ class RequestComponent extends StatefulWidget {
   final String? location;
   final String? dates;
   final int? id;
+  final int? id2;
   final String? userID;
   final String? seekerStatus;
   final String? giverStatus;
@@ -66,6 +70,7 @@ class RequestComponent extends StatefulWidget {
     this.userID,
     this.seekerStatus,
     this.giverStatus,
+    this.id2,
   });
 
   @override
@@ -369,7 +374,31 @@ class _RequestComponentState extends State<RequestComponent> {
                           alignment: Alignment.bottomRight,
                           child: SizedBox(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                //update donation
+                                await DonationsServices()
+                                    .updateDonation(widget.id!, widget.id2!);
+                                //referesh
+                                widget.onPressed!();
+
+                                //get forms
+                                if (widget.id! != 0) {
+                                  //requests
+                                  int rFormId = await RequestsServices()
+                                      .getFormId(widget.id!);
+                                  //delete forms
+                                  await UserServices().deleteForm(rFormId);
+                                }
+                                if (widget.id2! != 0) {
+                                  //matchings
+                                  List<int> mFormIds = await MatchingsServices()
+                                      .getFormIds(widget.id2!);
+                                  for (int i = 0; i < mFormIds.length; i++) {
+                                    await UserServices()
+                                        .deleteForm(mFormIds[i]);
+                                  }
+                                }
+                              },
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(

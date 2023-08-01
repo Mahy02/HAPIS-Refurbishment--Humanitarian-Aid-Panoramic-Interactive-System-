@@ -60,6 +60,6 @@ class MatchingsModel {
     required this.category,
     required this.datesAvailable,
     required this.seekerStatus,
-    required this.giverStatus,
+    required this.giverStatus
   });
 }

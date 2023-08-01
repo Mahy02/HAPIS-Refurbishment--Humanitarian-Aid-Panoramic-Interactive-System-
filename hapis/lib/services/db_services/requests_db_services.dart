@@ -76,4 +76,42 @@ class RequestsServices {
     int queryResult = await db.deleteData(sqlStatement);
     return queryResult;
   }
+
+  Future<int> getFormId(int rId) async {
+    String sqlStatement = '''
+    SELECT Rec_FormID
+    FROM Requests
+    WHERE R_ID = $rId
+  ''';
+    List<Map<String, dynamic>> results = await db.readData(sqlStatement);
+    if (results.isNotEmpty) {
+      int recFormId = results[0]['Rec_FormID'];
+
+      return recFormId;
+    } else {
+      return 0;
+    }
+  }
+
+   Future<int> createRequest(String senderID, String recID, int formID) async {
+    String sqlStatment = '''
+    INSERT INTO Requests (Sender_ID, Rec_ID, Rec_FormID, Rec_Status, Donation_Status)
+        VALUES ('$senderID' , '$recID', $formID, 'Pending', 'Not Started')
+    ''';
+    int rowID = await db.insertData(sqlStatment);
+
+    return rowID;
+  }
+
+  
+  Future<bool> checkFriendshipRequest(String senderId, String recId) async {
+  String sqlStatement = '''
+    SELECT 1
+    FROM Requests
+    WHERE Sender_ID = '$senderId' AND Rec_ID = '$recId' 
+  ''';
+  List<Map<String, dynamic>> results = await db.readData(sqlStatement);
+  return results.isNotEmpty;
+}
+
 }

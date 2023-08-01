@@ -406,6 +406,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
     try {
       await GoogleSignInApi.login();
       await GoogleSignInApi.logout();
+      
       final user = await GoogleSignInApi.login();
 
       if (user == Null) {

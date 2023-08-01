@@ -1,5 +1,11 @@
 /// Model that represents the `InProgressDonationModel`, with all of its properties and methods.
 class InProgressDonationModel {
+  ///property that defines the matching `id` if exists
+  final int mID;
+
+  ///property that defines the requests `id` if exists
+  final int rID;
+
   /// property that defines the user `firstName`
   final String firstName;
 
@@ -7,6 +13,8 @@ class InProgressDonationModel {
   final String lastName;
 
   InProgressDonationModel({
+    required this.mID,
+    required this.rID,
     required this.firstName,
     required this.lastName,
   });

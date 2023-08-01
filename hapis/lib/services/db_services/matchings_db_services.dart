@@ -66,7 +66,7 @@ class MatchingsServices {
         ELSE F1.FormID
     END AS FormID,
 
-    M_ID, Rec1_Status, Rec2_Status
+    M_ID, Rec1_Status, Rec2_status
     
 FROM Matchings M
 JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
@@ -94,14 +94,15 @@ WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'Not Started'
             item: matchingMap['Item'],
             category: matchingMap['Category'],
             datesAvailable: matchingMap['Dates_available'],
-            seekerStatus: matchingMap['Rec1_Status'] ?? '',
-            giverStatus: matchingMap['Rec2_Status'] ?? ''))
+            seekerStatus: matchingMap['Rec1_Status'],
+            giverStatus: matchingMap['Rec2_status']))
         .toList();
 
     return matchings;
   }
 
   Future<int> updateMatching(int id, String type) async {
+    print(type);
     String sqlStatement;
     if (type == 'seeker') {
       sqlStatement = '''
@@ -145,7 +146,47 @@ WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'Not Started'
     int queryResult = await db.deleteData(sqlStatement);
     return queryResult;
   }
+
+Future<List<int>> getFormIds(int mId) async {
+  String sqlStatement = '''
+    SELECT Seeker_FormID, Giver_FormID
+    FROM Matchings
+    WHERE M_ID = $mId
+  ''';
+  List<Map<String, dynamic>> results = await db.readData(sqlStatement);
+  if (results.isNotEmpty) {
+    int seekerFormId = results[0]['Seeker_FormID'];
+    int giverFormId = results[0]['Giver_FormID'];
+    return [seekerFormId, giverFormId];
+  } else {
+    return [];
+  }
 }
 
-/*
-*/
+  Future<List<int?>> checkMatching(
+      String type, String item, String cat, String dates, String city) async {
+    String sqlStatement = '''
+    SELECT FormID
+    FROM Forms
+    INNER JOIN Users ON Forms.UserID = Users.UserID
+    WHERE Forms.Type = '$type' AND Forms.Item = '$item' AND Forms.Category = '$cat' AND Forms.Dates_available LIKE '%$dates%' AND Forms.Status = 'Not Completed' AND Users.City = '$city' 
+    ''';
+    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    print(queryResult);
+    // If a matching form exists, return its Form_ID
+    List<int?> matching =
+        queryResult.map<int?>((row) => row['FormID']).toList();
+    print(matching);
+    return matching;
+  }
+
+  Future<int> createMatch(int seekerFormID, int giverFormID) async {
+    String sqlStatment = '''
+    INSERT INTO Matchings (Seeker_FormID,	Giver_FormID,	Rec1_Status ,	Rec2_status, 	Donation_Status)
+        VALUES ($seekerFormID, $giverFormID, 'Pending', 'Pending', 'Not Started')
+    ''';
+    int rowID = await db.insertData(sqlStatment);
+
+    return rowID;
+  }
+}

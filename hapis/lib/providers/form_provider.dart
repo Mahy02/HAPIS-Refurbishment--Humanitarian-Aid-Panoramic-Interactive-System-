@@ -11,14 +11,23 @@ import 'package:hapis/constants.dart';
 class FormProvider extends ChangeNotifier {
   int? _formID;
   int? _userID;
-  String _type = typeList[0];
-  String _forWho = forWhoList[0];
-  String _category = categoryList[0];
+  String _typeS = typeList[0];
+  String _forWhoS = forWhoList[0];
+  String _categoryS = categoryList[0];
   
-  String? _status;
-  String? _multiDates;
+  String? _statusS;
+  String? _multiDatesS;
 
-  final TextEditingController _formItemController = TextEditingController();
+  final TextEditingController _formItemControllerS = TextEditingController();
+
+  String _typeD = typeList[0];
+  String _forWhoD = forWhoList[0];
+  String _categoryD = categoryList[0];
+  
+  String? _statusD;
+  String? _multiDatesD;
+
+  final TextEditingController _formItemControllerD = TextEditingController();
 
 
   set formID(int? value) {
@@ -31,67 +40,105 @@ class FormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set multiDates(String? value) {
-    _multiDates = value;
+  set multiDatesS(String? value) {
+    _multiDatesS = value;
     notifyListeners();
   }
 
-  set status(String? value) {
-    _status = value;
+  set statusS(String? value) {
+    _statusS = value;
     notifyListeners();
   }
 
-  set forWho(String value) {
-    _forWho = value;
+  set forWhoS(String value) {
+    _forWhoS = value;
     notifyListeners();
   }
 
-  set category(String value) {
-    _category = value;
+  set categoryS(String value) {
+    _categoryS = value;
     notifyListeners();
   }
 
-  set item(String value) {
-    _formItemController.text = value;
+  set itemS(String value) {
+    _formItemControllerS.text = value;
     notifyListeners();
   }
 
-  set type(String value) {
-    _type = value;
+  set typeS(String value) {
+    _typeS = value;
     notifyListeners();
   }
 
-  TextEditingController get formItemController => _formItemController;
+  set multiDatesD(String? value) {
+    _multiDatesD = value;
+    notifyListeners();
+  }
+
+  set statusD(String? value) {
+    _statusD = value;
+    notifyListeners();
+  }
+
+  set forWhoD(String value) {
+    _forWhoD = value;
+    notifyListeners();
+  }
+
+  set categoryD(String value) {
+    _categoryD = value;
+    notifyListeners();
+  }
+
+  set itemD(String value) {
+    _formItemControllerD.text = value;
+    notifyListeners();
+  }
+
+  set typeD(String value) {
+    _typeD = value;
+    notifyListeners();
+  }
+
+
+  TextEditingController get formItemControllerS => _formItemControllerS;
   int? get formID => _formID;
   int? get userID => _userID;
-  String get type => _type;
-  String get category => _category;
-  String get forWho => _forWho;
-  String? get status => _status;
-  String? get multiDates => _multiDates;
+  String get typeS => _typeS;
+  String get categoryS => _categoryS;
+  String get forWhoS => _forWhoS;
+  String? get statusS => _statusS;
+  String? get multiDatesS => _multiDatesS;
 
-  final FormsModel _form = FormsModel();
-  FormsModel get form => _form;
+  TextEditingController get formItemControllerD => _formItemControllerD;
+  String get typeD => _typeD;
+  String get categoryD => _categoryD;
+  String get forWhoD => _forWhoD;
+  String? get statusD => _statusD;
+  String? get multiDatesD => _multiDatesD;
 
-  void saveData(
-    int formID,
-    int userID,
-    String type,
-    TextEditingController item,
-    String category,
-    String multiDates,
-    String forWho,
-    String status,
-  ) {
-    _form.formID = formID;
-    _form.userID = userID;
-    _form.type = type;
-    _form.item = item.text;
-    _form.category = category;
-    _form.multiDates = multiDates;
-    _form.forWho = forWho;
-    _form.status = status;
+  // final FormsModel _form = FormsModel();
+  // FormsModel get form => _form;
 
-    notifyListeners();
-  }
+  // void saveData(
+  //   int formID,
+  //   int userID,
+  //   String type,
+  //   TextEditingController item,
+  //   String category,
+  //   String multiDates,
+  //   String forWho,
+  //   String status,
+  // ) {
+  //   _form.formID = formID;
+  //   _form.userID = userID;
+  //   _form.type = type;
+  //   _form.item = item.text;
+  //   _form.category = category;
+  //   _form.multiDates = multiDates;
+  //   _form.forWho = forWho;
+  //   _form.status = status;
+
+  //   notifyListeners();
+  // }
 }

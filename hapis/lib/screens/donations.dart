@@ -30,17 +30,45 @@ class Donations extends StatefulWidget {
 }
 
 class _DonationsState extends State<Donations> {
+  late String id;
+  late Future<List<InProgressDonationModel>>? _future;
   @override
-  Widget build(BuildContext context) {
-    String id;
+  void initState() {
+    super.initState();
     final user = GoogleSignInApi().getCurrentUser();
     if (user != null) {
       id = user.id;
     } else {
       id = LoginSessionSharedPreferences.getNormalUserID()!;
     }
+    _future = DonationsServices().getDonationsInProgress(id);
+  }
+
+  Future<void> _refreshData() async {
+    final user = GoogleSignInApi().getCurrentUser();
+    if (user != null) {
+      id = user.id;
+    } else {
+      id = LoginSessionSharedPreferences.getNormalUserID()!;
+    }
+
+    setState(() {
+      _future = DonationsServices().getDonationsInProgress(id);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // String id;
+    // final user = GoogleSignInApi().getCurrentUser();
+    // if (user != null) {
+    //   id = user.id;
+    // } else {
+    //   id = LoginSessionSharedPreferences.getNormalUserID()!;
+    // }
     return FutureBuilder<List<InProgressDonationModel>>(
-        future: DonationsServices().getDonationsInProgress(id),
+        future: _future,
+        //DonationsServices().getDonationsInProgress(id),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -77,6 +105,12 @@ class _DonationsState extends State<Donations> {
                         itemBuilder: (context, index) {
                           final InProgressDonationModel donations =
                               donationsList[index];
+                          final r_id = donations.rID;
+                          final m_id = donations.mID;
+                          print('rid:');
+                          print(r_id);
+                          print('mid:');
+                          print(m_id);
 
                           final personName =
                               '${donations.firstName} ${donations.lastName}';
@@ -88,6 +122,12 @@ class _DonationsState extends State<Donations> {
                             fontSize: widget.fontSize,
                             buttonFontSize: widget.buttonFontSize,
                             personName: personName,
+                            id: r_id,
+                            id2: m_id,
+                            onPressed: () {
+                              _refreshData();
+                            },
+
                             // buttonHeight: buttonHeight,
                             // finishButtonHeight:finishButtonHeight ,
                             // pendingButtonHeight: pendingButtonHeight,
