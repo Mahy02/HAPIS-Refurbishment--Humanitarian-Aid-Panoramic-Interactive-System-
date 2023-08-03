@@ -416,7 +416,9 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             context,
             MaterialPageRoute(
                 builder: (context) => SignUpPage(
-                      user: user,
+                      googleUser: user,
+                      update: false,
+                      isGoogle: true,
                     )));
       }
     } on Exception catch (e) {

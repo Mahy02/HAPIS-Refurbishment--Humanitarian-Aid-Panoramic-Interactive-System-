@@ -93,25 +93,24 @@ class RequestsServices {
     }
   }
 
-   Future<int> createRequest(String senderID, String recID, int formID) async {
+  Future<int> createRequest(String senderID, String recID, int formID) async {
     String sqlStatment = '''
     INSERT INTO Requests (Sender_ID, Rec_ID, Rec_FormID, Rec_Status, Donation_Status)
-        VALUES ('$senderID' , '$recID', $formID, 'Pending', 'Not Started')
+        VALUES ($senderID , $recID , $formID, 'Pending', 'Not Started')
     ''';
     int rowID = await db.insertData(sqlStatment);
 
     return rowID;
   }
 
-  
   Future<bool> checkFriendshipRequest(String senderId, String recId) async {
-  String sqlStatement = '''
+    String sqlStatement = '''
     SELECT 1
     FROM Requests
-    WHERE Sender_ID = '$senderId' AND Rec_ID = '$recId' 
+    WHERE Sender_ID = $senderId AND Rec_ID = $recId
   ''';
-  List<Map<String, dynamic>> results = await db.readData(sqlStatement);
-  return results.isNotEmpty;
-}
-
+    List<Map<String, dynamic>> results = await db.readData(sqlStatement);
+    print(results);
+    return results.isNotEmpty;
+  }
 }

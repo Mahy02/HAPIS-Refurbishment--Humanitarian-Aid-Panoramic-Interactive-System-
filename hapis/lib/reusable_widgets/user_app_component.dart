@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
@@ -47,7 +49,7 @@ class UserAppComponent extends StatefulWidget {
 }
 
 class _UserAppComponentState extends State<UserAppComponent> {
-  late String id;
+  late String id = '0';
   bool requested = false;
 
   @override
@@ -56,10 +58,22 @@ class _UserAppComponentState extends State<UserAppComponent> {
 
     // requested =  RequestsServices()
     //     .checkFriendshipRequest(id, widget.user.userID!);
-    if (LoginSessionSharedPreferences.getLoggedIn()) {
+    if (GoogleSignInApi().isUserSignedIn() == true ||
+        LoginSessionSharedPreferences.getLoggedIn() == true) {
       final currentUser = GoogleSignInApi().getCurrentUser();
       if (currentUser != null) {
         id = currentUser.id;
+        print('hereeeeee');
+        print(id);
+        print(widget.user.userID);
+        // Separate the coefficient and exponent from the exponential notation
+//         List<String> parts = widget.user.userID!.split('e+');
+//         double coefficient = double.parse(parts[0]);
+//         int exponent = int.parse(parts[1]);
+
+// // Calculate the non-exponential number by multiplying the coefficient by 10 raised to the exponent
+//         double nonExponentialNumber = coefficient * pow(10.0, exponent);
+//         print(nonExponentialNumber);
       } else {
         id = LoginSessionSharedPreferences.getNormalUserID()!;
       }
@@ -144,33 +158,36 @@ class _UserAppComponentState extends State<UserAppComponent> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    if (LoginSessionSharedPreferences.getLoggedIn())
-                    if (id != widget.user.userID)
-                      StatefulBuilder(builder:
-                          (BuildContext context, StateSetter setState) {
-                        return GestureDetector(
-                          onTap: () async {
-                            //Make new request
-                            if (LoginSessionSharedPreferences.getLoggedIn()) {
-                              await RequestsServices().createRequest(
-                                  id, widget.user.userID!, widget.user.formID!);
+                    if (GoogleSignInApi().isUserSignedIn() == true ||
+                        LoginSessionSharedPreferences.getLoggedIn() == true)
+                      if (id != widget.user.userID)
+                        StatefulBuilder(builder:
+                            (BuildContext context, StateSetter setState) {
+                          return GestureDetector(
+                            onTap: () async {
+                              //Make new request
+                              if (GoogleSignInApi().isUserSignedIn() == true ||
+                                  LoginSessionSharedPreferences.getLoggedIn() ==
+                                      true) {
+                                await RequestsServices().createRequest(id,
+                                    widget.user.userID!, widget.user.formID!);
 
-                              //referesh:
-                              setState(() {
-                                requested = true;
-                              });
-                            } else {
-                              showDialogSignUp(context);
-                            }
-                          },
-                          //we should checkfriendship to see which icon to use
-                          child: requested
-                              ? const Icon(Icons.check,
-                                  color: HapisColors.lgColor4)
-                              : const Icon(Icons.person_add_alt_1_rounded,
-                                  color: HapisColors.lgColor1),
-                        );
-                      }),
+                                //referesh:
+                                setState(() {
+                                  requested = true;
+                                });
+                              } else {
+                                showDialogSignUp(context);
+                              }
+                            },
+                            //we should checkfriendship to see which icon to use
+                            child: requested
+                                ? const Icon(Icons.check,
+                                    color: HapisColors.lgColor4)
+                                : const Icon(Icons.person_add_alt_1_rounded,
+                                    color: HapisColors.lgColor1),
+                          );
+                        }),
                   ],
                 ),
                 if (widget.isMobile)

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/screens/app_home.dart';
 import 'package:hapis/screens/google_signup.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import 'package:image_picker/image_picker.dart';
 import '../helpers/api.dart';
 import '../location_and_maps/location_controller.dart';
+import '../models/db_models/user_model.dart';
 import '../models/place_autocomplete.dart';
 import '../reusable_widgets/drop_down_list_component.dart';
 import '../reusable_widgets/location_list_title.dart';
@@ -14,9 +16,17 @@ import '../reusable_widgets/text_form_field.dart';
 import 'dart:io';
 
 class SignUpPage extends StatefulWidget {
-  final GoogleSignInAccount user;
+  final GoogleSignInAccount? googleUser;
+  final UserModel? normalUser;
+  final bool update;
+  final bool isGoogle;
 
-  const SignUpPage({super.key, required this.user});
+  const SignUpPage(
+      {super.key,
+      this.googleUser,
+      this.normalUser,
+      required this.update,
+      required this.isGoogle});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -24,34 +34,6 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-
-  //for place autocomplete:
-  /// Makes a request to the Google Places API autocomplete with the given query.
-  /// Updates [placePredictions] with the results.
-  Future<void> placeAutoComplete(String query) async {
-    Uri uri = Uri.https(
-      "maps.googleapis.com",
-      '/maps/api/place/autocomplete/json', //unencoder path
-      {
-        "input": query, //query parameter
-        "key": apiKey,
-      },
-    );
-
-    ///for get request:
-    String? response = await Api.fetchUrl(uri);
-
-    /// Parse the response and update [placePredictions] if there are any predictions.
-    if (response != null) {
-      PlaceAutoCompleteResponse result =
-          PlaceAutoCompleteResponse.parseAutocompleteResult(response);
-      if (result.predictions != null) {
-        setState(() {
-          placePredictions = result.predictions!;
-        });
-      }
-    }
-  }
 
   String? _country;
   final _usernameController = TextEditingController();
@@ -61,13 +43,29 @@ class _SignUpPageState extends State<SignUpPage> {
   final _cityController = TextEditingController();
   final _addressController = TextEditingController();
   final _phoneNumberController = TextEditingController();
-  String _selectedLocationInput = '';
   File? image;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.normalUser != null) {
+      UserModel user = widget.normalUser!;
+      _usernameController.text = user.userName!;
+      _firstNameController.text = user.firstName!;
+      _lastNameController.text = user.lastName!;
+      _countryController.text = user.country!;
+      _cityController.text = user.city!;
+      _addressController.text = user.addressLocation!;
+      _phoneNumberController.text = user.phoneNum!;
+      _country = user.country!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     int countryIndex = countries.indexOf(_countryController.text);
-    //int countryIndex = countries.indexOf('Afghanistan');
+
     return GetBuilder<LocationController>(
       init: LocationController(),
       builder: (controller) {
@@ -88,8 +86,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage: widget.user.photoUrl != null
-                              ? NetworkImage(widget.user.photoUrl!)
+                          backgroundImage: widget.googleUser != null
+                              ? widget.googleUser!.photoUrl != null
+                                  ? NetworkImage(widget.googleUser!.photoUrl!)
+                                  : image != null
+                                      ? FileImage(image!)
+                                      : const AssetImage(
+                                          'assets/images/defaultuser.png',
+                                        ) as ImageProvider<Object>
                               : image != null
                                   ? FileImage(image!)
                                   : const AssetImage(
@@ -107,8 +111,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.05),
-                        Text('Hi ${widget.user.displayName}',
-                            style: TextStyle(fontSize: 22)),
+                        if (widget.googleUser != null)
+                          Text('Hi ${widget.googleUser!.displayName}',
+                              style: TextStyle(fontSize: 22)),
+                        if (widget.normalUser != null)
+                          Text('Hi ${widget.normalUser!.userName}',
+                              style: TextStyle(fontSize: 22)),
                       ],
                     ),
                   ),
@@ -127,26 +135,52 @@ class _SignUpPageState extends State<SignUpPage> {
                           label: 'UserName ',
                           fontSize: 16,
                         ),
-                        TextFormFieldWidget(
-                          key: const ValueKey("firstname"),
-                          textController: _firstNameController,
-                          hint: 'Enter your First Name',
-                          maxLength: 50,
-                          isHidden: false,
-                          isSuffixRequired: true,
-                          label: 'First Name ',
-                          fontSize: 16,
-                        ),
-                        TextFormFieldWidget(
-                          key: const ValueKey("lastname"),
-                          textController: _lastNameController,
-                          hint: 'Enter your last name',
-                          maxLength: 50,
-                          isHidden: false,
-                          isSuffixRequired: true,
-                          label: 'Last Name ',
-                          fontSize: 16,
-                        ),
+                        if (widget.update == false)
+                          TextFormFieldWidget(
+                            key: const ValueKey("firstname"),
+                            textController: _firstNameController,
+                            hint: 'Enter your First Name',
+                            maxLength: 50,
+                            isHidden: false,
+                            isSuffixRequired: true,
+                            label: 'First Name ',
+                            fontSize: 16,
+                          ),
+                        if (widget.update == true)
+                          TextFormFieldWidget(
+                            key: const ValueKey("firstname"),
+                            textController: _firstNameController,
+                            hint: 'Enter your First Name',
+                            maxLength: 50,
+                            isHidden: false,
+                            isSuffixRequired: true,
+                            label: 'First Name ',
+                            fontSize: 16,
+                            enabled: false,
+                          ),
+                        if (widget.update == false)
+                          TextFormFieldWidget(
+                            key: const ValueKey("lastname"),
+                            textController: _lastNameController,
+                            hint: 'Enter your last name',
+                            maxLength: 50,
+                            isHidden: false,
+                            isSuffixRequired: true,
+                            label: 'Last Name ',
+                            fontSize: 16,
+                          ),
+                        if (widget.update == true)
+                          TextFormFieldWidget(
+                            key: const ValueKey("lastname"),
+                            textController: _lastNameController,
+                            hint: 'Enter your last name',
+                            maxLength: 50,
+                            isHidden: false,
+                            isSuffixRequired: true,
+                            label: 'Last Name ',
+                            fontSize: 16,
+                            enabled: false,
+                          ),
                         DropDownListWidget(
                           key: const ValueKey("countries"),
                           fontSize: 16,
@@ -183,16 +217,16 @@ class _SignUpPageState extends State<SignUpPage> {
                           fontSize: 16,
                         ),
                         TextFormFieldWidget(
+                          hint: '',
+                          label: 'Address Location',
+                          isHidden: false,
                           key: const ValueKey("location"),
                           textController: _addressController,
-                          label: 'Address Location',
-                          hint: '',
-                          isHidden: false,
                           isSuffixRequired: true,
+                          fontSize: 16,
                           onChanged: (value) {
                             _addressController.text = value;
                           },
-                          fontSize: 16,
                         ),
                         ElevatedButton(
                           onPressed: () async {
@@ -226,27 +260,70 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             onPressed: () async {
-                              final result = await UserServices().createNewUser(
-                                userID: widget.user.id,
-                                userName: _usernameController.text,
-                                firstName: _firstNameController.text,
-                                lastName: _lastNameController.text,
-                                counrty: _countryController.text,
-                                city: _cityController.text,
-                                phoneNum: _phoneNumberController.text,
-                                address: _addressController.text,
-                                email: widget.user.email,
-                              );
-                              print('after signup');
+                              if (widget.update != true) {
+                                final result =
+                                    await UserServices().createNewUser(
+                                  userID: widget.googleUser!.id,
+                                  userName: _usernameController.text,
+                                  firstName: _firstNameController.text,
+                                  lastName: _lastNameController.text,
+                                  counrty: _countryController.text,
+                                  city: _cityController.text,
+                                  phoneNum: _phoneNumberController.text,
+                                  address: _addressController.text,
+                                  email: widget.googleUser!.email,
+                                );
 
-                              //await UserServices().blabla();
-                              if (result >= 0) {
-                                // ignore: use_build_context_synchronously
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const GoogleSignUp()));
+                                print('after signup');
+
+                                if (result >= 0) {
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const GoogleSignUp()));
+                                }
+                              } else {
+                                //update google user without password
+                                if (widget.isGoogle) {
+                                  final result = await UserServices()
+                                      .updateNewUser(
+                                          widget.normalUser!.userID!,
+                                          _usernameController.text,
+                                          _firstNameController.text,
+                                          _lastNameController.text,
+                                          _countryController.text,
+                                          _cityController.text,
+                                          _phoneNumberController.text,
+                                          _addressController.text,
+                                          widget.normalUser!.email!,
+                                          null);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AppHomePage()));
+                                } else {
+                                  //update normal user with password
+                                  final result = await UserServices()
+                                      .updateNewUser(
+                                          widget.normalUser!.userID!,
+                                          _usernameController.text,
+                                          _firstNameController.text,
+                                          _lastNameController.text,
+                                          _countryController.text,
+                                          _cityController.text,
+                                          _phoneNumberController.text,
+                                          _addressController.text,
+                                          widget.normalUser!.email!,
+                                          widget.normalUser!.pass!);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AppHomePage()));
+                                }
                               }
                             },
                             child: const Text(

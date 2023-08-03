@@ -13,7 +13,7 @@ class UserServices {
   /// `getCitiesAndCountries` function that retrives all cities and countries from USERS table in database and return the results in List of Maps
   Future<List<Map<String, String>>> getCitiesAndCountries() async {
     String sqlStatement = '''
-    SELECT DISTINCT City, Country
+    SELECT DISTINCT LOWER(City) as City, LOWER(Country) as Country
     FROM Users
   ''';
 
@@ -40,18 +40,30 @@ class UserServices {
     return queryResult.first['City'];
   }
 
-  //temp:
-  // blabla() async {
-  //   String sqlStatement = '''
-  //       SELECT *
-  //       FROM Users
-  //       WHERE UserID = 102628421386596844304
-  //   ''';
-  //   //
-  //   final queryResult = await db.readData(sqlStatement);
-  //   print('query result');
-  //   print(queryResult);
-  // }
+  Future<UserModel> getUser(String id) async {
+    String sqlStatement = '''
+        SELECT *
+        FROM Users
+        WHERE UserID = $id
+    ''';
+
+    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    List<UserModel> user = queryResult
+        .map((row) => UserModel(
+            userID: row['UserID'],
+            userName: row['UserName'],
+            firstName: row['FirstName'],
+            lastName: row['LastName'],
+            city: row['City'],
+            country: row['Country'],
+            addressLocation: row['AddressLocation'],
+            phoneNum: row['PhoneNum'],
+            email: row['Email'],
+            pass: row['Password']))
+        .toList();
+
+    return user[0];
+  }
 
   /// `getUsersInfo` that retrieves all users info for those who filled out a form as a seeker or a giver
   /// the function takes in  `type` of user and retrieves the form info and user info from both Forms and Users tables
@@ -197,6 +209,15 @@ class UserServices {
     return queryResult;
   }
 
+  Future<int> deleteUser(String id) async {
+    String sqlStatement = '''
+    DELETE FROM Users
+    WHERE UserID= $id
+    ''';
+    int queryResult = await db.deleteData(sqlStatement);
+    return queryResult;
+  }
+
   ///  `createNewUser` that creats a new user during sign up and adds him to database
   /// It returns a Future<int> for whether the transaction was sucessful or not
   Future<int> createNewUser(
@@ -228,6 +249,28 @@ class UserServices {
     int result = await db.insertData(sqlStatment);
     print('after creating new user');
     print(result);
+    return result;
+  }
+
+  Future<int> updateNewUser(
+      String userID,
+      String userName,
+      String firstName,
+      String lastName,
+      String counrty,
+      String city,
+      String phoneNum,
+      String address,
+      String email,
+      String? password) async {
+    String sqlStatment = '''
+    UPDATE Users
+    SET  UserName = '$userName' ,  FirstName= '$firstName',  LastName= '$lastName', City= '$city', Country= '$counrty', AddressLocation=  '$address', PhoneNum='$phoneNum' ,Email='$email', Password='${password ?? ''}'
+    WHERE UserID= $userID
+    ''';
+
+    int result = await db.updateData(sqlStatment);
+
     return result;
   }
 

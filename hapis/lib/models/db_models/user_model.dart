@@ -46,6 +46,9 @@ class UserModel {
   /// Property that defines for who -only if seeker  so it could be null or empty
   String? forWho;
 
+  ///property that defines password
+  String? pass;
+
   UserModel(
       {this.userID,
       this.formID,
@@ -61,7 +64,7 @@ class UserModel {
       this.item,
       this.category,
       this.multiDates,
-      this.forWho});
+      this.forWho, this.pass});
 
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -80,6 +83,7 @@ class UserModel {
       category: map['Category'],
       multiDates: map['Dates_available'],
       forWho: map['For'],
+      pass: map['Password']
     );
   }
 }
