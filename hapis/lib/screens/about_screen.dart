@@ -14,11 +14,13 @@ class About extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar:  HAPISAppBar(
+        appBar: HAPISAppBar(
           appBarText: '',
           isLg: isLg,
         ),
-        drawer: buildDrawer(context, isLg),
+        drawer: ResponsiveLayout(
+            mobileBody: buildDrawer(context, isLg, 18, 16),
+            tabletBody: buildDrawer(context, isLg, 24, 20)),
         body: ResponsiveLayout(
           mobileBody: buildMobileLogos(),
           tabletBody: buildTabletLogos(),

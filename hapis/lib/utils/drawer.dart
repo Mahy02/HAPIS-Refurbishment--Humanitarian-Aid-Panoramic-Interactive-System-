@@ -14,7 +14,7 @@ import '../screens/liquid_galaxy/settings_screen.dart';
 ///It helps navigate between these pages=> [About], [], [AppSettings] and [AppHomePage] in the main app view
 ///We use  [IconSideMenuWidget] to represent each item in the sidemenu
 
-Drawer buildDrawer(BuildContext context, bool isLg) {
+Drawer buildDrawer(BuildContext context, bool isLg, double fontSize, double iconFontSize) {
   return isLg
       ? Drawer(
           backgroundColor: const Color.fromARGB(222, 255, 255, 255),
@@ -32,26 +32,34 @@ Drawer buildDrawer(BuildContext context, bool isLg) {
                 ),
                 IconSideMenuWidget(
                   itemNumber: '1',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: About(
                     isLg: isLg,
                   ),
                   itemTitle: 'About',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                const IconSideMenuWidget(
+                 IconSideMenuWidget(
                   itemNumber: '2',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: LgHomePage(),
                   itemTitle: 'Home',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                const IconSideMenuWidget(
+                 IconSideMenuWidget(
                   itemNumber: '3',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: Settings(),
                   itemTitle: 'LG Settings',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                const IconSideMenuWidget(
+                 IconSideMenuWidget(
                   itemNumber: '4',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: Configuration(),
                   itemTitle: 'Connect LG',
                 ),
@@ -79,26 +87,34 @@ Drawer buildDrawer(BuildContext context, bool isLg) {
                 ),
                 IconSideMenuWidget(
                   itemNumber: '1',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: About(
                     isLg: isLg,
                   ),
                   itemTitle: 'About',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                const IconSideMenuWidget(
+                 IconSideMenuWidget(
                   itemNumber: '2',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: AppHomePage(),
                   itemTitle: 'How it works',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                const IconSideMenuWidget(
+                 IconSideMenuWidget(
                   itemNumber: '3',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: AppSettings(),
                   itemTitle: 'Settings',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                const IconSideMenuWidget(
+                 IconSideMenuWidget(
                   itemNumber: '4',
+                  fontSize: fontSize,
+                  iconFontSize: iconFontSize,
                   page: AppHomePage(),
                   itemTitle: 'Home',
                 ),
@@ -112,3 +128,5 @@ Drawer buildDrawer(BuildContext context, bool isLg) {
           ),
         );
 }
+
+//tablet view => 24 20

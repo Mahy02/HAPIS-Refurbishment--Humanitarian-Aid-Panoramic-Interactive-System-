@@ -15,6 +15,8 @@ class IconSideMenuWidget extends StatelessWidget {
   final String itemTitle;
   final String itemNumber;
   final Widget page;
+  final double fontSize;
+  final double iconFontSize;
   //final IconState iconState;
 
   const IconSideMenuWidget({
@@ -22,6 +24,8 @@ class IconSideMenuWidget extends StatelessWidget {
     required this.itemTitle,
     required this.itemNumber,
     required this.page,
+    required this.fontSize,
+    required this.iconFontSize,
   }) : super(key: key);
 
   @override
@@ -59,9 +63,9 @@ class IconSideMenuWidget extends StatelessWidget {
                           backgroundColor: HapisColors.primary,
                           child: Text(
                             itemNumber,
-                            style: const TextStyle(
+                            style:  TextStyle(
                               fontFamily: "segoe ui",
-                              fontSize: 20,
+                              fontSize: iconFontSize,
                               color: Colors.white,
                             ),
                           ),
@@ -72,7 +76,7 @@ class IconSideMenuWidget extends StatelessWidget {
               title: Text(
                 itemTitle,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: fontSize,
                   fontFamily: "segoe ui",
                   color: itemNumber == '1'
                       ? HapisColors.lgColor1

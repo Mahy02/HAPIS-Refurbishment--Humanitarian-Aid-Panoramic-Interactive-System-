@@ -40,7 +40,9 @@ class _ConfigurationState extends State<Configuration> {
           appBarText: '',
           isLg: true,
         ),
-        drawer: Drawer(child: buildDrawer(context, true)),
+        drawer:  ResponsiveLayout(
+          mobileBody: buildDrawer(context, true, 18, 16),
+          tabletBody: buildDrawer(context, true, 24, 20)),
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(context),
             tabletBody: buildTabletLayout(context)));

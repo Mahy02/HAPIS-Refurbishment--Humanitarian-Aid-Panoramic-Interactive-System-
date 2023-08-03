@@ -27,7 +27,9 @@ class Settings extends StatelessWidget {
         ),
         drawer: Drawer(
             // Drawer content goes here
-            child: buildDrawer(context, true)),
+            child: ResponsiveLayout(
+                mobileBody: buildDrawer(context, true, 18, 16),
+                tabletBody: buildDrawer(context, true, 24, 20))),
         body: ResponsiveLayout(
           mobileBody: buildMobileLayout(context),
           tabletBody: buildTabletLayout(context),

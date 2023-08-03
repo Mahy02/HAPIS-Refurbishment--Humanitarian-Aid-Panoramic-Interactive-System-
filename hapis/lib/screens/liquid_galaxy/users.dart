@@ -175,7 +175,9 @@ class _UsersState extends State<Users> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const HAPISAppBar(appBarText: '', isLg: true,),
-        drawer: buildDrawer(context, true),
+        drawer: ResponsiveLayout(
+          mobileBody: buildDrawer(context, true, 18, 16),
+          tabletBody: buildDrawer(context, true, 24, 20)),
         backgroundColor: Colors.white,
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));

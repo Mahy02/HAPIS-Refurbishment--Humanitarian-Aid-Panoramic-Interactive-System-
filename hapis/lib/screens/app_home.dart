@@ -23,7 +23,6 @@ class AppHomePage extends StatefulWidget {
 class _AppHomePageState extends State<AppHomePage> {
   int currentIndex = 0;
   final screens = const [
-    //UsersPage(),
     ResponsiveLayout(
         mobileBody: UsersPage(
           fontSize: 20,
@@ -48,7 +47,6 @@ class _AppHomePageState extends State<AppHomePage> {
           // finishButtonHeight: ,
           // finishButtonWidth: ,
         )),
-
     ResponsiveLayout(
       mobileBody: Matchings(
         fontSize: 18,
@@ -81,7 +79,9 @@ class _AppHomePageState extends State<AppHomePage> {
         appBarText: '',
         isLg: false,
       ),
-      drawer: buildDrawer(context, false),
+      drawer: ResponsiveLayout(
+          mobileBody: buildDrawer(context, false, 18, 16),
+          tabletBody: buildDrawer(context, false, 24, 20)),
       body: screens[currentIndex],
       bottomNavigationBar: ResponsiveLayout(
           mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()),
@@ -175,11 +175,6 @@ class _AppHomePageState extends State<AppHomePage> {
 
   Widget buildTabletLayout() {
     return BottomNavigationBar(
-        //selectedFontSize
-        //unselectedFontSize
-        //iconSize
-        //selectedItemColor:,
-        //unselectedItemColor
         selectedFontSize: 25,
         unselectedFontSize: 24,
         iconSize: 40,

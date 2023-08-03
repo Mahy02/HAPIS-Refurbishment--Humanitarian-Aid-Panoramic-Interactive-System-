@@ -47,7 +47,9 @@ class _CreateFormState extends State<CreateForm> {
     }
     return Scaffold(
       appBar: const HAPISAppBar(isLg: false, appBarText: ''),
-      drawer: buildDrawer(context, false),
+      drawer: ResponsiveLayout(
+          mobileBody: buildDrawer(context, false, 18, 16),
+          tabletBody: buildDrawer(context, false, 24, 20)),
       body: Consumer2<FormProvider, FormProvider>(
         builder:
             (BuildContext context, donorModel, seekerModel, Widget? child) {
