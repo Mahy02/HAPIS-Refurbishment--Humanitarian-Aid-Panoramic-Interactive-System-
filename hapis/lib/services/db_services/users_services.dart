@@ -100,17 +100,90 @@ class UserServices {
     }
   }
 
+  Future<bool> isFormInProgress(int formId) async {
+    // Check in the 'requests' table
+    String sqlStatementsR = '''
+    SELECT COUNT(*) as countR 
+    FROM Requests 
+    WHERE Donation_Status = 'In progress' AND Rec_FormID = $formId
+  ''';
+    final resultR = await db.readData(sqlStatementsR);
+    int requestsCount = resultR[0]['countR'];
+
+    String sqlStatementsM = '''
+     SELECT COUNT(*) as countM 
+     FROM Matchings 
+     WHERE Donation_Status = 'In progress' AND (Seeker_FormID = $formId OR Giver_FormID = $formId)
+  ''';
+
+    final resultM = await db.readData(sqlStatementsM);
+    int matchingsCount = resultM[0]['countM'];
+
+    // Return true if either of the counts is greater than 0
+    return requestsCount > 0 || matchingsCount > 0;
+  }
+
+  Future<List<UserModel>> getUserForms(String id) async {
+    String sqlStatment = '''
+      SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For, Type
+      FROM Forms
+      JOIN Users ON Forms.UserID = Users.UserID
+      WHERE Forms.Status = 'Not Completed' AND Forms.UserID = $id
+    ''';
+
+    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatment);
+    List<UserModel> forms = queryResult
+        .map((row) => UserModel(
+              userID: row['UserUserID'],
+              formID: row['FormID'],
+              userName: row['UserName'],
+              firstName: row['FirstName'],
+              lastName: row['LastName'],
+              city: row['City'],
+              country: row['Country'],
+              addressLocation: row['AddressLocation'],
+              phoneNum: row['PhoneNum'],
+              email: row['Email'],
+              type: row['Type'],
+              item: row['Item'],
+              category: row['Category'],
+              multiDates: row['Dates_available'],
+              forWho: row['For'],
+            ))
+        .toList();
+
+    return forms;
+  }
+
   Future<int> createNewForm(String userID, String type, String item,
       String category, String dates, String? forWho, String status) async {
     String sqlStatment = '''
     INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
         VALUES ($userID , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
     ''';
-    print('hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+
     int rowID = await db.insertData(sqlStatment);
-    print('inside create new form');
-    print(rowID);
-    print(userID);
+
+    return rowID;
+  }
+
+  Future<int> updateForm(
+      String userID,
+      String type,
+      String item,
+      String category,
+      String dates,
+      String? forWho,
+      String status,
+      int formID) async {
+    String sqlStatment = '''
+    UPDATE Forms
+    SET UserID= $userID , Type= '$type', Item='$item' , Category='$category' , Dates_available='$dates', For= '${forWho ?? ''}',Status='$status'
+    WHERE FormID = $formID
+    ''';
+
+    int rowID = await db.updateData(sqlStatment);
+
     return rowID;
   }
 

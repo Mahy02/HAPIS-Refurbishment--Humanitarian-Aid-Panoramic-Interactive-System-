@@ -46,7 +46,7 @@ class HapisElevatedButton extends StatelessWidget {
           onpressed();
         },
         style: ElevatedButton.styleFrom(
-          primary: buttonColor,
+          backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),

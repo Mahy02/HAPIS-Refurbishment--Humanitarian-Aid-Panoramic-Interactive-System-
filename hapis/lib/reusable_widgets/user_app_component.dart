@@ -144,31 +144,33 @@ class _UserAppComponentState extends State<UserAppComponent> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return GestureDetector(
-                        onTap: () async {
-                          //Make new request
-                          if (LoginSessionSharedPreferences.getLoggedIn()) {
-                            await RequestsServices().createRequest(
-                                id, widget.user.userID!, widget.user.formID!);
+                    if (LoginSessionSharedPreferences.getLoggedIn())
+                    if (id != widget.user.userID)
+                      StatefulBuilder(builder:
+                          (BuildContext context, StateSetter setState) {
+                        return GestureDetector(
+                          onTap: () async {
+                            //Make new request
+                            if (LoginSessionSharedPreferences.getLoggedIn()) {
+                              await RequestsServices().createRequest(
+                                  id, widget.user.userID!, widget.user.formID!);
 
-                            //referesh:
-                            setState(() {
-                              requested = true;
-                            });
-                          } else {
-                            showDialogSignUp(context);
-                          }
-                        },
-                        //we should checkfriendship to see which icon to use
-                        child: requested
-                            ? const Icon(Icons.check,
-                                color: HapisColors.lgColor4)
-                            : const Icon(Icons.person_add_alt_1_rounded,
-                                color: HapisColors.lgColor1),
-                      );
-                    }),
+                              //referesh:
+                              setState(() {
+                                requested = true;
+                              });
+                            } else {
+                              showDialogSignUp(context);
+                            }
+                          },
+                          //we should checkfriendship to see which icon to use
+                          child: requested
+                              ? const Icon(Icons.check,
+                                  color: HapisColors.lgColor4)
+                              : const Icon(Icons.person_add_alt_1_rounded,
+                                  color: HapisColors.lgColor1),
+                        );
+                      }),
                   ],
                 ),
                 if (widget.isMobile)

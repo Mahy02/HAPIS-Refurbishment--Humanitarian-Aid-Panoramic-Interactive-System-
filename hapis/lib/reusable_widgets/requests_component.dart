@@ -8,6 +8,7 @@ import 'package:hapis/services/db_services/users_services.dart';
 
 import '../helpers/matching_status_shared_pref.dart';
 import '../utils/date_popup.dart';
+import '../utils/show_user_details_modal.dart';
 
 /// [RequestComponent] is a custom widget that displays the component shown in main app view for either Requests, Donations or Matchings page
 /// It takes the following parameters:
@@ -132,7 +133,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (widget.type == 'giver') {
-                                        _showUserDetails(
+                                        showUserDetails(
                                             context,
                                             widget.personName,
                                             widget.email,
@@ -142,9 +143,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                             widget.item,
                                             widget.dates,
                                             widget.location,
-                                            'seeker');
+                                            'seeker', widget.fontSize);
                                       } else {
-                                        _showUserDetails(
+                                        showUserDetails(
                                             context,
                                             widget.personName,
                                             widget.email,
@@ -154,7 +155,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                             widget.item,
                                             widget.dates,
                                             widget.location,
-                                            'giver');
+                                            'giver', widget.fontSize);
                                       }
                                     },
                                     child: Text(
@@ -493,199 +494,5 @@ class _RequestComponentState extends State<RequestComponent> {
     );
   }
 
-  /// A function that calls [showModalBottomSheet] for opening a modal with users details in case of a match between 2 peope
-  /// It containes: [personName], [email], [phone], [item], [city], [category], [dates], [location] and [type]
-  void _showUserDetails(
-      BuildContext context,
-      String? personName,
-      String? email,
-      String? phone,
-      String? city,
-      String? category,
-      String? item,
-      String? dates,
-      String? location,
-      String? type) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: Column(
-            children: [
-              const Icon(
-                Icons.keyboard_double_arrow_up,
-                size: 30,
-                color: HapisColors.lgColor3,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Center(
-                child: Text(
-                  personName ?? '',
-                  style: TextStyle(
-                      fontSize: widget.fontSize + 4,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (type == 'seeker')
-                    Text(
-                      'Seeking',
-                      style: TextStyle(
-                          fontSize: widget.fontSize + 1,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic),
-                    ),
-                  if (type == 'giver')
-                    Text(
-                      'Donating',
-                      style: TextStyle(
-                        fontSize: widget.fontSize + 1,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  Text(
-                    item ?? '',
-                    style: TextStyle(
-                      fontSize: widget.fontSize,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'City',
-                    style: TextStyle(
-                      fontSize: widget.fontSize + 1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    city ?? '',
-                    style: TextStyle(
-                      fontSize: widget.fontSize,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Phone Number',
-                    style: TextStyle(
-                      fontSize: widget.fontSize + 1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    phone ?? '',
-                    style: TextStyle(
-                      fontSize: widget.fontSize,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Email',
-                    style: TextStyle(
-                      fontSize: widget.fontSize + 1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      email ?? '',
-                      style: TextStyle(
-                          fontSize: widget.fontSize,
-                          color: const Color.fromARGB(255, 32, 132, 214),
-                          decoration: TextDecoration.underline),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Location',
-                    style: TextStyle(
-                      fontSize: widget.fontSize + 1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      location ?? '',
-                      style: TextStyle(
-                        fontSize: widget.fontSize,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Dates available',
-                    style: TextStyle(
-                      fontSize: widget.fontSize + 1,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  GestureDetector(
-                    child: Text(
-                      'click here to view',
-                      style: TextStyle(
-                          fontSize: widget.fontSize,
-                          color: Color.fromARGB(255, 32, 132, 214),
-                          decoration: TextDecoration.underline),
-                    ),
-                    onTap: () {
-                      List<String> listDates = dates!.split(',');
-                      showDatesDialog(listDates, context);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  
 }

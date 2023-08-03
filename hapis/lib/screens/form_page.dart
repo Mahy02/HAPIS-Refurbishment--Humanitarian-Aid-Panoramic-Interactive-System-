@@ -23,8 +23,16 @@ import '../reusable_widgets/text_form_field.dart';
 import '../utils/empty_date_popup.dart';
 
 class CreateForm extends StatefulWidget {
+  final List<DateSelectionModel> selectedDates;
+  final String? type;
+  final bool update;
+  final int formID;
   const CreateForm({
     Key? key,
+    required this.selectedDates,
+    required this.type,
+    required this.update,
+    required this.formID,
   }) : super(key: key);
 
   @override
@@ -35,6 +43,18 @@ class _CreateFormState extends State<CreateForm> {
   final _formKey = GlobalKey<FormState>();
   List<DateSelectionModel> _selectedDatesSeeker = [];
   List<DateSelectionModel> _selectedDatesGiver = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.type != null) {
+      if (widget.type == 'seeker') {
+        _selectedDatesSeeker = widget.selectedDates;
+      } else if (widget.type == 'giver') {
+        _selectedDatesGiver = widget.selectedDates;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -508,14 +528,27 @@ class _CreateFormState extends State<CreateForm> {
               if (datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
-                int rowID = await UserServices().createNewForm(
-                    id,
-                    'seeker',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    seekerModel.forWhoS,
-                    'Not Completed');
+                int rowID = 0;
+                if (widget.update == true) {
+                  rowID = await UserServices().updateForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowID = await UserServices().createNewForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed');
+                }
                 //check match
                 //but first get city of userID
                 String city = await UserServices().getCity(id);
@@ -537,19 +570,27 @@ class _CreateFormState extends State<CreateForm> {
               if (datesG.isEmpty) {
                 showDatePopUp(context);
               } else {
-                print('hereeeee before');
-                int rowID = await UserServices().createNewForm(
-                    id,
-                    'giver',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    null,
-                    'Not Completed');
-                // print(rowID);
-                // print(id);
-                // await UserServices().blabla();
-                //check match
+                int rowID = 0;
+                if (widget.update == true) {
+                  rowID = await UserServices().updateForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowID = await UserServices().createNewForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed');
+                }
                 String city = await UserServices().getCity(id);
 
                 List<int?> formIds = await MatchingsServices().checkMatching(
@@ -571,15 +612,28 @@ class _CreateFormState extends State<CreateForm> {
               if (datesG.isEmpty || datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
-                int rowIDS = await UserServices().createNewForm(
-                    id,
-                    'seeker',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    seekerModel.forWhoS,
-                    'Not Completed');
+                int rowIDS = 0;
 
+                if (widget.update == true) {
+                  rowIDS = await UserServices().updateForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowIDS = await UserServices().createNewForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed');
+                }
                 //check match
                 String city = await UserServices().getCity(id);
                 List<int?> formIdsG = await MatchingsServices().checkMatching(
@@ -596,14 +650,28 @@ class _CreateFormState extends State<CreateForm> {
                   }
                 }
 
-                int rowIDG = await UserServices().createNewForm(
-                    id,
-                    'giver',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    null,
-                    'Not Completed');
+                int rowIDG = 0;
+
+                if (widget.update == true) {
+                  rowIDG = await UserServices().updateForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowIDG = await UserServices().createNewForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed');
+                }
 
                 //check match
                 List<int?> formIdsS = await MatchingsServices().checkMatching(
@@ -1066,14 +1134,27 @@ class _CreateFormState extends State<CreateForm> {
               if (datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
-                int rowID = await UserServices().createNewForm(
-                    id,
-                    'seeker',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    seekerModel.forWhoS,
-                    'Not Completed');
+                int rowID = 0;
+                if (widget.update == true) {
+                  rowID = await UserServices().updateForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowID = await UserServices().createNewForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed');
+                }
                 //check match
                 //but first get city of userID
                 String city = await UserServices().getCity(id);
@@ -1095,16 +1176,27 @@ class _CreateFormState extends State<CreateForm> {
               if (datesG.isEmpty) {
                 showDatePopUp(context);
               } else {
-                int rowID = await UserServices().createNewForm(
-                    id,
-                    'giver',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    null,
-                    'Not Completed');
-
-                //check match
+                int rowID = 0;
+                if (widget.update == true) {
+                  rowID = await UserServices().updateForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowID = await UserServices().createNewForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed');
+                }
                 String city = await UserServices().getCity(id);
 
                 List<int?> formIds = await MatchingsServices().checkMatching(
@@ -1126,15 +1218,28 @@ class _CreateFormState extends State<CreateForm> {
               if (datesG.isEmpty || datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
-                int rowIDS = await UserServices().createNewForm(
-                    id,
-                    'seeker',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    seekerModel.forWhoS,
-                    'Not Completed');
+                int rowIDS = 0;
 
+                if (widget.update == true) {
+                  rowIDS = await UserServices().updateForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowIDS = await UserServices().createNewForm(
+                      id,
+                      'seeker',
+                      seekerModel.formItemControllerS.text,
+                      seekerModel.categoryS,
+                      datesS,
+                      seekerModel.forWhoS,
+                      'Not Completed');
+                }
                 //check match
                 String city = await UserServices().getCity(id);
                 List<int?> formIdsG = await MatchingsServices().checkMatching(
@@ -1151,14 +1256,28 @@ class _CreateFormState extends State<CreateForm> {
                   }
                 }
 
-                int rowIDG = await UserServices().createNewForm(
-                    id,
-                    'giver',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    null,
-                    'Not Completed');
+                int rowIDG = 0;
+
+                if (widget.update == true) {
+                  rowIDG = await UserServices().updateForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed',
+                      widget.formID);
+                } else {
+                  rowIDG = await UserServices().createNewForm(
+                      id,
+                      'giver',
+                      donorModel.formItemControllerD.text,
+                      donorModel.categoryD,
+                      datesG,
+                      null,
+                      'Not Completed');
+                }
 
                 //check match
                 List<int?> formIdsS = await MatchingsServices().checkMatching(

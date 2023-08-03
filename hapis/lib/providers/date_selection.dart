@@ -16,13 +16,10 @@ import 'package:intl/intl.dart';
 /// both of the above use [showTimePicker] built in functionallity
 
 class DateSelectionModel extends ChangeNotifier {
- 
-
   TextEditingController _dateControllerStart =
       TextEditingController(text: '2023-05-12');
   TextEditingController _timeControllerStart =
       TextEditingController(text: '12:00 AM');
-
 
   set dateStart(String value) {
     _dateControllerStart.text = value;
@@ -34,25 +31,18 @@ class DateSelectionModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  
-
   set timeStartController(TextEditingController value) {
     _timeControllerStart = value;
     notifyListeners();
   }
-
- 
 
   set dateStartController(TextEditingController value) {
     _dateControllerStart = value;
     notifyListeners();
   }
 
- 
-  
   TextEditingController get dateControllerStart => _dateControllerStart;
   TextEditingController get timeControllerStart => _timeControllerStart;
-
 
   DateTime _dateTime = DateTime.now();
 
@@ -71,7 +61,6 @@ class DateSelectionModel extends ChangeNotifier {
     });
   }
 
-
   TimeOfDay _timeOfDay = const TimeOfDay(hour: 8, minute: 30);
   void showTimePickerStart(BuildContext context) {
     showTimePicker(
@@ -87,6 +76,4 @@ class DateSelectionModel extends ChangeNotifier {
       },
     );
   }
-
-  
 }
