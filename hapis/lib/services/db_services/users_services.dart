@@ -34,7 +34,7 @@ class UserServices {
     String sqlStatement = '''
         SELECT City
         FROM Users
-        WHERE UserID = $id
+        WHERE UserID = '$id'
     ''';
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
     print(queryResult);
@@ -46,7 +46,7 @@ class UserServices {
     String sqlStatement = '''
         SELECT *
         FROM Users
-        WHERE UserID = $id
+        WHERE UserID = '$id'
     ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
@@ -87,20 +87,7 @@ class UserServices {
         print('inside get users forms');
         String id = row['UserUserID'];
         print(id);
-        // Big userIdBig = Big(id);
-        // print(userIdBig);
-        // id = id.replaceAll(RegExp(r'[^0-9]'),
-        //     ''); // Remove non-numeric characters from the string
-        // BigInt userIdBigInt = BigInt.parse(id);
-        // print(userIdBigInt);
-        // Convert the string back to Decimal
 
-        // String id = row['UserUserID'];
-        // Decimal idDecimal = Decimal.parse(id);
-        // print(idDecimal);
-        // print(idDecimal.toString());
-
-        //print(row['UserUserID'].toString());
         UserModel user = UserModel(
           userID: row['UserUserID'],
           formID: row['FormID'],
@@ -156,32 +143,12 @@ class UserServices {
   Future<List<UserModel>> getUserForms(String id) async {
     print('inside user forms');
     print(id);
-String value1 = "111111111111196111111";
-String value2 = "1.11111111111197e+20";
-
-BigInt parseBigIntFromExponential(String input) {
-  // Split the input into coefficient and exponent parts
-  List<String> parts = input.split('e+');
-  BigInt coefficient = BigInt.parse(parts[0].replaceAll('.', ''));
-  int exponent = int.parse(parts[1]);
-
-  // Multiply the coefficient by 10 raised to the exponent
-  return coefficient * BigInt.from(10).pow(exponent);
-}
-
-BigInt bigValue2 = parseBigIntFromExponential(value2);
-
-if (BigInt.parse(value1) == bigValue2) {
-  print("They are equal.");
-} else {
-  print("They are not equal.");
-}
 
     String sqlStatment = '''
       SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For, Type
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Forms.Status = 'Not Completed' AND Forms.UserID = $id
+      WHERE Forms.Status = 'Not Completed' AND Forms.UserID = '$id'
     ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatment);
@@ -213,10 +180,10 @@ if (BigInt.parse(value1) == bigValue2) {
       String category, String dates, String? forWho, String status) async {
     print('inside create form');
     print(userID);
-  
+
     String sqlStatment = '''
     INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
-        VALUES ($userID , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
+        VALUES ('$userID' , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
     ''';
     print(sqlStatment);
     int rowID = await db.insertData(sqlStatment);
@@ -237,7 +204,7 @@ if (BigInt.parse(value1) == bigValue2) {
       int formID) async {
     String sqlStatment = '''
     UPDATE Forms
-    SET UserID= $userID , Type= '$type', Item='$item' , Category='$category' , Dates_available='$dates', For= '${forWho ?? ''}',Status='$status'
+    SET UserID= '$userID' , Type= '$type', Item='$item' , Category='$category' , Dates_available='$dates', For= '${forWho ?? ''}',Status='$status'
     WHERE FormID = $formID
     ''';
 
@@ -259,7 +226,7 @@ if (BigInt.parse(value1) == bigValue2) {
   Future<int> deleteUser(String id) async {
     String sqlStatement = '''
     DELETE FROM Users
-    WHERE UserID= $id
+    WHERE UserID= '$id'
     ''';
     int queryResult = await db.deleteData(sqlStatement);
     return queryResult;
@@ -290,7 +257,7 @@ if (BigInt.parse(value1) == bigValue2) {
         PhoneNum,
         Email,
         Password
-      ) VALUES ($userID, '$userName', '$firstName', '$lastName', '$city', '$counrty', '$address', '$phoneNum', '$email', '${password ?? ''}')
+      ) VALUES ('$userID', '$userName', '$firstName', '$lastName', '$city', '$counrty', '$address', '$phoneNum', '$email', '${password ?? ''}')
     ''';
 
     int result = await db.insertData(sqlStatment);
@@ -313,7 +280,7 @@ if (BigInt.parse(value1) == bigValue2) {
     String sqlStatment = '''
     UPDATE Users
     SET  UserName = '$userName' ,  FirstName= '$firstName',  LastName= '$lastName', City= '$city', Country= '$counrty', AddressLocation=  '$address', PhoneNum='$phoneNum' ,Email='$email', Password='${password ?? ''}'
-    WHERE UserID= $userID
+    WHERE UserID= '$userID'
     ''';
 
     int result = await db.updateData(sqlStatment);
@@ -325,7 +292,7 @@ if (BigInt.parse(value1) == bigValue2) {
   /// It returns a Future<int> for the count found , if it was >0 then user was found
   Future<int> doesGoogleUserExist(String userId, String email) async {
     String sqlStatment = '''
-      SELECT COUNT(*) AS count FROM Users WHERE UserID = $userId AND Email = "$email"
+      SELECT COUNT(*) AS count FROM Users WHERE UserID = '$userId' AND Email = "$email"
       ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatment);
