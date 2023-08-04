@@ -217,34 +217,67 @@ class _SignUpPageState extends State<SignUpPage> {
                           fontSize: 16,
                         ),
                         TextFormFieldWidget(
-                          hint: '',
-                          label: 'Address Location',
-                          isHidden: false,
-                          key: const ValueKey("location"),
+                          key: const ValueKey("add_location"),
                           textController: _addressController,
+                          hint: 'Enter your address',
+                          maxLength: 300,
+                          isHidden: false,
                           isSuffixRequired: true,
+                          label: 'Address Location',
                           fontSize: 16,
-                          onChanged: (value) {
-                            _addressController.text = value;
-                          },
                         ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            try {
-                              await controller.getCurrentLocation();
-                            } catch (e) {
-                              // Handle any exceptions that might occur during the execution of getCurrentLocation()
-                              print(e);
-                            }
-                          },
-                          child: const Text('Get Current Location'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            _addressController.text =
-                                controller.currentLocation ?? '';
-                          },
-                          child: const Text('Show Location'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: HapisColors.lgColor1,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                elevation: 1,
+                              ),
+                              onPressed: () async {
+                                try {
+                                  await controller.getCurrentLocation();
+                                } catch (e) {
+                                  // Handle any exceptions that might occur during the execution of getCurrentLocation()
+                                  print(e);
+                                }
+                              },
+                              child: const Text(
+                                'Get Current \n Location',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: HapisColors.lgColor1,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                elevation: 1,
+                              ),
+                              onPressed: () async {
+                                _addressController.text =
+                                    controller.currentLocation ?? '';
+                              },
+                              child: const Text(
+                                'Show \n Location',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.06,
