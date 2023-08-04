@@ -72,7 +72,7 @@ class AppSettings extends StatelessWidget {
                         id = googleUser.id;
                         isGoogle = true;
                       } else {
-                        id = LoginSessionSharedPreferences.getNormalUserID()!;
+                        id = LoginSessionSharedPreferences.getUserID()!;
                         isGoogle = false;
                       }
                       print(id);
@@ -146,7 +146,7 @@ class AppSettings extends StatelessWidget {
                         int result = await UserServices().deleteUser(id);
                         print(result);
                       } else {
-                        id = LoginSessionSharedPreferences.getNormalUserID()!;
+                        id = LoginSessionSharedPreferences.getUserID()!;
                         LoginSessionSharedPreferences.removeNormalUserID();
                         LoginSessionSharedPreferences.setLoggedIn(false);
                         int result = await UserServices().deleteUser(id);

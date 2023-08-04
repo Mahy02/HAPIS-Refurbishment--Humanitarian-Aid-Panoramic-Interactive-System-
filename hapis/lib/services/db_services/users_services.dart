@@ -1,9 +1,11 @@
+import 'package:big_dart/big_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/sql_db.dart';
 import '../../models/db_models/user_model.dart';
 import '../../providers/user_provider.dart';
+import 'package:decimal/decimal.dart';
 
 ///   `userServices` class that contains everything related to the users query and interactions with the database
 class UserServices {
@@ -73,7 +75,7 @@ class UserServices {
       SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Forms.Type = '$type' AND Forms.Status = 'Not Completed'
+      WHERE Forms.Type = '$type' AND Forms.Status = 'Not Completed' 
     ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatment);
@@ -82,7 +84,23 @@ class UserServices {
 
     for (Map<String, dynamic> row in result) {
       try {
-        // print(row);
+        print('inside get users forms');
+        String id = row['UserUserID'];
+        print(id);
+        // Big userIdBig = Big(id);
+        // print(userIdBig);
+        // id = id.replaceAll(RegExp(r'[^0-9]'),
+        //     ''); // Remove non-numeric characters from the string
+        // BigInt userIdBigInt = BigInt.parse(id);
+        // print(userIdBigInt);
+        // Convert the string back to Decimal
+
+        // String id = row['UserUserID'];
+        // Decimal idDecimal = Decimal.parse(id);
+        // print(idDecimal);
+        // print(idDecimal.toString());
+
+        //print(row['UserUserID'].toString());
         UserModel user = UserModel(
           userID: row['UserUserID'],
           formID: row['FormID'],
@@ -136,6 +154,29 @@ class UserServices {
   }
 
   Future<List<UserModel>> getUserForms(String id) async {
+    print('inside user forms');
+    print(id);
+String value1 = "111111111111196111111";
+String value2 = "1.11111111111197e+20";
+
+BigInt parseBigIntFromExponential(String input) {
+  // Split the input into coefficient and exponent parts
+  List<String> parts = input.split('e+');
+  BigInt coefficient = BigInt.parse(parts[0].replaceAll('.', ''));
+  int exponent = int.parse(parts[1]);
+
+  // Multiply the coefficient by 10 raised to the exponent
+  return coefficient * BigInt.from(10).pow(exponent);
+}
+
+BigInt bigValue2 = parseBigIntFromExponential(value2);
+
+if (BigInt.parse(value1) == bigValue2) {
+  print("They are equal.");
+} else {
+  print("They are not equal.");
+}
+
     String sqlStatment = '''
       SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For, Type
       FROM Forms
@@ -144,9 +185,10 @@ class UserServices {
     ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatment);
+    print('res: $queryResult');
     List<UserModel> forms = queryResult
         .map((row) => UserModel(
-              userID: row['UserUserID'],
+              userID: id,
               formID: row['FormID'],
               userName: row['UserName'],
               firstName: row['FirstName'],
@@ -169,12 +211,17 @@ class UserServices {
 
   Future<int> createNewForm(String userID, String type, String item,
       String category, String dates, String? forWho, String status) async {
+    print('inside create form');
+    print(userID);
+  
     String sqlStatment = '''
     INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
         VALUES ($userID , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
     ''';
-
+    print(sqlStatment);
     int rowID = await db.insertData(sqlStatment);
+    print('rowId');
+    print(rowID);
 
     return rowID;
   }
@@ -299,5 +346,16 @@ class UserServices {
     } else {
       return result[0]['UserID'];
     }
+  }
+
+  //tirals:
+  Future<int> bla() async {
+    String sqlStatment = '''
+      SELECT COUNT(*) AS count FROM Users WHERE UserID = 0
+      ''';
+
+    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+    int count = result[0]['count'];
+    return count;
   }
 }

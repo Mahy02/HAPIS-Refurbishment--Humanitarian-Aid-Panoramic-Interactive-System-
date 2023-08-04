@@ -59,12 +59,12 @@ class _CreateFormState extends State<CreateForm> {
   @override
   Widget build(BuildContext context) {
     String id;
-    final user = GoogleSignInApi().getCurrentUser();
-    if (user != null) {
-      id = user.id;
-    } else {
-      id = LoginSessionSharedPreferences.getNormalUserID() ?? '0';
-    }
+    // final user = GoogleSignInApi().getCurrentUser();
+    // if (user != null) {
+    //   id = user.id;
+    // } else {
+    id = LoginSessionSharedPreferences.getUserID() ?? '0';
+//}
     return Scaffold(
       appBar: const HAPISAppBar(isLg: false, appBarText: ''),
       drawer: ResponsiveLayout(
@@ -486,6 +486,13 @@ class _CreateFormState extends State<CreateForm> {
       ),
       GestureDetector(
         onTap: () async {
+          print('seeeeeeeeeeeeeeeeeee id');
+          print(id);
+
+          //
+          final result = await UserServices().bla();
+          print('res: $result');
+
           bool isFormValid = _formKey.currentState?.validate() ?? false;
           if (isFormValid) {
             String datesG = '';
@@ -582,6 +589,8 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed',
                       widget.formID);
                 } else {
+                  print('before create new form');
+                  print(id);
                   rowID = await UserServices().createNewForm(
                       id,
                       'giver',
@@ -663,6 +672,8 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed',
                       widget.formID);
                 } else {
+                  print('before create new form');
+                  print(id);
                   rowIDG = await UserServices().createNewForm(
                       id,
                       'giver',

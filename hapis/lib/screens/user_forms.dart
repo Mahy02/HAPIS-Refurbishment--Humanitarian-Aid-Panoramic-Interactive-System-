@@ -40,7 +40,7 @@ class _UserFormsState extends State<UserForms> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getUserID()!;
     }
     _future = UserServices().getUserForms(id);
   }
@@ -50,7 +50,7 @@ class _UserFormsState extends State<UserForms> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getUserID()!;
     }
 
     setState(() {

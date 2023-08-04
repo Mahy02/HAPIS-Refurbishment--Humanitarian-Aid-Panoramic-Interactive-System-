@@ -40,7 +40,7 @@ class _MatchingsState extends State<Matchings> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getUserID()!;
     }
     _future = MatchingsServices().getMatchings(id);
   }
@@ -50,7 +50,7 @@ class _MatchingsState extends State<Matchings> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getUserID()!;
     }
 
     setState(() {
@@ -65,7 +65,7 @@ class _MatchingsState extends State<Matchings> {
     // if (user != null) {
     //   id = user.id;
     // } else {
-    //   id = LoginSessionSharedPreferences.getNormalUserID()!;
+    //   id = LoginSessionSharedPreferences.getUserID()!;
     // }
 
     return FutureBuilder<List<MatchingsModel>>(

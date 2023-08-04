@@ -75,7 +75,7 @@ class _UserAppComponentState extends State<UserAppComponent> {
 //         double nonExponentialNumber = coefficient * pow(10.0, exponent);
 //         print(nonExponentialNumber);
       } else {
-        id = LoginSessionSharedPreferences.getNormalUserID()!;
+        id = LoginSessionSharedPreferences.getUserID()!;
       }
       checkFriendshipRequest(id, widget.user.userID!).then((result) {
         // Set the state when the Future completes

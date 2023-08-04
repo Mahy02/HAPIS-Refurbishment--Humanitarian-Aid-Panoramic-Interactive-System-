@@ -38,7 +38,7 @@ class _RequestsState extends State<Requests> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getUserID()!;
     }
     print(id);
     return SingleChildScrollView(

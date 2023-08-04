@@ -26,11 +26,11 @@ class LoginSessionSharedPreferences {
 
   //for normal users:
   
-  static Future<void> setNormalUserID(String userID) async {
+  static Future<void> setUserID(String userID) async {
     await _prefs?.setString(_keyNormalUserID, userID);
   }
 
-  static String? getNormalUserID() {
+  static String? getUserID() {
     return _prefs?.getString(_keyNormalUserID);
   }
   

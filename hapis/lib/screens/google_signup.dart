@@ -370,6 +370,10 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             //save it in shared preferences:
             await LoginSessionSharedPreferences.saveToken(
                 accessToken!, expiryTime);
+            //save ID
+            LoginSessionSharedPreferences.setUserID(user.id);
+            //set login to tryue
+            LoginSessionSharedPreferences.setLoggedIn(true);
             // ignore: use_build_context_synchronously
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AppHomePage()));
@@ -389,7 +393,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
       print(userID);
       if (userID.isNotEmpty) {
         //save ID
-        LoginSessionSharedPreferences.setNormalUserID(userID);
+        LoginSessionSharedPreferences.setUserID(userID);
         //set login to tryue
         LoginSessionSharedPreferences.setLoggedIn(true);
         // ignore: use_build_context_synchronously
@@ -406,7 +410,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
     try {
       await GoogleSignInApi.login();
       await GoogleSignInApi.logout();
-      
+
       final user = await GoogleSignInApi.login();
 
       if (user == Null) {

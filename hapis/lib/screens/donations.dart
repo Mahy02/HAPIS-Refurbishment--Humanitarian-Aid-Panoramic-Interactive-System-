@@ -39,7 +39,7 @@ class _DonationsState extends State<Donations> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getUserID()!;
     }
     _future = DonationsServices().getDonationsInProgress(id);
   }
@@ -49,7 +49,7 @@ class _DonationsState extends State<Donations> {
     if (user != null) {
       id = user.id;
     } else {
-      id = LoginSessionSharedPreferences.getNormalUserID()!;
+      id = LoginSessionSharedPreferences.getUserID()!;
     }
 
     setState(() {
@@ -64,7 +64,7 @@ class _DonationsState extends State<Donations> {
     // if (user != null) {
     //   id = user.id;
     // } else {
-    //   id = LoginSessionSharedPreferences.getNormalUserID()!;
+    //   id = LoginSessionSharedPreferences.getUserID()!;
     // }
     return FutureBuilder<List<InProgressDonationModel>>(
         future: _future,

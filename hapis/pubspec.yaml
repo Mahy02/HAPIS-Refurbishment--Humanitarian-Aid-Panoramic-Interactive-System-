@@ -58,6 +58,8 @@ dependencies:
   get: ^4.6.5
   flutter_local_notifications: ^15.1.0+1
   settings_ui: ^2.0.2
+  decimal: ^2.3.3
+  big_dart: ^1.0.1
   
 
 
