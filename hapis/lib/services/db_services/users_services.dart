@@ -12,23 +12,56 @@ class UserServices {
   /// retrieving the [db] database instance
   SqlDb db = SqlDb();
 
-  /// `getCitiesAndCountries` function that retrives all cities and countries from USERS table in database and return the results in List of Maps
+  String capitalizeFirstLetter(String text) {
+    if (text == null || text.isEmpty) return text;
+
+    List<String> words = text.split(' ');
+    for (int i = 0; i < words.length; i++) {
+      String word = words[i];
+      if (word.isNotEmpty) {
+        words[i] = word[0].toUpperCase() + word.substring(1).toLowerCase();
+      }
+    }
+
+    return words.join(' ');
+  }
+
+// Updated `getCitiesAndCountries` function.
   Future<List<Map<String, String>>> getCitiesAndCountries() async {
     String sqlStatement = '''
-    SELECT DISTINCT LOWER(City) as City, LOWER(Country) as Country
-    FROM Users
+  SELECT DISTINCT LOWER(City) as City, LOWER(Country) as Country
+  FROM Users
   ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    print(queryResult);
     List<Map<String, String>> results = queryResult.map((row) {
       return {
-        'city': row['City'] as String,
-        'country': row['Country'] as String,
+        'city': capitalizeFirstLetter(row['City'] as String),
+        'country': capitalizeFirstLetter(row['Country'] as String),
       };
     }).toList();
 
     return results;
   }
+
+  // /// `getCitiesAndCountries` function that retrives all cities and countries from USERS table in database and return the results in List of Maps
+  // Future<List<Map<String, String>>> getCitiesAndCountries() async {
+  //   String sqlStatement = '''
+  //   SELECT DISTINCT LOWER(City) as City, LOWER(Country) as Country
+  //   FROM Users
+  // ''';
+
+  //   List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+  //   List<Map<String, String>> results = queryResult.map((row) {
+  //     return {
+  //       'city': row['City'] as String,
+  //       'country': row['Country'] as String,
+  //     };
+  //   }).toList();
+
+  //   return results;
+  // }
 
   Future<String> getCity(String id) async {
     String sqlStatement = '''

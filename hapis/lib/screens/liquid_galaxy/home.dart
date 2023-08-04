@@ -13,6 +13,7 @@ import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../responsive/responsive_layout.dart';
+import '../../reusable_widgets/back_button.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
 import '../../reusable_widgets/sub_text.dart';
 import '../../services/db_services/global_db_services.dart';
@@ -108,8 +109,11 @@ class _LgHomePageState extends State<LgHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HAPISAppBar(appBarText: '', isLg: true,),
-      drawer:  ResponsiveLayout(
+      appBar: const HAPISAppBar(
+        appBarText: '',
+        isLg: true,
+      ),
+      drawer: ResponsiveLayout(
           mobileBody: buildDrawer(context, true, 18, 16),
           tabletBody: buildDrawer(context, true, 24, 20)),
       backgroundColor: Colors.white,
@@ -124,10 +128,11 @@ class _LgHomePageState extends State<LgHomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          BackButtonWidget(),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(top: 50.0),
+                padding: const EdgeInsets.only(top: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -266,10 +271,11 @@ class _LgHomePageState extends State<LgHomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          BackButtonWidget(),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(top: 50.0, left: 80, right: 80),
+                padding: const EdgeInsets.only(top: 10.0, left: 80, right: 80),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

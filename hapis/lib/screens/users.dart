@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
+import 'package:hapis/reusable_widgets/back_button.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class _UsersPageState extends State<UsersPage> {
       length: 2,
       child: Column(
         children: [
+          
           TabBar(
             indicatorColor: HapisColors.lgColor3,
             tabs: [
@@ -52,7 +54,6 @@ class _UsersPageState extends State<UsersPage> {
               ),
             ],
           ),
-         
 
           //we need a tab bar view for the content of our 3 tabs:
           const Expanded(

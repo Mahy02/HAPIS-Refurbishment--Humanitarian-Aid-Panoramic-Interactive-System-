@@ -5,6 +5,7 @@ import 'package:hapis/utils/drawer.dart';
 
 import '../../constants.dart';
 import '../../responsive/responsive_layout.dart';
+import '../../reusable_widgets/back_button.dart';
 import '../../reusable_widgets/liquid_galaxy/cityComponent.dart';
 import '../../reusable_widgets/no_component.dart';
 
@@ -57,7 +58,10 @@ class _CitiesPageState extends State<CitiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HAPISAppBar(appBarText: '', isLg: true,),
+      appBar: const HAPISAppBar(
+        appBarText: '',
+        isLg: true,
+      ),
       drawer: ResponsiveLayout(
           mobileBody: buildDrawer(context, true, 18, 16),
           tabletBody: buildDrawer(context, true, 24, 20)),
@@ -88,8 +92,9 @@ class _CitiesPageState extends State<CitiesPage> {
   Widget buildMobileLayout() {
     return Column(
       children: [
+        BackButtonWidget(),
         Padding(
-          padding: const EdgeInsets.only(top: 50.0, left: 50, right: 50),
+          padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
             controller: searchController,
             onChanged: (value) {
@@ -165,8 +170,9 @@ class _CitiesPageState extends State<CitiesPage> {
   Widget buildTabletLayout() {
     return Column(
       children: [
+        BackButtonWidget(),
         Padding(
-          padding: const EdgeInsets.only(top: 50.0, left: 50, right: 50),
+          padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
             controller: searchController,
             onChanged: (value) {

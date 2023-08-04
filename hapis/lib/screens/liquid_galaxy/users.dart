@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
+import 'package:hapis/reusable_widgets/back_button.dart';
 import 'package:hapis/screens/liquid_galaxy/seekers.dart';
 import 'package:provider/provider.dart';
 
@@ -187,6 +188,7 @@ class _UsersState extends State<Users> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          BackButtonWidget(),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -304,6 +306,7 @@ class _UsersState extends State<Users> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          BackButtonWidget(),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(

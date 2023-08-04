@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import '../helpers/google_signin_api.dart';
 import '../helpers/login_session_shared_preferences.dart';
 import '../providers/date_selection.dart';
+import '../reusable_widgets/back_button.dart';
 import '../reusable_widgets/date_day_component.dart';
 import '../reusable_widgets/date_time_component.dart';
 import '../reusable_widgets/drop_down_list_component.dart';
@@ -120,6 +121,7 @@ class _CreateFormState extends State<CreateForm> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             children: [
+              BackButtonWidget(),
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
@@ -737,6 +739,7 @@ class _CreateFormState extends State<CreateForm> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             children: [
+              BackButtonWidget(),
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(

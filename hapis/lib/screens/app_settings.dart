@@ -10,6 +10,7 @@ import 'package:settings_ui/settings_ui.dart';
 import '../helpers/google_signin_api.dart';
 import '../models/db_models/user_model.dart';
 import '../responsive/responsive_layout.dart';
+import '../reusable_widgets/back_button.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/signup_popup.dart';
 
@@ -47,6 +48,16 @@ class AppSettings extends StatelessWidget {
             //     ),
             //   ),
             // ]),
+
+            SettingsSection(
+              
+              tiles: [
+                SettingsTile(
+                  title: BackButtonWidget(),
+                ),
+              ],
+            ),
+
             SettingsSection(
               title: Text(
                 'Account',

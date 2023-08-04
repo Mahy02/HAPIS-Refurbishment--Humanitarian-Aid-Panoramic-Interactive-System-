@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
+import 'package:hapis/reusable_widgets/back_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/liquid_galaxy/connection_provider.dart';
@@ -40,9 +41,9 @@ class _ConfigurationState extends State<Configuration> {
           appBarText: '',
           isLg: true,
         ),
-        drawer:  ResponsiveLayout(
-          mobileBody: buildDrawer(context, true, 18, 16),
-          tabletBody: buildDrawer(context, true, 24, 20)),
+        drawer: ResponsiveLayout(
+            mobileBody: buildDrawer(context, true, 18, 16),
+            tabletBody: buildDrawer(context, true, 24, 20)),
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(context),
             tabletBody: buildTabletLayout(context)));
@@ -59,6 +60,7 @@ class _ConfigurationState extends State<Configuration> {
               children: [
                 Column(
                   children: [
+                    BackButtonWidget(),
                     const Padding(
                       padding: EdgeInsets.only(
                         top: 20,
@@ -271,6 +273,7 @@ class _ConfigurationState extends State<Configuration> {
               children: [
                 Column(
                   children: [
+                    BackButtonWidget(),
                     const Padding(
                       padding: EdgeInsets.only(
                         top: 50,

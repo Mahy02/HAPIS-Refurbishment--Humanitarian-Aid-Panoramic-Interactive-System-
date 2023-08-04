@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hapis/reusable_widgets/back_button.dart';
 
 import 'colors.dart';
 
@@ -8,6 +9,7 @@ Widget buildTabletLogos() {
   return SingleChildScrollView(
     child: Column(
       children: [
+        BackButtonWidget(),
         Padding(
           padding: const EdgeInsets.only(top: 70.0),
           child: Center(
@@ -179,6 +181,7 @@ Widget buildMobileLogos() {
   return SingleChildScrollView(
     child: Column(
       children: [
+        BackButtonWidget(),
         Padding(
           padding: const EdgeInsets.only(top: 20.0),
           child: Center(

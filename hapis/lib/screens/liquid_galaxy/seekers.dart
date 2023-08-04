@@ -6,6 +6,7 @@ import 'package:hapis/utils/drawer.dart';
 
 import '../../constants.dart';
 import '../../models/liquid_galaxy/balloon_models/users_model.dart';
+import '../../reusable_widgets/back_button.dart';
 import '../../reusable_widgets/liquid_galaxy/user_component.dart';
 import '../../reusable_widgets/no_component.dart';
 
@@ -48,10 +49,13 @@ class _SeekersState extends State<Seekers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const HAPISAppBar(appBarText: '', isLg: true,),
-        drawer:  ResponsiveLayout(
-          mobileBody: buildDrawer(context, true, 18, 16),
-          tabletBody: buildDrawer(context, true, 24, 20)),
+        appBar: const HAPISAppBar(
+          appBarText: '',
+          isLg: true,
+        ),
+        drawer: ResponsiveLayout(
+            mobileBody: buildDrawer(context, true, 18, 16),
+            tabletBody: buildDrawer(context, true, 24, 20)),
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));
   }
@@ -76,8 +80,9 @@ class _SeekersState extends State<Seekers> {
   Widget buildMobileLayout() {
     return Column(
       children: [
+        BackButtonWidget(),
         Padding(
-          padding: const EdgeInsets.only(top: 50.0, left: 50, right: 50),
+          padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
             controller: searchController,
             onChanged: (value) {
@@ -152,8 +157,9 @@ class _SeekersState extends State<Seekers> {
   Widget buildTabletLayout() {
     return Column(
       children: [
+        BackButtonWidget(),
         Padding(
-          padding: const EdgeInsets.only(top: 50.0, left: 50, right: 50),
+          padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
             controller: searchController,
             onChanged: (value) {

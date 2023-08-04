@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../reusable_widgets/app_bar.dart';
+import '../../reusable_widgets/back_button.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
 import '../../reusable_widgets/sub_text.dart';
 import '../../services/liquid_galaxy/LG_functionalities.dart';
@@ -39,14 +40,18 @@ class Settings extends StatelessWidget {
   Widget buildMobileLayout(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        BackButtonWidget(),
         Padding(
           padding: const EdgeInsets.only(top: 20.0, left: 30),
           child: const SubText(
             subTextContent: 'LG Settings',
             fontSize: 20,
           ),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.08,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -96,6 +101,9 @@ class Settings extends StatelessWidget {
                   }
                 }),
           ],
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.08,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -153,11 +161,15 @@ class Settings extends StatelessWidget {
       padding: const EdgeInsets.all(50.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          BackButtonWidget(),
           const SubText(
             subTextContent: 'LG Settings',
             fontSize: 35,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.08,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,6 +219,9 @@ class Settings extends StatelessWidget {
                     }
                   }),
             ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.08,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
