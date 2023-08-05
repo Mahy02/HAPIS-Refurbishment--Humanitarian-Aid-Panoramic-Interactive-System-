@@ -224,7 +224,7 @@ class _ConfigurationState extends State<Configuration> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: HapisColors.lgColor4,
+                          backgroundColor: HapisColors.lgColor4,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(80),
                           ),
@@ -432,7 +432,7 @@ class _ConfigurationState extends State<Configuration> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: HapisColors.lgColor4,
+                          backgroundColor: HapisColors.lgColor4,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(80),
                           ),

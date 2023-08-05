@@ -287,7 +287,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           width: MediaQuery.of(context).size.width * 0.3,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: HapisColors.lgColor4,
+                              backgroundColor: HapisColors.lgColor4,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),

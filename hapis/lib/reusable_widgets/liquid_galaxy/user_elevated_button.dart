@@ -129,7 +129,7 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
         child: ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
-              primary: HapisColors.accent,
+              backgroundColor: HapisColors.accent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),

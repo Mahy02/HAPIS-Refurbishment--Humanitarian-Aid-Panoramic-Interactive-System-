@@ -138,7 +138,7 @@ class _FilterModalState extends State<FilterModal> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: HapisColors.lgColor4),
+                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor4),
                 onPressed: () {
                   widget.onFiltered();
                   Navigator.pop(context);
@@ -146,7 +146,7 @@ class _FilterModalState extends State<FilterModal> {
                 child: const Text('FILTER'),
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: HapisColors.lgColor2),
+                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor2),
                 onPressed: () {
                   filterSetting.clearFilters();
                   widget.onFiltered();
@@ -270,7 +270,7 @@ class _FilterModalState extends State<FilterModal> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: HapisColors.lgColor4),
+                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor4),
                 onPressed: () {
                   widget.onFiltered();
                   Navigator.pop(context);
@@ -281,7 +281,7 @@ class _FilterModalState extends State<FilterModal> {
                 ),
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: HapisColors.lgColor2),
+                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor2),
                 onPressed: () {
                   filterSetting.clearFilters();
                   widget.onFiltered();
