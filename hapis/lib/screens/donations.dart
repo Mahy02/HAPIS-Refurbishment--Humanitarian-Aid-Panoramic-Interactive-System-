@@ -107,10 +107,7 @@ class _DonationsState extends State<Donations> {
                               donationsList[index];
                           final r_id = donations.rID;
                           final m_id = donations.mID;
-                          print('rid:');
-                          print(r_id);
-                          print('mid:');
-                          print(m_id);
+                          final type = donations.type;
 
                           final personName =
                               '${donations.firstName} ${donations.lastName}';
@@ -124,6 +121,7 @@ class _DonationsState extends State<Donations> {
                             personName: personName,
                             id: r_id,
                             id2: m_id,
+                            type: type,
                             onPressed: () {
                               _refreshData();
                             },

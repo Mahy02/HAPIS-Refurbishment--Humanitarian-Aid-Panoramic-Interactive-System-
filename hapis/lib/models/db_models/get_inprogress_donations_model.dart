@@ -12,10 +12,14 @@ class InProgressDonationModel {
   ///property that defines the user `lastName`
   final String lastName;
 
+  ///property that defines the type => sender rec seeker giver
+  final String type;
+
   InProgressDonationModel({
     required this.mID,
     required this.rID,
     required this.firstName,
     required this.lastName,
+    required this.type
   });
 }

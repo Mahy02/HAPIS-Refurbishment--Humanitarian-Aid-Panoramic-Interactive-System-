@@ -1,11 +1,11 @@
-R_ID,Sender_ID,Rec_ID,Rec_FormID,Rec_Status,Donation_Status
-1,8,1,4,Pending,Not Started
-2,7,4,3,Accepted,In progress
-3,10,1,41,Accepted,Finished
-4,49,45,10,Accepted,Finished
-5,44,42,47,Accepted,Finished
-6,31,39,49,Accepted,In progress
-7,31,35,48,Accepted,Finished
-8,16,14,14,Accepted,Cancelled
-9,24,22,12,Accepted,Finished
-10,14,12,13,Accepted,Finished
+R_ID,Sender_ID,Rec_ID,Rec_FormID,Rec_Status,Rec1_Donation_Status,Rec2_Donation_Status
+1,8,1,4,Pending,Not Started,Not Started
+2,7,4,3,Accepted,In progress,In progress
+3,10,1,41,Accepted,Finished,Finished
+4,49,45,10,Accepted,Finished,Finished
+5,44,42,47,Accepted,Finished,Finished
+6,31,39,49,Accepted,In progress,In progress
+7,31,35,48,Accepted,Finished,Finished
+8,16,14,14,Accepted,Cancelled,Cancelled
+9,24,22,12,Accepted,Finished,Finished
+10,14,12,13,Accepted,Finished,Finished

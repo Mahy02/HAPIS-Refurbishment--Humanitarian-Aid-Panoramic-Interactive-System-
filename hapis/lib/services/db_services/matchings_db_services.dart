@@ -14,55 +14,55 @@ class MatchingsServices {
     String sqlStatement = '''
     SELECT
     CASE
-        WHEN F1.UserID = $id THEN 'seeker'
+        WHEN F1.UserID = '$id' THEN 'seeker'
         ELSE 'giver'
     END AS Type,
     CASE
-        WHEN F1.UserID = $id THEN U2.FirstName
+        WHEN F1.UserID = '$id' THEN U2.FirstName
         ELSE U1.FirstName
     END AS FirstName,
     CASE
-        WHEN F1.UserID = $id THEN U2.LastName
+        WHEN F1.UserID = '$id' THEN U2.LastName
         ELSE U1.LastName
     END AS LastName,
     CASE
-        WHEN F1.UserID = $id THEN U2.City
+        WHEN F1.UserID = '$id' THEN U2.City
         ELSE U1.City
     END AS City,
 
     CASE
-        WHEN F1.UserID = $id THEN U2.AddressLocation
+        WHEN F1.UserID = '$id' THEN U2.AddressLocation
         ELSE U1.AddressLocation
     END AS AddressLocation,
 
     CASE
-        WHEN F1.UserID = $id THEN U2.Email
+        WHEN F1.UserID = '$id' THEN U2.Email
         ELSE U1.Email
     END AS Email,
 
      CASE
-        WHEN F1.UserID = $id THEN U2.PhoneNum
+        WHEN F1.UserID = '$id' THEN U2.PhoneNum
         ELSE U1.PhoneNum
     END AS PhoneNum,
 
     CASE
-        WHEN F1.UserID = $id THEN F2.Item
+        WHEN F1.UserID = '$id' THEN F2.Item
         ELSE F1.Item
     END AS Item,
     CASE
-        WHEN F1.UserID = $id THEN F2.Category
+        WHEN F1.UserID = '$id' THEN F2.Category
         ELSE F1.Category
     END AS Category,
     CASE
-        WHEN F1.UserID = $id THEN F2.Dates_available
+        WHEN F1.UserID = '$id' THEN F2.Dates_available
         ELSE F1.Dates_available
     END AS Dates_available,
     CASE
-        WHEN F1.UserID = $id THEN F2.UserID
+        WHEN F1.UserID = '$id' THEN F2.UserID
         ELSE F1.UserID
     END AS UserID,
     CASE
-        WHEN F1.UserID = $id THEN F2.FormID
+        WHEN F1.UserID = '$id' THEN F2.FormID
         ELSE F1.FormID
     END AS FormID,
 
@@ -73,7 +73,7 @@ JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
 JOIN Forms F2 ON M.Giver_FormID = F2.FormID
 JOIN Users U1 ON F1.UserID = U1.UserID
 JOIN Users U2 ON F2.UserID = U2.UserID
-WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Rec1_Donation_Status= 'Not Started'
+WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not Started'
 ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
@@ -163,21 +163,21 @@ WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Rec1_Donation_Status= 'Not Star
     return queryResult;
   }
 
-Future<List<int>> getFormIds(int mId) async {
-  String sqlStatement = '''
+  Future<List<int>> getFormIds(int mId) async {
+    String sqlStatement = '''
     SELECT Seeker_FormID, Giver_FormID
     FROM Matchings
     WHERE M_ID = $mId
   ''';
-  List<Map<String, dynamic>> results = await db.readData(sqlStatement);
-  if (results.isNotEmpty) {
-    int seekerFormId = results[0]['Seeker_FormID'];
-    int giverFormId = results[0]['Giver_FormID'];
-    return [seekerFormId, giverFormId];
-  } else {
-    return [];
+    List<Map<String, dynamic>> results = await db.readData(sqlStatement);
+    if (results.isNotEmpty) {
+      int seekerFormId = results[0]['Seeker_FormID'];
+      int giverFormId = results[0]['Giver_FormID'];
+      return [seekerFormId, giverFormId];
+    } else {
+      return [];
+    }
   }
-}
 
   Future<List<int?>> checkMatching(
       String type, String item, String cat, String dates, String city) async {

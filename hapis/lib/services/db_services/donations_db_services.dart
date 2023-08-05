@@ -9,20 +9,28 @@ class DonationsServices {
 
   /// `getDonationsInProgress` function that retrieves all donations in progress for a certain user given his `id`
   /// It returns a future List of `InProgressDonationModel`
+  //======> *** type here can be sender rec seeker giver
   Future<List<InProgressDonationModel>> getDonationsInProgress(
       String id) async {
     String sqlStatement = '''
     SELECT
     M_ID AS MID,
     NULL AS ReqID,
-    Rec1_Donation_Status,
-    Rec2_Donation_Status,
+
+
     CASE
-        WHEN F1.UserID = $id THEN U2.FirstName
+        WHEN F1.UserID = '$id' THEN 'seeker'
+        ELSE 'giver'
+    END AS Type,
+
+
+   
+    CASE
+        WHEN F1.UserID = '$id' THEN U2.FirstName
         ELSE U1.FirstName
     END AS FirstName,
     CASE
-        WHEN F1.UserID = $id THEN U2.LastName
+        WHEN F1.UserID = '$id' THEN U2.LastName
         ELSE U1.LastName
     END AS LastName
       
@@ -31,27 +39,35 @@ class DonationsServices {
     JOIN Forms F2 ON M.Giver_FormID = F2.FormID
     JOIN Users U1 ON F1.UserID = U1.UserID
     JOIN Users U2 ON F2.UserID = U2.UserID
-    WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Rec1_Donation_Status= 'In progress'
+    WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND (M.Rec1_Donation_Status= 'In progress' OR M.Rec2_Donation_Status= 'In progress')
 
     UNION ALL
 
     SELECT 
       NULL AS MID,
       R_ID AS ReqID,
-       Rec1_Donation_Status,
-       Rec2_Donation_Status
+
+
+
+     CASE 
+            WHEN R.Sender_ID = '$id' THEN 'sender'
+            ELSE 'rec'
+        END AS Type,
+
+
+      
         CASE 
-            WHEN R.Sender_ID = $id THEN U1.FirstName
+            WHEN R.Sender_ID = '$id' THEN U1.FirstName
             ELSE U2.FirstName
         END AS FirstName,
         CASE 
-            WHEN R.Sender_ID = $id THEN U1.LastName
+            WHEN R.Sender_ID = '$id' THEN U1.LastName
             ELSE U2.LastName
         END AS LastName
     FROM Requests R
     JOIN Users U1 ON R.Rec_ID = U1.UserID
     JOIN Users U2 ON R.Sender_ID = U2.UserID
-    WHERE R.Rec1_Donation_Status = 'In progress' AND (R.Sender_ID = '$id' OR R.Rec_ID = '$id');
+    WHERE (R.Rec1_Donation_Status = 'In progress' OR R.Rec2_Donation_Status = 'In progress') AND (R.Sender_ID = '$id' OR R.Rec_ID = '$id');
     ''';
     List<InProgressDonationModel> donations;
     try {
@@ -62,7 +78,8 @@ class DonationsServices {
               mID: result['MID'] ?? 0,
               rID: result['ReqID'] ?? 0,
               firstName: result['FirstName'],
-              lastName: result['LastName']))
+              lastName: result['LastName'],
+              type: result['Type']))
           .toList();
     } catch (e) {
       print('An error occurred: $e');
@@ -73,38 +90,69 @@ class DonationsServices {
     return donations;
   }
 
-  // Future<int> updateDonation(int rid, int mid) async {
-  //   int queryResultRequest = 0;
-  //   int queryResultMatching = 0;
-  //   if (rid != 0) {
-  //     String sqlStatementRequest = '''
-  //       UPDATE Requests
-  //       SET Donation_Status = 'Finished'          
-  //       WHERE R_ID = $rid
-  //     ''';
-  //     try {
-  //       queryResultRequest = await db.updateData(sqlStatementRequest);
-  //     } catch (e) {
-  //       print('Error updating : $e');
+  Future<int> updateDonation(int rid, int mid, String type) async {
+    int queryResultRequest = 0;
+    int queryResultMatching = 0;
 
-  //       return -1;
-  //     }
-  //   } else //there was no else and no returns here?????????????
-  //   if (mid != 0) {
-  //     String sqlStatementMatching = '''
-  //       UPDATE Matchings
-  //       SET Donation_Status = 'Finished'          
-  //       WHERE M_ID = $mid
-  //     ''';
-  //     try {
-  //       queryResultMatching = await db.updateData(sqlStatementMatching);
-  //     } catch (e) {
-  //       print('Error updating : $e');
+    if (rid != 0) {
+      if (type == 'sender') {
+        String sqlStatementRequest = '''
+        UPDATE Requests
+        SET Rec1_Donation_Status = 'Finished'
+        WHERE R_ID = $rid
+      ''';
+        try {
+          queryResultRequest = await db.updateData(sqlStatementRequest);
+        } catch (e) {
+          print('Error updating : $e');
 
-  //       return -1;
-  //     }
-  //   }
+          return -1;
+        }
+      } else if (type == 'rec') {
+        String sqlStatementRequest = '''
+        UPDATE Requests
+        SET Rec2_Donation_Status = 'Finished'
+        WHERE R_ID = $rid
+      ''';
+        try {
+          queryResultRequest = await db.updateData(sqlStatementRequest);
+        } catch (e) {
+          print('Error updating : $e');
 
-  //   return queryResultMatching + queryResultRequest;
-  // }
+          return -1;
+        }
+      }
+    } else //there was no else and no returns here?????????????
+    if (mid != 0) {
+      if (type == 'seeker') {
+        String sqlStatementMatching = '''
+        UPDATE Matchings
+        SET Rec1_Donation_Status = 'Finished'
+        WHERE M_ID = $mid
+      ''';
+        try {
+          queryResultMatching = await db.updateData(sqlStatementMatching);
+        } catch (e) {
+          print('Error updating : $e');
+
+          return -1;
+        }
+      } else if (type == 'giver') {
+        String sqlStatementMatching = '''
+        UPDATE Matchings
+        SET Rec1_Donation_Status = 'Finished'
+        WHERE M_ID = $mid
+      ''';
+        try {
+          queryResultMatching = await db.updateData(sqlStatementMatching);
+        } catch (e) {
+          print('Error updating : $e');
+
+          return -1;
+        }
+      }
+    }
+
+    return queryResultMatching + queryResultRequest;
+  }
 }

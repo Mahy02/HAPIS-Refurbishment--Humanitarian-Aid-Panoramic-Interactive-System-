@@ -402,38 +402,40 @@ class _RequestComponentState extends State<RequestComponent> {
                             SizedBox(
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  print('inside on press to finish process');
+                                  print('type: ${widget.type}');
                                   //update donation
-                                  // int result = await DonationsServices()
-                                  //     .updateDonation(widget.id!, widget.id2!);
-                                  // if (result > 0) {
-                                  //   showDatabasePopup(context,
-                                  //       'Donation Finished successfully! \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
-                                  //       isError: false);
-                                  // } else {
-                                  //   showDatabasePopup(context,
-                                  //       'There was a problem sending request. Please try again later..');
-                                  // }
-                                  // //referesh
-                                  // widget.onPressed!();
+                                  int result = await DonationsServices()
+                                      .updateDonation(widget.id!, widget.id2!, widget.type!);
+                                  if (result > 0) {
+                                    showDatabasePopup(context,
+                                        'Donation Finished successfully! \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
+                                        isError: false);
+                                  } else {
+                                    showDatabasePopup(context,
+                                        'There was a problem sending request. Please try again later..');
+                                  }
+                                  //referesh
+                                  widget.onPressed!();
 
-                                  // //get forms
-                                  // if (widget.id! != 0) {
-                                  //   //requests
-                                  //   int rFormId = await RequestsServices()
-                                  //       .getFormId(widget.id!);
-                                  //   //delete forms
-                                  //   await UserServices().deleteForm(rFormId);
-                                  // }
-                                  // if (widget.id2! != 0) {
-                                  //   //matchings
-                                  //   List<int> mFormIds =
-                                  //       await MatchingsServices()
-                                  //           .getFormIds(widget.id2!);
-                                  //   for (int i = 0; i < mFormIds.length; i++) {
-                                  //     int result = await UserServices()
-                                  //         .deleteForm(mFormIds[i]);
-                                  //   }
-                                  // }
+                                  //get forms
+                                  if (widget.id! != 0) {
+                                    //requests
+                                    int rFormId = await RequestsServices()
+                                        .getFormId(widget.id!);
+                                    //delete forms
+                                    await UserServices().deleteForm(rFormId);
+                                  }
+                                  if (widget.id2! != 0) {
+                                    //matchings
+                                    List<int> mFormIds =
+                                        await MatchingsServices()
+                                            .getFormIds(widget.id2!);
+                                    for (int i = 0; i < mFormIds.length; i++) {
+                                      int result = await UserServices()
+                                          .deleteForm(mFormIds[i]);
+                                    }
+                                  }
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
