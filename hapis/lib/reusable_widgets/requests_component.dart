@@ -405,37 +405,45 @@ class _RequestComponentState extends State<RequestComponent> {
                                   print('inside on press to finish process');
                                   print('type: ${widget.type}');
                                   //update donation
-                                  int result = await DonationsServices()
-                                      .updateDonation(widget.id!, widget.id2!, widget.type!);
-                                  if (result > 0) {
+                                  final result = await DonationsServices()
+                                      .updateDonation(widget.id!, widget.id2!,
+                                          widget.type!);
+                                  if (result['result'] > 0 &&
+                                      result['areBothFinished']) {
                                     showDatabasePopup(context,
                                         'Donation Finished successfully! \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
                                         isError: false);
+                                    //get forms
+                                    if (widget.id! != 0) {
+                                      //requests
+                                      int rFormId = await RequestsServices()
+                                          .getFormId(widget.id!);
+                                      //delete forms
+                                      await UserServices().deleteForm(rFormId);
+                                    }
+                                    if (widget.id2! != 0) {
+                                      //matchings
+                                      List<int> mFormIds =
+                                          await MatchingsServices()
+                                              .getFormIds(widget.id2!);
+                                      for (int i = 0;
+                                          i < mFormIds.length;
+                                          i++) {
+                                        int result = await UserServices()
+                                            .deleteForm(mFormIds[i]);
+                                      }
+                                    }
+                                  } else if (result['result'] > 0 &&
+                                      !result['areBothFinished']) {
+                                    showDatabasePopup(context,
+                                        'Waiting for the other user to confirm and complete the process \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
+                                        isError: false);
                                   } else {
                                     showDatabasePopup(context,
-                                        'There was a problem sending request. Please try again later..');
+                                        'There was a problem ending the donation process. Please try again later..');
                                   }
                                   //referesh
                                   widget.onPressed!();
-
-                                  //get forms
-                                  if (widget.id! != 0) {
-                                    //requests
-                                    int rFormId = await RequestsServices()
-                                        .getFormId(widget.id!);
-                                    //delete forms
-                                    await UserServices().deleteForm(rFormId);
-                                  }
-                                  if (widget.id2! != 0) {
-                                    //matchings
-                                    List<int> mFormIds =
-                                        await MatchingsServices()
-                                            .getFormIds(widget.id2!);
-                                    for (int i = 0; i < mFormIds.length; i++) {
-                                      int result = await UserServices()
-                                          .deleteForm(mFormIds[i]);
-                                    }
-                                  }
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
