@@ -15,6 +15,8 @@ import '../reusable_widgets/location_list_title.dart';
 import '../reusable_widgets/text_form_field.dart';
 import 'dart:io';
 
+import '../utils/database_popups.dart';
+
 class SignUpPage extends StatefulWidget {
   final GoogleSignInAccount? googleUser;
   final UserModel? normalUser;
@@ -307,21 +309,31 @@ class _SignUpPageState extends State<SignUpPage> {
                                   email: widget.googleUser!.email,
                                 );
 
-                                print('after signup');
-
-                                if (result >= 0) {
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const GoogleSignUp()));
+                                if (result > 0) {
+                                  showDatabasePopup(context,
+                                      'User created successfully! \n\nNow try signing in to HAPIS!',
+                                      isError: false, onOKPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const GoogleSignUp()));
+                                  });
+                                } else if (result == -1) {
+                                  showDatabasePopup(context,
+                                      'UserName already exists, please try a different username');
+                                } else if (result == -2) {
+                                  showDatabasePopup(
+                                      context, 'User already exists!');
+                                } else if (result == -3) {
+                                  showDatabasePopup(context,
+                                      'There was a problem creating user. Please try again later..');
                                 }
                               } else {
                                 //update google user without password
                                 if (widget.isGoogle) {
-                                  final result = await UserServices()
-                                      .updateNewUser(
+                                  final numberOfChanges = await UserServices()
+                                      .updateUser(
                                           widget.normalUser!.userID!,
                                           _usernameController.text,
                                           _firstNameController.text,
@@ -332,15 +344,34 @@ class _SignUpPageState extends State<SignUpPage> {
                                           _addressController.text,
                                           widget.normalUser!.email!,
                                           null);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AppHomePage()));
+                                  if (numberOfChanges == 0) {
+                                    showDatabasePopup(
+                                        context, 'No changes made.',
+                                        isError: false, isWarning: true);
+                                  } else if (numberOfChanges == -1) {
+                                    showDatabasePopup(
+                                        context, 'User doesn\'t exist!');
+                                  } else if (numberOfChanges == -2) {
+                                    showDatabasePopup(context,
+                                        'UserName already exists, please try a different username');
+                                  } else if (numberOfChanges == -3) {
+                                    showDatabasePopup(context,
+                                        'There was a problem updating user. Please try again later..');
+                                  } else {
+                                    showDatabasePopup(context,
+                                        'User Info updated successfully!',
+                                        isError: false, onOKPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AppHomePage()));
+                                    });
+                                  }
                                 } else {
                                   //update normal user with password
-                                  final result = await UserServices()
-                                      .updateNewUser(
+                                  final numberOfChanges = await UserServices()
+                                      .updateUser(
                                           widget.normalUser!.userID!,
                                           _usernameController.text,
                                           _firstNameController.text,
@@ -351,11 +382,30 @@ class _SignUpPageState extends State<SignUpPage> {
                                           _addressController.text,
                                           widget.normalUser!.email!,
                                           widget.normalUser!.pass!);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AppHomePage()));
+                                  if (numberOfChanges == 0) {
+                                    showDatabasePopup(
+                                        context, 'No changes made.',
+                                        isError: false, isWarning: true);
+                                  } else if (numberOfChanges == -1) {
+                                    showDatabasePopup(
+                                        context, 'User doesn\'t exist!');
+                                  } else if (numberOfChanges == -2) {
+                                    showDatabasePopup(context,
+                                        'UserName already exists, please try a different username');
+                                  } else if (numberOfChanges == -3) {
+                                    showDatabasePopup(context,
+                                        'There was a problem updating user. Please try again later..');
+                                  } else {
+                                    showDatabasePopup(context,
+                                        'User Info updated successfully!',
+                                        isError: false, onOKPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AppHomePage()));
+                                    });
+                                  }
                                 }
                               }
                             },

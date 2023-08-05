@@ -15,7 +15,8 @@ class DonationsServices {
     SELECT
     M_ID AS MID,
     NULL AS ReqID,
-    Donation_Status,
+    Rec1_Donation_Status,
+    Rec2_Donation_Status,
     CASE
         WHEN F1.UserID = $id THEN U2.FirstName
         ELSE U1.FirstName
@@ -30,14 +31,15 @@ class DonationsServices {
     JOIN Forms F2 ON M.Giver_FormID = F2.FormID
     JOIN Users U1 ON F1.UserID = U1.UserID
     JOIN Users U2 ON F2.UserID = U2.UserID
-    WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'In progress'
+    WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Rec1_Donation_Status= 'In progress'
 
     UNION ALL
 
     SELECT 
       NULL AS MID,
       R_ID AS ReqID,
-       Donation_Status,
+       Rec1_Donation_Status,
+       Rec2_Donation_Status
         CASE 
             WHEN R.Sender_ID = $id THEN U1.FirstName
             ELSE U2.FirstName
@@ -49,44 +51,60 @@ class DonationsServices {
     FROM Requests R
     JOIN Users U1 ON R.Rec_ID = U1.UserID
     JOIN Users U2 ON R.Sender_ID = U2.UserID
-    WHERE R.Donation_Status = 'In progress' AND (R.Sender_ID = $id OR R.Rec_ID = $id);
+    WHERE R.Rec1_Donation_Status = 'In progress' AND (R.Sender_ID = '$id' OR R.Rec_ID = '$id');
     ''';
+    List<InProgressDonationModel> donations;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+      print(queryResult);
+      donations = queryResult
+          .map((result) => InProgressDonationModel(
+              mID: result['MID'] ?? 0,
+              rID: result['ReqID'] ?? 0,
+              firstName: result['FirstName'],
+              lastName: result['LastName']))
+          .toList();
+    } catch (e) {
+      print('An error occurred: $e');
 
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    print(queryResult);
-    List<InProgressDonationModel> donations = queryResult
-        .map((result) => InProgressDonationModel(
-            mID: result['MID'] ?? 0,
-            rID: result['ReqID'] ?? 0,
-            firstName: result['FirstName'],
-            lastName: result['LastName']))
-        .toList();
+      return [];
+    }
 
     return donations;
   }
 
-  Future<int> updateDonation(int rid, int mid) async {
-    int queryResultRequest = 0;
-    int queryResultMatching = 0;
-    if (rid != 0) {
-      String sqlStatementRequest = '''
-        UPDATE Requests
-        SET Donation_Status = 'Finished'          
-        WHERE R_ID = $rid
-      ''';
-      queryResultRequest = await db.updateData(sqlStatementRequest);
-      print('requests: $queryResultRequest');
-    }
-    if (mid != 0) {
-      String sqlStatementMatching = '''
-        UPDATE Matchings
-        SET Donation_Status = 'Finished'          
-        WHERE M_ID = $mid
-      ''';
-      queryResultMatching = await db.updateData(sqlStatementMatching);
-      print('matchings: $queryResultMatching');
-    }
+  // Future<int> updateDonation(int rid, int mid) async {
+  //   int queryResultRequest = 0;
+  //   int queryResultMatching = 0;
+  //   if (rid != 0) {
+  //     String sqlStatementRequest = '''
+  //       UPDATE Requests
+  //       SET Donation_Status = 'Finished'          
+  //       WHERE R_ID = $rid
+  //     ''';
+  //     try {
+  //       queryResultRequest = await db.updateData(sqlStatementRequest);
+  //     } catch (e) {
+  //       print('Error updating : $e');
 
-    return queryResultMatching + queryResultRequest;
-  }
+  //       return -1;
+  //     }
+  //   } else //there was no else and no returns here?????????????
+  //   if (mid != 0) {
+  //     String sqlStatementMatching = '''
+  //       UPDATE Matchings
+  //       SET Donation_Status = 'Finished'          
+  //       WHERE M_ID = $mid
+  //     ''';
+  //     try {
+  //       queryResultMatching = await db.updateData(sqlStatementMatching);
+  //     } catch (e) {
+  //       print('Error updating : $e');
+
+  //       return -1;
+  //     }
+  //   }
+
+  //   return queryResultMatching + queryResultRequest;
+  // }
 }

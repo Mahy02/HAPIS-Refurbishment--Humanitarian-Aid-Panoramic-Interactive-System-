@@ -12,6 +12,7 @@ import '../models/db_models/user_model.dart';
 import '../responsive/responsive_layout.dart';
 import '../reusable_widgets/back_button.dart';
 import '../services/db_services/users_services.dart';
+import '../utils/database_popups.dart';
 import '../utils/signup_popup.dart';
 
 class AppSettings extends StatelessWidget {
@@ -50,7 +51,6 @@ class AppSettings extends StatelessWidget {
             // ]),
 
             SettingsSection(
-              
               tiles: [
                 SettingsTile(
                   title: BackButtonWidget(),
@@ -86,11 +86,9 @@ class AppSettings extends StatelessWidget {
                         id = LoginSessionSharedPreferences.getUserID()!;
                         isGoogle = false;
                       }
-                      print(id);
+                     
                       UserModel user = await UserServices().getUser(id);
-                      print(user.firstName);
-                      print(user.userID);
-                      print(user.pass);
+                     
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -128,10 +126,14 @@ class AppSettings extends StatelessWidget {
                       print(user);
                       if (user != null) {
                         GoogleSignInApi.logout();
-                      } else {
-                        LoginSessionSharedPreferences.removeNormalUserID();
-                        LoginSessionSharedPreferences.setLoggedIn(false);
                       }
+
+                      LoginSessionSharedPreferences.removeUserID();
+                      LoginSessionSharedPreferences.setLoggedIn(false);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AppHomePage()));
                     } else {
                       showDialogSignUp(context);
                     }
@@ -154,13 +156,31 @@ class AppSettings extends StatelessWidget {
                       if (user != null) {
                         id = user.id;
                         GoogleSignInApi.logout();
+                        LoginSessionSharedPreferences.removeUserID();
+                        LoginSessionSharedPreferences.setLoggedIn(false);
                         int result = await UserServices().deleteUser(id);
+                        if (result == 1) {
+                          showDatabasePopup(
+                              context, 'User deleted successfully!',
+                              isError: false);
+                        } else if (result == 0) {
+                          showDatabasePopup(context,
+                              'Error deleting user \n\nPlease try again later.');
+                        }
                         print(result);
                       } else {
                         id = LoginSessionSharedPreferences.getUserID()!;
-                        LoginSessionSharedPreferences.removeNormalUserID();
+                        LoginSessionSharedPreferences.removeUserID();
                         LoginSessionSharedPreferences.setLoggedIn(false);
                         int result = await UserServices().deleteUser(id);
+                        if (result == 1) {
+                          showDatabasePopup(
+                              context, 'User deleted successfully!',
+                              isError: false);
+                        } else if (result == 0) {
+                          showDatabasePopup(context,
+                              'Error deleting user \n\nPlease try again later.');
+                        }
                         print(result);
                       }
                       Navigator.push(

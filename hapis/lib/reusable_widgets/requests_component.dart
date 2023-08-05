@@ -5,8 +5,7 @@ import 'package:hapis/services/db_services/donations_db_services.dart';
 import 'package:hapis/services/db_services/matchings_db_services.dart';
 import 'package:hapis/services/db_services/requests_db_services.dart';
 import 'package:hapis/services/db_services/users_services.dart';
-
-import '../helpers/matching_status_shared_pref.dart';
+import '../utils/database_popups.dart';
 import '../utils/date_popup.dart';
 import '../utils/show_user_details_modal.dart';
 
@@ -143,7 +142,8 @@ class _RequestComponentState extends State<RequestComponent> {
                                             widget.item,
                                             widget.dates,
                                             widget.location,
-                                            'seeker', widget.fontSize);
+                                            'seeker',
+                                            widget.fontSize);
                                       } else {
                                         showUserDetails(
                                             context,
@@ -155,7 +155,8 @@ class _RequestComponentState extends State<RequestComponent> {
                                             widget.item,
                                             widget.dates,
                                             widget.location,
-                                            'giver', widget.fontSize);
+                                            'giver',
+                                            widget.fontSize);
                                       }
                                     },
                                     child: Text(
@@ -238,29 +239,53 @@ class _RequestComponentState extends State<RequestComponent> {
             ],
           ),
           widget.isSent
-              ? Align(
-                  alignment: Alignment.bottomRight,
-                  child: SizedBox(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            HapisColors.lgColor1),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.all(15)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                      child: Text(
-                        widget.status!.toUpperCase(),
-                        style: TextStyle(fontSize: widget.buttonFontSize),
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        int result =
+                            await RequestsServices().deleteRequest(widget.id!);
+                        if (result == 1) {
+                          showDatabasePopup(
+                              context, 'Request deleted successfully!',
+                              isError: false);
+                        } else if (result == 0) {
+                          showDatabasePopup(context,
+                              'Error deleting request \n\nPlease try again later.');
+                        }
+                        //refresh:
+                        widget.onPressed!();
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        color: HapisColors.lgColor2,
+                        size: 25,
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              HapisColors.lgColor1),
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                  const EdgeInsets.all(15)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          widget.status!.toUpperCase(),
+                          style: TextStyle(fontSize: widget.buttonFontSize),
+                        ),
+                      ),
+                    ),
+                  ],
                 )
               : widget.isMatching
                   ? Row(
@@ -371,56 +396,93 @@ class _RequestComponentState extends State<RequestComponent> {
                       ],
                     )
                   : widget.isDonation
-                      ? Align(
-                          alignment: Alignment.bottomRight,
-                          child: SizedBox(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                //update donation
-                                await DonationsServices()
-                                    .updateDonation(widget.id!, widget.id2!);
-                                //referesh
-                                widget.onPressed!();
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  //update donation
+                                  // int result = await DonationsServices()
+                                  //     .updateDonation(widget.id!, widget.id2!);
+                                  // if (result > 0) {
+                                  //   showDatabasePopup(context,
+                                  //       'Donation Finished successfully! \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
+                                  //       isError: false);
+                                  // } else {
+                                  //   showDatabasePopup(context,
+                                  //       'There was a problem sending request. Please try again later..');
+                                  // }
+                                  // //referesh
+                                  // widget.onPressed!();
 
-                                //get forms
-                                if (widget.id! != 0) {
-                                  //requests
-                                  int rFormId = await RequestsServices()
-                                      .getFormId(widget.id!);
-                                  //delete forms
-                                  await UserServices().deleteForm(rFormId);
-                                }
-                                if (widget.id2! != 0) {
-                                  //matchings
-                                  List<int> mFormIds = await MatchingsServices()
-                                      .getFormIds(widget.id2!);
-                                  for (int i = 0; i < mFormIds.length; i++) {
-                                    await UserServices()
-                                        .deleteForm(mFormIds[i]);
-                                  }
-                                }
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        HapisColors.lgColor4),
-                                padding: MaterialStateProperty.all<
-                                        EdgeInsetsGeometry>(
-                                    const EdgeInsets.all(15)),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                  // //get forms
+                                  // if (widget.id! != 0) {
+                                  //   //requests
+                                  //   int rFormId = await RequestsServices()
+                                  //       .getFormId(widget.id!);
+                                  //   //delete forms
+                                  //   await UserServices().deleteForm(rFormId);
+                                  // }
+                                  // if (widget.id2! != 0) {
+                                  //   //matchings
+                                  //   List<int> mFormIds =
+                                  //       await MatchingsServices()
+                                  //           .getFormIds(widget.id2!);
+                                  //   for (int i = 0; i < mFormIds.length; i++) {
+                                  //     int result = await UserServices()
+                                  //         .deleteForm(mFormIds[i]);
+                                  //   }
+                                  // }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          HapisColors.lgColor4),
+                                  padding: MaterialStateProperty.all<
+                                          EdgeInsetsGeometry>(
+                                      const EdgeInsets.all(15)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: Text(
-                                'FINISH PROCESS',
-                                style:
-                                    TextStyle(fontSize: widget.buttonFontSize),
+                                child: Text(
+                                  'FINISH \n PROCESS',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: widget.buttonFontSize),
+                                ),
                               ),
                             ),
-                          ),
+                            SizedBox(
+                              child: ElevatedButton(
+                                onPressed: () async {},
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          HapisColors.lgColor2),
+                                  padding: MaterialStateProperty.all<
+                                          EdgeInsetsGeometry>(
+                                      const EdgeInsets.all(15)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  'CANCEL \n PROCESS',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: widget.buttonFontSize),
+                                ),
+                              ),
+                            ),
+                          ],
                         )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -431,6 +493,15 @@ class _RequestComponentState extends State<RequestComponent> {
                                   //change status in database
                                   int result = await RequestsServices()
                                       .acceptRequest(widget.id!);
+                                  print('result: $result');
+                                  if (result > 0) {
+                                    showDatabasePopup(context,
+                                        'Request accepted ! \n\nThe donation process is now in progress',
+                                        isError: false);
+                                  } else {
+                                    showDatabasePopup(context,
+                                        'There was a problem accepting request. Please try again later..');
+                                  }
                                   //refresh:
                                   widget.onPressed!();
                                   //send push notification
@@ -462,6 +533,14 @@ class _RequestComponentState extends State<RequestComponent> {
                                   //change status in database
                                   int result = await RequestsServices()
                                       .deleteRequest(widget.id!);
+                                  if (result == 1) {
+                                    showDatabasePopup(context,
+                                        'Request deleted successfully!',
+                                        isError: false);
+                                  } else if (result == 0) {
+                                    showDatabasePopup(context,
+                                        'Error deleting request \n\nPlease try again later.');
+                                  }
                                   //refresh:
                                   widget.onPressed!();
                                   //send push notification
@@ -493,6 +572,4 @@ class _RequestComponentState extends State<RequestComponent> {
       ),
     );
   }
-
-  
 }

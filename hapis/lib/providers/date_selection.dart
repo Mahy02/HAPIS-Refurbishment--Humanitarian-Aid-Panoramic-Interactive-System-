@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hapis/constants.dart';
 import 'package:intl/intl.dart';
 
 ///This is a [Provider] class of [DateSelectionModel] that extends [ChangeNotifier]
@@ -48,11 +49,24 @@ class DateSelectionModel extends ChangeNotifier {
 
   void showDatePickerStart(BuildContext context) {
     showDatePicker(
-      context: context,
-      initialDate: _dateTime,
-      firstDate: DateTime(DateTime.now().year - 5),
-      lastDate: DateTime(DateTime.now().year + 5),
-    ).then((value) {
+        context: context,
+        initialDate: _dateTime,
+        firstDate: DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day),
+        lastDate: DateTime(DateTime.now().year + 10),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                  primary:
+                      HapisColors.lgColor1), // Change the button text color
+              buttonTheme: ButtonThemeData(
+                  textTheme:
+                      ButtonTextTheme.primary), // Change the button color
+            ),
+            child: child!,
+          );
+        }).then((value) {
       if (value != null) {
         _dateTime = value;
         _dateControllerStart.text = DateFormat('yyyy-MM-dd').format(value);
@@ -64,9 +78,21 @@ class DateSelectionModel extends ChangeNotifier {
   TimeOfDay _timeOfDay = const TimeOfDay(hour: 8, minute: 30);
   void showTimePickerStart(BuildContext context) {
     showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    ).then(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                  primary:
+                      HapisColors.lgColor1), // Change the button text color
+              buttonTheme: ButtonThemeData(
+                  textTheme:
+                      ButtonTextTheme.primary), // Change the button color
+            ),
+            child: child!,
+          );
+        }).then(
       (value) {
         if (value != null) {
           _timeOfDay = value;

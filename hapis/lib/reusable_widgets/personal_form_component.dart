@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/providers/form_provider.dart';
+import 'package:hapis/utils/database_popups.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -101,9 +102,6 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                       return formattedTime;
                     }).toList();
 
-                    print(dates);
-                    print(dateList);
-                    print(timeList);
                     List<DateSelectionModel> _selectedDates = [];
                     for (int i = 0; i < dateList.length; i++) {
                       datesProvider.dateStart = dateList[i];
@@ -163,9 +161,10 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
+                  if (widget.form.type! == 'seeker')
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
                   if (widget.form.type! == 'giver')
                     Text(
                       'Donating',
@@ -173,6 +172,10 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                           fontSize: widget.fontSize,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
+                    ),
+                  if (widget.form.type! == 'giver')
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
                   FittedBox(
                     fit: BoxFit.scaleDown,
@@ -187,7 +190,15 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
             ),
             GestureDetector(
               onTap: () async {
-                await UserServices().deleteForm(widget.form.formID!);
+                int result =
+                    await UserServices().deleteForm(widget.form.formID!);
+                if (result == 1) {
+                  showDatabasePopup(context, 'Form deleted successfully!',
+                      isError: false);
+                } else if (result == 0) {
+                  showDatabasePopup(context,
+                      'Error deleting form \n\nPlease try again later.');
+                }
                 widget.onPressed();
               },
               child: Icon(

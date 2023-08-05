@@ -16,8 +16,11 @@ class RequestsModel {
   /// Property that defines the recStatus
   String? recStatus;
 
-  /// Property that defines the donation status 
-  String? donStatus;
+  /// Property that defines the donation status of sender
+  String? senderDonStatus;
+
+  /// Property that defines the donation status of the receiver 
+  String? recDonStatus;
 
   RequestsModel(
       {this.rID,
@@ -25,7 +28,8 @@ class RequestsModel {
         this.recID,
         this.recFormID,
         this.recStatus,
-        this.donStatus
+        this.senderDonStatus,
+        this.recDonStatus
      });
 
   /// Turns a `Map` into a `RequestsModel`.  "Map From the database"
@@ -36,7 +40,8 @@ class RequestsModel {
       recID: map['Rec_ID'],
       recFormID: map['Rec_FormID'],
       recStatus: map['Rec_Status'],
-      donStatus: map['Donation_Status'],
+      senderDonStatus: map['Rec1_Donation_Status'],
+      recDonStatus: map['Rec2_Donation_Status']
     );
   }
 

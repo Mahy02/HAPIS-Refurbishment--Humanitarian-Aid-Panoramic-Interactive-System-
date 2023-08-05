@@ -73,7 +73,7 @@ JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
 JOIN Forms F2 ON M.Giver_FormID = F2.FormID
 JOIN Users U1 ON F1.UserID = U1.UserID
 JOIN Users U2 ON F2.UserID = U2.UserID
-WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'Not Started'
+WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Rec1_Donation_Status= 'Not Started'
 ''';
 
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
@@ -108,7 +108,15 @@ WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'Not Started'
       sqlStatement = '''
         UPDATE  Matchings
         SET Rec1_Status= 'Accepted',
-            Donation_Status = 
+            Rec1_Donation_Status = 
+                          CASE 
+                            WHEN Rec2_Status = 'Accepted' 
+                          THEN 
+                            'In progress'  
+                          ELSE 
+                            Donation_Status 
+                          END,
+            Rec2_Donation_Status = 
                           CASE 
                             WHEN Rec2_Status = 'Accepted' 
                           THEN 
@@ -122,7 +130,15 @@ WHERE (F1.UserID = $id OR F2.UserID = $id) AND M.Donation_Status= 'Not Started'
       sqlStatement = '''
         UPDATE  Matchings
         SET Rec2_Status= 'Accepted',
-        Donation_Status = 
+        Rec1_Donation_Status = 
+                          CASE 
+                          WHEN Rec1_Status = 'Accepted'  
+                          THEN 
+                            'In progress'  
+                          ELSE 
+                            Donation_Status 
+                          END,
+        Rec2_Donation_Status = 
                           CASE 
                           WHEN Rec1_Status = 'Accepted'  
                           THEN 
@@ -182,8 +198,8 @@ Future<List<int>> getFormIds(int mId) async {
 
   Future<int> createMatch(int seekerFormID, int giverFormID) async {
     String sqlStatment = '''
-    INSERT INTO Matchings (Seeker_FormID,	Giver_FormID,	Rec1_Status ,	Rec2_status, 	Donation_Status)
-        VALUES ($seekerFormID, $giverFormID, 'Pending', 'Pending', 'Not Started')
+    INSERT INTO Matchings (Seeker_FormID,	Giver_FormID,	Rec1_Status ,	Rec2_status, 	Rec1_Donation_Status, Rec2_Donation_Status)
+        VALUES ($seekerFormID, $giverFormID, 'Pending', 'Pending', 'Not Started', 'Not Started')
     ''';
     int rowID = await db.insertData(sqlStatment);
 

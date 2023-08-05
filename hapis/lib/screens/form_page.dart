@@ -8,6 +8,7 @@ import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/app_home.dart';
 import 'package:hapis/services/db_services/matchings_db_services.dart';
 import 'package:hapis/services/db_services/users_services.dart';
+import 'package:hapis/utils/database_popups.dart';
 import 'package:hapis/utils/drawer.dart';
 import 'package:intl/intl.dart';
 
@@ -488,12 +489,7 @@ class _CreateFormState extends State<CreateForm> {
       ),
       GestureDetector(
         onTap: () async {
-          print('seeeeeeeeeeeeeeeeeee id');
-          print(id);
-
-          //
-          final result = await UserServices().bla();
-          print('res: $result');
+          int numberOfChanges = 0;
 
           bool isFormValid = _formKey.currentState?.validate() ?? false;
           if (isFormValid) {
@@ -532,14 +528,15 @@ class _CreateFormState extends State<CreateForm> {
                 datesS += ',';
               }
             }
-
+//////////////////////////////////////////////////////////////////////////////////////////
             if (donorModel.typeD == 'seeker') {
               if (datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
                 int rowID = 0;
+
                 if (widget.update == true) {
-                  rowID = await UserServices().updateForm(
+                  numberOfChanges = await UserServices().updateForm(
                       id,
                       'seeker',
                       seekerModel.formItemControllerS.text,
@@ -548,6 +545,35 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
+                  print(numberOfChanges);
+                  if (numberOfChanges == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChanges == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    //check match
+                    //but first get city of userID
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
+
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        MatchingsServices()
+                            .createMatch(widget.formID, formIds[i]!);
+                      }
+                    }
+                  }
                 } else {
                   rowID = await UserServices().createNewForm(
                       id,
@@ -557,31 +583,39 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
-                }
-                //check match
-                //but first get city of userID
-                String city = await UserServices().getCity(id);
-                List<int?> formIds = await MatchingsServices().checkMatching(
-                    'giver',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    city);
+                  if (rowID <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  }  else {
+                    //check match
+                    //but first get city of userID
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
 
-                //make match if exists
-                if (formIds.isNotEmpty) {
-                  for (int i = 0; i < formIds.length; i++) {
-                    MatchingsServices().createMatch(rowID, formIds[i]!);
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        MatchingsServices().createMatch(rowID, formIds[i]!);
+                      }
+                    }
                   }
                 }
               }
+              /////////////////////////////////////////////////////////////////////////
             } else if (donorModel.typeD == 'giver') {
               if (datesG.isEmpty) {
                 showDatePopUp(context);
               } else {
                 int rowID = 0;
                 if (widget.update == true) {
-                  rowID = await UserServices().updateForm(
+                  numberOfChanges = await UserServices().updateForm(
                       id,
                       'giver',
                       donorModel.formItemControllerD.text,
@@ -590,9 +624,34 @@ class _CreateFormState extends State<CreateForm> {
                       null,
                       'Not Completed',
                       widget.formID);
+                  if (numberOfChanges == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChanges == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    String city = await UserServices().getCity(id);
+
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
+
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        int matchID = await MatchingsServices()
+                            .createMatch(formIds[i]!, widget.formID);
+                      }
+                    }
+                  }
                 } else {
-                  print('before create new form');
-                  print(id);
                   rowID = await UserServices().createNewForm(
                       id,
                       'giver',
@@ -601,32 +660,41 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
-                }
-                String city = await UserServices().getCity(id);
+                  if (rowID <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  } else {
+                    String city = await UserServices().getCity(id);
 
-                List<int?> formIds = await MatchingsServices().checkMatching(
-                    'seeker',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    city);
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
 
-                //make match if exists
-                if (formIds.isNotEmpty) {
-                  for (int i = 0; i < formIds.length; i++) {
-                    int matchID = await MatchingsServices()
-                        .createMatch(formIds[i]!, rowID);
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        int matchID = await MatchingsServices()
+                            .createMatch(formIds[i]!, rowID);
+                      }
+                    }
                   }
                 }
               }
+              //////////////////////////////////////////////////////////////////////////////////////
             } else {
               if (datesG.isEmpty || datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
                 int rowIDS = 0;
+                int numberOfChangesS = 0;
 
                 if (widget.update == true) {
-                  rowIDS = await UserServices().updateForm(
+                  numberOfChangesS = await UserServices().updateForm(
                       id,
                       'seeker',
                       seekerModel.formItemControllerS.text,
@@ -635,6 +703,33 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
+                  if (numberOfChangesS == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChanges == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsG = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
+
+                    //make match if exists
+                    if (formIdsG.isNotEmpty) {
+                      for (int i = 0; i < formIdsG.length; i++) {
+                        MatchingsServices()
+                            .createMatch(widget.formID, formIdsG[i]!);
+                      }
+                    }
+                  }
                 } else {
                   rowIDS = await UserServices().createNewForm(
                       id,
@@ -644,27 +739,36 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
-                }
-                //check match
-                String city = await UserServices().getCity(id);
-                List<int?> formIdsG = await MatchingsServices().checkMatching(
-                    'giver',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    city);
 
-                //make match if exists
-                if (formIdsG.isNotEmpty) {
-                  for (int i = 0; i < formIdsG.length; i++) {
-                    MatchingsServices().createMatch(rowIDS, formIdsG[i]!);
+                  if (rowIDS <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsG = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
+
+                    //make match if exists
+                    if (formIdsG.isNotEmpty) {
+                      for (int i = 0; i < formIdsG.length; i++) {
+                        MatchingsServices().createMatch(rowIDS, formIdsG[i]!);
+                      }
+                    }
                   }
                 }
 
                 int rowIDG = 0;
+                int numberOfChangesG = 0;
 
                 if (widget.update == true) {
-                  rowIDG = await UserServices().updateForm(
+                  numberOfChangesG = await UserServices().updateForm(
                       id,
                       'giver',
                       donorModel.formItemControllerD.text,
@@ -673,9 +777,35 @@ class _CreateFormState extends State<CreateForm> {
                       null,
                       'Not Completed',
                       widget.formID);
+
+                  if (numberOfChangesG == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChanges == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsS = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
+
+                    //make match if exists
+                    if (formIdsS.isNotEmpty) {
+                      for (int i = 0; i < formIdsS.length; i++) {
+                        MatchingsServices()
+                            .createMatch(formIdsS[i]!, widget.formID);
+                      }
+                    }
+                  }
                 } else {
-                  print('before create new form');
-                  print(id);
                   rowIDG = await UserServices().createNewForm(
                       id,
                       'giver',
@@ -684,28 +814,57 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
-                }
+                  if (rowIDG <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsS = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
 
-                //check match
-                List<int?> formIdsS = await MatchingsServices().checkMatching(
-                    'seeker',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    city);
-
-                //make match if exists
-                if (formIdsS.isNotEmpty) {
-                  for (int i = 0; i < formIdsS.length; i++) {
-                    MatchingsServices().createMatch(formIdsS[i]!, rowIDG);
+                    //make match if exists
+                    if (formIdsS.isNotEmpty) {
+                      for (int i = 0; i < formIdsS.length; i++) {
+                        MatchingsServices().createMatch(formIdsS[i]!, rowIDG);
+                      }
+                    }
                   }
                 }
+                numberOfChanges = numberOfChangesS + numberOfChangesG;
               }
             }
           }
+          /////////////////////////////////////////////////////////////////////////
           // ignore: use_build_context_synchronously
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AppHomePage()));
+          print('noc: $numberOfChanges');
+          if (numberOfChanges <= 0 && widget.update == true) {
+            print('no navigation');
+          } else {
+            if (widget.update == true) {
+              showDatabasePopup(context, 'Form updated successfully!',
+                  isError: false, onOKPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AppHomePage()));
+              });
+            } else {
+              showDatabasePopup(context, 'Form created successfully!',
+                  isError: false, onOKPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AppHomePage()));
+              });
+            }
+          }
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 20.0, bottom: 20),
@@ -1106,6 +1265,8 @@ class _CreateFormState extends State<CreateForm> {
       ),
       GestureDetector(
         onTap: () async {
+          int numberOfChanges = 0;
+
           bool isFormValid = _formKey.currentState?.validate() ?? false;
           if (isFormValid) {
             String datesG = '';
@@ -1143,14 +1304,15 @@ class _CreateFormState extends State<CreateForm> {
                 datesS += ',';
               }
             }
-
+//////////////////////////////////////////////////////////////////////////////////////////
             if (donorModel.typeD == 'seeker') {
               if (datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
                 int rowID = 0;
+
                 if (widget.update == true) {
-                  rowID = await UserServices().updateForm(
+                  numberOfChanges = await UserServices().updateForm(
                       id,
                       'seeker',
                       seekerModel.formItemControllerS.text,
@@ -1159,6 +1321,35 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
+                  print(numberOfChanges);
+                  if (numberOfChanges == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChanges == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    //check match
+                    //but first get city of userID
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
+
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        MatchingsServices()
+                            .createMatch(widget.formID, formIds[i]!);
+                      }
+                    }
+                  }
                 } else {
                   rowID = await UserServices().createNewForm(
                       id,
@@ -1168,31 +1359,39 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
-                }
-                //check match
-                //but first get city of userID
-                String city = await UserServices().getCity(id);
-                List<int?> formIds = await MatchingsServices().checkMatching(
-                    'giver',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    city);
+                  if (rowID <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  } else {
+                    //check match
+                    //but first get city of userID
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
 
-                //make match if exists
-                if (formIds.isNotEmpty) {
-                  for (int i = 0; i < formIds.length; i++) {
-                    MatchingsServices().createMatch(rowID, formIds[i]!);
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        MatchingsServices().createMatch(rowID, formIds[i]!);
+                      }
+                    }
                   }
                 }
               }
+              /////////////////////////////////////////////////////////////////////////
             } else if (donorModel.typeD == 'giver') {
               if (datesG.isEmpty) {
                 showDatePopUp(context);
               } else {
                 int rowID = 0;
                 if (widget.update == true) {
-                  rowID = await UserServices().updateForm(
+                  numberOfChanges = await UserServices().updateForm(
                       id,
                       'giver',
                       donorModel.formItemControllerD.text,
@@ -1201,6 +1400,33 @@ class _CreateFormState extends State<CreateForm> {
                       null,
                       'Not Completed',
                       widget.formID);
+                  if (numberOfChanges == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChanges == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    String city = await UserServices().getCity(id);
+
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
+
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        int matchID = await MatchingsServices()
+                            .createMatch(formIds[i]!, widget.formID);
+                      }
+                    }
+                  }
                 } else {
                   rowID = await UserServices().createNewForm(
                       id,
@@ -1210,32 +1436,41 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
-                }
-                String city = await UserServices().getCity(id);
+                  if (rowID <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  } else {
+                    String city = await UserServices().getCity(id);
 
-                List<int?> formIds = await MatchingsServices().checkMatching(
-                    'seeker',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    city);
+                    List<int?> formIds = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
 
-                //make match if exists
-                if (formIds.isNotEmpty) {
-                  for (int i = 0; i < formIds.length; i++) {
-                    int matchID = await MatchingsServices()
-                        .createMatch(formIds[i]!, rowID);
+                    //make match if exists
+                    if (formIds.isNotEmpty) {
+                      for (int i = 0; i < formIds.length; i++) {
+                        int matchID = await MatchingsServices()
+                            .createMatch(formIds[i]!, rowID);
+                      }
+                    }
                   }
                 }
               }
+              //////////////////////////////////////////////////////////////////////////////////////
             } else {
               if (datesG.isEmpty || datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
                 int rowIDS = 0;
+                int numberOfChangesS = 0;
 
                 if (widget.update == true) {
-                  rowIDS = await UserServices().updateForm(
+                  numberOfChangesS = await UserServices().updateForm(
                       id,
                       'seeker',
                       seekerModel.formItemControllerS.text,
@@ -1244,6 +1479,33 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
+                  if (numberOfChangesS == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChangesS == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsG = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
+
+                    //make match if exists
+                    if (formIdsG.isNotEmpty) {
+                      for (int i = 0; i < formIdsG.length; i++) {
+                        MatchingsServices()
+                            .createMatch(widget.formID, formIdsG[i]!);
+                      }
+                    }
+                  }
                 } else {
                   rowIDS = await UserServices().createNewForm(
                       id,
@@ -1253,27 +1515,36 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
-                }
-                //check match
-                String city = await UserServices().getCity(id);
-                List<int?> formIdsG = await MatchingsServices().checkMatching(
-                    'giver',
-                    seekerModel.formItemControllerS.text,
-                    seekerModel.categoryS,
-                    datesS,
-                    city);
 
-                //make match if exists
-                if (formIdsG.isNotEmpty) {
-                  for (int i = 0; i < formIdsG.length; i++) {
-                    MatchingsServices().createMatch(rowIDS, formIdsG[i]!);
+                  if (rowIDS <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsG = await MatchingsServices()
+                        .checkMatching(
+                            'giver',
+                            seekerModel.formItemControllerS.text,
+                            seekerModel.categoryS,
+                            datesS,
+                            city);
+
+                    //make match if exists
+                    if (formIdsG.isNotEmpty) {
+                      for (int i = 0; i < formIdsG.length; i++) {
+                        MatchingsServices().createMatch(rowIDS, formIdsG[i]!);
+                      }
+                    }
                   }
                 }
 
                 int rowIDG = 0;
+                int numberOfChangesG = 0;
 
                 if (widget.update == true) {
-                  rowIDG = await UserServices().updateForm(
+                  numberOfChangesG = await UserServices().updateForm(
                       id,
                       'giver',
                       donorModel.formItemControllerD.text,
@@ -1282,6 +1553,34 @@ class _CreateFormState extends State<CreateForm> {
                       null,
                       'Not Completed',
                       widget.formID);
+
+                  if (numberOfChangesG == 0) {
+                    showDatabasePopup(context, 'No changes made.',
+                        isError: false, isWarning: true);
+                  } else if (numberOfChanges == -1) {
+                    showDatabasePopup(context, 'Form doesn\'t exist!');
+                  } else if (numberOfChanges == -3) {
+                    showDatabasePopup(context,
+                        'There was a problem updating form. Please try again later..!');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsS = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
+
+                    //make match if exists
+                    if (formIdsS.isNotEmpty) {
+                      for (int i = 0; i < formIdsS.length; i++) {
+                        MatchingsServices()
+                            .createMatch(formIdsS[i]!, widget.formID);
+                      }
+                    }
+                  }
                 } else {
                   rowIDG = await UserServices().createNewForm(
                       id,
@@ -1291,28 +1590,57 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
-                }
+                  if (rowIDG <= 0) {
+                    //error creating form
+                    showDatabasePopup(context,
+                        'There was a problem creating the form. \n \nPlease try again later.');
+                  } else {
+                    //check match
+                    String city = await UserServices().getCity(id);
+                    List<int?> formIdsS = await MatchingsServices()
+                        .checkMatching(
+                            'seeker',
+                            donorModel.formItemControllerD.text,
+                            donorModel.categoryD,
+                            datesG,
+                            city);
 
-                //check match
-                List<int?> formIdsS = await MatchingsServices().checkMatching(
-                    'seeker',
-                    donorModel.formItemControllerD.text,
-                    donorModel.categoryD,
-                    datesG,
-                    city);
-
-                //make match if exists
-                if (formIdsS.isNotEmpty) {
-                  for (int i = 0; i < formIdsS.length; i++) {
-                    MatchingsServices().createMatch(formIdsS[i]!, rowIDG);
+                    //make match if exists
+                    if (formIdsS.isNotEmpty) {
+                      for (int i = 0; i < formIdsS.length; i++) {
+                        MatchingsServices().createMatch(formIdsS[i]!, rowIDG);
+                      }
+                    }
                   }
                 }
+                numberOfChanges = numberOfChangesS + numberOfChangesG;
               }
             }
           }
+          /////////////////////////////////////////////////////////////////////////
           // ignore: use_build_context_synchronously
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AppHomePage()));
+          print('noc: $numberOfChanges');
+          if (numberOfChanges <= 0 && widget.update == true) {
+            print('no navigation');
+          } else {
+            if (widget.update == true) {
+              showDatabasePopup(context, 'Form updated successfully!',
+                  isError: false, onOKPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AppHomePage()));
+              });
+            } else {
+              showDatabasePopup(context, 'Form created successfully!',
+                  isError: false, onOKPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AppHomePage()));
+              });
+            }
+          }
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 20.0, bottom: 20),

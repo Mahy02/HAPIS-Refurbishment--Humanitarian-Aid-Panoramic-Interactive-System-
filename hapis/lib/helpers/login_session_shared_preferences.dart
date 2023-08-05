@@ -1,4 +1,3 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///`LoginSessionSharedPreferences` to presist data in the app locally
@@ -14,28 +13,26 @@ class LoginSessionSharedPreferences {
   static const String _expiryTimeKey = 'expiryTime';
 
   /// key property of userID
-  static const String _keyNormalUserID = 'userID';
+  static const String _keyUserID = 'userID';
 
   /// key property of isLoggedIn
   static const String _keyIsLoggedIn = 'isLoggedIn';
 
-   ///initialization
+  ///initialization
   static Future init() async => _prefs = await SharedPreferences.getInstance();
 
-  
+  //for users:
 
-  //for normal users:
-  
   static Future<void> setUserID(String userID) async {
-    await _prefs?.setString(_keyNormalUserID, userID);
+    await _prefs?.setString(_keyUserID, userID);
   }
 
   static String? getUserID() {
-    return _prefs?.getString(_keyNormalUserID);
+    return _prefs?.getString(_keyUserID);
   }
-  
-   static Future<void> removeNormalUserID() async {
-    await _prefs?.remove(_keyNormalUserID);
+
+  static Future<void> removeUserID() async {
+    await _prefs?.remove(_keyUserID);
   }
 
   static Future<void> setLoggedIn(bool isLoggedIn) async {
@@ -45,8 +42,6 @@ class LoginSessionSharedPreferences {
   static bool getLoggedIn() {
     return _prefs?.getBool(_keyIsLoggedIn) ?? false;
   }
-
-
 
   //for google users:
   static Future<void> saveToken(String accessToken, DateTime expiryTime) async {

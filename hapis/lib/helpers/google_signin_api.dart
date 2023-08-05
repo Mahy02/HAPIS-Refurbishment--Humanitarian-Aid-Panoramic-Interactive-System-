@@ -8,6 +8,8 @@ class GoogleSignInApi {
   /// `login` function that calls Google signIn method
   static Future login() => _googleSignIn.signIn();
 
+
+
   /// `logout` function that calls Google disconnect method
   static Future logout() => _googleSignIn.disconnect();
 

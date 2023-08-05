@@ -8,6 +8,7 @@ import 'package:hapis/services/db_services/requests_db_services.dart';
 
 import '../helpers/google_signin_api.dart';
 import '../helpers/login_session_shared_preferences.dart';
+import '../utils/database_popups.dart';
 import '../utils/date_popup.dart';
 import '../utils/signup_popup.dart';
 
@@ -56,24 +57,11 @@ class _UserAppComponentState extends State<UserAppComponent> {
   void initState() {
     super.initState();
 
-    // requested =  RequestsServices()
-    //     .checkFriendshipRequest(id, widget.user.userID!);
     if (GoogleSignInApi().isUserSignedIn() == true ||
         LoginSessionSharedPreferences.getLoggedIn() == true) {
       final currentUser = GoogleSignInApi().getCurrentUser();
       if (currentUser != null) {
         id = currentUser.id;
-        print('hereeeeee');
-        print(id);
-        print(widget.user.userID);
-        // Separate the coefficient and exponent from the exponential notation
-//         List<String> parts = widget.user.userID!.split('e+');
-//         double coefficient = double.parse(parts[0]);
-//         int exponent = int.parse(parts[1]);
-
-// // Calculate the non-exponential number by multiplying the coefficient by 10 raised to the exponent
-//         double nonExponentialNumber = coefficient * pow(10.0, exponent);
-//         print(nonExponentialNumber);
       } else {
         id = LoginSessionSharedPreferences.getUserID()!;
       }
@@ -165,19 +153,33 @@ class _UserAppComponentState extends State<UserAppComponent> {
                             (BuildContext context, StateSetter setState) {
                           return GestureDetector(
                             onTap: () async {
-                              //Make new request
-                              if (GoogleSignInApi().isUserSignedIn() == true ||
-                                  LoginSessionSharedPreferences.getLoggedIn() ==
-                                      true) {
-                                await RequestsServices().createRequest(id,
-                                    widget.user.userID!, widget.user.formID!);
+                              //Make new request if not requested before
+                              print(requested);
+                              if (requested == false) {
+                                if (GoogleSignInApi().isUserSignedIn() ==
+                                        true ||
+                                    LoginSessionSharedPreferences
+                                            .getLoggedIn() ==
+                                        true) {
+                                  int result = await RequestsServices()
+                                      .createRequest(id, widget.user.userID!,
+                                          widget.user.formID!);
+                                  if (result > 0) {
+                                    showDatabasePopup(
+                                        context, 'Request sent successfully!',
+                                        isError: false);
+                                  } else {
+                                    showDatabasePopup(context,
+                                        'There was a problem sending request. Please try again later..');
+                                  }
 
-                                //referesh:
-                                setState(() {
-                                  requested = true;
-                                });
-                              } else {
-                                showDialogSignUp(context);
+                                  //referesh:
+                                  setState(() {
+                                    requested = true;
+                                  });
+                                } else {
+                                  showDialogSignUp(context);
+                                }
                               }
                             },
                             //we should checkfriendship to see which icon to use

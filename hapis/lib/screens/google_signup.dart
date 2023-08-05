@@ -9,6 +9,7 @@ import '../helpers/google_signin_api.dart';
 import '../reusable_widgets/text_form_field.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/colors.dart';
+import '../utils/database_popups.dart';
 
 class GoogleSignUp extends StatefulWidget {
   const GoogleSignUp({super.key});
@@ -351,6 +352,8 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
   Future signIn(bool isGoogleUser) async {
     if (isGoogleUser) {
       try {
+        await GoogleSignInApi.login();
+        await GoogleSignInApi.logout();
         final user = await GoogleSignInApi.login();
 
         if (user == Null) {
@@ -358,18 +361,6 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
           final userExists =
               await UserServices().doesGoogleUserExist(user.id, user.email);
           if (userExists != 0) {
-            //get authentication access token:
-            final GoogleSignInAuthentication googleAuth =
-                await user.authentication;
-            //set the expiration time in seconds (e.g. 2 hours)
-            final int expirationTimeSeconds = 7200;
-            final DateTime expiryTime =
-                DateTime.now().add(Duration(seconds: expirationTimeSeconds));
-            final String? accessToken = googleAuth.accessToken;
-            print(accessToken);
-            //save it in shared preferences:
-            await LoginSessionSharedPreferences.saveToken(
-                accessToken!, expiryTime);
             //save ID
             LoginSessionSharedPreferences.setUserID(user.id);
             //set login to tryue
@@ -378,13 +369,15 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AppHomePage()));
           } else {
-            //user doesnt exist message, check email and password
-            print(userExists);
+            showDatabasePopup(context,
+                'User doesn\'t exist \n \nPlease check your credentials again or try signing up if you are new to HAPIS.');
           }
         }
       } on Exception catch (e) {
         // Handle the sign-in error.
         print('Sign-in error: $e');
+        showDatabasePopup(context,
+            'There was a problem signing in. \nPlease try again later.');
       }
     } else {
       String pass = _passController.text;
@@ -400,8 +393,9 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AppHomePage()));
       } else {
-        //user doesnt exist message, check email and password
         print(userID);
+        showDatabasePopup(context,
+            'User doesn\'t exist \n \nPlease check your credentials again or try signing up if you are new to HAPIS.');
       }
     }
   }
@@ -428,19 +422,8 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
     } on Exception catch (e) {
       // Handle the sign-in error.
       print('Sign-in error: $e');
+      showDatabasePopup(
+          context, 'There was a problem signing in. \nPlease try again later.');
     }
   }
 }
-
-/*
- // final GoogleSignInAuthentication googleAuth = await user.authentication;
-          // final String? accessToken = googleAuth.accessToken;
-          // print(accessToken);
-
- // if (googleAuth.idToken != null) {
-        //   final String idToken = googleAuth.idToken!;
-        // } else {
-        //   print('id null');
-        //   throw Exception('Google Sign-In error: ID token is null');
-        // }
-*/

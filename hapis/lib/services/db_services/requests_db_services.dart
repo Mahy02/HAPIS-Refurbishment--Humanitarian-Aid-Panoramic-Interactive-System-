@@ -13,21 +13,28 @@ class RequestsServices {
   /// It returns Future list of `RequestSentModel`
   Future<List<RequestSentModel>> getRequestsSent(String id) async {
     String sqlStatement = '''
-    SELECT FirstName, LastName, Rec_Status
+    SELECT FirstName, LastName, Rec_Status, R_ID
     FROM Requests
     JOIN Users ON Requests.Rec_ID = Users.UserID
-    WHERE Requests.Sender_ID = $id AND Requests.Donation_Status= 'Not Started' AND Rec_Status= 'Pending'
+    WHERE Requests.Sender_ID = '$id' AND Requests.Rec1_Donation_Status= 'Not Started' AND Rec_Status= 'Pending'
   ''';
-//AND (Requests.Donation_Status= 'Not Started' AND (Rec_Status= 'Pending' OR Rec_Status= 'Accepted' ))
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    List<RequestSentModel> requests;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 
-    List<RequestSentModel> requests = queryResult
-        .map((result) => RequestSentModel(
-              firstName: result['FirstName'],
-              lastName: result['LastName'],
-              recipientStatus: result['Rec_Status'],
-            ))
-        .toList();
+      requests = queryResult
+          .map((result) => RequestSentModel(
+                RId: result['R_ID'],
+                firstName: result['FirstName'],
+                lastName: result['LastName'],
+                recipientStatus: result['Rec_Status'],
+              ))
+          .toList();
+    } catch (e) {
+      print('An error occurred: $e');
+
+      return [];
+    }
 
     return requests;
   }
@@ -40,20 +47,26 @@ class RequestsServices {
     FROM Requests
     JOIN Users ON Requests.Sender_ID = Users.UserID
     JOIN Forms ON Requests.Rec_FormID = Forms.FormID
-    WHERE Requests.Rec_ID = $id AND Requests.Donation_Status= 'Not Started' AND Rec_Status= 'Pending'
+    WHERE Requests.Rec_ID = '$id' AND Requests.Rec1_Donation_Status= 'Not Started' AND Rec_Status= 'Pending'
   ''';
+    List<RequestReceivedModel> requests;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+      requests = queryResult
+          .map((result) => RequestReceivedModel(
+                RId: result['R_ID'],
+                firstName: result['FirstName'],
+                lastName: result['LastName'],
+                item: result['Item'],
+                type: result['Type'],
+              ))
+          .toList();
+    } catch (e) {
+      print('An error occurred: $e');
 
-    List<RequestReceivedModel> requests = queryResult
-        .map((result) => RequestReceivedModel(
-              RId: result['R_ID'],
-              firstName: result['FirstName'],
-              lastName: result['LastName'],
-              item: result['Item'],
-              type: result['Type'],
-            ))
-        .toList();
+      return [];
+    }
 
     return requests;
   }
@@ -61,11 +74,18 @@ class RequestsServices {
   Future<int> acceptRequest(int id) async {
     String sqlStatement = '''
     UPDATE Requests 
-    SET Donation_Status = 'In progress' , Rec_Status= 'Accepted'
+    SET Rec1_Donation_Status = 'In progress' , Rec_Status= 'Accepted', Rec2_Donation_Status = 'In progress'
     WHERE R_ID = $id
     ''';
-    int queryResult = await db.updateData(sqlStatement);
-    return queryResult;
+    try {
+      int queryResult = await db.updateData(sqlStatement);
+
+      return queryResult;
+    } catch (e) {
+      print('Error updating form: $e');
+
+      return -3; // Error updating request
+    }
   }
 
   Future<int> deleteRequest(int id) async {
@@ -73,7 +93,13 @@ class RequestsServices {
     DELETE FROM Requests
     WHERE Requests.R_ID = $id
     ''';
-    int queryResult = await db.deleteData(sqlStatement);
+    int queryResult;
+    try {
+      queryResult = await db.deleteData(sqlStatement);
+    } catch (e) {
+      print('Error deleting form: $e');
+      return 0;
+    }
     return queryResult;
   }
 
@@ -95,22 +121,30 @@ class RequestsServices {
 
   Future<int> createRequest(String senderID, String recID, int formID) async {
     String sqlStatment = '''
-    INSERT INTO Requests (Sender_ID, Rec_ID, Rec_FormID, Rec_Status, Donation_Status)
-        VALUES ($senderID , $recID , $formID, 'Pending', 'Not Started')
+    INSERT INTO Requests (Sender_ID, Rec_ID, Rec_FormID, Rec_Status, Rec1_Donation_Status, Rec2_Donation_Status)
+        VALUES ('$senderID' , '$recID' , $formID, 'Pending', 'Not Started', 'Not Started')
     ''';
-    int rowID = await db.insertData(sqlStatment);
 
-    return rowID;
+    try {
+      int rowID = await db.insertData(sqlStatment);
+
+      return rowID;
+    } catch (e) {
+      print('Error creating request: $e');
+      String error = e.toString();
+
+      return -3;
+    }
   }
 
   Future<bool> checkFriendshipRequest(String senderId, String recId) async {
     String sqlStatement = '''
     SELECT 1
     FROM Requests
-    WHERE Sender_ID = $senderId AND Rec_ID = $recId
+    WHERE Sender_ID = '$senderId' AND Rec_ID = '$recId'
   ''';
     List<Map<String, dynamic>> results = await db.readData(sqlStatement);
-    print(results);
+
     return results.isNotEmpty;
   }
 }

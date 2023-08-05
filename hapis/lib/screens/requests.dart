@@ -45,7 +45,6 @@ class _RequestsState extends State<Requests> {
     return SingleChildScrollView(
       child: Column(
         children: [
-         
           Container(
             padding: const EdgeInsets.all(20),
             child: Text(
@@ -74,7 +73,7 @@ class _RequestsState extends State<Requests> {
                         child: const Center(
                           child: NoComponentWidget(
                             displayText:
-                                'You don\'t have any requests recieved',
+                                'You don\'t have any requests received',
                             icon: Icons.person_add_alt_1_rounded,
                           ),
                         ),
@@ -162,6 +161,7 @@ class _RequestsState extends State<Requests> {
                                 '${requestSent.firstName} ${requestSent.lastName}';
 
                             final statusText = requestSent.recipientStatus;
+                            final id = requestSent.RId;
 
                             return ListTile(
                                 title: RequestComponent(
@@ -172,6 +172,10 @@ class _RequestsState extends State<Requests> {
                               buttonFontSize: widget.buttonFontSize,
                               status: statusText,
                               personName: personName,
+                              id: id,
+                              onPressed: () {
+                                setState(() {});
+                              },
                               // buttonHeight: buttonHeight,
                               // finishButtonHeight:finishButtonHeight ,
                               // pendingButtonHeight: pendingButtonHeight,

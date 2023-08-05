@@ -17,7 +17,12 @@ class CreateMatchingsModel {
   String? rec2Status;
 
   /// Property that defines the donation status 
-  String? donStatus;
+  String? rec1DonStatus;
+
+  /// Property that defines the donation status 
+  String? rec2DonStatus;
+
+
 
  
 
@@ -27,7 +32,8 @@ class CreateMatchingsModel {
         this.giverFormID,
         this.rec1Status,
         this.rec2Status,
-        this.donStatus
+        this.rec1DonStatus,
+        this.rec2DonStatus
      });
 
   /// Turns a `Map` into a `MatchingsModel`.  "Map From the database"
@@ -38,7 +44,8 @@ class CreateMatchingsModel {
       giverFormID: map['Giver_FormID'],
       rec1Status: map['Rec1_Status'],
       rec2Status: map['Rec2_status'],
-      donStatus: map['Donation_Status'],
+      rec1DonStatus: map['Rec1_Donation_Status'],
+       rec2DonStatus: map['Rec2_Donation_Status'],
     );
   }
 

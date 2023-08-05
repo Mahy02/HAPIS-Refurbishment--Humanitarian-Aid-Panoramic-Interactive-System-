@@ -1,11 +1,9 @@
-import 'package:big_dart/big_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/sql_db.dart';
 import '../../models/db_models/user_model.dart';
 import '../../providers/user_provider.dart';
-import 'package:decimal/decimal.dart';
 
 ///   `userServices` class that contains everything related to the users query and interactions with the database
 class UserServices {
@@ -32,36 +30,24 @@ class UserServices {
   SELECT DISTINCT LOWER(City) as City, LOWER(Country) as Country
   FROM Users
   ''';
+    List<Map<String, String>> results;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    print(queryResult);
-    List<Map<String, String>> results = queryResult.map((row) {
-      return {
-        'city': capitalizeFirstLetter(row['City'] as String),
-        'country': capitalizeFirstLetter(row['Country'] as String),
-      };
-    }).toList();
+      results = queryResult.map((row) {
+        return {
+          'city': capitalizeFirstLetter(row['City'] as String),
+          'country': capitalizeFirstLetter(row['Country'] as String),
+        };
+      }).toList();
+    } catch (e) {
+      print('An error occurred: $e');
+
+      return [];
+    }
 
     return results;
   }
-
-  // /// `getCitiesAndCountries` function that retrives all cities and countries from USERS table in database and return the results in List of Maps
-  // Future<List<Map<String, String>>> getCitiesAndCountries() async {
-  //   String sqlStatement = '''
-  //   SELECT DISTINCT LOWER(City) as City, LOWER(Country) as Country
-  //   FROM Users
-  // ''';
-
-  //   List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-  //   List<Map<String, String>> results = queryResult.map((row) {
-  //     return {
-  //       'city': row['City'] as String,
-  //       'country': row['Country'] as String,
-  //     };
-  //   }).toList();
-
-  //   return results;
-  // }
 
   Future<String> getCity(String id) async {
     String sqlStatement = '''
@@ -69,8 +55,14 @@ class UserServices {
         FROM Users
         WHERE UserID = '$id'
     ''';
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    print(queryResult);
+    List<Map<String, dynamic>> queryResult;
+    try {
+      queryResult = await db.readData(sqlStatement);
+    } catch (e) {
+      print('An error occurred: $e');
+
+      return '';
+    }
 
     return queryResult.first['City'];
   }
@@ -117,10 +109,6 @@ class UserServices {
 
     for (Map<String, dynamic> row in result) {
       try {
-        print('inside get users forms');
-        String id = row['UserUserID'];
-        print(id);
-
         UserModel user = UserModel(
           userID: row['UserUserID'],
           formID: row['FormID'],
@@ -151,32 +139,34 @@ class UserServices {
   }
 
   Future<bool> isFormInProgress(int formId) async {
-    // Check in the 'requests' table
-    String sqlStatementsR = '''
+    try {
+      // Check in the 'requests' table
+      String sqlStatementsR = '''
     SELECT COUNT(*) as countR 
     FROM Requests 
     WHERE Donation_Status = 'In progress' AND Rec_FormID = $formId
   ''';
-    final resultR = await db.readData(sqlStatementsR);
-    int requestsCount = resultR[0]['countR'];
+      final resultR = await db.readData(sqlStatementsR);
+      int requestsCount = resultR[0]['countR'];
 
-    String sqlStatementsM = '''
+      String sqlStatementsM = '''
      SELECT COUNT(*) as countM 
      FROM Matchings 
      WHERE Donation_Status = 'In progress' AND (Seeker_FormID = $formId OR Giver_FormID = $formId)
   ''';
 
-    final resultM = await db.readData(sqlStatementsM);
-    int matchingsCount = resultM[0]['countM'];
+      final resultM = await db.readData(sqlStatementsM);
+      int matchingsCount = resultM[0]['countM'];
 
-    // Return true if either of the counts is greater than 0
-    return requestsCount > 0 || matchingsCount > 0;
+      return requestsCount > 0 || matchingsCount > 0;
+    } catch (e) {
+      print('Error in isFormInProgress: $e');
+
+      return false;
+    }
   }
 
   Future<List<UserModel>> getUserForms(String id) async {
-    print('inside user forms');
-    print(id);
-
     String sqlStatment = '''
       SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For, Type
       FROM Forms
@@ -184,66 +174,114 @@ class UserServices {
       WHERE Forms.Status = 'Not Completed' AND Forms.UserID = '$id'
     ''';
 
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatment);
-    print('res: $queryResult');
-    List<UserModel> forms = queryResult
-        .map((row) => UserModel(
-              userID: id,
-              formID: row['FormID'],
-              userName: row['UserName'],
-              firstName: row['FirstName'],
-              lastName: row['LastName'],
-              city: row['City'],
-              country: row['Country'],
-              addressLocation: row['AddressLocation'],
-              phoneNum: row['PhoneNum'],
-              email: row['Email'],
-              type: row['Type'],
-              item: row['Item'],
-              category: row['Category'],
-              multiDates: row['Dates_available'],
-              forWho: row['For'],
-            ))
-        .toList();
+    List<UserModel> forms;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatment);
+
+      forms = queryResult
+          .map((row) => UserModel(
+                userID: id,
+                formID: row['FormID'],
+                userName: row['UserName'],
+                firstName: row['FirstName'],
+                lastName: row['LastName'],
+                city: row['City'],
+                country: row['Country'],
+                addressLocation: row['AddressLocation'],
+                phoneNum: row['PhoneNum'],
+                email: row['Email'],
+                type: row['Type'],
+                item: row['Item'],
+                category: row['Category'],
+                multiDates: row['Dates_available'],
+                forWho: row['For'],
+              ))
+          .toList();
+    } catch (e) {
+      print('An error occurred: $e');
+
+      return [];
+    }
 
     return forms;
   }
 
   Future<int> createNewForm(String userID, String type, String item,
       String category, String dates, String? forWho, String status) async {
-    print('inside create form');
-    print(userID);
-
     String sqlStatment = '''
     INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
         VALUES ('$userID' , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
     ''';
-    print(sqlStatment);
-    int rowID = await db.insertData(sqlStatment);
-    print('rowId');
-    print(rowID);
 
-    return rowID;
+    try {
+      int rowID = await db.insertData(sqlStatment);
+
+      return rowID;
+    } catch (e) {
+      print('Error creating form: $e');
+      String error = e.toString();
+
+      if (error.contains('UNIQUE constraint failed: Forms.FormID')) {
+        return -2; // Form duplication
+      } else {
+        return -3; // Error creating form
+      }
+    }
   }
 
   Future<int> updateForm(
-      String userID,
-      String type,
-      String item,
-      String category,
-      String dates,
-      String? forWho,
-      String status,
-      int formID) async {
-    String sqlStatment = '''
-    UPDATE Forms
-    SET UserID= '$userID' , Type= '$type', Item='$item' , Category='$category' , Dates_available='$dates', For= '${forWho ?? ''}',Status='$status'
+    String userID,
+    String type,
+    String item,
+    String category,
+    String dates,
+    String? forWho,
+    String status,
+    int formID,
+  ) async {
+    String sqlQuery = '''
+    SELECT UserID, Type, Item, Category, Dates_available, For, Status
+    FROM Forms
     WHERE FormID = $formID
-    ''';
+  ''';
 
-    int rowID = await db.updateData(sqlStatment);
+    List<Map<String, dynamic>> result = await db.readData(sqlQuery);
 
-    return rowID;
+    if (result.isEmpty) {
+      // Form with the specified ID not found
+      return -1;
+    }
+
+    Map<String, dynamic> existingForm = result.first;
+
+    // Check if the new values are different from the existing values
+    if (existingForm['UserID'] == userID &&
+        existingForm['Type'] == type &&
+        existingForm['Item'] == item &&
+        existingForm['Category'] == category &&
+        existingForm['Dates_available'] == dates &&
+        existingForm['For'] == (forWho ?? '') &&
+        existingForm['Status'] == status) {
+      //no need for updating as no changes made
+      return 0;
+    }
+
+    String sqlStatement = '''
+    UPDATE Forms
+    SET UserID= '$userID', Type= '$type', Item='$item', Category='$category',
+        Dates_available='$dates', For='${forWho ?? ''}', Status='$status'
+    WHERE FormID = $formID
+  ''';
+
+    try {
+      int rowID = await db.updateData(sqlStatement);
+
+      return rowID;
+    } catch (e) {
+      print('Error updating form: $e');
+
+      return -3; // Error updating form
+    }
   }
 
   /// `deleteForm` deletes a form given an id
@@ -252,7 +290,13 @@ class UserServices {
     DELETE FROM Forms
     WHERE FormID= $id
     ''';
-    int queryResult = await db.deleteData(sqlStatement);
+    int queryResult;
+    try {
+      queryResult = await db.deleteData(sqlStatement);
+    } catch (e) {
+      print('Error deleting form: $e');
+      return 0;
+    }
     return queryResult;
   }
 
@@ -261,7 +305,14 @@ class UserServices {
     DELETE FROM Users
     WHERE UserID= '$id'
     ''';
-    int queryResult = await db.deleteData(sqlStatement);
+    int queryResult;
+
+    try {
+      queryResult = await db.deleteData(sqlStatement);
+    } catch (e) {
+      print('Error deleting user: $e');
+      return 0;
+    }
     return queryResult;
   }
 
@@ -292,14 +343,25 @@ class UserServices {
         Password
       ) VALUES ('$userID', '$userName', '$firstName', '$lastName', '$city', '$counrty', '$address', '$phoneNum', '$email', '${password ?? ''}')
     ''';
-
-    int result = await db.insertData(sqlStatment);
-    print('after creating new user');
-    print(result);
-    return result;
+    try {
+      int result = await db.insertData(sqlStatment);
+      print('User created with ID: $result');
+      return result;
+    } catch (e) {
+      // Error occurred during insertion, capture and print the specific error message.
+      print('Error creating user: $e');
+      String error = e.toString();
+      if (error.contains('UNIQUE constraint failed: Users.UserName')) {
+        return -1; // userName duplication
+      } else if (error.contains('UNIQUE constraint failed: Users.UserID')) {
+        return -2; // User duplication
+      } else {
+        return -3; // Error creating user
+      }
+    }
   }
 
-  Future<int> updateNewUser(
+  Future<int> updateUser(
       String userID,
       String userName,
       String firstName,
@@ -310,15 +372,51 @@ class UserServices {
       String address,
       String email,
       String? password) async {
+    String sqlQuery = '''
+    SELECT UserName, City, Country, AddressLocation, PhoneNum
+    FROM Users
+    WHERE UserID = '$userID'
+  ''';
+
+    List<Map<String, dynamic>> result = await db.readData(sqlQuery);
+
+    if (result.isEmpty) {
+      // user with the specified ID not found
+      return -1;
+    }
+
+    Map<String, dynamic> existingUser = result.first;
+
+    // Check if the new values are different from the existing values
+    if (existingUser['UserName'] == userName &&
+        existingUser['City'] == city &&
+        existingUser['Country'] == counrty &&
+        existingUser['AddressLocation'] == address &&
+        existingUser['PhoneNum'] == phoneNum) {
+      //no need for updating as no changes made
+      return 0;
+    }
+
     String sqlStatment = '''
     UPDATE Users
     SET  UserName = '$userName' ,  FirstName= '$firstName',  LastName= '$lastName', City= '$city', Country= '$counrty', AddressLocation=  '$address', PhoneNum='$phoneNum' ,Email='$email', Password='${password ?? ''}'
     WHERE UserID= '$userID'
     ''';
 
-    int result = await db.updateData(sqlStatment);
+    try {
+      int updateResult = await db.updateData(sqlStatment);
 
-    return result;
+      return updateResult;
+    } catch (e) {
+      // Error occurred during insertion, capture and print the specific error message.
+      print('Error creating user: $e');
+      String error = e.toString();
+      if (error.contains('UNIQUE constraint failed: Users.UserName')) {
+        return -2; // userName duplication
+      } else {
+        return -3; // Error creating user
+      }
+    }
   }
 
   /// `doesGoogleUserExist` function that checks if a user signed in by google exists or not from taking the `userId` and `email`
@@ -327,9 +425,15 @@ class UserServices {
     String sqlStatment = '''
       SELECT COUNT(*) AS count FROM Users WHERE UserID = '$userId' AND Email = "$email"
       ''';
+    int count;
+    try {
+      List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+      count = result[0]['count'];
+    } catch (e) {
+      print('An error occurred: $e');
 
-    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
-    int count = result[0]['count'];
+      return 0;
+    }
     return count;
   }
 
@@ -349,13 +453,13 @@ class UserServices {
   }
 
   //tirals:
-  Future<int> bla() async {
-    String sqlStatment = '''
-      SELECT COUNT(*) AS count FROM Users WHERE UserID = 0
-      ''';
+  // Future<int> bla() async {
+  //   String sqlStatment = '''
+  //     SELECT COUNT(*) AS count FROM Users WHERE UserID = 0
+  //     ''';
 
-    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
-    int count = result[0]['count'];
-    return count;
-  }
+  //   List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+  //   int count = result[0]['count'];
+  //   return count;
+  // }
 }
