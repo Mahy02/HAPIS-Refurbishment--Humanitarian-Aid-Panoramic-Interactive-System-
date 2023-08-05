@@ -46,6 +46,7 @@ class RequestComponent extends StatefulWidget {
   final String? userID;
   final String? seekerStatus;
   final String? giverStatus;
+  final String? donationStatus;
   final VoidCallback? onPressed;
 
   const RequestComponent({
@@ -71,6 +72,7 @@ class RequestComponent extends StatefulWidget {
     this.seekerStatus,
     this.giverStatus,
     this.id2,
+    this.donationStatus,
   });
 
   @override
@@ -396,59 +398,14 @@ class _RequestComponentState extends State<RequestComponent> {
                       ],
                     )
                   : widget.isDonation
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            SizedBox(
+                      ? widget.donationStatus == 'Pending'
+                          ? SizedBox(
                               child: ElevatedButton(
-                                onPressed: () async {
-                                  print('inside on press to finish process');
-                                  print('type: ${widget.type}');
-                                  //update donation
-                                  final result = await DonationsServices()
-                                      .updateDonation(widget.id!, widget.id2!,
-                                          widget.type!);
-                                  if (result['result'] > 0 &&
-                                      result['areBothFinished']) {
-                                    showDatabasePopup(context,
-                                        'Donation Finished successfully! \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
-                                        isError: false);
-                                    //get forms
-                                    if (widget.id! != 0) {
-                                      //requests
-                                      int rFormId = await RequestsServices()
-                                          .getFormId(widget.id!);
-                                      //delete forms
-                                      await UserServices().deleteForm(rFormId);
-                                    }
-                                    if (widget.id2! != 0) {
-                                      //matchings
-                                      List<int> mFormIds =
-                                          await MatchingsServices()
-                                              .getFormIds(widget.id2!);
-                                      for (int i = 0;
-                                          i < mFormIds.length;
-                                          i++) {
-                                        int result = await UserServices()
-                                            .deleteForm(mFormIds[i]);
-                                      }
-                                    }
-                                  } else if (result['result'] > 0 &&
-                                      !result['areBothFinished']) {
-                                    showDatabasePopup(context,
-                                        'Waiting for the other user to confirm and complete the process \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
-                                        isError: false);
-                                  } else {
-                                    showDatabasePopup(context,
-                                        'There was a problem ending the donation process. Please try again later..');
-                                  }
-                                  //referesh
-                                  widget.onPressed!();
-                                },
+                                onPressed: () {},
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                          HapisColors.lgColor4),
+                                          HapisColors.lgColor1),
                                   padding: MaterialStateProperty.all<
                                           EdgeInsetsGeometry>(
                                       const EdgeInsets.all(15)),
@@ -459,41 +416,155 @@ class _RequestComponentState extends State<RequestComponent> {
                                     ),
                                   ),
                                 ),
-                                child: Text(
-                                  'FINISH \n PROCESS',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: widget.buttonFontSize),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              child: ElevatedButton(
-                                onPressed: () async {},
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          HapisColors.lgColor2),
-                                  padding: MaterialStateProperty.all<
-                                          EdgeInsetsGeometry>(
-                                      const EdgeInsets.all(15)),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
+                                child: Tooltip(
+                                  message: 'Waiting for others..',
+                                  child: Text(
+                                    'PENDING',
+                                    style: TextStyle(
+                                        fontSize: widget.buttonFontSize),
                                   ),
                                 ),
-                                child: Text(
-                                  'CANCEL \n PROCESS',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: widget.buttonFontSize),
-                                ),
                               ),
-                            ),
-                          ],
-                        )
+                            )
+                          : widget.donationStatus == 'Cancel'
+                              ? SizedBox(
+                                  child: ElevatedButton(
+                                    onPressed: () {},
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              HapisColors.lgColor2),
+                                      padding: MaterialStateProperty.all<
+                                              EdgeInsetsGeometry>(
+                                          const EdgeInsets.all(15)),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Tooltip(
+                                      message:
+                                          'Sorry, other user has cancelled the process.',
+                                      child: Text(
+                                        'CANCELLED',
+                                        style: TextStyle(
+                                            fontSize: widget.buttonFontSize),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          print(
+                                              'inside on press to finish process');
+                                          print('type: ${widget.type}');
+                                          //update donation
+                                          final result =
+                                              await DonationsServices()
+                                                  .updateDonation(
+                                                      widget.id!,
+                                                      widget.id2!,
+                                                      widget.type!);
+                                          if (result['result'] > 0 &&
+                                              result['areBothFinished']) {
+                                            showDatabasePopup(context,
+                                                'Donation Finished successfully! \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
+                                                isError: false);
+                                            //get forms
+                                            if (widget.id! != 0) {
+                                              //requests
+                                              int rFormId =
+                                                  await RequestsServices()
+                                                      .getFormId(widget.id!);
+                                              //delete forms
+                                              await UserServices()
+                                                  .deleteForm(rFormId);
+                                            }
+                                            if (widget.id2! != 0) {
+                                              //matchings
+                                              List<int> mFormIds =
+                                                  await MatchingsServices()
+                                                      .getFormIds(widget.id2!);
+                                              for (int i = 0;
+                                                  i < mFormIds.length;
+                                                  i++) {
+                                                int result =
+                                                    await UserServices()
+                                                        .deleteForm(
+                                                            mFormIds[i]);
+                                              }
+                                            }
+                                          } else if (result['result'] > 0 &&
+                                              !result['areBothFinished']) {
+                                            showDatabasePopup(context,
+                                                'Waiting for the other user to confirm and complete the process \n\nThanks for using HAPIS \u{1F30D} \u{2764}',
+                                                isError: false);
+                                          } else {
+                                            showDatabasePopup(context,
+                                                'There was a problem ending the donation process. Please try again later..');
+                                          }
+                                          //referesh
+                                          widget.onPressed!();
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  HapisColors.lgColor4),
+                                          padding: MaterialStateProperty.all<
+                                                  EdgeInsetsGeometry>(
+                                              const EdgeInsets.all(15)),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'FINISH \n PROCESS',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: widget.buttonFontSize),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: ElevatedButton(
+                                        onPressed: () async {},
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  HapisColors.lgColor2),
+                                          padding: MaterialStateProperty.all<
+                                                  EdgeInsetsGeometry>(
+                                              const EdgeInsets.all(15)),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'CANCEL \n PROCESS',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: widget.buttonFontSize),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [

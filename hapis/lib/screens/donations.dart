@@ -111,6 +111,19 @@ class _DonationsState extends State<Donations> {
 
                           final personName =
                               '${donations.firstName} ${donations.lastName}';
+
+                          final rec1Status = donations.rec1DonationStatus;
+                          final rec2Status = donations.rec2DonationStatus;
+                          String donationStatus = '';
+                          if (rec1Status == 'Finished' ||
+                              rec2Status == 'Finished') {
+                            //pending
+                            donationStatus = 'Pending';
+                          } else if (rec1Status == 'Cancelled' ||
+                              rec2Status == 'Cancelled') {
+                            //cancel
+                            donationStatus = 'Cancel';
+                          }
                           return ListTile(
                               title: RequestComponent(
                             isSent: false,
@@ -122,6 +135,7 @@ class _DonationsState extends State<Donations> {
                             id: r_id,
                             id2: m_id,
                             type: type,
+                            donationStatus: donationStatus,
                             onPressed: () {
                               _refreshData();
                             },

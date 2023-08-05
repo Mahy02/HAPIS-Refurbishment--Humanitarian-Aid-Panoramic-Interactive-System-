@@ -15,11 +15,19 @@ class InProgressDonationModel {
   ///property that defines the type => sender rec seeker giver
   final String type;
 
-  InProgressDonationModel({
-    required this.mID,
-    required this.rID,
-    required this.firstName,
-    required this.lastName,
-    required this.type
-  });
+  ///property that defines rec1 donation status
+  final String rec1DonationStatus;
+
+  ///property that defines rec2 donation status
+  final String rec2DonationStatus;
+
+  InProgressDonationModel(
+      {required this.mID,
+      required this.rID,
+      required this.firstName,
+      required this.lastName,
+      required this.type,
+      required this.rec1DonationStatus,
+      required this.rec2DonationStatus
+      });
 }
