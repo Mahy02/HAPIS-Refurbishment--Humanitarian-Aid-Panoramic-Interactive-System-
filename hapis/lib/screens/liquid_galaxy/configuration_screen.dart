@@ -3,8 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/reusable_widgets/back_button.dart';
+import 'package:hapis/reusable_widgets/liquid_galaxy/connection_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../helpers/lg_connection_shared_preferences.dart';
 import '../../providers/liquid_galaxy/connection_provider.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../reusable_widgets/app_bar.dart';
@@ -34,6 +36,18 @@ class _ConfigurationState extends State<Configuration> {
   /// `is loading` to Track the loading state
   bool _isLoading = false;
 
+  final TextEditingController _ipController =
+      TextEditingController(text: LgConnectionSharedPref.getIP());
+  final TextEditingController _portController =
+      TextEditingController(text: LgConnectionSharedPref.getPort());
+  final TextEditingController _userNameController =
+      TextEditingController(text: LgConnectionSharedPref.getUserName());
+  final TextEditingController _passwordController =
+      TextEditingController(text: LgConnectionSharedPref.getPassword());
+  final TextEditingController _screenAmountController = TextEditingController(
+      text: LgConnectionSharedPref.getScreenAmount().toString());
+//  bool isConnected = LgConnectionSharedPref.getIsConnected()!;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +67,9 @@ class _ConfigurationState extends State<Configuration> {
     return SingleChildScrollView(
       child: Consumer<Connectionprovider>(
         builder: (BuildContext context, model, Widget? child) {
-          return Padding(
+          return
+              //child:
+              Padding(
             padding: const EdgeInsets.all(50.0),
             child: Stack(
               alignment: Alignment.center,
@@ -61,6 +77,7 @@ class _ConfigurationState extends State<Configuration> {
                 Column(
                   children: [
                     BackButtonWidget(),
+                    ConnectionIndicator(isConnected: model.isConnected),
                     const Padding(
                       padding: EdgeInsets.only(
                         top: 20,
@@ -111,7 +128,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 18,
                                   label: 'LG User Name',
                                   key: const ValueKey("username"),
-                                  textController: model.userNameController,
+                                  textController: _userNameController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -124,7 +141,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 18,
                                   label: 'LG Password',
                                   key: const ValueKey("lgpass"),
-                                  textController: model.passwordOrKeyController,
+                                  textController: _passwordController,
                                   isSuffixRequired: true,
                                   isHidden: true,
                                 ),
@@ -137,7 +154,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 18,
                                   key: const ValueKey("ip"),
                                   label: 'LG Master IP address',
-                                  textController: model.hostController,
+                                  textController: _ipController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -150,7 +167,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 18,
                                   label: 'LG Port Number',
                                   key: const ValueKey("port"),
-                                  textController: model.portController,
+                                  textController: _portController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -163,7 +180,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 18,
                                   label: 'Number of LG screens',
                                   key: const ValueKey("lgscreens"),
-                                  textController: model.screenAmountController,
+                                  textController: _screenAmountController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -181,17 +198,28 @@ class _ConfigurationState extends State<Configuration> {
                         onPressed: () async {
                           /// checking first if form is valid
                           if (_formKey.currentState!.validate()) {
-                            ///calling `saveData` from the provider to save the data entered by the user
-                            Provider.of<Connectionprovider>(context,
-                                    listen: false)
-                                .saveData(
-                              model.userNameController,
-                              model.hostController,
-                              model.passwordOrKeyController,
-                              model.portController,
-                              model.screenAmountController,
-                              model.isConnected,
-                            );
+                            // ///calling `saveData` from the provider to save the data entered by the user
+                            // Provider.of<Connectionprovider>(context,
+                            //         listen: false)
+                            //     .saveData(
+                            //   model.userNameController,
+                            //   model.hostController,
+                            //   model.passwordOrKeyController,
+                            //   model.portController,
+                            //   model.screenAmountController,
+                            //   model.isConnected,
+                            // );
+                            //saving date in shared pref
+                            await LgConnectionSharedPref.setUserName(
+                                _userNameController.text);
+                            await LgConnectionSharedPref.setIP(
+                                _ipController.text);
+                            await LgConnectionSharedPref.setPassword(
+                                _passwordController.text);
+                            await LgConnectionSharedPref.setPort(
+                                _portController.text);
+                            await LgConnectionSharedPref.setScreenAmount(
+                                int.parse(_screenAmountController.text));
                           }
 
                           final sshData =
@@ -205,17 +233,23 @@ class _ConfigurationState extends State<Configuration> {
                           /// Call the init function to set up the SSH client with the connection data
                           String? result = await sshData.init(context);
 
+                          Connectionprovider connection =
+                              Provider.of<Connectionprovider>(context,
+                                  listen: false);
+
                           ///checking on the connection status:
                           if (result == '') {
-                            setState(() {
-                              model.isConnected = true;
-                            });
+                            // setState(() {
+                            // isConnected = true;
+                            //  });
+                            connection.isConnected = true;
 
                             ///If connected, the logos should appear by calling `setLogos` from the `LGService` calss
                             LgService(sshData).setLogos();
                           } else {
                             ///show an error message
                             showConnectionError(context, result!);
+                            connection.isConnected = false;
                           }
 
                           ///stop the loading process by setting `isloading` to false
@@ -266,7 +300,9 @@ class _ConfigurationState extends State<Configuration> {
     return SingleChildScrollView(
       child: Consumer<Connectionprovider>(
         builder: (BuildContext context, model, Widget? child) {
-          return Padding(
+          return
+              //child:
+              Padding(
             padding: const EdgeInsets.all(50.0),
             child: Stack(
               alignment: Alignment.center,
@@ -274,6 +310,7 @@ class _ConfigurationState extends State<Configuration> {
                 Column(
                   children: [
                     BackButtonWidget(),
+                    ConnectionIndicator(isConnected: model.isConnected),
                     const Padding(
                       padding: EdgeInsets.only(
                         top: 50,
@@ -316,7 +353,7 @@ class _ConfigurationState extends State<Configuration> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 100.0),
+                      padding: const EdgeInsets.only(top: 20.0),
                       child: Form(
                           key: _formKey,
                           child: Column(
@@ -327,7 +364,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 30,
                                   label: 'LG User Name',
                                   key: const ValueKey("username"),
-                                  textController: model.userNameController,
+                                  textController: _userNameController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -338,7 +375,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 30,
                                   label: 'LG Password',
                                   key: const ValueKey("lgpass"),
-                                  textController: model.passwordOrKeyController,
+                                  textController: _passwordController,
                                   isSuffixRequired: true,
                                   isHidden: true,
                                 ),
@@ -349,7 +386,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 30,
                                   key: const ValueKey("ip"),
                                   label: 'LG Master IP address',
-                                  textController: model.hostController,
+                                  textController: _ipController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -360,7 +397,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 30,
                                   label: 'LG Port Number',
                                   key: const ValueKey("port"),
-                                  textController: model.portController,
+                                  textController: _portController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -371,7 +408,7 @@ class _ConfigurationState extends State<Configuration> {
                                   fontSize: 30,
                                   label: 'Number of LG screens',
                                   key: const ValueKey("lgscreens"),
-                                  textController: model.screenAmountController,
+                                  textController: _screenAmountController,
                                   isSuffixRequired: true,
                                   isHidden: false,
                                 ),
@@ -380,26 +417,38 @@ class _ConfigurationState extends State<Configuration> {
                           )),
                     ),
                     const SizedBox(
-                      height: 100,
+                      height: 20,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.1,
                       child: ElevatedButton(
                         onPressed: () async {
                           /// checking first if form is valid
                           if (_formKey.currentState!.validate()) {
                             ///calling `saveData` from the provider to save the data entered by the user
-                            Provider.of<Connectionprovider>(context,
-                                    listen: false)
-                                .saveData(
-                              model.userNameController,
-                              model.hostController,
-                              model.passwordOrKeyController,
-                              model.portController,
-                              model.screenAmountController,
-                              model.isConnected,
-                            );
+                            //   Provider.of<Connectionprovider>(context,
+                            //           listen: false)
+                            //       .saveData(
+                            //     model.userNameController,
+                            //     model.hostController,
+                            //     model.passwordOrKeyController,
+                            //     model.portController,
+                            //     model.screenAmountController,
+                            //     model.isConnected,
+                            //   );
+
+                            //saving date in shared pref
+                            await LgConnectionSharedPref.setUserName(
+                                _userNameController.text);
+                            await LgConnectionSharedPref.setIP(
+                                _ipController.text);
+                            await LgConnectionSharedPref.setPassword(
+                                _passwordController.text);
+                            await LgConnectionSharedPref.setPort(
+                                _portController.text);
+                            await LgConnectionSharedPref.setScreenAmount(
+                                int.parse(_screenAmountController.text));
                           }
 
                           final sshData =
@@ -413,15 +462,23 @@ class _ConfigurationState extends State<Configuration> {
                           /// Call the init function to set up the SSH client with the connection data
                           String? result = await sshData.init(context);
 
+                          Connectionprovider connection =
+                              Provider.of<Connectionprovider>(context,
+                                  listen: false);
+
                           ///checking on the connection status:
                           if (result == '') {
-                            setState(() {
-                              model.isConnected = true;
-                            });
+                            //setState(() async {
+                            // await LgConnectionSharedPref.setIsConnected(true);
+                            //});
+
+                            connection.isConnected = true;
 
                             ///If connected, the logos should appear by calling `setLogos` from the `LGService` calss
                             LgService(sshData).setLogos();
                           } else {
+                            connection.isConnected = false;
+
                             ///show an error message
                             showConnectionError(context, result!);
                           }
@@ -442,7 +499,7 @@ class _ConfigurationState extends State<Configuration> {
                           'CONNECT TO LG',
                           style: TextStyle(
                               fontFamily: "Poppins",
-                              fontSize: 42,
+                              fontSize: 30,
                               color: Colors.white),
                         ),
                       ),

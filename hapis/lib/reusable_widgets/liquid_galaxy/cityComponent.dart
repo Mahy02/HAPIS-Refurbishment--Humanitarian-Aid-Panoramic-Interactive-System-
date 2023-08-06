@@ -113,15 +113,15 @@ class _CityComponentState extends State<CityComponent> {
   @override
   Widget build(BuildContext context) {
     final imagePath = countryMap[widget.country];
-   
+
     final buttonContent = '${widget.city}\n${widget.country}';
 
     return HapisElevatedButton(
       fontSize: widget.fontSize,
       buttonColor: widget.buttonColor,
       elevatedButtonContent: buttonContent,
-      height: MediaQuery.of(context).size.height * 0.2,
-      width: MediaQuery.of(context).size.width * 0.4,
+      height: MediaQuery.of(context).size.height * 0.3,
+      width: MediaQuery.of(context).size.width * 0.1,
       imageHeight: widget.imageHeight,
       imageWidth: widget.imageWidth,
       imagePath: imagePath,

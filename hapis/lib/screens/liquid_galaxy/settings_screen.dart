@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
+import 'package:hapis/reusable_widgets/liquid_galaxy/connection_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/liquid_galaxy/connection_provider.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../reusable_widgets/app_bar.dart';
 import '../../reusable_widgets/back_button.dart';
@@ -38,11 +40,14 @@ class Settings extends StatelessWidget {
   }
 
   Widget buildMobileLayout(BuildContext context) {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         BackButtonWidget(),
+        ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 20.0, left: 30),
           child: const SubText(
@@ -157,6 +162,8 @@ class Settings extends StatelessWidget {
   }
 
   Widget buildTabletLayout(BuildContext context) {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(50.0),
       child: Column(
@@ -164,6 +171,7 @@ class Settings extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           BackButtonWidget(),
+          ConnectionIndicator(isConnected: connection.isConnected),
           const SubText(
             subTextContent: 'LG Settings',
             fontSize: 35,

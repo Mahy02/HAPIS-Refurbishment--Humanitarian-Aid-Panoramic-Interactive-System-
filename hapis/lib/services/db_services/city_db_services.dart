@@ -154,18 +154,18 @@ class cityDBServices {
     String sqlStatement = '''
     SELECT COUNT(*) AS successful_donation_count
     FROM (
-      SELECT Matchings.Donation_Status
+      SELECT Matchings.Rec1_Donation_Status
       FROM Matchings
       JOIN Forms ON Matchings.Seeker_FormID = Forms.FormID 
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Users.City = '$cityName' AND Matchings.Donation_Status = 'Finished' 
+      WHERE Users.City = '$cityName' AND Matchings.Rec2_Donation_Status = 'Finished' AND Matchings.Rec1_Donation_Status = 'Finished' 
       
       UNION ALL
       
-      SELECT Requests.Donation_Status
+      SELECT Requests.Rec1_Donation_Status
       FROM Requests
       JOIN Users ON Requests.Rec_ID = Users.UserID
-      WHERE Users.City = '$cityName' AND Requests.Donation_Status = 'Finished'
+      WHERE Users.City = '$cityName' AND Requests.Rec1_Donation_Status = 'Finished' AND Requests.Rec2_Donation_Status = 'Finished'
     ) AS donation_data;
   ''';
 
@@ -180,18 +180,18 @@ class cityDBServices {
     String sqlStatement = '''
     SELECT COUNT(*) AS Inprogress_donation_count
     FROM (
-      SELECT Matchings.Donation_Status
+      SELECT Matchings.Rec1_Donation_Status
       FROM Matchings
       JOIN Forms ON Matchings.Seeker_FormID = Forms.FormID 
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Users.City = '$cityName' AND Matchings.Donation_Status = 'In progress' 
+      WHERE Users.City = '$cityName' AND Matchings.Rec1_Donation_Status = 'In progress' AND Matchings.Rec2_Donation_Status = 'In progress' 
       
       UNION ALL
       
-      SELECT Requests.Donation_Status
+      SELECT Requests.Rec1_Donation_Status
       FROM Requests
       JOIN Users ON Requests.Rec_ID = Users.UserID
-      WHERE Users.City = '$cityName' AND Requests.Donation_Status = 'In progress'
+      WHERE Users.City = '$cityName' AND Requests.Rec1_Donation_Status = 'In progress' AND Requests.Rec2_Donation_Status = 'In progress'
     ) AS donation_data;
   ''';
 

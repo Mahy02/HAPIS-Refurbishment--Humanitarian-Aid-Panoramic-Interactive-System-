@@ -15,6 +15,7 @@ import 'package:hapis/screens/splash_screen.dart';
 import 'package:hapis/services/liquid_galaxy/LG_functionalities.dart';
 import 'package:provider/provider.dart';
 import 'constants.dart';
+import 'helpers/lg_connection_shared_preferences.dart';
 import 'helpers/login_session_shared_preferences.dart';
 import 'helpers/sql_db.dart';
 import 'models/liquid_galaxy/ssh_model.dart';
@@ -34,14 +35,14 @@ void main() async {
 
   /// Import the database tables from CSV files
 
-  // SqlDb sqlDbb = SqlDb();
-  // await sqlDbb.deleteDb();
+  SqlDb sqlDbb = SqlDb();
+  await sqlDbb.deleteDb();
   SqlDb sqlDb = SqlDb();
   await sqlDb.importAllTablesFromCSV();
 
   /// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
   await LoginSessionSharedPreferences.init();
-  // await MatchingsSharedPreferences.init();
+  await LgConnectionSharedPref.init();
 
   runApp(
     MultiProvider(
@@ -64,15 +65,22 @@ void main() async {
     final sshData =
         Provider.of<SSHprovider>(navigatorKey.currentContext!, listen: false);
 
-    final settings = Provider.of<Connectionprovider>(
+    Connectionprovider connection = Provider.of<Connectionprovider>(
         navigatorKey.currentContext!,
         listen: false);
-    sshData.reconnectClient(SSHModel(
-      username: settings.connectionFormData.username,
-      host: settings.connectionFormData.ip,
-      passwordOrKey: settings.connectionFormData.password,
-      port: settings.connectionFormData.port,
-    ));
+
+    String? result = await sshData.reconnectClient(
+        SSHModel(
+          username: LgConnectionSharedPref.getUserName() ?? '',
+          host: LgConnectionSharedPref.getIP() ?? '',
+          passwordOrKey: LgConnectionSharedPref.getPassword() ?? '',
+          port: int.parse(LgConnectionSharedPref.getPort() ?? '22'),
+        ),
+        navigatorKey.currentContext!);
+    print(' res: $result');
+    if (result == 'fail' || result != '') {
+      connection.isConnected = false;
+    }
   });
 }
 

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
+import 'package:hapis/reusable_widgets/liquid_galaxy/connection_indicator.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import 'package:hapis/utils/drawer.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart';
+import '../../providers/liquid_galaxy/connection_provider.dart';
 import '../../responsive/responsive_layout.dart';
 import '../../reusable_widgets/back_button.dart';
 import '../../reusable_widgets/liquid_galaxy/cityComponent.dart';
@@ -90,9 +93,12 @@ class _CitiesPageState extends State<CitiesPage> {
   }
 
   Widget buildMobileLayout() {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
         BackButtonWidget(),
+        ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
@@ -168,9 +174,12 @@ class _CitiesPageState extends State<CitiesPage> {
   }
 
   Widget buildTabletLayout() {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
         BackButtonWidget(),
+        ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
@@ -216,9 +225,10 @@ class _CitiesPageState extends State<CitiesPage> {
                     itemCount: filteredCitiesList.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, // Display two items per row
-                      crossAxisSpacing: 100.0,
-                      mainAxisSpacing: 100.0,
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 20.0,
+                      mainAxisSpacing: 20.0,
+                      childAspectRatio: 1.2,
                     ),
                     itemBuilder: (context, index) {
                       final String city = filteredCitiesList[index]['city']!;
@@ -233,9 +243,9 @@ class _CitiesPageState extends State<CitiesPage> {
                         city: city,
                         country: country,
                         buttonColor: buttonColor,
-                        imageHeight: MediaQuery.of(context).size.height * 0.2,
-                        imageWidth: MediaQuery.of(context).size.height * 0.4,
-                        fontSize: 35,
+                        imageHeight: MediaQuery.of(context).size.height * 0.1,
+                        imageWidth: MediaQuery.of(context).size.width * 0.2,
+                        fontSize: 30,
                       );
                     },
                   ),

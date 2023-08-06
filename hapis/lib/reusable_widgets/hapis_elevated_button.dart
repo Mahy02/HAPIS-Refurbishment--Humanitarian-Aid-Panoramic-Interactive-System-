@@ -77,13 +77,16 @@ class HapisElevatedButton extends StatelessWidget {
                         ),
                   const SizedBox(height: 20),
                   Center(
-                    child: Text(
-                      elevatedButtonContent,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: fontSize,
-                        fontFamily: GoogleFonts.montserrat().fontFamily,
-                        fontWeight: FontWeight.bold,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        elevatedButtonContent,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: fontSize,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

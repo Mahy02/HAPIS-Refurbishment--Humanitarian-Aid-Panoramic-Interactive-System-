@@ -40,13 +40,13 @@ class globalDBServices {
     FROM (
       SELECT *
       FROM Matchings
-      WHERE Matchings.Donation_Status = 'Finished' 
+      WHERE Matchings.Rec1_Donation_Status = 'Finished'  AND Matchings.Rec2_Donation_Status = 'Finished'
       
       UNION ALL
       
       SELECT *
       FROM Requests
-      WHERE Requests.Donation_Status = 'Finished'
+      WHERE Requests.Rec1_Donation_Status = 'Finished' AND Requests.Rec2_Donation_Status = 'Finished'
     ) AS donation_data;
   ''';
 
@@ -63,13 +63,13 @@ class globalDBServices {
     FROM (
       SELECT *
       FROM Matchings
-      WHERE Matchings.Donation_Status = 'In progress' 
+      WHERE Matchings.Rec1_Donation_Status = 'In progress'  AND Matchings.Rec2_Donation_Status = 'In progress' 
       
       UNION ALL
       
       SELECT *
       FROM Requests
-      WHERE Requests.Donation_Status = 'In progress'
+      WHERE Requests.Rec1_Donation_Status = 'In progress' AND Requests.Rec2_Donation_Status = 'In progress'
     ) AS donation_data;
   ''';
 

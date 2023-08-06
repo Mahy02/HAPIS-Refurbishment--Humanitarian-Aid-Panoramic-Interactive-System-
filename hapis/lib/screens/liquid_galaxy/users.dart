@@ -10,10 +10,12 @@ import '../../models/liquid_galaxy/balloon_models/users_model.dart';
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
+import '../../providers/liquid_galaxy/connection_provider.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../providers/liquid_galaxy/users_provider.dart';
 import '../../reusable_widgets/app_bar.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
+import '../../reusable_widgets/liquid_galaxy/connection_indicator.dart';
 import '../../reusable_widgets/sub_text.dart';
 import '../../services/liquid_galaxy/LG_placemarks_services/city_balloon_service.dart';
 import '../../services/liquid_galaxy/LG_placemarks_services/users_pins_services.dart';
@@ -175,20 +177,26 @@ class _UsersState extends State<Users> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const HAPISAppBar(appBarText: '', isLg: true,),
+        appBar: const HAPISAppBar(
+          appBarText: '',
+          isLg: true,
+        ),
         drawer: ResponsiveLayout(
-          mobileBody: buildDrawer(context, true, 18, 16),
-          tabletBody: buildDrawer(context, true, 24, 20)),
+            mobileBody: buildDrawer(context, true, 18, 16),
+            tabletBody: buildDrawer(context, true, 24, 20)),
         backgroundColor: Colors.white,
         body: ResponsiveLayout(
             mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout()));
   }
 
   Widget buildMobileLayout() {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return SingleChildScrollView(
       child: Column(
         children: [
           BackButtonWidget(),
+          ConnectionIndicator(isConnected: connection.isConnected),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -303,10 +311,13 @@ class _UsersState extends State<Users> {
   }
 
   Widget buildTabletLayout() {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return SingleChildScrollView(
       child: Column(
         children: [
           BackButtonWidget(),
+          ConnectionIndicator(isConnected: connection.isConnected),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(

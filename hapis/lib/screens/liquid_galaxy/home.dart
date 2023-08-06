@@ -11,10 +11,12 @@ import '../../models/liquid_galaxy/balloon_models/global_stats_model.dart';
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
 import '../../models/liquid_galaxy/kml/look_at_model.dart';
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
+import '../../providers/liquid_galaxy/connection_provider.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
 import '../../responsive/responsive_layout.dart';
 import '../../reusable_widgets/back_button.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
+import '../../reusable_widgets/liquid_galaxy/connection_indicator.dart';
 import '../../reusable_widgets/sub_text.dart';
 import '../../services/db_services/global_db_services.dart';
 import '../../services/liquid_galaxy/LG_placemarks_services/global_balloon_service.dart';
@@ -125,10 +127,15 @@ class _LgHomePageState extends State<LgHomePage> {
   }
 
   Widget buildMobileLayout(BuildContext context) {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return SingleChildScrollView(
       child: Column(
         children: [
           BackButtonWidget(),
+           ConnectionIndicator(
+            isConnected: connection.isConnected,
+          ),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -268,14 +275,19 @@ class _LgHomePageState extends State<LgHomePage> {
   }
 
   Widget buildTabletLayout(BuildContext context) {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return SingleChildScrollView(
       child: Column(
         children: [
           BackButtonWidget(),
+          ConnectionIndicator(
+            isConnected: connection.isConnected,
+          ),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(top: 10.0, left: 80, right: 80),
+                padding: const EdgeInsets.only(top: 30.0, left: 80, right: 80),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

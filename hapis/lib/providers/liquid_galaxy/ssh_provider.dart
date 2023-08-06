@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dartssh2/dartssh2.dart';
+import '../../helpers/lg_connection_shared_preferences.dart';
 import '../../models/liquid_galaxy/ssh_model.dart';
 import 'connection_provider.dart';
 
@@ -18,23 +19,24 @@ import 'connection_provider.dart';
 /// [reconnectClient] for connecting the client again in case the connection is lost while app is running
 
 class SSHprovider extends ChangeNotifier {
-  String? _host;
+  String? _host = LgConnectionSharedPref.getIP();
 
   /// Property that defines the SSH port. Default is 22
-  int? _port;
+  int? _port = int.parse(LgConnectionSharedPref.getPort() ?? '22');
 
   /// Property that defines the SSH machine username.
-  String? _username;
+  String? _username = LgConnectionSharedPref.getUserName();
 
   /// Property that defines the SSH machine password or RSA private key.
-  String? _passwordOrKey;
+  String? _passwordOrKey = LgConnectionSharedPref.getPassword();
 
-  int? _numberOfScreens;
+  int? _numberOfScreens = LgConnectionSharedPref.getScreenAmount();
 
   SSHClient? _client;
 
   /// reconnects with the client again every 30 seconds while the app is running with given `ssh` info
-  reconnectClient(SSHModel ssh) async {
+  Future<String?> reconnectClient(SSHModel ssh, BuildContext context) async {
+    String? result = '';
     try {
       final socket = await SSHSocket.connect(ssh.host, ssh.port,
           timeout: const Duration(seconds: 36000000));
@@ -52,8 +54,19 @@ class SSHprovider extends ChangeNotifier {
 
       // Perform other operations on the connected socket
     } catch (e) {
-      print('Failed to connect to the SSH server: $e');
+      result = 'fail';
+      print(result);
+      print('Failed to connect to the SSH server----: $e');
     }
+    print('hereeeeeeeeeeeeee');
+    print(result);
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
+    connection.isConnected = false;
+
+    print(connection.isConnected);
+
+    return result;
   }
 
   /// Sets a client with the given [ssh] info.
@@ -146,18 +159,28 @@ class SSHprovider extends ChangeNotifier {
   }
 
   Future<String?> init(BuildContext context) async {
-    final settings = Provider.of<Connectionprovider>(context, listen: false);
+    // final settings = Provider.of<Connectionprovider>(context, listen: false);
     String? result = await setClient(SSHModel(
-      username: settings.connectionFormData.username,
-      host: settings.connectionFormData.ip,
-      passwordOrKey: settings.connectionFormData.password,
-      port: settings.connectionFormData.port,
+      // username: settings.connectionFormData.username,
+      // host: settings.connectionFormData.ip,
+      // passwordOrKey: settings.connectionFormData.password,
+      // port: settings.connectionFormData.port,
+      username: LgConnectionSharedPref.getUserName() ?? '',
+      host: LgConnectionSharedPref.getIP() ?? '',
+      passwordOrKey: LgConnectionSharedPref.getPassword() ?? '',
+      port: int.parse(LgConnectionSharedPref.getPort() ?? '22'),
     ));
-    _username = settings.connectionFormData.username;
-    _host = settings.connectionFormData.ip;
-    _passwordOrKey = settings.connectionFormData.password;
-    _port = settings.connectionFormData.port;
-    _numberOfScreens = settings.connectionFormData.screenAmount;
+    _username = LgConnectionSharedPref.getUserName() ?? '';
+    _host = LgConnectionSharedPref.getIP() ?? '';
+    _passwordOrKey = LgConnectionSharedPref.getPassword() ?? '';
+    _port = int.parse(LgConnectionSharedPref.getPort() ?? '22');
+    _numberOfScreens = LgConnectionSharedPref.getScreenAmount();
+
+    // _username = settings.connectionFormData.username;
+    // _host = settings.connectionFormData.ip;
+    // _passwordOrKey = settings.connectionFormData.password;
+    // _port = settings.connectionFormData.port;
+    // _numberOfScreens = settings.connectionFormData.screenAmount;
 
     notifyListeners();
     return result;

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/utils/drawer.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../models/liquid_galaxy/balloon_models/users_model.dart';
+import '../../providers/liquid_galaxy/connection_provider.dart';
 import '../../reusable_widgets/back_button.dart';
+import '../../reusable_widgets/liquid_galaxy/connection_indicator.dart';
 import '../../reusable_widgets/liquid_galaxy/user_component.dart';
 import '../../reusable_widgets/no_component.dart';
 import '../../reusable_widgets/sub_text.dart';
@@ -78,9 +81,12 @@ class _GiversState extends State<Givers> {
   }
 
   Widget buildMobileLayout() {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
         BackButtonWidget(),
+        ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
@@ -155,9 +161,12 @@ class _GiversState extends State<Givers> {
   }
 
   Widget buildTabletLayout() {
+    Connectionprovider connection =
+        Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
         BackButtonWidget(),
+        ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
           child: TextField(
