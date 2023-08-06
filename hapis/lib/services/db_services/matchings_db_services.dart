@@ -160,7 +160,7 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     }
     int queryResult;
     try {
-       queryResult = await db.updateData(sqlStatement);
+      queryResult = await db.updateData(sqlStatement);
     } catch (e) {
       print('Error : $e');
       String error = e.toString();
@@ -205,11 +205,31 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
 
   Future<List<int?>> checkMatching(
       String type, String item, String cat, String dates, String city) async {
+    print(dates);
+    //for MY SQL:
+
+    // String sqlStatement = '''
+    // SELECT FormID
+    // FROM Forms
+    // INNER JOIN Users ON Forms.UserID = Users.UserID
+    // WHERE Forms.Type = '$type' AND Forms.Item = '$item' AND Forms.Category = '$cat' AND (Forms.Dates_available LIKE '%$dates%' OR FIND_IN_SET(Forms.Dates_available, '$dates') > 0) AND Forms.Status = 'Not Completed' AND Users.City = '$city'
+    // ''';
+    //for sqllitee:
+    final individualDates = dates.split(',');
+    final dateConditions = individualDates.map((date) {
+      return "Forms.Dates_available LIKE '%$date%'";
+    }).join(" OR ");
+
     String sqlStatement = '''
     SELECT FormID
     FROM Forms
     INNER JOIN Users ON Forms.UserID = Users.UserID
-    WHERE Forms.Type = '$type' AND Forms.Item = '$item' AND Forms.Category = '$cat' AND Forms.Dates_available LIKE '%$dates%' AND Forms.Status = 'Not Completed' AND Users.City = '$city' 
+    WHERE Forms.Type = '$type'
+      AND Forms.Item = '$item'
+      AND Forms.Category = '$cat'
+      AND ( $dateConditions )
+      AND Forms.Status = 'Not Completed'
+      AND Users.City = '$city'
     ''';
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
 

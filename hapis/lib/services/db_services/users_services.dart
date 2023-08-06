@@ -144,7 +144,7 @@ class UserServices {
       String sqlStatementsR = '''
     SELECT COUNT(*) as countR 
     FROM Requests 
-    WHERE Rec1_Donation_Status != 'Not Started'AND Rec2_Donation_Status != 'Not Started' AND Rec_FormID = $formId
+    WHERE Rec1_Donation_Status != 'Not Started' AND Rec2_Donation_Status != 'Not Started' AND Rec_FormID = $formId
   ''';
       final resultR = await db.readData(sqlStatementsR);
       int requestsCount = resultR[0]['countR'];
@@ -157,7 +157,7 @@ class UserServices {
 
       final resultM = await db.readData(sqlStatementsM);
       int matchingsCount = resultM[0]['countM'];
-
+      print(requestsCount > 0 || matchingsCount > 0);
       return requestsCount > 0 || matchingsCount > 0;
     } catch (e) {
       print('Error in isFormInProgress: $e');

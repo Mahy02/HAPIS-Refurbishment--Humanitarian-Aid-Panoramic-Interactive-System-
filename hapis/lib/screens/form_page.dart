@@ -51,9 +51,16 @@ class _CreateFormState extends State<CreateForm> {
     super.initState();
     if (widget.type != null) {
       if (widget.type == 'seeker') {
-        _selectedDatesSeeker = widget.selectedDates;
+        for (int i = 0; i < widget.selectedDates.length; i++) {
+          _selectedDatesSeeker.add(widget.selectedDates[i]);
+        }
+        //  _selectedDatesSeeker = widget.selectedDates;
       } else if (widget.type == 'giver') {
-        _selectedDatesGiver = widget.selectedDates;
+        for (int i = 0; i < widget.selectedDates.length; i++) {
+          print(widget.selectedDates[i].dateControllerStart.text);
+          _selectedDatesGiver.add(widget.selectedDates[i]);
+        }
+        //  _selectedDatesGiver = widget.selectedDates;
       }
     }
   }
@@ -61,12 +68,9 @@ class _CreateFormState extends State<CreateForm> {
   @override
   Widget build(BuildContext context) {
     String id;
-    // final user = GoogleSignInApi().getCurrentUser();
-    // if (user != null) {
-    //   id = user.id;
-    // } else {
+
     id = LoginSessionSharedPreferences.getUserID() ?? '0';
-//}
+
     return Scaffold(
       appBar: const HAPISAppBar(isLg: false, appBarText: ''),
       drawer: ResponsiveLayout(
@@ -77,7 +81,6 @@ class _CreateFormState extends State<CreateForm> {
             (BuildContext context, donorModel, seekerModel, Widget? child) {
           int typeIndexDonor = typeList.indexOf(donorModel.typeD);
           int categoryIndexDonor = categoryList.indexOf(donorModel.categoryD);
-          //int forWhoIndexDonor = forWhoList.indexOf(donorModel.forWho);
 
           int typeIndexSeeker = typeList.indexOf(seekerModel.typeS);
           int categoryIndexSeeker = categoryList.indexOf(seekerModel.categoryS);
@@ -429,6 +432,7 @@ class _CreateFormState extends State<CreateForm> {
                             itemCount: _selectedDatesGiver.length,
                             itemBuilder: (context, index) {
                               final dateModel = _selectedDatesGiver[index];
+
                               return Row(
                                 children: [
                                   Expanded(
@@ -1054,7 +1058,7 @@ class _CreateFormState extends State<CreateForm> {
                                 key: const ValueKey("item"),
                                 textController: donorModel.formItemControllerD,
                                 hint: 'Enter the item you prefer',
-                                maxLength: 50,
+                                maxLength: 20,
                                 isHidden: false,
                                 isSuffixRequired: true,
                                 label: 'Item ',
@@ -1080,7 +1084,7 @@ class _CreateFormState extends State<CreateForm> {
                                 key: const ValueKey("item"),
                                 textController: seekerModel.formItemControllerS,
                                 hint: 'Enter the item you prefer',
-                                maxLength: 50,
+                                maxLength: 20,
                                 isHidden: false,
                                 isSuffixRequired: true,
                                 label: 'Item ',

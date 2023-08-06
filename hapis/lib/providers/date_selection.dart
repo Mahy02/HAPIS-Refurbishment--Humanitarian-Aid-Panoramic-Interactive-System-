@@ -102,4 +102,11 @@ class DateSelectionModel extends ChangeNotifier {
       },
     );
   }
+
+  // Function to clear the data stored in the provider
+  void clearData() {
+    _dateControllerStart.text = '';
+    _timeControllerStart.text = '';
+    notifyListeners();
+  }
 }

@@ -84,8 +84,8 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                   } else {
                     FormProvider formProvider =
                         Provider.of<FormProvider>(context, listen: false);
-                    DateSelectionModel datesProvider =
-                        Provider.of<DateSelectionModel>(context, listen: false);
+                    // DateSelectionModel datesProvider =
+                    //     Provider.of<DateSelectionModel>(context, listen: false);
 
                     String dates = widget.form.multiDates!;
                     List<String> dateList = dates
@@ -104,8 +104,15 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
 
                     List<DateSelectionModel> _selectedDates = [];
                     for (int i = 0; i < dateList.length; i++) {
+                      DateSelectionModel datesProvider = DateSelectionModel();
+                      datesProvider.clearData();
                       datesProvider.dateStart = dateList[i];
                       datesProvider.timeStart = timeList[i];
+                      print('-------');
+                      print(dateList[i]);
+                      print(timeList[i]);
+
+                      print(datesProvider.dateControllerStart.text);
                       _selectedDates.add(datesProvider);
                     }
                     print(_selectedDates);
