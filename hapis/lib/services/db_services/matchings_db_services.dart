@@ -75,28 +75,36 @@ JOIN Users U1 ON F1.UserID = U1.UserID
 JOIN Users U2 ON F2.UserID = U2.UserID
 WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not Started'
 ''';
+    List<MatchingsModel> matchings;
 
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    print(queryResult);
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+      print(queryResult);
 
-    List<MatchingsModel> matchings = queryResult
-        .map((matchingMap) => MatchingsModel(
-            matchingID: matchingMap['M_ID'],
-            formID: matchingMap['FormID'],
-            userID: matchingMap['UserID'],
-            type: matchingMap['Type'],
-            firstName: matchingMap['FirstName'],
-            lastName: matchingMap['LastName'],
-            city: matchingMap['City'],
-            addressLocation: matchingMap['AddressLocation'],
-            phoneNum: matchingMap['PhoneNum'],
-            email: matchingMap['Email'],
-            item: matchingMap['Item'],
-            category: matchingMap['Category'],
-            datesAvailable: matchingMap['Dates_available'],
-            seekerStatus: matchingMap['Rec1_Status'],
-            giverStatus: matchingMap['Rec2_status']))
-        .toList();
+      matchings = queryResult
+          .map((matchingMap) => MatchingsModel(
+              matchingID: matchingMap['M_ID'],
+              formID: matchingMap['FormID'],
+              userID: matchingMap['UserID'],
+              type: matchingMap['Type'],
+              firstName: matchingMap['FirstName'],
+              lastName: matchingMap['LastName'],
+              city: matchingMap['City'],
+              addressLocation: matchingMap['AddressLocation'],
+              phoneNum: matchingMap['PhoneNum'],
+              email: matchingMap['Email'],
+              item: matchingMap['Item'],
+              category: matchingMap['Category'],
+              datesAvailable: matchingMap['Dates_available'],
+              seekerStatus: matchingMap['Rec1_Status'],
+              giverStatus: matchingMap['Rec2_status']))
+          .toList();
+    } catch (e) {
+      print('Error creating request: $e');
+      String error = e.toString();
+
+      return [];
+    }
 
     return matchings;
   }
@@ -114,7 +122,7 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
                           THEN 
                             'In progress'  
                           ELSE 
-                            Donation_Status 
+                            Rec1_Donation_Status 
                           END,
             Rec2_Donation_Status = 
                           CASE 
@@ -122,7 +130,7 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
                           THEN 
                             'In progress'  
                           ELSE 
-                            Donation_Status 
+                            Rec2_Donation_Status 
                           END
         WHERE M_ID = $id
       ''';
@@ -136,7 +144,7 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
                           THEN 
                             'In progress'  
                           ELSE 
-                            Donation_Status 
+                            Rec1_Donation_Status  
                           END,
         Rec2_Donation_Status = 
                           CASE 
@@ -144,13 +152,21 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
                           THEN 
                             'In progress'  
                           ELSE 
-                            Donation_Status 
+                            Rec2_Donation_Status 
                           END
            
         WHERE M_ID = $id
       ''';
     }
-    int queryResult = await db.updateData(sqlStatement);
+    int queryResult;
+    try {
+       queryResult = await db.updateData(sqlStatement);
+    } catch (e) {
+      print('Error : $e');
+      String error = e.toString();
+
+      return -1;
+    }
     return queryResult;
   }
 
@@ -159,7 +175,15 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     DELETE FROM Matchings
     WHERE  M_ID= $id
     ''';
-    int queryResult = await db.deleteData(sqlStatement);
+    int queryResult;
+    try {
+      queryResult = await db.deleteData(sqlStatement);
+    } catch (e) {
+      print('Error : $e');
+      String error = e.toString();
+
+      return -1;
+    }
     return queryResult;
   }
 
@@ -188,11 +212,11 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     WHERE Forms.Type = '$type' AND Forms.Item = '$item' AND Forms.Category = '$cat' AND Forms.Dates_available LIKE '%$dates%' AND Forms.Status = 'Not Completed' AND Users.City = '$city' 
     ''';
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    print(queryResult);
+
     // If a matching form exists, return its Form_ID
     List<int?> matching =
         queryResult.map<int?>((row) => row['FormID']).toList();
-    print(matching);
+
     return matching;
   }
 
@@ -201,6 +225,7 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     INSERT INTO Matchings (Seeker_FormID,	Giver_FormID,	Rec1_Status ,	Rec2_status, 	Rec1_Donation_Status, Rec2_Donation_Status)
         VALUES ($seekerFormID, $giverFormID, 'Pending', 'Pending', 'Not Started', 'Not Started')
     ''';
+
     int rowID = await db.insertData(sqlStatment);
 
     return rowID;

@@ -144,7 +144,7 @@ class UserServices {
       String sqlStatementsR = '''
     SELECT COUNT(*) as countR 
     FROM Requests 
-    WHERE Donation_Status = 'In progress' AND Rec_FormID = $formId
+    WHERE Rec1_Donation_Status != 'Not Started'AND Rec2_Donation_Status != 'Not Started' AND Rec_FormID = $formId
   ''';
       final resultR = await db.readData(sqlStatementsR);
       int requestsCount = resultR[0]['countR'];
@@ -152,7 +152,7 @@ class UserServices {
       String sqlStatementsM = '''
      SELECT COUNT(*) as countM 
      FROM Matchings 
-     WHERE Donation_Status = 'In progress' AND (Seeker_FormID = $formId OR Giver_FormID = $formId)
+     WHERE Rec1_Donation_Status != 'Not Started' AND Rec2_Donation_Status != 'Not Started' AND (Seeker_FormID = $formId OR Giver_FormID = $formId)
   ''';
 
       final resultM = await db.readData(sqlStatementsM);

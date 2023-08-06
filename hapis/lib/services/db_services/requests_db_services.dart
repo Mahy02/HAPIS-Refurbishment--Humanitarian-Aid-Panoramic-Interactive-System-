@@ -137,11 +137,11 @@ class RequestsServices {
     }
   }
 
-  Future<bool> checkFriendshipRequest(String senderId, String recId) async {
+  Future<bool> checkFriendshipRequest(String senderId, String recId, int recFormID) async {
     String sqlStatement = '''
     SELECT 1
     FROM Requests
-    WHERE Sender_ID = '$senderId' AND Rec_ID = '$recId'
+    WHERE Sender_ID = '$senderId' AND Rec_ID = '$recId' AND  (Rec1_Donation_Status != 'Cancelled' AND Rec2_Donation_Status != 'Cancelled') AND Rec_FormID =$recFormID
   ''';
     List<Map<String, dynamic>> results = await db.readData(sqlStatement);
 

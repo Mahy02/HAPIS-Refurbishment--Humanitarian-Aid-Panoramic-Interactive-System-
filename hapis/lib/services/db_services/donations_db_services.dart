@@ -17,8 +17,15 @@ class DonationsServices {
     M_ID AS MID,
     NULL AS ReqID,
 
-    Rec1_Donation_Status,
-    Rec2_Donation_Status,
+    CASE
+        WHEN F1.UserID = '$id' THEN Rec2_Donation_Status
+        ELSE Rec1_Donation_Status
+    END AS Other_Donation_Status,
+
+     CASE
+        WHEN F1.UserID = '$id' THEN Rec1_Donation_Status
+        ELSE Rec2_Donation_Status
+    END AS Current_Donation_Status,
 
     CASE
         WHEN F1.UserID = '$id' THEN 'seeker'
@@ -41,7 +48,8 @@ class DonationsServices {
     JOIN Forms F2 ON M.Giver_FormID = F2.FormID
     JOIN Users U1 ON F1.UserID = U1.UserID
     JOIN Users U2 ON F2.UserID = U2.UserID
-    WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND (M.Rec1_Donation_Status= 'In progress' OR M.Rec2_Donation_Status= 'In progress')
+    WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND ((M.Rec1_Donation_Status= 'In progress' OR M.Rec2_Donation_Status= 'In progress') OR (M.Rec1_Donation_Status= 'Finished' AND M.Rec2_Donation_Status= 'Cancelled') OR (M.Rec2_Donation_Status= 'Finished' AND M.Rec1_Donation_Status= 'Cancelled'))
+        
 
     UNION ALL
 
@@ -49,8 +57,15 @@ class DonationsServices {
       NULL AS MID,
       R_ID AS ReqID,
 
-    Rec1_Donation_Status,
-    Rec2_Donation_Status,
+    CASE
+        WHEN R.Sender_ID  = '$id' THEN Rec2_Donation_Status
+        ELSE Rec1_Donation_Status
+    END AS Other_Donation_Status,
+
+     CASE
+        WHEN R.Sender_ID = '$id' THEN Rec1_Donation_Status
+        ELSE Rec2_Donation_Status
+    END AS Current_Donation_Status,
 
 
      CASE 
@@ -71,7 +86,7 @@ class DonationsServices {
     FROM Requests R
     JOIN Users U1 ON R.Rec_ID = U1.UserID
     JOIN Users U2 ON R.Sender_ID = U2.UserID
-    WHERE (R.Rec1_Donation_Status = 'In progress' OR R.Rec2_Donation_Status = 'In progress') AND (R.Sender_ID = '$id' OR R.Rec_ID = '$id');
+    WHERE ((R.Rec1_Donation_Status = 'In progress' OR R.Rec2_Donation_Status = 'In progress') OR (R.Rec1_Donation_Status = 'Finished' AND R.Rec2_Donation_Status = 'Cancelled') OR (R.Rec2_Donation_Status = 'Finished' AND R.Rec1_Donation_Status = 'Cancelled') ) AND (R.Sender_ID = '$id' OR R.Rec_ID = '$id');
     ''';
     List<InProgressDonationModel> donations;
     try {
@@ -84,9 +99,8 @@ class DonationsServices {
               firstName: result['FirstName'],
               lastName: result['LastName'],
               type: result['Type'],
-              rec1DonationStatus: result['Rec1_Donation_Status'],
-              rec2DonationStatus: result['Rec2_Donation_Status']
-              ))
+              currentDonationStatus: result['Current_Donation_Status'],
+              otherDonationStatus: result['Other_Donation_Status']))
           .toList();
     } catch (e) {
       print('An error occurred: $e');
@@ -97,216 +111,190 @@ class DonationsServices {
     return donations;
   }
 
-  // Future<int> updateDonation(int rid, int mid, String type) async {
-  //   int queryResultRequest = 0;
-  //   int queryResultMatching = 0;
+  Future<Map<String, dynamic>> finishDonation(
+      int rid, int mid, String type) async {
+    int queryResultRequest = 0;
+    int queryResultMatching = 0;
+    bool areBothFinished = false;
 
-  //   if (rid != 0) {
-  //     if (type == 'sender') {
-  //       String sqlStatementRequest = '''
-  //       UPDATE Requests
-  //       SET Rec1_Donation_Status = 'Finished'
-  //       WHERE R_ID = $rid
-  //     ''';
-  //       try {
-  //         queryResultRequest = await db.updateData(sqlStatementRequest);
-  //       } catch (e) {
-  //         print('Error updating : $e');
-
-  //         return -1;
-  //       }
-  //     } else if (type == 'rec') {
-  //       String sqlStatementRequest = '''
-  //       UPDATE Requests
-  //       SET Rec2_Donation_Status = 'Finished'
-  //       WHERE R_ID = $rid
-  //     ''';
-  //       try {
-  //         queryResultRequest = await db.updateData(sqlStatementRequest);
-  //       } catch (e) {
-  //         print('Error updating : $e');
-
-  //         return -1;
-  //       }
-  //     }
-  //     //now do a select statment to see if both Rec2_Donation_Status and Rec1_Donation_Status are finished or not
-  //   } else //there was no else and no returns here?????????????
-  //   if (mid != 0) {
-  //     if (type == 'seeker') {
-  //       String sqlStatementMatching = '''
-  //       UPDATE Matchings
-  //       SET Rec1_Donation_Status = 'Finished'
-  //       WHERE M_ID = $mid
-  //     ''';
-  //       try {
-  //         queryResultMatching = await db.updateData(sqlStatementMatching);
-  //       } catch (e) {
-  //         print('Error updating : $e');
-
-  //         return -1;
-  //       }
-  //     } else if (type == 'giver') {
-  //       String sqlStatementMatching = '''
-  //       UPDATE Matchings
-  //       SET Rec1_Donation_Status = 'Finished'
-  //       WHERE M_ID = $mid
-  //     ''';
-  //       try {
-  //         queryResultMatching = await db.updateData(sqlStatementMatching);
-  //       } catch (e) {
-  //         print('Error updating : $e');
-
-  //         return -1;
-  //       }
-  //     }
-  //     ////now do a select statment to see if both Rec2_Donation_Status and Rec1_Donation_Status are finished or not
-  //   }
-
-  //   return queryResultMatching + queryResultRequest;
-  // }
-
-  Future<Map<String, dynamic>> updateDonation(int rid, int mid, String type) async {
-  int queryResultRequest = 0;
-  int queryResultMatching = 0;
-  bool areBothFinished = false;
-
-  if (rid != 0) {
-    if (type == 'sender') {
-      String sqlStatementRequest = '''
+    if (rid != 0) {
+      if (type == 'sender') {
+        String sqlStatementRequest = '''
         UPDATE Requests
         SET Rec1_Donation_Status = 'Finished'
         WHERE R_ID = $rid
       ''';
-      try {
-        queryResultRequest = await db.updateData(sqlStatementRequest);
-      } catch (e) {
-        print('Error updating: $e');
-        return {'result': -1, 'areBothFinished': false};
-      }
-    } else if (type == 'rec') {
-      String sqlStatementRequest = '''
+        try {
+          queryResultRequest = await db.updateData(sqlStatementRequest);
+        } catch (e) {
+          print('Error updating: $e');
+          return {'result': -1, 'areBothFinished': false};
+        }
+      } else if (type == 'rec') {
+        String sqlStatementRequest = '''
         UPDATE Requests
         SET Rec2_Donation_Status = 'Finished'
         WHERE R_ID = $rid
       ''';
-      try {
-        queryResultRequest = await db.updateData(sqlStatementRequest);
-      } catch (e) {
-        print('Error updating: $e');
-        return {'result': -1, 'areBothFinished': false};
+        try {
+          queryResultRequest = await db.updateData(sqlStatementRequest);
+        } catch (e) {
+          print('Error updating: $e');
+          return {'result': -1, 'areBothFinished': false};
+        }
       }
-    }
 
-    // Check if both Rec2_Donation_Status and Rec1_Donation_Status are finished
-    String sqlStatementCheck = '''
+      // Check if both Rec2_Donation_Status and Rec1_Donation_Status are finished
+      String sqlStatementCheck = '''
       SELECT Rec1_Donation_Status, Rec2_Donation_Status
       FROM Requests
       WHERE R_ID = $rid
     ''';
-    try {
-      List<Map<String, dynamic>> result = await db.readData(sqlStatementCheck);
-      if (result.isNotEmpty) {
-        String rec1Status = result[0]['Rec1_Donation_Status'];
-        String rec2Status = result[0]['Rec2_Donation_Status'];
-        if (rec1Status == 'Finished' && rec2Status == 'Finished') {
-          areBothFinished = true;
+      try {
+        List<Map<String, dynamic>> result =
+            await db.readData(sqlStatementCheck);
+        if (result.isNotEmpty) {
+          String rec1Status = result[0]['Rec1_Donation_Status'];
+          String rec2Status = result[0]['Rec2_Donation_Status'];
+          if (rec1Status == 'Finished' && rec2Status == 'Finished') {
+            areBothFinished = true;
+          }
+        }
+      } catch (e) {
+        print('Error checking status: $e');
+        return {'result': -1, 'areBothFinished': false};
+      }
+    } else if (mid != 0) {
+      if (type == 'seeker') {
+        String sqlStatementMatching = '''
+        UPDATE Matchings
+        SET Rec1_Donation_Status = 'Finished'
+        WHERE M_ID = $mid
+      ''';
+        try {
+          queryResultMatching = await db.updateData(sqlStatementMatching);
+        } catch (e) {
+          print('Error updating: $e');
+          return {'result': -1, 'areBothFinished': false};
+        }
+      } else if (type == 'giver') {
+        String sqlStatementMatching = '''
+        UPDATE Matchings
+        SET Rec1_Donation_Status = 'Finished'
+        WHERE M_ID = $mid
+      ''';
+        try {
+          queryResultMatching = await db.updateData(sqlStatementMatching);
+        } catch (e) {
+          print('Error updating: $e');
+          return {'result': -1, 'areBothFinished': false};
         }
       }
-    } catch (e) {
-      print('Error checking status: $e');
-      return {'result': -1, 'areBothFinished': false};
-    }
-  } else if (mid != 0) {
-    if (type == 'seeker') {
-      String sqlStatementMatching = '''
-        UPDATE Matchings
-        SET Rec1_Donation_Status = 'Finished'
-        WHERE M_ID = $mid
-      ''';
-      try {
-        queryResultMatching = await db.updateData(sqlStatementMatching);
-      } catch (e) {
-        print('Error updating: $e');
-        return {'result': -1, 'areBothFinished': false};
-      }
-    } else if (type == 'giver') {
-      String sqlStatementMatching = '''
-        UPDATE Matchings
-        SET Rec1_Donation_Status = 'Finished'
-        WHERE M_ID = $mid
-      ''';
-      try {
-        queryResultMatching = await db.updateData(sqlStatementMatching);
-      } catch (e) {
-        print('Error updating: $e');
-        return {'result': -1, 'areBothFinished': false};
-      }
-    }
 
-    // Check if both Rec2_Donation_Status and Rec1_Donation_Status are finished
-    String sqlStatementCheck = '''
+      // Check if both Rec2_Donation_Status and Rec1_Donation_Status are finished
+      String sqlStatementCheck = '''
       SELECT Rec1_Donation_Status, Rec2_Donation_Status
       FROM Matchings
       WHERE M_ID = $mid
     ''';
-    try {
-      List<Map<String, dynamic>> result = await db.readData(sqlStatementCheck);
-      if (result.isNotEmpty) {
-        String rec1Status = result[0]['Rec1_Donation_Status'];
-        String rec2Status = result[0]['Rec2_Donation_Status'];
-        if (rec1Status == 'Finished' && rec2Status == 'Finished') {
-          areBothFinished = true;
+      try {
+        List<Map<String, dynamic>> result =
+            await db.readData(sqlStatementCheck);
+        if (result.isNotEmpty) {
+          String rec1Status = result[0]['Rec1_Donation_Status'];
+          String rec2Status = result[0]['Rec2_Donation_Status'];
+          if (rec1Status == 'Finished' && rec2Status == 'Finished') {
+            areBothFinished = true;
+          }
         }
+      } catch (e) {
+        print('Error checking status: $e');
+        return {'result': -1, 'areBothFinished': false};
       }
-    } catch (e) {
-      print('Error checking status: $e');
-      return {'result': -1, 'areBothFinished': false};
     }
+
+    return {
+      'result': queryResultMatching + queryResultRequest,
+      'areBothFinished': areBothFinished
+    };
   }
 
-  return {'result': queryResultMatching + queryResultRequest, 'areBothFinished': areBothFinished};
-}
-// Future<bool> checkBothFinished(int rid, int mid) async {
-//   bool areBothFinished = false;
+  Future<int> cancelDonation(int rid, int mid, String type) async {
+    int queryResultRequest = 0;
+    int queryResultMatching = 0;
 
-//   if (rid != 0) {
-//     String sqlStatementCheck = '''
-//       SELECT Rec1_Donation_Status, Rec2_Donation_Status
-//       FROM Requests
-//       WHERE R_ID = $rid
-//     ''';
-//     try {
-//       List<Map<String, dynamic>> result = await db.readData(sqlStatementCheck);
-//       if (result.isNotEmpty) {
-//         String rec1Status = result[0]['Rec1_Donation_Status'];
-//         String rec2Status = result[0]['Rec2_Donation_Status'];
-//         if (rec1Status == 'Finished' && rec2Status == 'Finished') {
-//           areBothFinished = true;
-//         }
-//       }
-//     } catch (e) {
-//       print('Error checking status: $e');
-//     }
-//   } else if (mid != 0) {
-//     String sqlStatementCheck = '''
-//       SELECT Rec1_Donation_Status, Rec2_Donation_Status
-//       FROM Matchings
-//       WHERE M_ID = $mid
-//     ''';
-//     try {
-//       List<Map<String, dynamic>> result = await db.readData(sqlStatementCheck);
-//       if (result.isNotEmpty) {
-//         String rec1Status = result[0]['Rec1_Donation_Status'];
-//         String rec2Status = result[0]['Rec2_Donation_Status'];
-//         if (rec1Status == 'Finished' && rec2Status == 'Finished') {
-//           areBothFinished = true;
-//         }
-//       }
-//     } catch (e) {
-//       print('Error checking status: $e');
-//     }
-//   }
+    print(type);
+    print('hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
 
-//   return areBothFinished;
-// }
+    if (rid != 0) {
+      if (type == 'sender') {
+        String sqlStatementRequest = '''
+        UPDATE Requests
+        SET Rec1_Donation_Status = 'Cancelled'
+        WHERE R_ID = $rid
+      ''';
+        try {
+          queryResultRequest = await db.updateData(sqlStatementRequest);
+          print(queryResultRequest);
+        } catch (e) {
+          print('Error updating: $e');
+          return -1;
+        }
+      } else if (type == 'rec') {
+        String sqlStatementRequest = '''
+        UPDATE Requests
+        SET Rec2_Donation_Status = 'Cancelled'
+        WHERE R_ID = $rid
+      ''';
+        try {
+          queryResultRequest = await db.updateData(sqlStatementRequest);
+          print(queryResultRequest);
+        } catch (e) {
+          print('Error updating: $e');
+          return -1;
+        }
+      }
+    } else if (mid != 0) {
+      if (type == 'seeker') {
+        String sqlStatementMatching = '''
+        UPDATE Matchings
+        SET Rec1_Donation_Status = 'Cancelled'
+        WHERE M_ID = $mid
+      ''';
+        try {
+          queryResultMatching = await db.updateData(sqlStatementMatching);
+        } catch (e) {
+          print('Error updating: $e');
+          return -1;
+        }
+      } else if (type == 'giver') {
+        String sqlStatementMatching = '''
+        UPDATE Matchings
+        SET Rec2_Donation_Status = 'Cancelled'
+        WHERE M_ID = $mid
+      ''';
+        try {
+          queryResultMatching = await db.updateData(sqlStatementMatching);
+        } catch (e) {
+          print('Error updating: $e');
+          return -1;
+        }
+      }
+    }
+    print(queryResultMatching + queryResultRequest);
+
+    return queryResultMatching + queryResultRequest;
+  }
 }
+
+
+/*
+case:
+dlwa2ty user 3ml finish process 
+we user tany 3ml cancel 
+fa dlwa2ty b2a el status kdah => finished cancelled
+e7na b2a fe sf7t el retrieval bngeb el inprogress bs 
+fa lao cancelled w cancelled msh byban
+w lao finished w finish msh byban
+bs 3yzen n handle case lao finished w cancelled teb2a lesa byana l7ad ma te2lb cancelled w cancelled
+*/

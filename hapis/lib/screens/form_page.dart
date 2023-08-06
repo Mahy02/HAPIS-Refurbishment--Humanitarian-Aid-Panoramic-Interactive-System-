@@ -278,7 +278,7 @@ class _CreateFormState extends State<CreateForm> {
                                 key: const ValueKey("itemgiver"),
                                 textController: donorModel.formItemControllerD,
                                 hint: 'Enter the item you prefer',
-                                maxLength: 50,
+                                maxLength: 20,
                                 isHidden: false,
                                 isSuffixRequired: true,
                                 label: 'Item ',
@@ -304,7 +304,7 @@ class _CreateFormState extends State<CreateForm> {
                                 key: const ValueKey("itemseek"),
                                 textController: seekerModel.formItemControllerS,
                                 hint: 'Enter the item you prefer',
-                                maxLength: 50,
+                                maxLength: 20,
                                 isHidden: false,
                                 isSuffixRequired: true,
                                 label: 'Item ',
@@ -587,7 +587,7 @@ class _CreateFormState extends State<CreateForm> {
                     //error creating form
                     showDatabasePopup(context,
                         'There was a problem creating the form. \n \nPlease try again later.');
-                  }  else {
+                  } else {
                     //check match
                     //but first get city of userID
                     String city = await UserServices().getCity(id);

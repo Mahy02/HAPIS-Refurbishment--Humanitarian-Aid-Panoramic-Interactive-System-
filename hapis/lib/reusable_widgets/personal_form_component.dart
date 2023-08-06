@@ -80,7 +80,7 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                   if (await UserServices()
                       .isFormInProgress(widget.form.formID!)) {
                     //no edits
-                    showEditErrorPopUp(context);
+                    showEditErrorPopUp(context, 'editing');
                   } else {
                     FormProvider formProvider =
                         Provider.of<FormProvider>(context, listen: false);
@@ -190,16 +190,22 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
             ),
             GestureDetector(
               onTap: () async {
-                int result =
-                    await UserServices().deleteForm(widget.form.formID!);
-                if (result == 1) {
-                  showDatabasePopup(context, 'Form deleted successfully!',
-                      isError: false);
-                } else if (result == 0) {
-                  showDatabasePopup(context,
-                      'Error deleting form \n\nPlease try again later.');
+                if (await UserServices()
+                    .isFormInProgress(widget.form.formID!)) {
+                  //no edits
+                  showEditErrorPopUp(context, 'deleting');
+                } else {
+                  int result =
+                      await UserServices().deleteForm(widget.form.formID!);
+                  if (result == 1) {
+                    showDatabasePopup(context, 'Form deleted successfully!',
+                        isError: false);
+                  } else if (result == 0) {
+                    showDatabasePopup(context,
+                        'Error deleting form \n\nPlease try again later.');
+                  }
+                  widget.onPressed();
                 }
-                widget.onPressed();
               },
               child: Icon(
                 Icons.delete,

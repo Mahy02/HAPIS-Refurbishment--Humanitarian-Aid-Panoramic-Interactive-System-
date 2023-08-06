@@ -6,13 +6,13 @@ import '../constants.dart';
 ///This is used for displayed a pop up to the user regarding sign up
 ///It returns an [AlertDialog]
 
-Future<dynamic> showEditErrorPopUp(BuildContext context) {
+Future<dynamic> showEditErrorPopUp(BuildContext context, String editOrDelete) {
   return showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text(
-          ' No editing allowed ! ',
+        title:  Text(
+          ' No $editOrDelete allowed ! ',
           style: TextStyle(fontSize: 20, color: HapisColors.lgColor2),
         ),
         content: const Text(

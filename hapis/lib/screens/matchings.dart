@@ -90,7 +90,6 @@ class _MatchingsState extends State<Matchings> {
               : SingleChildScrollView(
                   child: Column(
                     children: [
-                    
                       Container(
                         padding: const EdgeInsets.all(20),
                         child: Text(

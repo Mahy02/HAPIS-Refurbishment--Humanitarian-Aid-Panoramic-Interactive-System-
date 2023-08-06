@@ -65,7 +65,8 @@ class _UserAppComponentState extends State<UserAppComponent> {
       } else {
         id = LoginSessionSharedPreferences.getUserID()!;
       }
-      checkFriendshipRequest(id, widget.user.userID!).then((result) {
+      checkFriendshipRequest(id, widget.user.userID!, widget.user.formID!)
+          .then((result) {
         // Set the state when the Future completes
         setState(() {
           requested = result;
@@ -74,9 +75,10 @@ class _UserAppComponentState extends State<UserAppComponent> {
     }
   }
 
-  Future<bool> checkFriendshipRequest(String userId, String friendId) async {
-    final request =
-        await RequestsServices().checkFriendshipRequest(userId, friendId);
+  Future<bool> checkFriendshipRequest(
+      String userId, String friendId, int formID) async {
+    final request = await RequestsServices()
+        .checkFriendshipRequest(userId, friendId, formID);
     return request;
   }
 
