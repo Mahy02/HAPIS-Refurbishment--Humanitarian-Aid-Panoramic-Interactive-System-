@@ -43,7 +43,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
   Widget buildMobileLayout() {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 80, 20, 0),
+        padding: EdgeInsets.fromLTRB(20, 100, 20, 0),
         child: Column(
           children: <Widget>[
             GestureDetector(
@@ -59,7 +59,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             ),
             Image.asset("assets/images/HAPIS_Logo.png"),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.002,
+              height: MediaQuery.of(context).size.height * 0.1,
             ),
             const Align(
                 alignment: Alignment.centerLeft,
@@ -76,50 +76,50 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                   ),
                 )),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
+              height: MediaQuery.of(context).size.height * 0.05,
             ),
-            TextFormFieldWidget(
-              key: const ValueKey("email"),
-              fillColor: Color.fromARGB(0, 255, 255, 255),
-              textController: _emailController,
-              hint: 'Enter your Email',
-              isHidden: false,
-              isSuffixRequired: true,
-              label: 'Email',
-              fontSize: 16,
-            ),
-            TextFormFieldWidget(
-              fillColor: Color.fromARGB(0, 255, 255, 255),
-              key: const ValueKey("pass"),
-              textController: _passController,
-              hint: 'Enter your password',
-              isHidden: true,
-              isSuffixRequired: true,
-              label: 'Password',
-              fontSize: 16,
-            ),
-            ElevatedButton(
-              onPressed: () => signIn(false),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  )),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                child: Text(
-                  "Sign in",
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-            ),
+            // TextFormFieldWidget(
+            //   key: const ValueKey("email"),
+            //   fillColor: Color.fromARGB(0, 255, 255, 255),
+            //   textController: _emailController,
+            //   hint: 'Enter your Email',
+            //   isHidden: false,
+            //   isSuffixRequired: true,
+            //   label: 'Email',
+            //   fontSize: 16,
+            // ),
+            // TextFormFieldWidget(
+            //   fillColor: Color.fromARGB(0, 255, 255, 255),
+            //   key: const ValueKey("pass"),
+            //   textController: _passController,
+            //   hint: 'Enter your password',
+            //   isHidden: true,
+            //   isSuffixRequired: true,
+            //   label: 'Password',
+            //   fontSize: 16,
+            // ),
+            // ElevatedButton(
+            //   onPressed: () => signIn(false),
+            //   style: ButtonStyle(
+            //       backgroundColor:
+            //           MaterialStateProperty.all<Color>(Colors.white),
+            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //         RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(20.0),
+            //         ),
+            //       )),
+            //   child: const Padding(
+            //     padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            //     child: Text(
+            //       "Sign in",
+            //       style: TextStyle(
+            //         fontSize: 16.0,
+            //         fontWeight: FontWeight.bold,
+            //         color: Colors.black54,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
@@ -157,7 +157,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
+              height: MediaQuery.of(context).size.height * 0.04,
             ),
             RichText(
               text: TextSpan(
@@ -212,7 +212,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             ),
             Image.asset(
               "assets/images/HAPIS_Logo.png",
-              scale: 4,
+              scale: 2.8,
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.001,
@@ -234,48 +234,48 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            TextFormFieldWidget(
-              key: const ValueKey("email"),
-              fillColor: Color.fromARGB(0, 255, 255, 255),
-              textController: _emailController,
-              hint: 'Enter your Email',
-              isHidden: false,
-              isSuffixRequired: true,
-              label: 'Email',
-              fontSize: 20,
-            ),
-            TextFormFieldWidget(
-              fillColor: Color.fromARGB(0, 255, 255, 255),
-              key: const ValueKey("pass"),
-              textController: _passController,
-              hint: 'Enter your password',
-              isHidden: true,
-              isSuffixRequired: true,
-              label: 'Password',
-              fontSize: 20,
-            ),
-            ElevatedButton(
-              onPressed: () => signIn(false),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  )),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                child: Text(
-                  "Sign in",
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-            ),
+            // TextFormFieldWidget(
+            //   key: const ValueKey("email"),
+            //   fillColor: Color.fromARGB(0, 255, 255, 255),
+            //   textController: _emailController,
+            //   hint: 'Enter your Email',
+            //   isHidden: false,
+            //   isSuffixRequired: true,
+            //   label: 'Email',
+            //   fontSize: 20,
+            // ),
+            // TextFormFieldWidget(
+            //   fillColor: Color.fromARGB(0, 255, 255, 255),
+            //   key: const ValueKey("pass"),
+            //   textController: _passController,
+            //   hint: 'Enter your password',
+            //   isHidden: true,
+            //   isSuffixRequired: true,
+            //   label: 'Password',
+            //   fontSize: 20,
+            // ),
+            // ElevatedButton(
+            //   onPressed: () => signIn(false),
+            //   style: ButtonStyle(
+            //       backgroundColor:
+            //           MaterialStateProperty.all<Color>(Colors.white),
+            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //         RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(20.0),
+            //         ),
+            //       )),
+            //   child: const Padding(
+            //     padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+            //     child: Text(
+            //       "Sign in",
+            //       style: TextStyle(
+            //         fontSize: 25.0,
+            //         fontWeight: FontWeight.bold,
+            //         color: Colors.black54,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
@@ -322,7 +322,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                     text: "Don't have an account? ",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 25.0,
+                      fontSize: 28.0,
                     ),
                   ),
                   WidgetSpan(
@@ -334,7 +334,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
                         "Sign Up!",
                         style: TextStyle(
                           color: Colors.blue,
-                          fontSize: 25.0,
+                          fontSize: 28.0,
                           decoration: TextDecoration.underline,
                         ),
                       ),
