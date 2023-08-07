@@ -17,6 +17,7 @@ import '../reusable_widgets/back_button.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/database_popups.dart';
 import '../utils/signup_popup.dart';
+import 'notify_screen.dart';
 
 class AppSettings extends StatelessWidget {
   const AppSettings({Key? key}) : super(key: key);
@@ -110,6 +111,22 @@ class AppSettings extends StatelessWidget {
                   } else {
                     showDialogSignUp(context);
                   }
+                },
+              ),
+              SettingsTile(
+                title: Text(
+                  'Notifications',
+                  style: TextStyle(fontSize: 16),
+                ),
+                leading: Icon(
+                  Icons.notifications,
+                  color: HapisColors.lgColor4,
+                ),
+                onPressed: (BuildContext context) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationPage()));
                 },
               ),
             ],
@@ -283,6 +300,22 @@ class AppSettings extends StatelessWidget {
                       } else {
                         showDialogSignUp(context);
                       }
+                    },
+                  ),
+                  SettingsTile(
+                    title: Text(
+                      'Notifications',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    leading: Icon(
+                      Icons.notifications,
+                      color: HapisColors.lgColor4,
+                    ),
+                    onPressed: (BuildContext context) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationPage()));
                     },
                   ),
                 ],

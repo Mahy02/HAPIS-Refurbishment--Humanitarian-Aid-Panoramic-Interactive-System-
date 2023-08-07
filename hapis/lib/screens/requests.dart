@@ -89,7 +89,8 @@ class _RequestsState extends State<Requests> {
                                 '${requestRec.firstName} ${requestRec.lastName}';
                             final type = requestRec.type;
                             final item = requestRec.item;
-                            final id = requestRec.RId;
+                            final reqid = requestRec.RId;
+                            final otherId= requestRec.userId;
                             return ListTile(
                                 title: RequestComponent(
                               isSent: false,
@@ -100,7 +101,9 @@ class _RequestsState extends State<Requests> {
                               personName: personName,
                               type: type,
                               item: item,
-                              id: id,
+                              id: reqid,
+                              currentUserID: id,
+                              userID: otherId ,
                               onPressed: () {
                                 setState(() {});
                               },
@@ -161,7 +164,7 @@ class _RequestsState extends State<Requests> {
                                 '${requestSent.firstName} ${requestSent.lastName}';
 
                             final statusText = requestSent.recipientStatus;
-                            final id = requestSent.RId;
+                            final reqid = requestSent.RId;
 
                             return ListTile(
                                 title: RequestComponent(
@@ -172,7 +175,8 @@ class _RequestsState extends State<Requests> {
                               buttonFontSize: widget.buttonFontSize,
                               status: statusText,
                               personName: personName,
-                              id: id,
+                              id: reqid,
+                              currentUserID: id,
                               onPressed: () {
                                 setState(() {});
                               },

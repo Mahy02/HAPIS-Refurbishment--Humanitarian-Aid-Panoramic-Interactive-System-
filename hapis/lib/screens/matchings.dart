@@ -150,6 +150,7 @@ class _MatchingsState extends State<Matchings> {
                             id: matchingID,
                             seekerStatus: seekerStatus,
                             giverStatus: giverStatus,
+                            currentUserID: id,
                             onPressed: () {
                               _refreshData();
                             },

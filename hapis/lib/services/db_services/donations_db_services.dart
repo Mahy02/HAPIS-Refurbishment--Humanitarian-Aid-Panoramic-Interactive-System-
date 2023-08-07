@@ -32,6 +32,11 @@ class DonationsServices {
         ELSE 'giver'
     END AS Type,
 
+    
+     CASE
+        WHEN F1.UserID = '$id' THEN U2.UserID
+        ELSE U1.UserID
+    END AS id,
 
    
     CASE
@@ -74,6 +79,11 @@ class DonationsServices {
         END AS Type,
 
 
+
+  CASE 
+            WHEN R.Sender_ID = '$id' THEN U1.UserID
+            ELSE U2.UserID
+        END AS id,
       
         CASE 
             WHEN R.Sender_ID = '$id' THEN U1.FirstName
@@ -96,6 +106,7 @@ class DonationsServices {
           .map((result) => InProgressDonationModel(
               mID: result['MID'] ?? 0,
               rID: result['ReqID'] ?? 0,
+              otherId: result['id'],
               firstName: result['FirstName'],
               lastName: result['LastName'],
               type: result['Type'],

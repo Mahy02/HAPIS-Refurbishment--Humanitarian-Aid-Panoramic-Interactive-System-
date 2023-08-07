@@ -110,6 +110,16 @@ class SqlDb {
         UNIQUE(R_ID)
        );
     ''');
+
+    await db.execute('''
+       CREATE TABLE IF NOT EXISTS Notifications (
+        N_ID INTEGER  NOT NULL PRIMARY KEY ,
+        UserID TEXT NOT NULL,
+        Message  TEXT NOT NULL  ,
+        FOREIGN KEY (UserID) REFERENCES Users(UserID),
+        UNIQUE(N_ID)
+       );
+    ''');
   }
 
   ///`_onUpgrade` function

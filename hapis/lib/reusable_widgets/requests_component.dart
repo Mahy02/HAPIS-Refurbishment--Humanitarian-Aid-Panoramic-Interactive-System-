@@ -5,6 +5,7 @@ import 'package:hapis/constants.dart';
 import 'package:hapis/models/db_models/get_inprogress_donations_model.dart';
 import 'package:hapis/services/db_services/donations_db_services.dart';
 import 'package:hapis/services/db_services/matchings_db_services.dart';
+import 'package:hapis/services/db_services/notifications_services.dart';
 import 'package:hapis/services/db_services/requests_db_services.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import '../utils/database_popups.dart';
@@ -50,6 +51,7 @@ class RequestComponent extends StatefulWidget {
   final String? giverStatus;
   final String? currentDonationStatus;
   final String? otherDonationStatus;
+  final String? currentUserID;
   final VoidCallback? onPressed;
 
   const RequestComponent(
@@ -76,7 +78,8 @@ class RequestComponent extends StatefulWidget {
       this.giverStatus,
       this.id2,
       this.currentDonationStatus,
-      this.otherDonationStatus});
+      this.otherDonationStatus,
+      this.currentUserID});
 
   @override
   State<RequestComponent> createState() => _RequestComponentState();
@@ -319,7 +322,14 @@ class _RequestComponentState extends State<RequestComponent> {
                                 int result = await MatchingsServices()
                                     .updateMatching(widget.id!, widget.type!);
 
+                                String name = await UserServices()
+                                    .getFullNameById(widget.currentUserID!);
+
                                 if (result > 0) {
+                                  //send notification
+                                  await NotificationsServices()
+                                      .insertNotification(widget.userID!,
+                                          '$name has accepted the matching');
                                   showDatabasePopup(context,
                                       'Match accepted ! \n\nThe donation will start as soon as other user accepts',
                                       isError: false);
@@ -362,7 +372,14 @@ class _RequestComponentState extends State<RequestComponent> {
                                 //delete matching
                                 int result = await MatchingsServices()
                                     .deleteMatching(widget.id!);
+
+                                String name = await UserServices()
+                                    .getFullNameById(widget.currentUserID!);
+
                                 if (result == 1) {
+                                  await NotificationsServices()
+                                      .insertNotification(widget.userID!,
+                                          '$name has declined the matching');
                                   showDatabasePopup(
                                       context, 'Matching deleted successfully!',
                                       isError: false);
@@ -548,6 +565,15 @@ class _RequestComponentState extends State<RequestComponent> {
                                                           widget.id!,
                                                           widget.id2!,
                                                           widget.type!);
+
+                                              String name = await UserServices()
+                                                  .getFullNameById(
+                                                      widget.currentUserID!);
+                                              await NotificationsServices()
+                                                  .insertNotification(
+                                                      widget.userID!,
+                                                      '$name has ended the donation process');
+
                                               print('aaaaaaaaa');
                                               print(result);
                                               if (result['result'] > 0 &&
@@ -647,6 +673,14 @@ class _RequestComponentState extends State<RequestComponent> {
                                               int result =
                                                   await completer.future;
 
+                                              String name = await UserServices()
+                                                  .getFullNameById(
+                                                      widget.currentUserID!);
+                                              await NotificationsServices()
+                                                  .insertNotification(
+                                                      widget.userID!,
+                                                      '$name has cancelled the donation process');
+
                                               if (result > 0) {
                                                 showDatabasePopup(
                                                   context,
@@ -699,6 +733,12 @@ class _RequestComponentState extends State<RequestComponent> {
                                   int result = await RequestsServices()
                                       .acceptRequest(widget.id!);
                                   print('result: $result');
+                                  String name = await UserServices()
+                                      .getFullNameById(widget.currentUserID!);
+                                  await NotificationsServices()
+                                      .insertNotification(widget.userID!,
+                                          '$name has accepted the request');
+
                                   if (result > 0) {
                                     showDatabasePopup(context,
                                         'Request accepted ! \n\nThe donation process is now in progress',
@@ -738,6 +778,13 @@ class _RequestComponentState extends State<RequestComponent> {
                                   //change status in database
                                   int result = await RequestsServices()
                                       .deleteRequest(widget.id!);
+
+                                  String name = await UserServices()
+                                      .getFullNameById(widget.currentUserID!);
+                                  await NotificationsServices()
+                                      .insertNotification(widget.userID!,
+                                          '$name has declined the request');
+
                                   if (result == 1) {
                                     showDatabasePopup(context,
                                         'Request deleted successfully!',

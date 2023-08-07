@@ -43,7 +43,7 @@ class RequestsServices {
   /// It returns Future list of `RequestReceivedModel`
   Future<List<RequestReceivedModel>> getRequestsReceived(String id) async {
     String sqlStatement = '''
-    SELECT FirstName, LastName, Item, Type, R_ID
+    SELECT FirstName, LastName, Item, Type, R_ID, Users.UserID AS UserID
     FROM Requests
     JOIN Users ON Requests.Sender_ID = Users.UserID
     JOIN Forms ON Requests.Rec_FormID = Forms.FormID
@@ -56,6 +56,7 @@ class RequestsServices {
       requests = queryResult
           .map((result) => RequestReceivedModel(
                 RId: result['R_ID'],
+                userId: result['UserID'],
                 firstName: result['FirstName'],
                 lastName: result['LastName'],
                 item: result['Item'],

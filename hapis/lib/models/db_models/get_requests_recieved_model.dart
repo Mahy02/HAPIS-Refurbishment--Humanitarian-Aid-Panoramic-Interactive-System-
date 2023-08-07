@@ -3,6 +3,9 @@ class RequestReceivedModel {
   /// property that defines the request ID
   final int RId;
 
+  ///property that defines the other user ID
+  final String userId;
+
   /// Property that defines the user firstName
   final String firstName;
 
@@ -17,6 +20,7 @@ class RequestReceivedModel {
 
   RequestReceivedModel({
     required this.RId,
+    required this.userId,
     required this.firstName,
     required this.lastName,
     required this.item,

@@ -109,6 +109,8 @@ class _DonationsState extends State<Donations> {
                           final m_id = donations.mID;
                           final type = donations.type;
 
+                          final otherId = donations.otherId;
+
                           final personName =
                               '${donations.firstName} ${donations.lastName}';
 
@@ -130,6 +132,8 @@ class _DonationsState extends State<Donations> {
                             type: type,
                             currentDonationStatus: currentStatus,
                             otherDonationStatus: otherStatus,
+                            userID: otherId,
+                            currentUserID: id,
                             onPressed: () {
                               _refreshData();
                             },

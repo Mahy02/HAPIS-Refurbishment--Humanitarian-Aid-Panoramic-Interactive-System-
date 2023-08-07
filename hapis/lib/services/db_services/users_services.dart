@@ -24,6 +24,23 @@ class UserServices {
     return words.join(' ');
   }
 
+   // Function to get the full name by id
+  Future<String> getFullNameById(String userId) async {
+    String sqlStatement = '''
+      SELECT FirstName, LastName FROM Users
+      WHERE UserID = '$userId'
+    ''';
+    List<Map<String, dynamic>> results = await db.readData(sqlStatement);
+
+    if (results.isNotEmpty) {
+      String firstName = results[0]['FirstName'] as String;
+      String lastName = results[0]['LastName'] as String;
+      return '$firstName $lastName';
+    } else {
+      return 'User not found'; // Return an error message or handle the case where the user is not found
+    }
+  }
+
 // Updated `getCitiesAndCountries` function.
   Future<List<Map<String, String>>> getCitiesAndCountries() async {
     String sqlStatement = '''

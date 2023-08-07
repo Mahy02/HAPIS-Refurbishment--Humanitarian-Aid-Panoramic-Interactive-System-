@@ -6,6 +6,9 @@ class InProgressDonationModel {
   ///property that defines the requests `id` if exists
   final int rID;
 
+  ///property that defines the other user id
+  final String otherId;
+
   /// property that defines the user `firstName`
   final String firstName;
 
@@ -24,10 +27,10 @@ class InProgressDonationModel {
   InProgressDonationModel(
       {required this.mID,
       required this.rID,
+      required this.otherId,
       required this.firstName,
       required this.lastName,
       required this.type,
       required this.currentDonationStatus,
-      required this.otherDonationStatus
-      });
+      required this.otherDonationStatus});
 }
