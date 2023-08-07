@@ -84,9 +84,6 @@ class RequestComponent extends StatefulWidget {
 
 class _RequestComponentState extends State<RequestComponent> {
   bool _accepted = false;
-  // bool isMatchAccepted = MatchingsSharedPreferences.isMatchAccepted();
-
-  // bool isMatchAccepted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -419,39 +416,6 @@ class _RequestComponentState extends State<RequestComponent> {
                               ),
                             ),
                           ),
-                        // //handle case if soemone cancelled
-                        // if ((widget.type == 'seeker' &&
-                        //       widget.giverStatus == 'Rejected' &&  widget.seekerStatus != 'Rejected') ||
-                        //   (widget.type == 'giver' &&
-                        //       widget.seekerStatus == 'Rejected' && widget.giverStatus != 'Rejected'))
-                        //       SizedBox(
-                        //             child: ElevatedButton(
-                        //             onPressed: () {},
-                        //             style: ButtonStyle(
-                        //               backgroundColor:
-                        //                   MaterialStateProperty.all<Color>(
-                        //                       HapisColors.lgColor2),
-                        //               padding: MaterialStateProperty.all<
-                        //                       EdgeInsetsGeometry>(
-                        //                   const EdgeInsets.all(15)),
-                        //               shape: MaterialStateProperty.all<
-                        //                   RoundedRectangleBorder>(
-                        //                 RoundedRectangleBorder(
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(5),
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //             child: Tooltip(
-                        //               message:
-                        //                   'Waiting for other user to confirm cancellation.',
-                        //               child: Text(
-                        //                 'CANCELLED',
-                        //                 style: TextStyle(
-                        //                     fontSize: widget.buttonFontSize),
-                        //               ),
-                        //             ),
-                        //           ))
                       ],
                     )
                   : widget.isDonation
@@ -573,6 +537,8 @@ class _RequestComponentState extends State<RequestComponent> {
                                                           widget.id!,
                                                           widget.id2!,
                                                           widget.type!);
+                                              print('aaaaaaaaa');
+                                              print(result);
                                               if (result['result'] > 0 &&
                                                   result['areBothFinished']) {
                                                 showDatabasePopup(context,

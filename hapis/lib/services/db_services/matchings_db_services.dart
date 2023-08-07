@@ -194,10 +194,14 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     WHERE M_ID = $mId
   ''';
     List<Map<String, dynamic>> results = await db.readData(sqlStatement);
+    List<int> ids = [];
     if (results.isNotEmpty) {
-      int seekerFormId = results[0]['Seeker_FormID'];
-      int giverFormId = results[0]['Giver_FormID'];
-      return [seekerFormId, giverFormId];
+      print(results[0]['Seeker_FormID']);
+      int seekerFormId = results[0]['Seeker_FormID'] as int;
+      int giverFormId = results[0]['Giver_FormID'] as int;
+      ids.add(seekerFormId);
+      ids.add(giverFormId);
+      return ids;
     } else {
       return [];
     }
@@ -225,14 +229,14 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     FROM Forms
     INNER JOIN Users ON Forms.UserID = Users.UserID
     WHERE Forms.Type = '$type'
-      AND Forms.Item = '$item'
+      AND LOWER(Forms.Item) = LOWER('$item')
       AND Forms.Category = '$cat'
       AND ( $dateConditions )
       AND Forms.Status = 'Not Completed'
       AND Users.City = '$city'
     ''';
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-
+    print('matchings: $queryResult');
     // If a matching form exists, return its Form_ID
     List<int?> matching =
         queryResult.map<int?>((row) => row['FormID']).toList();

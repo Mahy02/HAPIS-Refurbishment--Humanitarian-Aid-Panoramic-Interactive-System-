@@ -496,6 +496,7 @@ class _CreateFormState extends State<CreateForm> {
       GestureDetector(
         onTap: () async {
           int numberOfChanges = 0;
+          int rows = 0;
 
           bool isFormValid = _formKey.currentState?.validate() ?? false;
           if (isFormValid) {
@@ -589,6 +590,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
+                  rows = rowID;
                   if (rowID <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -666,6 +668,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
+                  rows = rowID;
                   if (rowID <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -745,7 +748,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
-
+                  rows = rowIDS;
                   if (rowIDS <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -820,6 +823,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
+                  rows = rowIDG;
                   if (rowIDG <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -846,31 +850,33 @@ class _CreateFormState extends State<CreateForm> {
                 numberOfChanges = numberOfChangesS + numberOfChangesG;
               }
             }
-          }
-          /////////////////////////////////////////////////////////////////////////
-          // ignore: use_build_context_synchronously
-          print('noc: $numberOfChanges');
-          if (numberOfChanges <= 0 && widget.update == true) {
-            print('no navigation');
-          } else {
-            if (widget.update == true) {
-              showDatabasePopup(context, 'Form updated successfully!',
-                  isError: false, onOKPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AppHomePage()));
-              });
+            // ignore: use_build_context_synchronously
+            print('noc: $numberOfChanges');
+            if (numberOfChanges <= 0 && widget.update == true) {
+              print('no navigation');
             } else {
-              showDatabasePopup(context, 'Form created successfully!',
-                  isError: false, onOKPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AppHomePage()));
-              });
+              if (widget.update == true) {
+                showDatabasePopup(context, 'Form updated successfully!',
+                    isError: false, onOKPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AppHomePage()));
+                });
+              } else {
+                if (rows > 0) {
+                  showDatabasePopup(context, 'Form created successfully!',
+                      isError: false, onOKPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AppHomePage()));
+                  });
+                }
+              }
             }
           }
+          /////////////////////////////////////////////////////////////////////////
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 20.0, bottom: 20),
@@ -1274,6 +1280,7 @@ class _CreateFormState extends State<CreateForm> {
       GestureDetector(
         onTap: () async {
           int numberOfChanges = 0;
+          int rows = 0;
 
           bool isFormValid = _formKey.currentState?.validate() ?? false;
           if (isFormValid) {
@@ -1367,6 +1374,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
+                  rows = rowID;
                   if (rowID <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -1444,6 +1452,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
+                  rows = rowID;
                   if (rowID <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -1490,7 +1499,7 @@ class _CreateFormState extends State<CreateForm> {
                   if (numberOfChangesS == 0) {
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
-                  } else if (numberOfChangesS == -1) {
+                  } else if (numberOfChanges == -1) {
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
                     showDatabasePopup(context,
@@ -1523,7 +1532,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesS,
                       seekerModel.forWhoS,
                       'Not Completed');
-
+                  rows = rowIDS;
                   if (rowIDS <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -1598,6 +1607,7 @@ class _CreateFormState extends State<CreateForm> {
                       datesG,
                       null,
                       'Not Completed');
+                  rows = rowIDG;
                   if (rowIDG <= 0) {
                     //error creating form
                     showDatabasePopup(context,
@@ -1624,31 +1634,33 @@ class _CreateFormState extends State<CreateForm> {
                 numberOfChanges = numberOfChangesS + numberOfChangesG;
               }
             }
-          }
-          /////////////////////////////////////////////////////////////////////////
-          // ignore: use_build_context_synchronously
-          print('noc: $numberOfChanges');
-          if (numberOfChanges <= 0 && widget.update == true) {
-            print('no navigation');
-          } else {
-            if (widget.update == true) {
-              showDatabasePopup(context, 'Form updated successfully!',
-                  isError: false, onOKPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AppHomePage()));
-              });
+            // ignore: use_build_context_synchronously
+            print('noc: $numberOfChanges');
+            if (numberOfChanges <= 0 && widget.update == true) {
+              print('no navigation');
             } else {
-              showDatabasePopup(context, 'Form created successfully!',
-                  isError: false, onOKPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AppHomePage()));
-              });
+              if (widget.update == true) {
+                showDatabasePopup(context, 'Form updated successfully!',
+                    isError: false, onOKPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AppHomePage()));
+                });
+              } else {
+                if (rows > 0) {
+                  showDatabasePopup(context, 'Form created successfully!',
+                      isError: false, onOKPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AppHomePage()));
+                  });
+                }
+              }
             }
           }
+          /////////////////////////////////////////////////////////////////////////
         },
         child: const Padding(
           padding: EdgeInsets.only(right: 20.0, bottom: 20),

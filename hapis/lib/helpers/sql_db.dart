@@ -83,8 +83,8 @@ class SqlDb {
     await db.execute('''
        CREATE TABLE IF NOT EXISTS Matchings (
         M_ID INTEGER  NOT NULL PRIMARY KEY ,
-        Seeker_FormID TEXT NOT NULL,
-        Giver_FormID TEXT NOT NULL,
+        Seeker_FormID INTEGER NOT NULL,
+        Giver_FormID INTEGER NOT NULL,
         Rec1_Status  TEXT NOT NULL  CHECK (Rec1_Status IN ('Pending', 'Accepted', 'Rejected')) ,
         Rec2_status TEXT NOT NULL CHECK (Rec2_status IN ('Pending', 'Accepted', 'Rejected')) ,
         Rec1_Donation_Status TEXT NOT NULL CHECK (Rec1_Donation_Status IN ('Not Started', 'In progress', 'Finished', 'Cancelled')) ,

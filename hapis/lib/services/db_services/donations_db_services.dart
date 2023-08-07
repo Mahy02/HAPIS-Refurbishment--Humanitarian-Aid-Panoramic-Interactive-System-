@@ -117,6 +117,11 @@ class DonationsServices {
     int queryResultMatching = 0;
     bool areBothFinished = false;
 
+    print('inside finish donation');
+    print(rid);
+    print(mid);
+    print(type);
+
     if (rid != 0) {
       if (type == 'sender') {
         String sqlStatementRequest = '''
@@ -180,11 +185,12 @@ class DonationsServices {
       } else if (type == 'giver') {
         String sqlStatementMatching = '''
         UPDATE Matchings
-        SET Rec1_Donation_Status = 'Finished'
+        SET Rec2_Donation_Status = 'Finished'
         WHERE M_ID = $mid
       ''';
         try {
           queryResultMatching = await db.updateData(sqlStatementMatching);
+          print(queryResultMatching);
         } catch (e) {
           print('Error updating: $e');
           return {'result': -1, 'areBothFinished': false};

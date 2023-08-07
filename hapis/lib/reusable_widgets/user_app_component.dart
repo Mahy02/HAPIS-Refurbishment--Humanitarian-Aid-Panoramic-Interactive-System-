@@ -29,6 +29,7 @@ class UserAppComponent extends StatefulWidget {
   final double headerFontSize;
   final double textFontSize;
   final bool isMobile;
+  final double friendshipSize;
 
   const UserAppComponent(
       {Key? key,
@@ -42,7 +43,9 @@ class UserAppComponent extends StatefulWidget {
       required this.userImageWidth,
       required this.headerFontSize,
       required this.textFontSize,
-      required this.isMobile})
+      required this.isMobile,
+      required this.friendshipSize,
+      })
       : super(key: key);
 
   @override
@@ -186,10 +189,12 @@ class _UserAppComponentState extends State<UserAppComponent> {
                             },
                             //we should checkfriendship to see which icon to use
                             child: requested
-                                ? const Icon(Icons.check,
-                                    color: HapisColors.lgColor4)
-                                : const Icon(Icons.person_add_alt_1_rounded,
-                                    color: HapisColors.lgColor1),
+                                ?  Icon(Icons.check,
+                                    color: HapisColors.lgColor4,
+                                    size: widget.friendshipSize)
+                                :  Icon(Icons.person_add_alt_1_rounded,
+                                    color: HapisColors.lgColor1,
+                                    size: widget.friendshipSize),
                           );
                         }),
                   ],

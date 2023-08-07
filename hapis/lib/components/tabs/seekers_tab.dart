@@ -196,6 +196,7 @@ class _SeekersTabState extends State<SeekersTab> {
                             containerWidth:
                                 MediaQuery.of(context).size.width * 0.9,
                             isMobile: true,
+                            friendshipSize: 20,
                           ),
                           const Divider(
                             height: 3,
@@ -298,6 +299,7 @@ class _SeekersTabState extends State<SeekersTab> {
                             containerWidth:
                                 MediaQuery.of(context).size.width * 0.8,
                             isMobile: false,
+                            friendshipSize: 40,
                           ),
                           const Divider(
                             height: 3,

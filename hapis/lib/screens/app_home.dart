@@ -39,8 +39,8 @@ class _AppHomePageState extends State<AppHomePage> {
           deleteSize: 25,
         ),
         tabletBody: UserForms(
-          fontSize: 30,
-          subHeadFontSize: 40,
+          fontSize: 25,
+          subHeadFontSize: 28,
           editSize: 40,
           deleteSize: 45,
         )),
