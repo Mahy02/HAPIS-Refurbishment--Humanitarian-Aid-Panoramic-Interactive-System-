@@ -76,7 +76,7 @@ class _ConfigurationState extends State<Configuration> {
               children: [
                 Column(
                   children: [
-                    BackButtonWidget(),
+                    BackButtonWidget(isTablet: false,),
                     ConnectionIndicator(isConnected: model.isConnected),
                     const Padding(
                       padding: EdgeInsets.only(
@@ -309,7 +309,7 @@ class _ConfigurationState extends State<Configuration> {
               children: [
                 Column(
                   children: [
-                    BackButtonWidget(),
+                    BackButtonWidget(isTablet: true,),
                     ConnectionIndicator(isConnected: model.isConnected),
                     const Padding(
                       padding: EdgeInsets.only(

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/liquid_galaxy/cities.dart';
+import 'package:hapis/services/liquid_galaxy/tour_services.dart';
 
 import 'package:provider/provider.dart';
 
@@ -72,6 +73,8 @@ class _LgHomePageState extends State<LgHomePage> {
       content: placemark.balloonOnlyTag,
     );
 
+    //await Future.delayed(Duration(seconds: 3));
+
     try {
       /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
       await LgService(sshData).sendKMLToSlave(
@@ -96,12 +99,18 @@ class _LgHomePageState extends State<LgHomePage> {
       ));
     }
 
+    await Future.delayed(Duration(seconds: 3));
+
     ///building the orbit
     final orbit = globeService.buildOrbit();
 
     try {
       ///Sending Tour with `orbit details` where the tour would be `Orbit`
       await LgService(sshData).sendTour(orbit, 'Orbit');
+      await Future.delayed(Duration(seconds: 5));
+      await LgService(sshData).startTour('Orbit');
+      await Future.delayed(Duration(seconds: 20));
+      await LgService(sshData).stopTour();
     } catch (e) {
       // ignore: avoid_print
       print(e);
@@ -132,8 +141,8 @@ class _LgHomePageState extends State<LgHomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(),
-           ConnectionIndicator(
+          BackButtonWidget(isTablet: false,),
+          ConnectionIndicator(
             isConnected: connection.isConnected,
           ),
           Align(
@@ -146,44 +155,6 @@ class _LgHomePageState extends State<LgHomePage> {
                     const SubText(
                       subTextContent: 'Welcome to HAPIS !',
                       fontSize: 20,
-                    ),
-                    Column(
-                      children: [
-                        GestureDetector(
-                          child: Image.asset(
-                            'assets/images/orbit.png',
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            width: MediaQuery.of(context).size.width * 0.15,
-                          ),
-                          onTap: () async {
-                            final sshData = Provider.of<SSHprovider>(context,
-                                listen: false);
-
-                            ///checking status of connection first
-                            if (sshData.client != null) {
-                              try {
-                                ///`stopTour` to stop any tour already going now
-                                await LgService(sshData).stopTour();
-
-                                /// `startTour` to start the new tour
-                                await LgService(sshData).startTour('Orbit');
-                              } catch (e) {
-                                // ignore: avoid_print
-                                print(e);
-                              }
-                            } else {
-                              ///show the connection error message
-                              showDialogConnection(context);
-                            }
-                          },
-                        ),
-                        Text(' Orbit ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontFamily: GoogleFonts.montserrat().fontFamily,
-                            ))
-                      ],
                     ),
                   ],
                 ),
@@ -266,6 +237,38 @@ class _LgHomePageState extends State<LgHomePage> {
                 const SizedBox(
                   height: 40,
                 ),
+                HapisElevatedButton(
+                    elevatedButtonContent: 'HAPIS Tour',
+                    buttonColor: HapisColors.lgColor2,
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    imagePath: 'assets/images/earth.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.15,
+                    imageWidth: MediaQuery.of(context).size.height * 0.15,
+                    fontSize: 35,
+                    isPoly: false,
+                    onpressed: () async {
+                      //TourService().tourKML;
+                      print('here');
+                      final sshData =
+                          Provider.of<SSHprovider>(context, listen: false);
+                      final tourKml = KMLModel(
+                        name: 'HAPIS-tour',
+                        content: TourService().tourKMLContent,
+                      );
+
+                      try {
+                        /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
+                        await LgService(sshData).sendKMLToSlave(
+                          //  LgService(sshData).,
+                          1,
+                          tourKml.body,
+                        );
+                      } catch (e) {
+                        // ignore: avoid_print
+                        print(e);
+                      }
+                    }),
               ],
             ),
           ),
@@ -280,7 +283,7 @@ class _LgHomePageState extends State<LgHomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(),
+          BackButtonWidget(isTablet: true,),
           ConnectionIndicator(
             isConnected: connection.isConnected,
           ),
@@ -295,44 +298,6 @@ class _LgHomePageState extends State<LgHomePage> {
                       subTextContent: 'Welcome to HAPIS !',
                       fontSize: 35,
                     ),
-                    Column(
-                      children: [
-                        GestureDetector(
-                          child: Image.asset(
-                            'assets/images/orbit.png',
-                            height: MediaQuery.of(context).size.height * 0.15,
-                            width: MediaQuery.of(context).size.width * 0.15,
-                          ),
-                          onTap: () async {
-                            final sshData = Provider.of<SSHprovider>(context,
-                                listen: false);
-
-                            ///checking status of connection first
-                            if (sshData.client != null) {
-                              try {
-                                ///`stopTour` to stop any tour already going now
-                                await LgService(sshData).stopTour();
-
-                                /// `startTour` to start the new tour
-                                await LgService(sshData).startTour('Orbit');
-                              } catch (e) {
-                                // ignore: avoid_print
-                                print(e);
-                              }
-                            } else {
-                              ///show the connection error message
-                              showDialogConnection(context);
-                            }
-                          },
-                        ),
-                        Text(' Orbit ',
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                              fontFamily: GoogleFonts.montserrat().fontFamily,
-                            ))
-                      ],
-                    ),
                   ],
                 ),
               )),
@@ -346,10 +311,10 @@ class _LgHomePageState extends State<LgHomePage> {
                     elevatedButtonContent: 'Global Statistics',
                     buttonColor: HapisColors.lgColor1,
                     height: MediaQuery.of(context).size.height * 0.4,
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.3,
                     imagePath: 'assets/images/growth.png',
-                    imageHeight: MediaQuery.of(context).size.height * 0.25,
-                    imageWidth: MediaQuery.of(context).size.height * 0.25,
+                    imageHeight: MediaQuery.of(context).size.height * 0.2,
+                    imageWidth: MediaQuery.of(context).size.height * 0.2,
                     fontSize: 35,
                     isPoly: false,
                     onpressed: () async {
@@ -396,10 +361,10 @@ class _LgHomePageState extends State<LgHomePage> {
                     elevatedButtonContent: 'Cities',
                     buttonColor: HapisColors.lgColor3,
                     height: MediaQuery.of(context).size.height * 0.4,
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.3,
                     imagePath: 'assets/images/architecture-and-city.png',
-                    imageHeight: MediaQuery.of(context).size.height * 0.25,
-                    imageWidth: MediaQuery.of(context).size.height * 0.25,
+                    imageHeight: MediaQuery.of(context).size.height * 0.2,
+                    imageWidth: MediaQuery.of(context).size.height * 0.2,
                     fontSize: 35,
                     isPoly: false,
                     onpressed: () {
@@ -407,6 +372,38 @@ class _LgHomePageState extends State<LgHomePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const CitiesPage()));
+                    }),
+                HapisElevatedButton(
+                    elevatedButtonContent: 'HAPIS Tour',
+                    buttonColor: HapisColors.lgColor2,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    imagePath: 'assets/images/earth.png',
+                    imageHeight: MediaQuery.of(context).size.height * 0.2,
+                    imageWidth: MediaQuery.of(context).size.height * 0.2,
+                    fontSize: 35,
+                    isPoly: false,
+                    onpressed: () async {
+                      //TourService().tourKML;
+                      print('here');
+                      final sshData =
+                          Provider.of<SSHprovider>(context, listen: false);
+                      final tourKml = KMLModel(
+                        name: 'HAPIS-tour',
+                        content: TourService().tourKMLContent,
+                      );
+
+                      try {
+                        /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
+                        await LgService(sshData).sendKMLToSlave(
+                          //  LgService(sshData).,
+                          1,
+                          tourKml.body,
+                        );
+                      } catch (e) {
+                        // ignore: avoid_print
+                        print(e);
+                      }
                     }),
               ],
             ),

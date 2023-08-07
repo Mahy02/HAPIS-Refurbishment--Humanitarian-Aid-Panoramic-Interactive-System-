@@ -62,7 +62,11 @@ class SSHprovider extends ChangeNotifier {
     print(result);
     Connectionprovider connection =
         Provider.of<Connectionprovider>(context, listen: false);
-    connection.isConnected = false;
+    if (result == 'fail') {
+      connection.isConnected = false;
+    } else {
+      connection.isConnected = true;
+    }
 
     print(connection.isConnected);
 

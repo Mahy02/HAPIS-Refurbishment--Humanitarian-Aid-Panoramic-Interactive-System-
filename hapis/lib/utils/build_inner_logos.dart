@@ -9,7 +9,9 @@ Widget buildTabletLogos() {
   return SingleChildScrollView(
     child: Column(
       children: [
-        BackButtonWidget(),
+        BackButtonWidget(
+          isTablet: true,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 70.0),
           child: Center(
@@ -181,7 +183,9 @@ Widget buildMobileLogos() {
   return SingleChildScrollView(
     child: Column(
       children: [
-        BackButtonWidget(),
+        BackButtonWidget(
+          isTablet: false,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 20.0),
           child: Center(

@@ -29,7 +29,7 @@ void showUserDetails(
     builder: (BuildContext context) {
       return Container(
         padding: const EdgeInsets.all(16),
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery.of(context).size.height * 0.7,
         child: Column(
           children: [
             const Icon(

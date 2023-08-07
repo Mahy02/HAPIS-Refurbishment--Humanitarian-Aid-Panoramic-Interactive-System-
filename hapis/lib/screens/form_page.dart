@@ -125,7 +125,9 @@ class _CreateFormState extends State<CreateForm> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             children: [
-              BackButtonWidget(),
+              BackButtonWidget(
+                isTablet: false,
+              ),
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
@@ -902,7 +904,9 @@ class _CreateFormState extends State<CreateForm> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             children: [
-              BackButtonWidget(),
+              BackButtonWidget(
+                isTablet: true,
+              ),
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(

@@ -46,7 +46,7 @@ class Settings extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        BackButtonWidget(),
+        BackButtonWidget(isTablet: false,),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 20.0, left: 30),
@@ -170,7 +170,7 @@ class Settings extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          BackButtonWidget(),
+          BackButtonWidget(isTablet: true,),
           ConnectionIndicator(isConnected: connection.isConnected),
           const SubText(
             subTextContent: 'LG Settings',

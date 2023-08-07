@@ -85,7 +85,7 @@ class _SeekersState extends State<Seekers> {
         Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
-        BackButtonWidget(),
+        BackButtonWidget(isTablet: false,),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
@@ -165,7 +165,7 @@ class _SeekersState extends State<Seekers> {
         Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
-        BackButtonWidget(),
+        BackButtonWidget(isTablet: true,),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),

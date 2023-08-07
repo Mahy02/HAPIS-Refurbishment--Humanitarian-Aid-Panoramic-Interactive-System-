@@ -80,6 +80,8 @@ void main() async {
     print(' res: $result');
     if (result == 'fail' || result != '') {
       connection.isConnected = false;
+    } else {
+      connection.isConnected = true;
     }
   });
 }

@@ -59,22 +59,6 @@ class _UsersState extends State<Users> {
       updatePosition: updatePosition,
     );
 
-    for (PlacemarkModel placemark in donorsPlacemarks) {
-      /// sending kml to slave where we send the `kml placemark`
-      final kmlPlacemark = KMLModel(
-        name: 'HAPIS-Donors-pin-${placemark.id}',
-        content: placemark.pinOnlyTag,
-      );
-
-      try {
-        await LgService(sshData)
-            .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
-      } catch (e) {
-        // ignore: avoid_print
-        print(e);
-      }
-    }
-
     /// calling the `buildSeekersPlacemark` that returns the `seeker placemark`
     final seekersPlacemarks = usersPinService.buildSeekersPlacemark(
       seekers,
@@ -85,94 +69,37 @@ class _UsersState extends State<Users> {
       updatePosition: updatePosition,
     );
 
+    List<PlacemarkModel> usersPlacemarks = [];
     for (PlacemarkModel placemark in seekersPlacemarks) {
-      /// sending kml to slave where we send the `kml placemark`
+      usersPlacemarks.add(placemark);
+    }
+    for (PlacemarkModel placemark in donorsPlacemarks) {
+      usersPlacemarks.add(placemark);
+    }
+
+    print(usersPlacemarks);
+    await sendPlacemarks(usersPlacemarks);
+  }
+
+  Future<void> sendPlacemarks(List<PlacemarkModel> usersPlacemarks) async {
+    print(usersPlacemarks.length);
+   
+    for (PlacemarkModel placemark in usersPlacemarks) {
+      print('here');
       final kmlPlacemark = KMLModel(
-        name: 'HAPIS-Seekers-pin-${placemark.id}',
+        name: 'HAPIS-Users-pin-${placemark.id}',
         content: placemark.pinOnlyTag,
       );
+      final sshData = Provider.of<SSHprovider>(context, listen: false);
 
       try {
         await LgService(sshData)
             .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
       } catch (e) {
-        // ignore: avoid_print
         print(e);
       }
     }
   }
-
-  // /// Views  `donors pins` into the Google Earth
-  // void _viewDonorsPins(List<UsersModel> donors, BuildContext context,
-  //     {double orbitPeriod = 2.8, bool updatePosition = true}) async {
-  //   final sshData = Provider.of<SSHprovider>(context, listen: false);
-
-  //   final UsersPinsService usersPinService = UsersPinsService();
-
-  //   /// calling the `buildDonorsPlacemark` that returns the `donors placemark`
-  //   final placemarks = usersPinService.buildDonorsPlacemark(
-  //     donors,
-  //     orbitPeriod,
-  //     lookAt: _donorsPlacemark != null && !updatePosition
-  //         ? _donorsPlacemark!.lookAt
-  //         : null,
-  //     updatePosition: updatePosition,
-  //   );
-
-  //   for (PlacemarkModel placemark in placemarks) {
-  //     /// sending kml to slave where we send the `kml placemark`
-  //     final kmlPlacemark = KMLModel(
-  //       name: 'HAPIS-Donors-pin-${placemark.id}',
-  //       content: placemark.pinOnlyTag,
-  //     );
-
-  //     try {
-  //       await LgService(sshData)
-  //           .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
-  //     } catch (e) {
-  //       // ignore: avoid_print
-  //       print(e);
-  //     }
-  //   }
-
-  // }
-
-  // /// Views  `seekers pins` into the Google Earth
-  // void _viewSeekersPins(List<UsersModel> seekers, BuildContext context,
-  //     {double orbitPeriod = 2.8, bool updatePosition = true}) async {
-  //   final sshData = Provider.of<SSHprovider>(context, listen: false);
-
-  //   final UsersPinsService usersPinService = UsersPinsService();
-
-  //   /// calling the `buildSeekersPlacemark` that returns the `seeker placemark`
-  //   final placemarks = usersPinService.buildSeekersPlacemark(
-  //     seekers,
-  //     orbitPeriod,
-  //     lookAt: _seekersPlacemark != null && !updatePosition
-  //         ? _seekersPlacemark!.lookAt
-  //         : null,
-  //     updatePosition: updatePosition,
-  //   );
-
-  //   for (PlacemarkModel placemark in placemarks) {
-  //     /// sending kml to slave where we send the `kml placemark`
-  //     final kmlPlacemark = KMLModel(
-  //       name: 'HAPIS-Seekers-pin-${placemark.id}',
-  //       content: placemark.pinOnlyTag,
-  //     );
-
-  //     try {
-
-  //       await LgService(sshData)
-  //           .sendKmlPins(kmlPlacemark.body, kmlPlacemark.name);
-  //     } catch (e) {
-  //       // ignore: avoid_print
-  //       print(e);
-  //     }
-
-  //   }
-
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +122,7 @@ class _UsersState extends State<Users> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(),
+          BackButtonWidget(isTablet: false,),
           ConnectionIndicator(isConnected: connection.isConnected),
           Align(
               alignment: Alignment.topLeft,
@@ -229,6 +156,7 @@ class _UsersState extends State<Users> {
                       // ignore: avoid_print
                       print(e);
                     }
+                    // await Future.delayed(Duration(seconds: 5));
                     _viewPins(givers, seekers, context);
                   },
                 ),
@@ -263,7 +191,7 @@ class _UsersState extends State<Users> {
                         Provider.of<UserProvider>(context, listen: false);
                     List<UsersModel> seekers = userProvider.seekers;
 
-                    // _viewSeekersPins(seekers, context);
+                   
 
                     /// navigating to the `Seekers` page with the `seekers` and the `city` from the widget input
                     Navigator.push(
@@ -291,8 +219,6 @@ class _UsersState extends State<Users> {
                         Provider.of<UserProvider>(context, listen: false);
                     List<UsersModel> givers = userProvider.givers;
 
-                    //_viewDonorsPins(givers, context);
-
                     /// navigating to the `Givers` page with the `givers` and the `city` from the widget input
                     Navigator.push(
                         context,
@@ -316,7 +242,7 @@ class _UsersState extends State<Users> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(),
+          BackButtonWidget(isTablet: true,),
           ConnectionIndicator(isConnected: connection.isConnected),
           Align(
               alignment: Alignment.topLeft,
@@ -354,13 +280,6 @@ class _UsersState extends State<Users> {
                                 print(e);
                               }
                               _viewPins(givers, seekers, context);
-
-                              //print("before view donors");
-                              //_viewDonorsPins(givers, context);
-                              //await Future.delayed(Duration(seconds: 10));
-                              // print("before view seekers");
-                              //_viewSeekersPins(seekers, context);
-                              // print("after both");
                             },
                           ),
                           Text(' Show Users Pins ',
@@ -396,9 +315,6 @@ class _UsersState extends State<Users> {
                           Provider.of<UserProvider>(context, listen: false);
                       List<UsersModel> seekers = userProvider.seekers;
 
-                      // _viewSeekersPins(seekers, context);
-
-                      /// navigating to the `Seekers` page with the `seekers` and the `city` from the widget input
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -416,14 +332,12 @@ class _UsersState extends State<Users> {
                     imageWidth: MediaQuery.of(context).size.height * 0.25,
                     isPoly: false,
                     onpressed: () {
-                      ///retrieving the `list of givers` from the `user provider` and saving them in `givers`
+                   
                       UserProvider userProvider =
                           Provider.of<UserProvider>(context, listen: false);
                       List<UsersModel> givers = userProvider.givers;
 
-                      //_viewDonorsPins(givers, context);
-
-                      /// navigating to the `Givers` page with the `givers` and the `city` from the widget input
+                    
                       Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -97,17 +97,12 @@ class _CityComponentState extends State<CityComponent> {
         longitude: city.cityCoordinates.longitude,
         altitude: 0,
         // range: '13000',
-        range: '5000',
-        tilt: '0',
+        range: '10000',
+        tilt: '45',
         heading: '0',
       ));
     }
 
-    ///building the orbit with given `city`  Model
-    final orbit = cityService.buildOrbit(city);
-
-    ///Sending Tour with `orbit details` where the tour would be `Orbit`
-    await LgService(sshData).sendTour(orbit, 'Orbit');
   }
 
   @override
@@ -168,7 +163,7 @@ class _CityComponentState extends State<CityComponent> {
 
           if (sshData.client != null) {
             // ignore: use_build_context_synchronously
-            // /calling the function to view the city statstics and fly to the city
+           
 
             _viewCityStats(city, true, context);
 

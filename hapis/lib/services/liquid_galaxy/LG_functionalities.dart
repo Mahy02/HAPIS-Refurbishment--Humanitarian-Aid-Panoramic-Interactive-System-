@@ -132,8 +132,6 @@ fi
       try {
         await _sshData.execute(
             'sshpass -p $pw ssh -t lg$i "echo $pw | sudo -S poweroff"');
-
-      
       } catch (e) {
         // ignore: avoid_print
         print(e);
@@ -201,7 +199,6 @@ fi
   /// Puts the given [content] into the `/tmp/query.txt` file.
   Future<void> query(String content) async {
     await _sshData.execute('echo "$content" > /tmp/query.txt');
- 
   }
 
   ///Fly to functionality:
@@ -258,7 +255,6 @@ fi
       // ignore: avoid_print
       print(e);
     }
-   
   }
 
   /// Sets the logos KML into the Liquid Galaxy rig. A KML [name] and [content] may be passed, but it's not required.
@@ -286,7 +282,6 @@ fi
     try {
       await _sshData
           .execute("echo '$content' > /var/www/html/kml/slave_$screen.kml");
-     
     } catch (e) {
       // ignore: avoid_print
       print(e);
@@ -313,13 +308,12 @@ fi
       {List<Map<String, String>> images = const []}) async {
     final fileName = '${kml.name}.kml';
 
-
-    try {
-      await clearKml();
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
+    // try {
+    //   await clearKml();
+    // } catch (e) {
+    //   // ignore: avoid_print
+    //   print(e);
+    // }
 
     for (var img in images) {
       final image = await _fileService.createImage(img['name']!, img['path']!);
@@ -339,7 +333,6 @@ fi
       // ignore: avoid_print
       print(e);
     }
-   
   }
 
   Future<void> sendKmlPins(String pinsKml, String placemarkName) async {
