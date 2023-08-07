@@ -141,14 +141,16 @@ class _LgHomePageState extends State<LgHomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(isTablet: false,),
+          BackButtonWidget(
+            isTablet: false,
+          ),
           ConnectionIndicator(
             isConnected: connection.isConnected,
           ),
           Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -160,7 +162,7 @@ class _LgHomePageState extends State<LgHomePage> {
                 ),
               )),
           Padding(
-            padding: const EdgeInsets.only(top: 80.0),
+            padding: const EdgeInsets.only(top: 40.0),
             // padding: EdgeInsets.only(top: screenSize.height * 0.08),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,10 +171,10 @@ class _LgHomePageState extends State<LgHomePage> {
                     elevatedButtonContent: 'Global Statistics',
                     buttonColor: HapisColors.lgColor1,
                     height: MediaQuery.of(context).size.height * 0.25,
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     imagePath: 'assets/images/growth.png',
-                    imageHeight: MediaQuery.of(context).size.height * 0.15,
-                    imageWidth: MediaQuery.of(context).size.height * 0.15,
+                    imageHeight: MediaQuery.of(context).size.height * 0.1,
+                    imageWidth: MediaQuery.of(context).size.height * 0.1,
                     fontSize: 20,
                     isPoly: false,
                     onpressed: () async {
@@ -216,16 +218,16 @@ class _LgHomePageState extends State<LgHomePage> {
                       }
                     }),
                 const SizedBox(
-                  height: 80,
+                  height: 30,
                 ),
                 HapisElevatedButton(
                     elevatedButtonContent: 'Cities',
                     buttonColor: HapisColors.lgColor3,
                     height: MediaQuery.of(context).size.height * 0.25,
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     imagePath: 'assets/images/architecture-and-city.png',
-                    imageHeight: MediaQuery.of(context).size.height * 0.15,
-                    imageWidth: MediaQuery.of(context).size.height * 0.15,
+                    imageHeight: MediaQuery.of(context).size.height * 0.1,
+                    imageWidth: MediaQuery.of(context).size.height * 0.1,
                     fontSize: 20,
                     isPoly: false,
                     onpressed: () {
@@ -235,17 +237,17 @@ class _LgHomePageState extends State<LgHomePage> {
                               builder: (context) => const CitiesPage()));
                     }),
                 const SizedBox(
-                  height: 40,
+                  height: 30,
                 ),
                 HapisElevatedButton(
                     elevatedButtonContent: 'HAPIS Tour',
                     buttonColor: HapisColors.lgColor2,
                     height: MediaQuery.of(context).size.height * 0.25,
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     imagePath: 'assets/images/earth.png',
-                    imageHeight: MediaQuery.of(context).size.height * 0.15,
-                    imageWidth: MediaQuery.of(context).size.height * 0.15,
-                    fontSize: 35,
+                    imageHeight: MediaQuery.of(context).size.height * 0.1,
+                    imageWidth: MediaQuery.of(context).size.height * 0.1,
+                    fontSize: 20,
                     isPoly: false,
                     onpressed: () async {
                       //TourService().tourKML;
@@ -269,6 +271,9 @@ class _LgHomePageState extends State<LgHomePage> {
                         print(e);
                       }
                     }),
+                const SizedBox(
+                  height: 30,
+                ),
               ],
             ),
           ),
@@ -283,7 +288,9 @@ class _LgHomePageState extends State<LgHomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(isTablet: true,),
+          BackButtonWidget(
+            isTablet: true,
+          ),
           ConnectionIndicator(
             isConnected: connection.isConnected,
           ),

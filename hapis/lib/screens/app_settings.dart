@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/helpers/login_session_shared_preferences.dart';
@@ -164,10 +166,22 @@ class AppSettings extends StatelessWidget {
                     final user = GoogleSignInApi().getCurrentUser();
                     if (user != null) {
                       id = user.id;
-                      GoogleSignInApi.logout();
-                      LoginSessionSharedPreferences.removeUserID();
-                      LoginSessionSharedPreferences.setLoggedIn(false);
-                      int result = await UserServices().deleteUser(id);
+
+                      Completer<int> completer = Completer<int>();
+                      showDatabasePopup(
+                          context, 'Are you sure you want to delete?',
+                          isWarning: true,
+                          isError: false,
+                          isCancel: true, onOKPressed: () async {
+                        GoogleSignInApi.logout();
+                        LoginSessionSharedPreferences.removeUserID();
+                        LoginSessionSharedPreferences.setLoggedIn(false);
+                        int result = await UserServices().deleteUser(id);
+                        completer.complete(result);
+                      });
+
+                      int result = await completer.future;
+
                       if (result == 1) {
                         showDatabasePopup(context, 'User deleted successfully!',
                             isError: false);
@@ -178,9 +192,20 @@ class AppSettings extends StatelessWidget {
                       print(result);
                     } else {
                       id = LoginSessionSharedPreferences.getUserID()!;
-                      LoginSessionSharedPreferences.removeUserID();
-                      LoginSessionSharedPreferences.setLoggedIn(false);
-                      int result = await UserServices().deleteUser(id);
+
+                      Completer<int> completer = Completer<int>();
+                      showDatabasePopup(
+                          context, 'Are you sure you want to delete?',
+                          isWarning: true,
+                          isError: false,
+                          isCancel: true, onOKPressed: () async {
+                        LoginSessionSharedPreferences.removeUserID();
+                        LoginSessionSharedPreferences.setLoggedIn(false);
+                        int result = await UserServices().deleteUser(id);
+                        completer.complete(result);
+                      });
+
+                      int result = await completer.future;
                       if (result == 1) {
                         showDatabasePopup(context, 'User deleted successfully!',
                             isError: false);

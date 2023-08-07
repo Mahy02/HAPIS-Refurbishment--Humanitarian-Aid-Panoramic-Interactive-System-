@@ -85,10 +85,12 @@ class _SeekersState extends State<Seekers> {
         Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
-        BackButtonWidget(isTablet: false,),
+        BackButtonWidget(
+          isTablet: false,
+        ),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
-          padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
+          padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
           child: TextField(
             controller: searchController,
             onChanged: (value) {
@@ -133,15 +135,16 @@ class _SeekersState extends State<Seekers> {
                   displayText: 'Sorry, there are no users available',
                   icon: Icons.people_alt)
               : Padding(
-                  padding: const EdgeInsets.only(top: 50, right: 50, left: 50),
+                  padding: const EdgeInsets.only(
+                      top: 20, right: 20, left: 20, bottom: 20),
                   child: GridView.builder(
                     itemCount: filteredSeekersList.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Display 3 items per row
-                      crossAxisSpacing: 20.0,
-                      mainAxisSpacing: 20.0,
-                    ),
+                            crossAxisCount: 2, // Display 3 items per row
+                            crossAxisSpacing: 20.0,
+                            mainAxisSpacing: 20.0,
+                            childAspectRatio: 1.2),
                     itemBuilder: (context, index) {
                       final UsersModel user = filteredSeekersList[index];
 
@@ -151,6 +154,10 @@ class _SeekersState extends State<Seekers> {
                         type: 'seeker',
                         height: MediaQuery.of(context).size.height * 0.2,
                         width: MediaQuery.of(context).size.width * 0.4,
+                        imageHeight: MediaQuery.of(context).size.height * 0.03,
+                        imageWidth: MediaQuery.of(context).size.width * 0.065,
+                        // height: MediaQuery.of(context).size.height * 0.01,
+                        //     width: MediaQuery.of(context).size.width * 0.03,
                       );
                     },
                   ),
@@ -165,7 +172,9 @@ class _SeekersState extends State<Seekers> {
         Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
-        BackButtonWidget(isTablet: true,),
+        BackButtonWidget(
+          isTablet: true,
+        ),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
@@ -231,6 +240,8 @@ class _SeekersState extends State<Seekers> {
                         type: 'seeker',
                         height: MediaQuery.of(context).size.height * 0.2,
                         width: MediaQuery.of(context).size.width * 0.15,
+                        imageHeight: MediaQuery.of(context).size.height * 0.01,
+                        imageWidth: MediaQuery.of(context).size.width * 0.03,
                       );
                     },
                   ),

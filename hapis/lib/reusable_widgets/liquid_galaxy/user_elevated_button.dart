@@ -25,6 +25,8 @@ class UserElevatedButton extends StatefulWidget {
   final UsersModel user;
   final double height;
   final double width;
+  final double? imageHeight;
+  final double? imageWidth;
 
   const UserElevatedButton({
     required this.elevatedButtonContent,
@@ -32,7 +34,7 @@ class UserElevatedButton extends StatefulWidget {
     required this.user,
     required this.height,
     required this.width,
-    super.key,
+    super.key, this.imageHeight, this.imageWidth,
   });
 
   @override
@@ -104,7 +106,7 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
     }
 
     await Future.delayed(Duration(seconds: 3));
-   
+
     final orbit = userService.buildOrbit(user);
     try {
       await LgService(sshData).sendTour(orbit, 'Orbit');
@@ -163,8 +165,10 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                         child: GestureDetector(
                           child: Image.asset(
                             'assets/images/info.png',
-                            height: MediaQuery.of(context).size.height * 0.01,
-                            width: MediaQuery.of(context).size.width * 0.03,
+                            height: widget.imageHeight,
+                            width: widget.imageWidth,
+                            // height: MediaQuery.of(context).size.height * 0.01,
+                            // width: MediaQuery.of(context).size.width * 0.03,
                           ),
                           onTap: () async {
                             final sshData = Provider.of<SSHprovider>(context,
@@ -194,7 +198,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             size: 35,
                             color: HapisColors.lgColor1,
                           ),
-                        
                           onTap: () async {
                             final sshData = Provider.of<SSHprovider>(context,
                                 listen: false);
@@ -216,7 +219,7 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: HapisColors.lgColor4,
+                            color: HapisColors.lgColor2,
                             width: 1.5,
                           ),
                           borderRadius: BorderRadius.circular(2),
@@ -228,7 +231,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             size: 35,
                             color: HapisColors.lgColor1,
                           ),
-                       
                           onTap: () async {
                             final sshData = Provider.of<SSHprovider>(context,
                                 listen: false);
@@ -236,8 +238,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             if (sshData.client != null) {
                               try {
                                 await LgService(sshData).stopTour();
-
-                             
                               } catch (e) {
                                 // ignore: avoid_print
                                 print(e);

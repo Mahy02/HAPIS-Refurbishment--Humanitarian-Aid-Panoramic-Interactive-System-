@@ -97,7 +97,9 @@ class _CitiesPageState extends State<CitiesPage> {
         Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
-        BackButtonWidget(isTablet: false,),
+        BackButtonWidget(
+          isTablet: false,
+        ),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),
@@ -139,14 +141,19 @@ class _CitiesPageState extends State<CitiesPage> {
                   displayText: 'Sorry, there are no Cities available',
                   icon: Icons.location_city_outlined)
               : Padding(
-                  padding: const EdgeInsets.only(top: 50, right: 10, left: 10),
+                  padding: const EdgeInsets.only(
+                      top: 50, right: 10, left: 10, bottom: 10),
                   child: GridView.builder(
                     itemCount: filteredCitiesList.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Display two items per row
-                      crossAxisSpacing: 20.0,
-                      mainAxisSpacing: 20.0,
+                      // crossAxisCount: 2, // Display two items per row
+                      // crossAxisSpacing: 20.0,
+                      // mainAxisSpacing: 20.0,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                      childAspectRatio: 1.25,
                     ),
                     itemBuilder: (context, index) {
                       final String city = filteredCitiesList[index]['city']!;
@@ -161,8 +168,8 @@ class _CitiesPageState extends State<CitiesPage> {
                         city: city,
                         country: country,
                         buttonColor: buttonColor,
-                        imageHeight: MediaQuery.of(context).size.height * 0.1,
-                        imageWidth: MediaQuery.of(context).size.height * 0.1,
+                        imageHeight: MediaQuery.of(context).size.height * 0.07,
+                        imageWidth: MediaQuery.of(context).size.height * 0.07,
                         fontSize: 16,
                       );
                     },
@@ -178,7 +185,9 @@ class _CitiesPageState extends State<CitiesPage> {
         Provider.of<Connectionprovider>(context, listen: false);
     return Column(
       children: [
-        BackButtonWidget(isTablet: true,),
+        BackButtonWidget(
+          isTablet: true,
+        ),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 10.0, left: 50, right: 50),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/providers/form_provider.dart';
@@ -202,8 +204,17 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                   //no edits
                   showEditErrorPopUp(context, 'deleting');
                 } else {
-                  int result =
-                      await UserServices().deleteForm(widget.form.formID!);
+                  Completer<int> completer = Completer<int>();
+                  showDatabasePopup(context, 'Are you sure you want to delete?',
+                      isWarning: true,
+                      isError: false,
+                      isCancel: true, onOKPressed: () async {
+                    int result =
+                        await UserServices().deleteForm(widget.form.formID!);
+                    completer.complete(result);
+                  });
+
+                  int result = await completer.future;
                   if (result == 1) {
                     showDatabasePopup(context, 'Form deleted successfully!',
                         isError: false);

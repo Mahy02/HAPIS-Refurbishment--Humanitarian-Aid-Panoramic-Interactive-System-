@@ -250,8 +250,19 @@ class _RequestComponentState extends State<RequestComponent> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        int result =
-                            await RequestsServices().deleteRequest(widget.id!);
+                        Completer<int> completer = Completer<int>();
+                        showDatabasePopup(
+                            context, 'Are you sure you want to delete?',
+                            isWarning: true,
+                            isError: false,
+                            isCancel: true, onOKPressed: () async {
+                          int result = await RequestsServices()
+                              .deleteRequest(widget.id!);
+                          completer.complete(result);
+                        });
+
+                        int result = await completer.future;
+
                         if (result == 1) {
                           showDatabasePopup(
                               context, 'Request deleted successfully!',

@@ -139,24 +139,29 @@ class UserServices {
   }
 
   Future<bool> isFormInProgress(int formId) async {
+    //cannot delete if one of them is in progress
+    print('forms in progress?????????');
     try {
       // Check in the 'requests' table
       String sqlStatementsR = '''
     SELECT COUNT(*) as countR 
     FROM Requests 
-    WHERE Rec1_Donation_Status != 'Not Started' AND Rec2_Donation_Status != 'Not Started' AND Rec_FormID = $formId
+    WHERE (Rec1_Donation_Status = 'In progress' OR Rec2_Donation_Status = 'In progress') AND Rec_FormID = $formId
   ''';
       final resultR = await db.readData(sqlStatementsR);
+      print(resultR);
       int requestsCount = resultR[0]['countR'];
 
       String sqlStatementsM = '''
      SELECT COUNT(*) as countM 
      FROM Matchings 
-     WHERE Rec1_Donation_Status != 'Not Started' AND Rec2_Donation_Status != 'Not Started' AND (Seeker_FormID = $formId OR Giver_FormID = $formId)
+     WHERE (Rec1_Donation_Status = 'In progress' OR Rec2_Donation_Status = 'In progress') AND (Seeker_FormID = $formId OR Giver_FormID = $formId)
   ''';
 
       final resultM = await db.readData(sqlStatementsM);
       int matchingsCount = resultM[0]['countM'];
+      print(resultM);
+
       print(requestsCount > 0 || matchingsCount > 0);
       return requestsCount > 0 || matchingsCount > 0;
     } catch (e) {

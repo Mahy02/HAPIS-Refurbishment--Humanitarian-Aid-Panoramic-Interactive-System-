@@ -83,7 +83,7 @@ class _UsersState extends State<Users> {
 
   Future<void> sendPlacemarks(List<PlacemarkModel> usersPlacemarks) async {
     print(usersPlacemarks.length);
-   
+
     for (PlacemarkModel placemark in usersPlacemarks) {
       print('here');
       final kmlPlacemark = KMLModel(
@@ -122,7 +122,9 @@ class _UsersState extends State<Users> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(isTablet: false,),
+          BackButtonWidget(
+            isTablet: false,
+          ),
           ConnectionIndicator(isConnected: connection.isConnected),
           Align(
               alignment: Alignment.topLeft,
@@ -172,26 +174,24 @@ class _UsersState extends State<Users> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
           ),
-          Column(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               HapisElevatedButton(
                   fontSize: 18,
                   elevatedButtonContent: 'Seekers',
                   buttonColor: HapisColors.lgColor2,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   imagePath: 'assets/images/seekers.png',
-                  imageHeight: MediaQuery.of(context).size.height * 0.15,
-                  imageWidth: MediaQuery.of(context).size.height * 0.15,
+                  imageHeight: MediaQuery.of(context).size.height * 0.08,
+                  imageWidth: MediaQuery.of(context).size.height * 0.08,
                   isPoly: false,
                   onpressed: () async {
                     ///retrieving the `list of seekers` from the `user provider` and saving them in `seekers`
                     UserProvider userProvider =
                         Provider.of<UserProvider>(context, listen: false);
                     List<UsersModel> seekers = userProvider.seekers;
-
-                   
 
                     /// navigating to the `Seekers` page with the `seekers` and the `city` from the widget input
                     Navigator.push(
@@ -201,17 +201,17 @@ class _UsersState extends State<Users> {
                                 seekersList: seekers, city: widget.city)));
                   }),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery.of(context).size.width * 0.02,
               ),
               HapisElevatedButton(
                   fontSize: 18,
                   elevatedButtonContent: 'Donors',
                   buttonColor: HapisColors.lgColor4,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   imagePath: 'assets/images/giver.png',
-                  imageHeight: MediaQuery.of(context).size.height * 0.15,
-                  imageWidth: MediaQuery.of(context).size.height * 0.15,
+                  imageHeight: MediaQuery.of(context).size.height * 0.08,
+                  imageWidth: MediaQuery.of(context).size.height * 0.08,
                   isPoly: false,
                   onpressed: () {
                     ///retrieving the `list of givers` from the `user provider` and saving them in `givers`
@@ -228,9 +228,6 @@ class _UsersState extends State<Users> {
                   }),
             ],
           ),
-          const SizedBox(
-            height: 40,
-          ),
         ],
       ),
     );
@@ -242,7 +239,9 @@ class _UsersState extends State<Users> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BackButtonWidget(isTablet: true,),
+          BackButtonWidget(
+            isTablet: true,
+          ),
           ConnectionIndicator(isConnected: connection.isConnected),
           Align(
               alignment: Alignment.topLeft,
@@ -332,12 +331,10 @@ class _UsersState extends State<Users> {
                     imageWidth: MediaQuery.of(context).size.height * 0.25,
                     isPoly: false,
                     onpressed: () {
-                   
                       UserProvider userProvider =
                           Provider.of<UserProvider>(context, listen: false);
                       List<UsersModel> givers = userProvider.givers;
 
-                    
                       Navigator.push(
                           context,
                           MaterialPageRoute(

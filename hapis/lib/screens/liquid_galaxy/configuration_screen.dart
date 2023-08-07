@@ -70,13 +70,16 @@ class _ConfigurationState extends State<Configuration> {
           return
               //child:
               Padding(
-            padding: const EdgeInsets.all(50.0),
+            padding: const EdgeInsets.only(
+                top: 20.0, left: 10, right: 10, bottom: 20),
             child: Stack(
               alignment: Alignment.center,
               children: [
                 Column(
                   children: [
-                    BackButtonWidget(isTablet: false,),
+                    BackButtonWidget(
+                      isTablet: false,
+                    ),
                     ConnectionIndicator(isConnected: model.isConnected),
                     const Padding(
                       padding: EdgeInsets.only(
@@ -91,41 +94,48 @@ class _ConfigurationState extends State<Configuration> {
                       ),
                     ),
                     const SizedBox(height: 60),
-                    Text(
-                      'Connection Status: ',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontFamily: GoogleFonts.montserrat().fontFamily,
-                        color: HapisColors.lgColor1,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      model.isConnected == true ? "Connected" : "Not Connected",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: GoogleFonts.montserrat().fontFamily,
-                        color: model.isConnected == true
-                            ? HapisColors.lgColor4
-                            : HapisColors.lgColor2,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Connection Status: ',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
+                            color: HapisColors.lgColor1,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          model.isConnected == true
+                              ? "Connected"
+                              : "Not Connected",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
+                            color: model.isConnected == true
+                                ? HapisColors.lgColor4
+                                : HapisColors.lgColor2,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 60.0),
+                      padding: const EdgeInsets.only(top: 30.0),
                       child: Form(
                           key: _formKey,
                           child: Column(
                             children: [
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.12,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 width: MediaQuery.of(context).size.width * 2,
                                 child: TextFormFieldWidget(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   label: 'LG User Name',
                                   key: const ValueKey("username"),
                                   textController: _userNameController,
@@ -135,10 +145,10 @@ class _ConfigurationState extends State<Configuration> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.12,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 width: MediaQuery.of(context).size.width * 2,
                                 child: TextFormFieldWidget(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   label: 'LG Password',
                                   key: const ValueKey("lgpass"),
                                   textController: _passwordController,
@@ -148,10 +158,10 @@ class _ConfigurationState extends State<Configuration> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.12,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 width: MediaQuery.of(context).size.width * 2,
                                 child: TextFormFieldWidget(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   key: const ValueKey("ip"),
                                   label: 'LG Master IP address',
                                   textController: _ipController,
@@ -161,10 +171,10 @@ class _ConfigurationState extends State<Configuration> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.12,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 width: MediaQuery.of(context).size.width * 2,
                                 child: TextFormFieldWidget(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   label: 'LG Port Number',
                                   key: const ValueKey("port"),
                                   textController: _portController,
@@ -174,10 +184,10 @@ class _ConfigurationState extends State<Configuration> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.12,
+                                    MediaQuery.of(context).size.height * 0.1,
                                 width: MediaQuery.of(context).size.width * 2,
                                 child: TextFormFieldWidget(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   label: 'Number of LG screens',
                                   key: const ValueKey("lgscreens"),
                                   textController: _screenAmountController,
@@ -192,23 +202,12 @@ class _ConfigurationState extends State<Configuration> {
                       height: 40,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.08,
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: MediaQuery.of(context).size.height * 0.05,
                       child: ElevatedButton(
                         onPressed: () async {
                           /// checking first if form is valid
                           if (_formKey.currentState!.validate()) {
-                            // ///calling `saveData` from the provider to save the data entered by the user
-                            // Provider.of<Connectionprovider>(context,
-                            //         listen: false)
-                            //     .saveData(
-                            //   model.userNameController,
-                            //   model.hostController,
-                            //   model.passwordOrKeyController,
-                            //   model.portController,
-                            //   model.screenAmountController,
-                            //   model.isConnected,
-                            // );
                             //saving date in shared pref
                             await LgConnectionSharedPref.setUserName(
                                 _userNameController.text);
@@ -309,7 +308,9 @@ class _ConfigurationState extends State<Configuration> {
               children: [
                 Column(
                   children: [
-                    BackButtonWidget(isTablet: true,),
+                    BackButtonWidget(
+                      isTablet: true,
+                    ),
                     ConnectionIndicator(isConnected: model.isConnected),
                     const Padding(
                       padding: EdgeInsets.only(

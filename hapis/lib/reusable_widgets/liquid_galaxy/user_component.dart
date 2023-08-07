@@ -7,19 +7,20 @@ import 'package:hapis/reusable_widgets/liquid_galaxy/user_elevated_button.dart';
 /// It takes the following paramters
 ///   -   `user` [UsersModel] to be displayed
 ///   -   `type` for the user type
-///   -   `height` and `width` for adapting to different scales and being responsive 
+///   -   `height` and `width` for adapting to different scales and being responsive
 class UserComponent extends StatefulWidget {
   final UsersModel user;
   final String type;
   final double height;
   final double width;
-  const UserComponent({
-    super.key,
-    required this.user,
-    required this.type,
-    required this.height,
-    required this.width
-  });
+  final double? imageHeight;
+  final double? imageWidth;
+  const UserComponent(
+      {super.key,
+      required this.user,
+      required this.type,
+      required this.height,
+      required this.width, this.imageHeight, this.imageWidth});
 
   @override
   State<UserComponent> createState() => _UserComponentState();
@@ -35,6 +36,8 @@ class _UserComponentState extends State<UserComponent> {
       user: widget.user,
       height: widget.height,
       width: widget.width,
+      imageHeight: widget.imageHeight,
+      imageWidth: widget.imageWidth,
     );
   }
 }
