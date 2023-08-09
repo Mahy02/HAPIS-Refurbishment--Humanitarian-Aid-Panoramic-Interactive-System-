@@ -109,6 +109,28 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     return matchings;
   }
 
+
+  /// Function to get the count of matchings for a user
+Future<int> getMatchingsCount(String id) async {
+  String sqlStatement = '''
+    SELECT COUNT(*) AS Count
+    FROM Matchings M
+    JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
+    JOIN Forms F2 ON M.Giver_FormID = F2.FormID
+    JOIN Users U1 ON F1.UserID = U1.UserID
+    JOIN Users U2 ON F2.UserID = U2.UserID
+    WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status = 'Not Started'
+  ''';
+  try {
+    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
+  } catch (e) {
+    print('An error occurred: $e');
+    return 0;
+  }
+}
+
+
   Future<int> updateMatching(int id, String type) async {
     print(type);
     String sqlStatement;

@@ -122,6 +122,43 @@ class DonationsServices {
     return donations;
   }
 
+  /// Function to get the count of in-progress donations for a user
+  Future<int> getInProgressDonationsCount(String id) async {
+    String sqlStatement = '''
+    SELECT COUNT(*) AS Count
+    FROM (
+      -- First query
+      SELECT M_ID
+      FROM Matchings M
+      JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
+      JOIN Forms F2 ON M.Giver_FormID = F2.FormID
+      JOIN Users U1 ON F1.UserID = U1.UserID
+      JOIN Users U2 ON F2.UserID = U2.UserID
+      WHERE (F1.UserID = '$id' OR F2.UserID = '$id')
+        AND ((M.Rec1_Donation_Status = 'In progress' OR M.Rec2_Donation_Status = 'In progress')
+            OR (M.Rec1_Donation_Status = 'Finished' AND M.Rec2_Donation_Status = 'Cancelled')
+            OR (M.Rec2_Donation_Status = 'Finished' AND M.Rec1_Donation_Status = 'Cancelled'))
+      -- Second query
+      UNION ALL
+      SELECT NULL AS M_ID
+      FROM Requests R
+      JOIN Users U1 ON R.Rec_ID = U1.UserID
+      JOIN Users U2 ON R.Sender_ID = U2.UserID
+      WHERE ((R.Rec1_Donation_Status = 'In progress' OR R.Rec2_Donation_Status = 'In progress')
+            OR (R.Rec1_Donation_Status = 'Finished' AND R.Rec2_Donation_Status = 'Cancelled')
+            OR (R.Rec2_Donation_Status = 'Finished' AND R.Rec1_Donation_Status = 'Cancelled'))
+            AND (R.Sender_ID = '$id' OR R.Rec_ID = '$id')
+    ) AS TotalInProgressDonations
+  ''';
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+      return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
+    } catch (e) {
+      print('An error occurred: $e');
+      return 0;
+    }
+  }
+
   Future<Map<String, dynamic>> finishDonation(
       int rid, int mid, String type) async {
     int queryResultRequest = 0;

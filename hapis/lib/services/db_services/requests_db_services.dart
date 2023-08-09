@@ -72,6 +72,40 @@ class RequestsServices {
     return requests;
   }
 
+
+  /// Function to get the count of requests sent by a user
+Future<int> getRequestsSentCount(String id) async {
+  String sqlStatement = '''
+    SELECT COUNT(*) AS Count
+    FROM Requests
+    WHERE Sender_ID = '$id' AND Rec1_Donation_Status = 'Not Started' AND Rec_Status = 'Pending'
+  ''';
+  try {
+    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
+  } catch (e) {
+    print('An error occurred: $e');
+    return 0;
+  }
+}
+
+/// Function to get the count of requests received by a user
+Future<int> getRequestsReceivedCount(String id) async {
+  String sqlStatement = '''
+    SELECT COUNT(*) AS Count
+    FROM Requests
+    WHERE Rec_ID = '$id' AND Rec1_Donation_Status = 'Not Started' AND Rec_Status = 'Pending'
+  ''';
+  try {
+    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+    return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
+  } catch (e) {
+    print('An error occurred: $e');
+    return 0;
+  }
+}
+
+
   Future<int> acceptRequest(int id) async {
     String sqlStatement = '''
     UPDATE Requests 

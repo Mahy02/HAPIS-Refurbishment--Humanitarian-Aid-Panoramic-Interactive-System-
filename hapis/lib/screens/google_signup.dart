@@ -352,9 +352,13 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
   Future signIn(bool isGoogleUser) async {
     if (isGoogleUser) {
       try {
+        print('here1');
         await GoogleSignInApi.login();
+        print('here2');
         await GoogleSignInApi.logout();
+        print('here3');
         final user = await GoogleSignInApi.login();
+        print('here4');
 
         if (user == Null) {
         } else {
@@ -371,6 +375,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
           } else {
             showDatabasePopup(context,
                 'User doesn\'t exist \n \nPlease check your credentials again or try signing up if you are new to HAPIS.');
+            return;
           }
         }
       } on Exception catch (e) {
@@ -378,6 +383,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
         print('Sign-in error: $e');
         showDatabasePopup(context,
             'There was a problem signing in. \nPlease try again later.');
+        return;
       }
     } else {
       String pass = _passController.text;
@@ -396,6 +402,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
         print(userID);
         showDatabasePopup(context,
             'User doesn\'t exist \n \nPlease check your credentials again or try signing up if you are new to HAPIS.');
+        return;
       }
     }
   }
@@ -424,6 +431,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
       print('Sign-in error: $e');
       showDatabasePopup(
           context, 'There was a problem signing in. \nPlease try again later.');
+      return;
     }
   }
 }

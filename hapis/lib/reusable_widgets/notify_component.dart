@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
+import 'package:hapis/services/db_services/notifications_services.dart';
 
-class NotificationComponent extends StatelessWidget {
+import '../utils/database_popups.dart';
+
+class NotificationComponent extends StatefulWidget {
   final String title;
   final String message;
+  final int id;
+  final VoidCallback? onPressed;
 
   const NotificationComponent({
     required this.title,
     required this.message,
+    required this.id,
+    required this.onPressed,
   });
 
+  @override
+  State<NotificationComponent> createState() => _NotificationComponentState();
+}
+
+class _NotificationComponentState extends State<NotificationComponent> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -18,8 +30,25 @@ class NotificationComponent extends StatelessWidget {
           Icons.notifications,
           color: HapisColors.lgColor3,
         ),
+        trailing: IconButton(
+          icon: Icon(
+            Icons.check_circle_outline,
+            color: HapisColors.lgColor4,
+          ),
+          onPressed: () async {
+            int result =
+                await NotificationsServices().deleteNotification(widget.id);
+            print('result');
+
+            if (result <= 0) {
+              showDatabasePopup(context,
+                  'Error confirming notifications \n\nPlease try again later.');
+            }
+            widget.onPressed!();
+          },
+        ),
         title: Text(
-          title,
+          widget.title,
           style: TextStyle(
               fontSize: 20,
               color: HapisColors.lgColor1,
@@ -28,7 +57,7 @@ class NotificationComponent extends StatelessWidget {
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
-            message,
+            widget.message,
             style: TextStyle(fontSize: 18, color: Colors.black),
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:hapis/helpers/login_session_shared_preferences.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/app_home.dart';
 import 'package:hapis/screens/sign_up_page.dart';
+import 'package:hapis/services/notification_services.dart';
 import 'package:hapis/utils/date_popup.dart';
 import 'package:hapis/utils/drawer.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -14,13 +15,37 @@ import '../helpers/google_signin_api.dart';
 import '../models/db_models/user_model.dart';
 import '../responsive/responsive_layout.dart';
 import '../reusable_widgets/back_button.dart';
+import '../services/db_services/notifications_services.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/database_popups.dart';
 import '../utils/signup_popup.dart';
 import 'notify_screen.dart';
 
-class AppSettings extends StatelessWidget {
+class AppSettings extends StatefulWidget {
   const AppSettings({Key? key}) : super(key: key);
+
+  @override
+  State<AppSettings> createState() => _AppSettingsState();
+}
+
+class _AppSettingsState extends State<AppSettings> {
+  late String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    if (GoogleSignInApi().isUserSignedIn() == true ||
+        LoginSessionSharedPreferences.getLoggedIn() == true) {
+      final user = GoogleSignInApi().getCurrentUser();
+      if (user != null) {
+        userId = user.id;
+      } else {
+        userId = LoginSessionSharedPreferences.getUserID()!;
+      }
+    } else {
+      userId = '0';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,26 +65,6 @@ class AppSettings extends StatelessWidget {
       alignment: Alignment.center,
       child: SettingsList(
         sections: [
-          // SettingsSection(tiles: [
-          //   SettingsTile(
-          //     title: Center(
-          //       child: Align(
-          //         alignment: Alignment.center,
-          //         child: UserAccountsDrawerHeader(
-          //           decoration: BoxDecoration(
-          //             color: Colors.transparent,
-          //           ),
-          //           accountName: Text('Your Name'),
-          //           accountEmail: Text('user@example.com'),
-          //           currentAccountPicture: CircleAvatar(
-          //             backgroundImage: AssetImage('assets/images/donorpin.png'),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ]),
-
           SettingsSection(
             tiles: [
               SettingsTile(
@@ -69,7 +74,6 @@ class AppSettings extends StatelessWidget {
               ),
             ],
           ),
-
           SettingsSection(
             title: Text(
               'Account',
@@ -122,11 +126,40 @@ class AppSettings extends StatelessWidget {
                   Icons.notifications,
                   color: HapisColors.lgColor4,
                 ),
+                trailing: FutureBuilder<int>(
+                  future: NotificationsServices().getNotificationCount(
+                      userId), // Replace userId with the actual user ID
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // While waiting for the future to complete, show a loading indicator
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      // If an error occurred, display an error message
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      // If the future completed successfully, show the notification count
+                      int notificationCount = snapshot.data ?? 0;
+                      return CircleAvatar(
+                        backgroundColor: Colors.red,
+                        radius: 10,
+                        child: Text(
+                          '$notificationCount',
+                          style: TextStyle(color: Colors.white, fontSize: 10),
+                        ),
+                      );
+                    }
+                  },
+                ),
                 onPressed: (BuildContext context) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationPage()));
+                  if (GoogleSignInApi().isUserSignedIn() == true ||
+                      LoginSessionSharedPreferences.getLoggedIn() == true) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotificationPage()));
+                  } else {
+                    showDialogSignUp(context);
+                  }
                 },
               ),
             ],
