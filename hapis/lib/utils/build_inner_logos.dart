@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hapis/constants.dart';
 import 'package:hapis/reusable_widgets/back_button.dart';
 
 import 'colors.dart';
@@ -76,41 +77,106 @@ Widget buildTabletLogos() {
           padding: const EdgeInsets.all(20.0),
           child: Align(
             alignment: Alignment.center,
-            child: Text(
-              'Contributor: Mahinour Elsarky',
-              style: TextStyle(
-                  fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: TextStyle(
+                    fontSize: 32,
+                    fontFamily: GoogleFonts.lato().fontFamily,
+                    color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Made by: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor1),
+                  ),
+                  TextSpan(text: 'Mahinour Elsarky \n'),
+                  TextSpan(
+                    text: 'Organization : ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor2),
+                  ),
+                  TextSpan(text: 'Liquid Galaxy project \n'),
+                  TextSpan(
+                    text: 'Mentor: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor3),
+                  ),
+                  TextSpan(text: 'Claudia Diosan \n'),
+                  TextSpan(
+                    text: 'Organization admin: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor4),
+                  ),
+                  TextSpan(text: 'Andreu Ibañez \n'),
+                  TextSpan(
+                    text: 'Liquid Galaxy LAB testers : ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor1),
+                  ),
+                  TextSpan(text: 'Mohamed Zazou, Navdeep Singh, Imad Laichi'),
+                ],
+              ),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Mentors: Claudia Diosan, Karine Pistili Rodrigues, Deniz Yuksel',
-              style: TextStyle(
-                  fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Liquid Galxy Project Admin: Andreu Ibáñez Perales',
-              style: TextStyle(
-                  fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
-            ),
-          ),
-        ),
+
+        // Padding(
+        //   padding: const EdgeInsets.all(20.0),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: Text(
+        //       'Organization : Liquid Galaxy project',
+        //       style: TextStyle(
+        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
+        //     ),
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(20.0),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: Text(
+        //       'Mentor: Claudia Diosan',
+        //       style: TextStyle(
+        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
+        //     ),
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(20.0),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: Text(
+        //       'Organization admin: Andreu Ibañez',
+        //       style: TextStyle(
+        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
+        //     ),
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(20.0),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: Text(
+        //       'Liquid Galaxy LAB testers : Mohamed Zazou,Navdeep Singh, Imad Laichi',
+        //       style: TextStyle(
+        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
+        //     ),
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Align(
             alignment: Alignment.center,
             child: Text(
               'The main idea of HAPIS Refurbishment is to have a simple functional application that is able to connect those who need something with those willing to offer it through an android mobile application where the user can simply fill in a form or view the list of seekers & givers any place in the world. Things offered can fall in any category such as food, clothes, electronics, books...etc. We will use the technology of Liquid Galaxy in order to visualize all Humanitarian actions all around the world by viewing on the LG the number of people currently offering something, or seeking something as well as some statistics such as the number of successful donations that happened either locally or globally. Controlling the LG would be through an android tablet application.',
+              textAlign: TextAlign.justify,
               style: TextStyle(
                   fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
             ),
@@ -251,44 +317,96 @@ Widget buildMobileLogos() {
           padding: const EdgeInsets.all(20.0),
           child: Align(
             alignment: Alignment.center,
-            child: Text(
-              'Contributor: Mahinour Elsarky',
-              style: TextStyle(
-                  fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Mentors: Claudia Diosan, Karine Pistili Rodrigues, Deniz Yuksel',
+            child: RichText(
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
+              text: TextSpan(
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: GoogleFonts.lato().fontFamily,
+                    color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Made by: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor1),
+                  ),
+                  TextSpan(text: 'Mahinour Elsarky \n'),
+                  TextSpan(
+                    text: 'Organization : ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor2),
+                  ),
+                  TextSpan(text: 'Liquid Galaxy project \n'),
+                  TextSpan(
+                    text: 'Mentor: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor3),
+                  ),
+                  TextSpan(text: 'Claudia Diosan \n'),
+                  TextSpan(
+                    text: 'Organization admin: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor4),
+                  ),
+                  TextSpan(text: 'Andreu Ibañez \n'),
+                  TextSpan(
+                    text: 'Liquid Galaxy LAB testers : ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: HapisColors.lgColor1),
+                  ),
+                  TextSpan(text: 'Mohamed Zazou, Navdeep Singh, Imad Laichi'),
+                ],
+              ),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Liquid Galxy Project Admin: Andreu Ibáñez Perales',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(20.0),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: Text(
+        //       'Contributor: Mahinour Elsarky',
+        //       style: TextStyle(
+        //           fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
+        //     ),
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(20.0),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: Text(
+        //       'Mentors: Claudia Diosan, Karine Pistili Rodrigues, Deniz Yuksel',
+        //       textAlign: TextAlign.center,
+        //       style: TextStyle(
+        //           fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
+        //     ),
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(20.0),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: Text(
+        //       'Liquid Galxy Project Admin: Andreu Ibáñez Perales',
+        //       textAlign: TextAlign.center,
+        //       style: TextStyle(
+        //           fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
+        //     ),
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Align(
             alignment: Alignment.center,
             child: Text(
               'The main idea of HAPIS Refurbishment is to have a simple functional application that is able to connect those who need something with those willing to offer it through an android mobile application where the user can simply fill in a form or view the list of seekers & givers any place in the world. Things offered can fall in any category such as food, clothes, electronics, books...etc. We will use the technology of Liquid Galaxy in order to visualize all Humanitarian actions all around the world by viewing on the LG the number of people currently offering something, or seeking something as well as some statistics such as the number of successful donations that happened either locally or globally. Controlling the LG would be through an android tablet application.',
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.justify,
               style: TextStyle(
                   fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
             ),
