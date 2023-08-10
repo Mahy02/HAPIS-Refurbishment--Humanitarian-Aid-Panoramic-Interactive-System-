@@ -64,24 +64,24 @@ android {
         //flutterVersionName
     }
     
-    // signingConfigs{
-    //     debug{
-    //         keyAlias 'androiddebugkey'
-    //         keyPassword 'hApis_GsoC@2023_MC'
-    //         storeFile file('mykey.jks')
-    //         storePassword 'hApis_GsoC@2023_MC'
-    //     }
-    // }
-
-    signingConfigs {
-        release {
-
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+    signingConfigs{
+        debug{
+            keyAlias 'androiddebugkey'
+            keyPassword 'hApis_GsoC@2023_MC'
+            storeFile file('mykey.jks')
+            storePassword 'hApis_GsoC@2023_MC'
         }
     }
+
+    // signingConfigs {
+    //     release {
+
+    //         keyAlias keystoreProperties['keyAlias']
+    //         keyPassword keystoreProperties['keyPassword']
+    //         storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+    //         storePassword keystoreProperties['storePassword']
+    //     }
+    // }
 
     buildTypes {
          release {
