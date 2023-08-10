@@ -1,2 +1,20 @@
-# HAPIS Refurbishment "Humanitarian Aid Panoramic Interactive System"
- The main idea of HAPIS Refurbishment is to have a simple functional application that is able to connect those who need something with those willing to offer it through an android mobile application where the user can simply fill in a form or view the list of seekers & givers any place in the world. Things offered can fall in any category such as food, clothes, electronics, books...etc. We will use the technology of Liquid Galaxy in order to visualize all Humanitarian actions all around the world by viewing on the LG the number of people currently offering something, or seeking something as well as some statistics such as the number of successful donations that happened either locally or globally. Controlling the LG would be through an android tablet application.
+# HAPIS “Humanitarian Aid Panoramic Interactive system”
+
+## Welcome to HAPIS project
+
+This project was started as Google Summer of Code 2020 project by my mentor Claudia Diosan as “Homeless Aid Panoramic Interactive system” but due to Covid-19 the launch lagged behind. It was decided that it needs refurbishment and the project refurbishment has started as Google Summer Of Code 2023 project.
+
+It is an Android application that aims to connect people all over the world together to allow people who want to donate something to help those who need or seek something. Things donated can fall into many categories such as Food, Clothes, Toys & games, Books & Media, Electronics, Pet food, Baby items, Housing items….etc. Besides, it can be connected with the Liquid Galaxy System to view all global and local statistics for each city as well as show users information for each city, donors and seekers. 
+
+
+
+## Google Summer Of Code 2023 with Liquid Galaxy Organization:
+
+<div style="display: flex; justify-content: center;">
+  <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week1/hapis/assets/images/LOGO%20LIQUID%20GALAXY-sq1000-%20OKnoline.png" alt="Liquid Galaxy logo" width="200" style="margin-right: 20px;">
+  <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week1/hapis/assets/images/gsoc.png" alt="Liquid Galaxy logo" width="200">
+</div>
+
+
+
+
