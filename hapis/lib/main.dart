@@ -38,8 +38,11 @@ void main() async {
 
   // SqlDb sqlDbb = SqlDb();
   // await sqlDbb.deleteDb();
-  SqlDb sqlDb = SqlDb();
-  await sqlDb.importAllTablesFromCSV();
+
+  
+  //those were uncommented
+  //SqlDb sqlDb = SqlDb();
+  //await sqlDb.importAllTablesFromCSV();
 
   /// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
   await LoginSessionSharedPreferences.init();

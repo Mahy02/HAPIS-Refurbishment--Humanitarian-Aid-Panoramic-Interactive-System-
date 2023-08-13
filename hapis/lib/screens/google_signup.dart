@@ -360,6 +360,8 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
         final user = await GoogleSignInApi.login();
         print('here4');
 
+        print(user.id);
+
         if (user == Null) {
         } else {
           final userExists =

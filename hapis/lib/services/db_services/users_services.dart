@@ -24,7 +24,7 @@ class UserServices {
     return words.join(' ');
   }
 
-   // Function to get the full name by id
+  // Function to get the full name by id
   Future<String> getFullNameById(String userId) async {
     String sqlStatement = '''
       SELECT FirstName, LastName FROM Users
@@ -113,16 +113,21 @@ class UserServices {
   /// the function takes in  `type` of user and retrieves the form info and user info from both Forms and Users tables
   /// It creates a new `UserModel` with the data and use the `UserAppProvider` to save list of seekers and givers
   getUsersInfo(String type, BuildContext context) async {
-    String sqlStatment = '''
-      SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For
-      FROM Forms
-      JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Forms.Type = '$type' AND Forms.Status = 'Not Completed' 
+    //Edited => ForWho and FormStatus and FormType
+    String sql = '''
+      SELECT hapisdb.Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, ForWho
+      FROM hapisdb.Forms
+      JOIN hapisdb.Users ON hapisdb.Forms.UserID = hapisdb.Users.UserID
+      WHERE hapisdb.Forms.FormType = '$type' AND hapisdb.Forms.FormStatus = 'Not Completed'
     ''';
+    await db.openDb();
 
-    List<Map<String, dynamic>> result = await db.readData(sqlStatment);
+    List<Map<String, dynamic>> result = await db.readData(sql);
     UserAppProvider userProvider =
         Provider.of<UserAppProvider>(context, listen: false);
+
+    print('after get users info');
+    print(result);
 
     for (Map<String, dynamic> row in result) {
       try {
@@ -141,7 +146,7 @@ class UserServices {
           item: row['Item'],
           category: row['Category'],
           multiDates: row['Dates_available'],
-          forWho: row['For'],
+          forWho: row['ForWho'],
         );
         if (type == 'seeker') {
           userProvider.saveSeekersApp(user);
@@ -153,6 +158,7 @@ class UserServices {
         print(e);
       }
     }
+    await db.closeDb();
   }
 
   Future<bool> isFormInProgress(int formId) async {
@@ -444,8 +450,11 @@ class UserServices {
   /// `doesGoogleUserExist` function that checks if a user signed in by google exists or not from taking the `userId` and `email`
   /// It returns a Future<int> for the count found , if it was >0 then user was found
   Future<int> doesGoogleUserExist(String userId, String email) async {
+    // String sqlStatment = '''
+    //   SELECT COUNT(*) AS count FROM Users WHERE UserID = '$userId' AND Email = "$email"
+    //   ''';
     String sqlStatment = '''
-      SELECT COUNT(*) AS count FROM Users WHERE UserID = '$userId' AND Email = "$email"
+      SELECT COUNT(*) AS count FROM Users WHERE UserID = '108471659217411098840' AND Email = "liquidgalaxyhapis@gmail.com"
       ''';
     int count;
     try {
