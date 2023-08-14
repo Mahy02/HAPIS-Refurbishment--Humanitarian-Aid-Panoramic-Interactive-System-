@@ -252,22 +252,101 @@ class _LgHomePageState extends State<LgHomePage> {
                     onpressed: () async {
                       //TourService().tourKML;
                       print('tourr');
-                      // final sshData =
-                      //     Provider.of<SSHprovider>(context, listen: false);
-                      // final tourKml = KMLModel(
-                      //   name: 'HAPIS-tour',
-                      //   content: TourService().tourKMLContent,
-                      // );
+                      final sshData =
+                          Provider.of<SSHprovider>(context, listen: false);
 
-                      try {
-                        /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
-                      } catch (e) {
-                        // ignore: avoid_print
-                        print(e);
+                      if (sshData.client != null) {
+                        try {
+                          await LgService(sshData).clearKml();
+                          String tourKmlContent =
+                              await TourService().generateTourKMLContent();
+                          await LgService(sshData)
+                              .sendTour(tourKmlContent, 'Hapis-Tour');
+                        } catch (e) {
+                          // ignore: avoid_print
+                          print(e);
+                        }
+                      } else {
+                        showDialogConnection(context);
                       }
                     }),
                 const SizedBox(
                   height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: HapisColors.lgColor4,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.play_arrow,
+                          size: 30,
+                          color: HapisColors.lgColor1,
+                        ),
+                        onTap: () async {
+                          final sshData =
+                              Provider.of<SSHprovider>(context, listen: false);
+
+                          if (sshData.client != null) {
+                            try {
+                              await LgService(sshData).startTour('Hapis-Tour');
+                            } catch (e) {
+                              // ignore: avoid_print
+                              print(e);
+                            }
+                          } else {
+                            showDialogConnection(context);
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 40,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: HapisColors.lgColor2,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.pause_circle,
+                          size: 30,
+                          color: HapisColors.lgColor1,
+                        ),
+                        onTap: () async {
+                          final sshData =
+                              Provider.of<SSHprovider>(context, listen: false);
+
+                          if (sshData.client != null) {
+                            try {
+                              await LgService(sshData).stopTour();
+                            } catch (e) {
+                              // ignore: avoid_print
+                              print(e);
+                            }
+                          } else {
+                            showDialogConnection(context);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 40,
                 ),
               ],
             ),
@@ -390,20 +469,20 @@ class _LgHomePageState extends State<LgHomePage> {
                       print('tourr');
                       final sshData =
                           Provider.of<SSHprovider>(context, listen: false);
-                      // final tourKml = KMLModel(
-                      //   name: 'HAPIS-tour',
-                      //   content: TourService().tourKMLContent,
-                      // );
 
-                      try {
-                        await LgService(sshData).clearKml();
-                        String tourKmlContent =
-                            await TourService().generateTourKMLContent();
-                        await LgService(sshData)
-                            .sendTour(tourKmlContent, 'Hapis-Tour');
-                      } catch (e) {
-                        // ignore: avoid_print
-                        print(e);
+                      if (sshData.client != null) {
+                        try {
+                          await LgService(sshData).clearKml();
+                          String tourKmlContent =
+                              await TourService().generateTourKMLContent();
+                          await LgService(sshData)
+                              .sendTour(tourKmlContent, 'Hapis-Tour');
+                        } catch (e) {
+                          // ignore: avoid_print
+                          print(e);
+                        }
+                      } else {
+                        showDialogConnection(context);
                       }
                     }),
               ],
@@ -411,6 +490,81 @@ class _LgHomePageState extends State<LgHomePage> {
           ),
           const SizedBox(
             height: 40,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 100.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: HapisColors.lgColor4,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: GestureDetector(
+                    child: Icon(
+                      Icons.play_arrow,
+                      size: 80,
+                      color: HapisColors.lgColor1,
+                    ),
+                    onTap: () async {
+                      final sshData =
+                          Provider.of<SSHprovider>(context, listen: false);
+
+                      if (sshData.client != null) {
+                        try {
+                          await LgService(sshData).startTour('Hapis-Tour');
+                        } catch (e) {
+                          // ignore: avoid_print
+                          print(e);
+                        }
+                      } else {
+                        showDialogConnection(context);
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: HapisColors.lgColor2,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: GestureDetector(
+                    child: Icon(
+                      Icons.pause_circle,
+                      size: 80,
+                      color: HapisColors.lgColor1,
+                    ),
+                    onTap: () async {
+                      final sshData =
+                          Provider.of<SSHprovider>(context, listen: false);
+
+                      if (sshData.client != null) {
+                        try {
+                          await LgService(sshData).stopTour();
+                        } catch (e) {
+                          // ignore: avoid_print
+                          print(e);
+                        }
+                      } else {
+                        showDialogConnection(context);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
