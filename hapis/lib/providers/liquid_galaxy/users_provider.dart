@@ -38,8 +38,7 @@ class UserProvider extends ChangeNotifier {
   /// Property that defines the user's email
   String? _email;
 
-  /// Property that defines the user's password
-  String? _pass;
+ 
 
   /// property that defines the user's total number of donations
   int? _givings;
@@ -64,10 +63,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set pass(String? value) {
-    _pass = value;
-    notifyListeners();
-  }
+ 
 
   set email(String? value) {
     _email = value;
@@ -139,7 +135,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? get pass => _pass;
+ 
   String? get email => _email;
   String? get phoneNum => _phoneNum;
   String? get addressLocation => _addressLocation;
@@ -183,7 +179,7 @@ class UserProvider extends ChangeNotifier {
     _user.addressLocation = addressLocation;
     _user.phoneNum = phoneNum;
     _user.email = email;
-    _user.pass = pass;
+   
     _user.seekingsForSelf = seekingsForSelf;
     _user.seekingForOthers = _seekingForOthers;
     _user.givings = _givings;

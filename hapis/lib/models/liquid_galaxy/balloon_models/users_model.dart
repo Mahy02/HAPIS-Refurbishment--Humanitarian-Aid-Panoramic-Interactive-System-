@@ -34,8 +34,7 @@ class UsersModel {
   /// Property that defines the user's email
   String? email;
 
-  /// Property that defines the user's password
-  String? pass;
+ 
 
   /// property that defines the user's total number of donations
   int? givings;
@@ -61,7 +60,7 @@ class UsersModel {
       this.addressLocation,
       this.phoneNum,
       this.email,
-      this.pass,
+     
       this.givings,
       this.seekingForOthers,
       this.seekingsForSelf,
@@ -152,7 +151,6 @@ class UsersModel {
       addressLocation: map['AddressLocation'],
       phoneNum: map['PhoneNum'],
       email: map['Email'],
-      pass: map['Password'],
     );
   }
 }

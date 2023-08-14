@@ -20,7 +20,7 @@ class cityDBServices {
     ''';
     List<Map> result = await db.readData(sqlStatment);
 
-    int numberOfSeekers = result[0]['seeker_count'];
+    int numberOfSeekers = int.parse(result[0]['seeker_count']);
 
     return numberOfSeekers;
   }
@@ -35,7 +35,7 @@ class cityDBServices {
     ''';
     List<Map> result = await db.readData(sqlStatment);
 
-    int numberOfGivers = result[0]['giver_count'];
+    int numberOfGivers = int.parse(result[0]['giver_count']);
 
     return numberOfGivers;
   }
@@ -43,7 +43,7 @@ class cityDBServices {
   /// Retrieve the list of seekers and all their info for the given city `cityName`
   getSeekersInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
-      SELECT  Users.UserID AS UserUserID , UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password,COUNT(CASE WHEN Forms.For = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.For = 'other' THEN Forms.FormID END) AS other_count
+      SELECT  Users.UserID AS UserUserID , UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,COUNT(CASE WHEN Forms.ForWho = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.ForWho = 'other' THEN Forms.FormID END) AS other_count
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
       WHERE Users.City = '$cityName' AND Forms.FormType = 'seeker'
@@ -96,9 +96,8 @@ class cityDBServices {
           addressLocation: row['AddressLocation'],
           phoneNum: row['PhoneNum'],
           email: row['Email'],
-          pass: row['Password'],
-          seekingForOthers: row['other_count'],
-          seekingsForSelf: row['self_count'],
+          seekingForOthers: int.parse(row['other_count']),
+          seekingsForSelf: int.parse(row['self_count']),
           userCoordinates: coords,
         );
         userProvider.saveSeekers(user);
@@ -112,7 +111,7 @@ class cityDBServices {
   /// Retrieve the list of giversand all their info for the given city `cityName`
   getGiversInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
-      SELECT  Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password, COUNT(*) AS numberOfGivings
+      SELECT  Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, COUNT(*) AS numberOfGivings
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
       WHERE Users.City = '$cityName' AND Forms.FormType = 'giver'
@@ -137,8 +136,8 @@ class cityDBServices {
           addressLocation: row['AddressLocation'],
           phoneNum: row['PhoneNum'],
           email: row['Email'],
-          pass: row['Password'],
-          givings: row['numberOfGivings'],
+         
+          givings:int.parse( row['numberOfGivings']),
           userCoordinates: coords,
         );
         userProvider.saveGivers(user);
@@ -170,7 +169,7 @@ class cityDBServices {
   ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
-    int numberOfSuccessfulDonations = result[0]['successful_donation_count'];
+    int numberOfSuccessfulDonations = int.parse(result[0]['successful_donation_count']);
 
     return numberOfSuccessfulDonations;
   }
@@ -196,7 +195,7 @@ class cityDBServices {
   ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
-    int numberOfInProgressDonations = result[0]['Inprogress_donation_count'];
+    int numberOfInProgressDonations = int.parse(result[0]['Inprogress_donation_count']);
 
     return numberOfInProgressDonations;
   }

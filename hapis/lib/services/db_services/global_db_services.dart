@@ -14,7 +14,7 @@ class globalDBServices {
     ''';
     List<Map> result = await db.readData(sqlStatment);
 
-    int numberOfSeekers = result[0]['seeker_count'];
+    int numberOfSeekers = int.parse(result[0]['seeker_count']);
 
     return numberOfSeekers;
   }
@@ -28,7 +28,7 @@ class globalDBServices {
     ''';
     List<Map> result = await db.readData(sqlStatment);
 
-    int numberOfGivers = result[0]['giver_count'];
+    int numberOfGivers = int.parse(result[0]['giver_count']);
 
     return numberOfGivers;
   }
@@ -51,7 +51,7 @@ class globalDBServices {
   ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
-    int numberOfSuccessfulDonations = result[0]['successful_donation_count'];
+    int numberOfSuccessfulDonations = int.parse( result[0]['successful_donation_count']);
 
     return numberOfSuccessfulDonations;
   }
@@ -74,7 +74,7 @@ class globalDBServices {
   ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
-    int numberOfInProgressDonations = result[0]['Inprogress_donation_count'];
+    int numberOfInProgressDonations = int.parse(result[0]['Inprogress_donation_count']);
 
     return numberOfInProgressDonations;
   }
@@ -103,7 +103,7 @@ class globalDBServices {
   /// Retrieve the top 3 cities globally
   Future<List<String>> getTopCities() async {
     String sqlStatement = '''
-        SELECT Users.city, COUNT(*) AS city_count
+        SELECT Users.City AS City , COUNT(*) AS city_count
         FROM Forms
         JOIN Users ON Forms.UserID = Users.UserID
         GROUP BY Users.city
