@@ -94,16 +94,17 @@ class UserServices {
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
     List<UserModel> user = queryResult
         .map((row) => UserModel(
-            userID: row['UserID'],
-            userName: row['UserName'],
-            firstName: row['FirstName'],
-            lastName: row['LastName'],
-            city: row['City'],
-            country: row['Country'],
-            addressLocation: row['AddressLocation'],
-            phoneNum: row['PhoneNum'],
-            email: row['Email'],
-            pass: row['Password']))
+              userID: row['UserID'],
+              userName: row['UserName'],
+              firstName: row['FirstName'],
+              lastName: row['LastName'],
+              city: row['City'],
+              country: row['Country'],
+              addressLocation: row['AddressLocation'],
+              phoneNum: row['PhoneNum'],
+              email: row['Email'],
+              // pass: row['Password']
+            ))
         .toList();
 
     return user[0];
@@ -120,9 +121,9 @@ class UserServices {
       JOIN hapisdb.Users ON hapisdb.Forms.UserID = hapisdb.Users.UserID
       WHERE hapisdb.Forms.FormType = '$type' AND hapisdb.Forms.FormStatus = 'Not Completed'
     ''';
-    await db.openDb();
 
     List<Map<String, dynamic>> result = await db.readData(sql);
+
     UserAppProvider userProvider =
         Provider.of<UserAppProvider>(context, listen: false);
 
@@ -133,7 +134,7 @@ class UserServices {
       try {
         UserModel user = UserModel(
           userID: row['UserUserID'],
-          formID: row['FormID'],
+          formID: int.parse(row['FormID']),
           userName: row['UserName'],
           firstName: row['FirstName'],
           lastName: row['LastName'],
@@ -148,6 +149,7 @@ class UserServices {
           multiDates: row['Dates_available'],
           forWho: row['ForWho'],
         );
+
         if (type == 'seeker') {
           userProvider.saveSeekersApp(user);
         } else {
@@ -158,7 +160,6 @@ class UserServices {
         print(e);
       }
     }
-    await db.closeDb();
   }
 
   Future<bool> isFormInProgress(int formId) async {
@@ -173,7 +174,7 @@ class UserServices {
   ''';
       final resultR = await db.readData(sqlStatementsR);
       print(resultR);
-      int requestsCount = resultR[0]['countR'];
+      int requestsCount = int.parse(resultR[0]['countR']);
 
       String sqlStatementsM = '''
      SELECT COUNT(*) as countM 
@@ -182,7 +183,7 @@ class UserServices {
   ''';
 
       final resultM = await db.readData(sqlStatementsM);
-      int matchingsCount = resultM[0]['countM'];
+      int matchingsCount = int.parse(resultM[0]['countM']);
       print(resultM);
 
       print(requestsCount > 0 || matchingsCount > 0);
@@ -196,10 +197,10 @@ class UserServices {
 
   Future<List<UserModel>> getUserForms(String id) async {
     String sqlStatment = '''
-      SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, For, Type
+      SELECT Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, ForWho, FormType
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Forms.Status = 'Not Completed' AND Forms.UserID = '$id'
+      WHERE Forms.FormStatus = 'Not Completed' AND Forms.UserID = '$id'
     ''';
 
     List<UserModel> forms;
@@ -209,7 +210,7 @@ class UserServices {
       forms = queryResult
           .map((row) => UserModel(
                 userID: id,
-                formID: row['FormID'],
+                formID: int.parse(row['FormID']),
                 userName: row['UserName'],
                 firstName: row['FirstName'],
                 lastName: row['LastName'],
@@ -218,11 +219,11 @@ class UserServices {
                 addressLocation: row['AddressLocation'],
                 phoneNum: row['PhoneNum'],
                 email: row['Email'],
-                type: row['Type'],
+                type: row['FormType'],
                 item: row['Item'],
                 category: row['Category'],
                 multiDates: row['Dates_available'],
-                forWho: row['For'],
+                forWho: row['ForWho'],
               ))
           .toList();
     } catch (e) {
@@ -237,12 +238,14 @@ class UserServices {
   Future<int> createNewForm(String userID, String type, String item,
       String category, String dates, String? forWho, String status) async {
     String sqlStatment = '''
-    INSERT INTO Forms (UserID , Type, Item, Category, Dates_available, For, Status)
+    INSERT INTO Forms (UserID , FormType, Item, Category, Dates_available, ForWho, FormStatus)
         VALUES ('$userID' , '$type', '$item', '$category', '$dates', '${forWho ?? ''}', '$status')
     ''';
 
     try {
       int rowID = await db.insertData(sqlStatment);
+      print('rowID');
+      print(rowID);
 
       return rowID;
     } catch (e) {
@@ -257,6 +260,24 @@ class UserServices {
     }
   }
 
+  Future<int> completeForm(int formID) async {
+    String sqlStatement = '''
+    UPDATE Forms
+    SET FormStatus='Completed'
+    WHERE FormID = $formID
+  ''';
+
+    try {
+      int rowID = await db.updateData(sqlStatement);
+
+      return rowID;
+    } catch (e) {
+      print('Error updating form: $e');
+
+      return -3; // Error updating form
+    }
+  }
+
   Future<int> updateForm(
     String userID,
     String type,
@@ -268,7 +289,7 @@ class UserServices {
     int formID,
   ) async {
     String sqlQuery = '''
-    SELECT UserID, Type, Item, Category, Dates_available, For, Status
+    SELECT UserID, FormType, Item, Category, Dates_available, ForWho, FormStatus
     FROM Forms
     WHERE FormID = $formID
   ''';
@@ -284,20 +305,20 @@ class UserServices {
 
     // Check if the new values are different from the existing values
     if (existingForm['UserID'] == userID &&
-        existingForm['Type'] == type &&
+        existingForm['FormType'] == type &&
         existingForm['Item'] == item &&
         existingForm['Category'] == category &&
         existingForm['Dates_available'] == dates &&
-        existingForm['For'] == (forWho ?? '') &&
-        existingForm['Status'] == status) {
+        existingForm['ForWho'] == (forWho ?? '') &&
+        existingForm['FormStatus'] == status) {
       //no need for updating as no changes made
       return 0;
     }
 
     String sqlStatement = '''
     UPDATE Forms
-    SET UserID= '$userID', Type= '$type', Item='$item', Category='$category',
-        Dates_available='$dates', For='${forWho ?? ''}', Status='$status'
+    SET UserID= '$userID', FormType= '$type', Item='$item', Category='$category',
+        Dates_available='$dates', ForWho='${forWho ?? ''}', FormStatus='$status'
     WHERE FormID = $formID
   ''';
 
@@ -337,6 +358,7 @@ class UserServices {
 
     try {
       queryResult = await db.deleteData(sqlStatement);
+      print(queryResult);
     } catch (e) {
       print('Error deleting user: $e');
       return 0;
@@ -357,6 +379,8 @@ class UserServices {
       required String address,
       required String email,
       String? password}) async {
+    // Capitalize the first letter of the city
+    String capitalizedCity = capitalizeFirstLetter(city);
     String sqlStatment = '''
       INSERT INTO Users (
         UserID,
@@ -367,9 +391,8 @@ class UserServices {
         Country,
         AddressLocation,
         PhoneNum,
-        Email,
-        Password
-      ) VALUES ('$userID', '$userName', '$firstName', '$lastName', '$city', '$counrty', '$address', '$phoneNum', '$email', '${password ?? ''}')
+        Email
+      ) VALUES ('$userID', '$userName', '$firstName', '$lastName', '$capitalizedCity', '$counrty', '$address', '$phoneNum', '$email');
     ''';
     try {
       int result = await db.insertData(sqlStatment);
@@ -390,16 +413,18 @@ class UserServices {
   }
 
   Future<int> updateUser(
-      String userID,
-      String userName,
-      String firstName,
-      String lastName,
-      String counrty,
-      String city,
-      String phoneNum,
-      String address,
-      String email,
-      String? password) async {
+    String userID,
+    String userName,
+    String firstName,
+    String lastName,
+    String counrty,
+    String city,
+    String phoneNum,
+    String address,
+    String email,
+    //String? password
+  ) async {
+    String capitalizedCity = capitalizeFirstLetter(city);
     String sqlQuery = '''
     SELECT UserName, City, Country, AddressLocation, PhoneNum
     FROM Users
@@ -417,7 +442,7 @@ class UserServices {
 
     // Check if the new values are different from the existing values
     if (existingUser['UserName'] == userName &&
-        existingUser['City'] == city &&
+        existingUser['City'] == capitalizedCity &&
         existingUser['Country'] == counrty &&
         existingUser['AddressLocation'] == address &&
         existingUser['PhoneNum'] == phoneNum) {
@@ -427,8 +452,8 @@ class UserServices {
 
     String sqlStatment = '''
     UPDATE Users
-    SET  UserName = '$userName' ,  FirstName= '$firstName',  LastName= '$lastName', City= '$city', Country= '$counrty', AddressLocation=  '$address', PhoneNum='$phoneNum' ,Email='$email', Password='${password ?? ''}'
-    WHERE UserID= '$userID'
+    SET  UserName = '$userName' ,  FirstName= '$firstName',  LastName= '$lastName', City= '$capitalizedCity', Country= '$counrty', AddressLocation=  '$address', PhoneNum='$phoneNum' ,Email='$email'
+    WHERE UserID= '$userID';
     ''';
 
     try {
@@ -437,7 +462,7 @@ class UserServices {
       return updateResult;
     } catch (e) {
       // Error occurred during insertion, capture and print the specific error message.
-      print('Error creating user: $e');
+      print('Error updating user: $e');
       String error = e.toString();
       if (error.contains('UNIQUE constraint failed: Users.UserName')) {
         return -2; // userName duplication
@@ -454,12 +479,12 @@ class UserServices {
     //   SELECT COUNT(*) AS count FROM Users WHERE UserID = '$userId' AND Email = "$email"
     //   ''';
     String sqlStatment = '''
-      SELECT COUNT(*) AS count FROM Users WHERE UserID = '108471659217411098840' AND Email = "liquidgalaxyhapis@gmail.com"
+      SELECT COUNT(*) AS count FROM Users WHERE UserID = '$userId' AND Email = '$email'
       ''';
     int count;
     try {
       List<Map<String, dynamic>> result = await db.readData(sqlStatment);
-      count = result[0]['count'];
+      count = int.parse(result[0]['count']);
     } catch (e) {
       print('An error occurred: $e');
 
@@ -482,15 +507,4 @@ class UserServices {
       return result[0]['UserID'];
     }
   }
-
-  //tirals:
-  // Future<int> bla() async {
-  //   String sqlStatment = '''
-  //     SELECT COUNT(*) AS count FROM Users WHERE UserID = 0
-  //     ''';
-
-  //   List<Map<String, dynamic>> result = await db.readData(sqlStatment);
-  //   int count = result[0]['count'];
-  //   return count;
-  // }
 }

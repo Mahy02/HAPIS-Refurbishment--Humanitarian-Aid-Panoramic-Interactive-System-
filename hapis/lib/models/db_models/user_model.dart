@@ -47,7 +47,7 @@ class UserModel {
   String? forWho;
 
   ///property that defines password
-  String? pass;
+  // String? pass;
 
   UserModel(
       {this.userID,
@@ -64,7 +64,9 @@ class UserModel {
       this.item,
       this.category,
       this.multiDates,
-      this.forWho, this.pass});
+      this.forWho, 
+      //this.pass
+      });
 
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -78,12 +80,12 @@ class UserModel {
       addressLocation: map['AddressLocation'],
       phoneNum: map['PhoneNum'],
       email: map['Email'],
-      type: map['Type'],
+      type: map['FormType'],
       item: map['Item'],
       category: map['Category'],
       multiDates: map['Dates_available'],
-      forWho: map['For'],
-      pass: map['Password']
+      forWho: map['ForWho'],
+      //pass: map['Password']
     );
   }
 }

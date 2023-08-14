@@ -102,10 +102,11 @@ class DonationsServices {
     try {
       List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
       print(queryResult);
+
       donations = queryResult
           .map((result) => InProgressDonationModel(
-              mID: result['MID'] ?? 0,
-              rID: result['ReqID'] ?? 0,
+              mID: int.parse(result['MID'] ?? '0'),
+              rID: int.parse(result['ReqID'] ?? '0'),
               otherId: result['id'],
               firstName: result['FirstName'],
               lastName: result['LastName'],
@@ -152,7 +153,7 @@ class DonationsServices {
   ''';
     try {
       List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-      return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
+      return queryResult.isNotEmpty ? int.parse(queryResult[0]['Count']) : 0;
     } catch (e) {
       print('An error occurred: $e');
       return 0;

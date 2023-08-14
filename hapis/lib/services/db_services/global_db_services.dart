@@ -10,7 +10,7 @@ class globalDBServices {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS seeker_count
       FROM Forms
-      WHERE Forms.Type = 'seeker';
+      WHERE Forms.FormType = 'seeker';
     ''';
     List<Map> result = await db.readData(sqlStatment);
 
@@ -24,7 +24,7 @@ class globalDBServices {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS giver_count
       FROM Forms
-      WHERE Forms.Type = 'giver';
+      WHERE Forms.FormType = 'giver';
     ''';
     List<Map> result = await db.readData(sqlStatment);
 

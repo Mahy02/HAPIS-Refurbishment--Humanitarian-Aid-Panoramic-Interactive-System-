@@ -317,7 +317,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               email: widget.googleUser!.email,
                             );
 
-                            if (result > 0) {
+                            if (result >= 0) {
                               showDatabasePopup(context,
                                   'User created successfully! \n\nNow try signing in to HAPIS!',
                                   isError: false, onOKPressed: () {
@@ -340,18 +340,19 @@ class _SignUpPageState extends State<SignUpPage> {
                           } else {
                             //update google user without password
                             if (widget.isGoogle) {
-                              final numberOfChanges = await UserServices()
-                                  .updateUser(
-                                      widget.normalUser!.userID!,
-                                      _usernameController.text,
-                                      _firstNameController.text,
-                                      _lastNameController.text,
-                                      _countryController.text,
-                                      _cityController.text,
-                                      _phoneNumberController.text,
-                                      _addressController.text,
-                                      widget.normalUser!.email!,
-                                      null);
+                              final numberOfChanges =
+                                  await UserServices().updateUser(
+                                widget.normalUser!.userID!,
+                                _usernameController.text,
+                                _firstNameController.text,
+                                _lastNameController.text,
+                                _countryController.text,
+                                _cityController.text,
+                                _phoneNumberController.text,
+                                _addressController.text,
+                                widget.normalUser!.email!,
+                                //  null
+                              );
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',
                                     isError: false, isWarning: true);
@@ -387,8 +388,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                       _cityController.text,
                                       _phoneNumberController.text,
                                       _addressController.text,
-                                      widget.normalUser!.email!,
-                                      widget.normalUser!.pass!);
+                                      widget.normalUser!.email!
+                                      //  widget.normalUser!.pass!
+                                      );
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',
                                     isError: false, isWarning: true);
@@ -680,7 +682,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               email: widget.googleUser!.email,
                             );
 
-                            if (result > 0) {
+                            if (result >= 0) {
                               showDatabasePopup(context,
                                   'User created successfully! \n\nNow try signing in to HAPIS!',
                                   isError: false, onOKPressed: () {
@@ -713,8 +715,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                       _cityController.text,
                                       _phoneNumberController.text,
                                       _addressController.text,
-                                      widget.normalUser!.email!,
-                                      null);
+                                      widget.normalUser!.email!
+                                      //  null
+                                      );
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',
                                     isError: false, isWarning: true);
@@ -750,8 +753,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                       _cityController.text,
                                       _phoneNumberController.text,
                                       _addressController.text,
-                                      widget.normalUser!.email!,
-                                      widget.normalUser!.pass!);
+                                      widget.normalUser!.email!
+                                      //  widget.normalUser!.pass!
+                                      );
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',
                                     isError: false, isWarning: true);

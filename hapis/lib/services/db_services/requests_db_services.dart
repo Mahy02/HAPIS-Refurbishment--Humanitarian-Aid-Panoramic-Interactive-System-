@@ -24,11 +24,10 @@ class RequestsServices {
 
       requests = queryResult
           .map((result) => RequestSentModel(
-                RId: result['R_ID'],
-                firstName: result['FirstName'],
-                lastName: result['LastName'],
-                recipientStatus: result['Rec_Status'],
-              ))
+              RId: int.parse(result['R_ID']),
+              firstName: result['FirstName'],
+              lastName: result['LastName'],
+              recipientStatus: result['Rec_Status']))
           .toList();
     } catch (e) {
       print('An error occurred: $e');
@@ -43,7 +42,7 @@ class RequestsServices {
   /// It returns Future list of `RequestReceivedModel`
   Future<List<RequestReceivedModel>> getRequestsReceived(String id) async {
     String sqlStatement = '''
-    SELECT FirstName, LastName, Item, Type, R_ID, Users.UserID AS UserID
+    SELECT FirstName, LastName, Item, FormType, R_ID, Users.UserID AS UserID
     FROM Requests
     JOIN Users ON Requests.Sender_ID = Users.UserID
     JOIN Forms ON Requests.Rec_FormID = Forms.FormID
@@ -55,13 +54,12 @@ class RequestsServices {
 
       requests = queryResult
           .map((result) => RequestReceivedModel(
-                RId: result['R_ID'],
-                userId: result['UserID'],
-                firstName: result['FirstName'],
-                lastName: result['LastName'],
-                item: result['Item'],
-                type: result['Type'],
-              ))
+              RId: int.parse(result['R_ID']),
+              userId: result['UserID'],
+              firstName: result['FirstName'],
+              lastName: result['LastName'],
+              item: result['Item'],
+              type: result['FormType']))
           .toList();
     } catch (e) {
       print('An error occurred: $e');
@@ -72,39 +70,37 @@ class RequestsServices {
     return requests;
   }
 
-
   /// Function to get the count of requests sent by a user
-Future<int> getRequestsSentCount(String id) async {
-  String sqlStatement = '''
+  Future<int> getRequestsSentCount(String id) async {
+    String sqlStatement = '''
     SELECT COUNT(*) AS Count
     FROM Requests
     WHERE Sender_ID = '$id' AND Rec1_Donation_Status = 'Not Started' AND Rec_Status = 'Pending'
   ''';
-  try {
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
-  } catch (e) {
-    print('An error occurred: $e');
-    return 0;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+      return queryResult.isNotEmpty ? int.parse(queryResult[0]['Count']) : 0;
+    } catch (e) {
+      print('An error occurred: $e');
+      return 0;
+    }
   }
-}
 
-/// Function to get the count of requests received by a user
-Future<int> getRequestsReceivedCount(String id) async {
-  String sqlStatement = '''
+  /// Function to get the count of requests received by a user
+  Future<int> getRequestsReceivedCount(String id) async {
+    String sqlStatement = '''
     SELECT COUNT(*) AS Count
     FROM Requests
     WHERE Rec_ID = '$id' AND Rec1_Donation_Status = 'Not Started' AND Rec_Status = 'Pending'
   ''';
-  try {
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
-  } catch (e) {
-    print('An error occurred: $e');
-    return 0;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+      return queryResult.isNotEmpty ? int.parse(queryResult[0]['Count']) : 0;
+    } catch (e) {
+      print('An error occurred: $e');
+      return 0;
+    }
   }
-}
-
 
   Future<int> acceptRequest(int id) async {
     String sqlStatement = '''
@@ -146,7 +142,7 @@ Future<int> getRequestsReceivedCount(String id) async {
   ''';
     List<Map<String, dynamic>> results = await db.readData(sqlStatement);
     if (results.isNotEmpty) {
-      int recFormId = results[0]['Rec_FormID'];
+      int recFormId = int.parse(results[0]['Rec_FormID']);
 
       return recFormId;
     } else {
@@ -157,7 +153,7 @@ Future<int> getRequestsReceivedCount(String id) async {
   Future<int> createRequest(String senderID, String recID, int formID) async {
     String sqlStatment = '''
     INSERT INTO Requests (Sender_ID, Rec_ID, Rec_FormID, Rec_Status, Rec1_Donation_Status, Rec2_Donation_Status)
-        VALUES ('$senderID' , '$recID' , $formID, 'Pending', 'Not Started', 'Not Started')
+        VALUES ('$senderID' , '$recID' , $formID, 'Pending', 'Not Started', 'Not Started');
     ''';
 
     try {
@@ -172,7 +168,8 @@ Future<int> getRequestsReceivedCount(String id) async {
     }
   }
 
-  Future<bool> checkFriendshipRequest(String senderId, String recId, int recFormID) async {
+  Future<bool> checkFriendshipRequest(
+      String senderId, String recId, int recFormID) async {
     String sqlStatement = '''
     SELECT 1
     FROM Requests

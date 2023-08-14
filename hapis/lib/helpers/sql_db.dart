@@ -1,108 +1,191 @@
-import 'package:mysql1/mysql1.dart';
 import 'dart:async';
-import 'package:flutter/services.dart';
+
+import 'package:mysql_client/mysql_client.dart';
 
 class SqlDb {
-  late MySqlConnection _connection;
+  // Future<MySqlConnection> getConnection() async {
+  //   var settings = ConnectionSettings(
+  //     host: '192.168.1.5',
+  //     port: 3306,
+  //     user: 'root',
+  //     db: 'hapisdb',
+  //     password: 'mySql_2023_GsoC',
+  //   );
 
-  Future<void> openDb() async {
-    try {
-      _connection = await MySqlConnection.connect(ConnectionSettings(
-        host: '192.168.1.5',
-        port: 3306,
-        user: 'root',
-        db: 'hapisdb',
-        password: 'mySql_2023_GsoC',
-      ));
-      //print(await _connection.query(' SELECT * FROM hapisdb.Matchings;'));
-      /*
-
-      SELECT * FROM hapisdb.Users;
-      */
-      print('Connected to the database');
-    } catch (e) {
-      print('Error connecting to the database: $e');
-    }
-
-    // _connection = await MySqlConnection.connect(ConnectionSettings(
-    //   host: '10.0.2.2',
-    //   port: 3306,
-    //   user: 'root',
-    //   db: 'hapisdb',
-    //   password: 'mySql_2023_GsoC',
-    // ));
-  }
-
-  Future<void> closeDb() async {
-    await _connection.close();
-  }
-
-  // Future<void> deleteDb() async {
-  //   await _connection.query('DROP DATABASE hapisdb');
-  // }
-  // Future<T> execute<T>(
-  //     Future<T> Function(MySqlConnection connection) action) async {
-  //   await openDb();
-
-  //   try {
-  //     return await action(_connection);
-  //   } finally {
-  //     await closeDb();
-  //   }
-  // }
-
-  // Future<List<Map<String, dynamic>>> readData(String selectSql) async {
-  //   return execute((connection) async {
-  //     final results = await connection.query(selectSql);
-  //     return results.map((r) => r.fields).toList();
-  //   });
-  // }
-
-  // Future<int> insertData(String insertSql) async {
-  //   return execute((connection) async {
-  //     final result = await connection.query(insertSql);
-  //     return result.insertId!;
-  //   });
-  // }
-
-  // Future<int> updateData(String updateSql) async {
-  //   return execute((connection) async {
-  //     final result = await connection.query(updateSql);
-  //     return result.affectedRows ?? 0;
-  //   });
-  // }
-
-  // Future<int> deleteData(String deleteSql) async {
-  //   return execute((connection) async {
-  //     final result = await connection.query(deleteSql);
-  //     return result.affectedRows ?? 0;
-  //   });
+  //   return await MySqlConnection.connect(settings);
   // }
 
   Future<List<Map<String, dynamic>>> readData(String selectSql) async {
-    print(selectSql);
-    print('??');
-    final results = await _connection.query(selectSql);
-    print('here');
-    print(results);
-    return results.map((r) => r.fields).toList();
+    //var conn = await getConnection();
+    final pool = MySQLConnectionPool(
+      host: '192.168.1.5',
+      port: 3306,
+      userName: 'root',
+      password: 'mySql_2023_GsoC',
+      maxConnections: 200000,
+      databaseName: 'hapisdb',
+      timeoutMs: 60000,
+    );
+    //print(await conn.query(' SELECT * FROM hapisdb.Matchings;'));
+    List<Map<String, dynamic>> now = [];
+    try {
+      var result = await pool.execute(selectSql);
+
+      for (final row in result.rows) {
+        now.add(row.assoc());
+      }
+      return now;
+      // return result.map((r) => r.fields).toList();
+    } finally {
+      await pool.close();
+    }
   }
 
   Future<int> insertData(String insertSql) async {
-    final result = await _connection.query(insertSql);
-    return result.insertId!;
+    final pool = MySQLConnectionPool(
+      host: '192.168.1.5',
+      port: 3306,
+      userName: 'root',
+      password: 'mySql_2023_GsoC',
+      maxConnections: 200000,
+      databaseName: 'hapisdb',
+      timeoutMs: 60000,
+    );
+    try {
+      //int totalAffectedRows = 0;
+      var res = await pool.execute(insertSql);
+
+      int rowID = res.lastInsertID.toInt();
+      //totalAffectedRows += res.affectedRows.toInt();
+      //print('affected rows in insert');
+
+      //print(totalAffectedRows);
+      return rowID;
+    } finally {
+      await pool.close();
+    }
   }
 
   Future<int> updateData(String updateSql) async {
-    final result = await _connection.query(updateSql);
-    return result.affectedRows ?? 0;
+    final pool = MySQLConnectionPool(
+      host: '192.168.1.5',
+      port: 3306,
+      userName: 'root',
+      password: 'mySql_2023_GsoC',
+      maxConnections: 200000,
+      databaseName: 'hapisdb',
+      timeoutMs: 60000,
+    );
+    try {
+      int totalAffectedRows = 0;
+
+      var res = await pool.execute(updateSql);
+
+      totalAffectedRows += res.affectedRows.toInt();
+
+      return totalAffectedRows;
+
+      //var result = await conn.query(updateSql);
+      // return result.affectedRows!;
+    } finally {
+      await pool.close();
+    }
   }
 
   Future<int> deleteData(String deleteSql) async {
-    final result = await _connection.query(deleteSql);
-    return result.affectedRows ?? 0;
+    final pool = MySQLConnectionPool(
+      host: '192.168.1.5',
+      port: 3306,
+      userName: 'root',
+      password: 'mySql_2023_GsoC',
+      maxConnections: 200000,
+      databaseName: 'hapisdb',
+      timeoutMs: 60000,
+    );
+
+    try {
+      int totalAffectedRows = 0;
+      var res = await pool.execute(deleteSql);
+      totalAffectedRows += res.affectedRows.toInt();
+
+      return totalAffectedRows;
+    } finally {
+      await pool.close();
+    }
   }
 }
+
+// class SqlDb {
+//   //late MySqlConnection _connection;
+
+//   SqlDb();
+
+//   Future<MySqlConnection> getConnection() async {
+//     var settings = new ConnectionSettings(
+//       host: '192.168.1.5',
+//       port: 3306,
+//       user: 'root',
+//       db: 'hapisdb',
+//       password: 'mySql_2023_GsoC',
+//     );
+//     return await MySqlConnection.connect(settings);
+//   }
+
+
+//   // Future<void> openDb() async {
+//   //   try {
+//   //     _connection = await MySqlConnection.connect(ConnectionSettings(
+//   //       host: '192.168.1.5',
+//   //       port: 3306,
+//   //       user: 'root',
+//   //       db: 'hapisdb',
+//   //       password: 'mySql_2023_GsoC',
+//   //     ));
+//   //     print('here');
+//   //     print(await _connection.query(' SELECT * FROM hapisdb.Matchings;'));
+
+//   //     print('Connected to the database');
+//   //   } catch (e) {
+//   //     print('Error connecting to the database: $e');
+//   //   }
+//   // }
+
+//   // Future<void> closeDb() async {
+//   //   await _connection.close();
+//   // }
+
+//   // Future<List<Map<String, dynamic>>> readData(String selectSql) async {
+//   //   var db = new SqlDb();
+//   //   db.getConnection().then((conn) {
+//   //     String sql = '';
+//   //     conn.query(sql).then((result) {
+//   //       return result.map((r) => r.fields).toList();
+//   //     });
+//   //   });
+//   //   return [];
+//   //   // print(selectSql);
+//   //   // final results = await _connection.query(selectSql);
+//   //   // print('here');
+//   //   // print(results);
+
+//   //   // return results.map((r) => r.fields).toList();
+//   // }
+
+//   Future<int> insertData(String insertSql) async {
+//     final result = await _connection.query(insertSql);
+//     return result.insertId!;
+//   }
+
+//   Future<int> updateData(String updateSql) async {
+//     final result = await _connection.query(updateSql);
+//     return result.affectedRows ?? 0;
+//   }
+
+//   Future<int> deleteData(String deleteSql) async {
+//     final result = await _connection.query(deleteSql);
+//     return result.affectedRows ?? 0;
+//   }
+// }
 
 
 // import 'package:sqflite/sqflite.dart';

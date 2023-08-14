@@ -47,7 +47,7 @@ class NotificationsServices {
 
     List<NotifyModel> notifications = results.map((result) {
       String message = result['Message'] as String;
-      int id = result['N_ID'] as int;
+      int id = int.parse(result['N_ID']) as int;
       return NotifyModel(message: message, notifyID: id);
     }).toList();
 
@@ -61,7 +61,9 @@ class NotificationsServices {
   ''';
     List<Map<String, dynamic>> results = await db.readData(sqlStatement);
 
-    int notificationCount = results.isNotEmpty ? results[0]['count'] : 0;
+    String notificationCountString =
+        results.isNotEmpty ? results[0]['count'] : '0';
+    int notificationCount = int.parse(notificationCountString);
 
     return notificationCount;
   }

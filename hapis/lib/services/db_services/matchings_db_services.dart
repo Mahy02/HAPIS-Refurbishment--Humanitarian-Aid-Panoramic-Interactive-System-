@@ -83,8 +83,8 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
 
       matchings = queryResult
           .map((matchingMap) => MatchingsModel(
-              matchingID: matchingMap['M_ID'],
-              formID: matchingMap['FormID'],
+              matchingID: int.parse(matchingMap['M_ID']),
+              formID: int.parse(matchingMap['FormID']),
               userID: matchingMap['UserID'],
               type: matchingMap['Type'],
               firstName: matchingMap['FirstName'],
@@ -109,10 +109,9 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     return matchings;
   }
 
-
   /// Function to get the count of matchings for a user
-Future<int> getMatchingsCount(String id) async {
-  String sqlStatement = '''
+  Future<int> getMatchingsCount(String id) async {
+    String sqlStatement = '''
     SELECT COUNT(*) AS Count
     FROM Matchings M
     JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
@@ -121,15 +120,14 @@ Future<int> getMatchingsCount(String id) async {
     JOIN Users U2 ON F2.UserID = U2.UserID
     WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status = 'Not Started'
   ''';
-  try {
-    List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    return queryResult.isNotEmpty ? queryResult[0]['Count'] : 0;
-  } catch (e) {
-    print('An error occurred: $e');
-    return 0;
+    try {
+      List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
+      return queryResult.isNotEmpty ? int.parse(queryResult[0]['Count']) : 0;
+    } catch (e) {
+      print('An error occurred: $e');
+      return 0;
+    }
   }
-}
-
 
   Future<int> updateMatching(int id, String type) async {
     print(type);
@@ -219,8 +217,8 @@ Future<int> getMatchingsCount(String id) async {
     List<int> ids = [];
     if (results.isNotEmpty) {
       print(results[0]['Seeker_FormID']);
-      int seekerFormId = results[0]['Seeker_FormID'] as int;
-      int giverFormId = results[0]['Giver_FormID'] as int;
+      int seekerFormId = int.parse(results[0]['Seeker_FormID']) as int;
+      int giverFormId = int.parse(results[0]['Giver_FormID']) as int;
       ids.add(seekerFormId);
       ids.add(giverFormId);
       return ids;
@@ -250,29 +248,33 @@ Future<int> getMatchingsCount(String id) async {
     SELECT FormID
     FROM Forms
     INNER JOIN Users ON Forms.UserID = Users.UserID
-    WHERE Forms.Type = '$type'
+    WHERE Forms.FormType = '$type'
       AND LOWER(Forms.Item) = LOWER('$item')
       AND Forms.Category = '$cat'
       AND ( $dateConditions )
-      AND Forms.Status = 'Not Completed'
+      AND Forms.FormStatus = 'Not Completed'
       AND Users.City = '$city'
     ''';
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
     print('matchings: $queryResult');
     // If a matching form exists, return its Form_ID
     List<int?> matching =
-        queryResult.map<int?>((row) => row['FormID']).toList();
+        queryResult.map<int?>((row) => int.parse(row['FormID'])).toList();
 
     return matching;
   }
 
   Future<int> createMatch(int seekerFormID, int giverFormID) async {
+    print('creating match');
+    print(seekerFormID);
+    print(giverFormID);
     String sqlStatment = '''
     INSERT INTO Matchings (Seeker_FormID,	Giver_FormID,	Rec1_Status ,	Rec2_status, 	Rec1_Donation_Status, Rec2_Donation_Status)
-        VALUES ($seekerFormID, $giverFormID, 'Pending', 'Pending', 'Not Started', 'Not Started')
+        VALUES ($seekerFormID, $giverFormID, 'Pending', 'Pending', 'Not Started', 'Not Started');
     ''';
 
     int rowID = await db.insertData(sqlStatment);
+    print(rowID);
 
     return rowID;
   }

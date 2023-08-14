@@ -589,8 +589,12 @@ class _RequestComponentState extends State<RequestComponent> {
                                                           .getFormId(
                                                               widget.id!);
                                                   //delete forms
+                                                  //update form status:
                                                   await UserServices()
-                                                      .deleteForm(rFormId);
+                                                      .completeForm(rFormId);
+
+                                                  // await UserServices()
+                                                  //     .deleteForm(rFormId);
                                                 }
                                                 if (widget.id2! != 0) {
                                                   //matchings
@@ -601,10 +605,13 @@ class _RequestComponentState extends State<RequestComponent> {
                                                   for (int i = 0;
                                                       i < mFormIds.length;
                                                       i++) {
-                                                    int result =
-                                                        await UserServices()
-                                                            .deleteForm(
-                                                                mFormIds[i]);
+                                                    // int result =
+                                                    //     await UserServices()
+                                                    //         .deleteForm(
+                                                    //             mFormIds[i]);
+                                                    await UserServices()
+                                                        .completeForm(
+                                                            mFormIds[i]);
                                                   }
                                                 }
                                               } else if (result['result'] > 0 &&

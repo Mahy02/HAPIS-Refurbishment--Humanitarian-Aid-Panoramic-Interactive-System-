@@ -16,7 +16,7 @@ class cityDBServices {
       SELECT COUNT(DISTINCT Forms.UserID) AS seeker_count
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Users.City = '$cityName' AND Forms.Type = 'seeker';
+      WHERE Users.City = '$cityName' AND Forms.FormType = 'seeker';
     ''';
     List<Map> result = await db.readData(sqlStatment);
 
@@ -31,7 +31,7 @@ class cityDBServices {
       SELECT COUNT(DISTINCT Forms.UserID) AS giver_count
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Users.City = '$cityName' AND Forms.Type = 'giver';
+      WHERE Users.City = '$cityName' AND Forms.FormType = 'giver';
     ''';
     List<Map> result = await db.readData(sqlStatment);
 
@@ -46,7 +46,7 @@ class cityDBServices {
       SELECT  Users.UserID AS UserUserID , UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password,COUNT(CASE WHEN Forms.For = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.For = 'other' THEN Forms.FormID END) AS other_count
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Users.City = '$cityName' AND Forms.Type = 'seeker'
+      WHERE Users.City = '$cityName' AND Forms.FormType = 'seeker'
       GROUP BY Users.UserID;
     ''';
 
@@ -115,7 +115,7 @@ class cityDBServices {
       SELECT  Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,Password, COUNT(*) AS numberOfGivings
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
-      WHERE Users.City = '$cityName' AND Forms.Type = 'giver'
+      WHERE Users.City = '$cityName' AND Forms.FormType = 'giver'
       GROUP BY Users.UserID;
     ''';
 
