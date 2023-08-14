@@ -102,7 +102,6 @@ class _CityComponentState extends State<CityComponent> {
         heading: '0',
       ));
     }
-
   }
 
   @override
@@ -163,7 +162,6 @@ class _CityComponentState extends State<CityComponent> {
 
           if (sshData.client != null) {
             // ignore: use_build_context_synchronously
-           
 
             _viewCityStats(city, true, context);
 

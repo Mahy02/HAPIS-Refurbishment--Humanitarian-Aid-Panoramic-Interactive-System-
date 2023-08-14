@@ -25,7 +25,7 @@ class GlobalBalloonService {
         latitude: -47.0000101,
         range: '31231212.86',
         tilt: '0',
-        altitude: 50000.1097385,
+        altitude: -47.0000101,
         heading: '0',
         altitudeMode: 'relativeToSeaFloor',
       );

@@ -251,21 +251,16 @@ class _LgHomePageState extends State<LgHomePage> {
                     isPoly: false,
                     onpressed: () async {
                       //TourService().tourKML;
-                      print('here');
-                      final sshData =
-                          Provider.of<SSHprovider>(context, listen: false);
-                      final tourKml = KMLModel(
-                        name: 'HAPIS-tour',
-                        content: TourService().tourKMLContent,
-                      );
+                      print('tourr');
+                      // final sshData =
+                      //     Provider.of<SSHprovider>(context, listen: false);
+                      // final tourKml = KMLModel(
+                      //   name: 'HAPIS-tour',
+                      //   content: TourService().tourKMLContent,
+                      // );
 
                       try {
                         /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
-                        await LgService(sshData).sendKMLToSlave(
-                          //  LgService(sshData).,
-                          1,
-                          tourKml.body,
-                        );
                       } catch (e) {
                         // ignore: avoid_print
                         print(e);
@@ -392,21 +387,20 @@ class _LgHomePageState extends State<LgHomePage> {
                     isPoly: false,
                     onpressed: () async {
                       //TourService().tourKML;
-                      print('here');
+                      print('tourr');
                       final sshData =
                           Provider.of<SSHprovider>(context, listen: false);
-                      final tourKml = KMLModel(
-                        name: 'HAPIS-tour',
-                        content: TourService().tourKMLContent,
-                      );
+                      // final tourKml = KMLModel(
+                      //   name: 'HAPIS-tour',
+                      //   content: TourService().tourKMLContent,
+                      // );
 
                       try {
-                        /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
-                        await LgService(sshData).sendKMLToSlave(
-                          //  LgService(sshData).,
-                          1,
-                          tourKml.body,
-                        );
+                        await LgService(sshData).clearKml();
+                        String tourKmlContent =
+                            await TourService().generateTourKMLContent();
+                        await LgService(sshData)
+                            .sendTour(tourKmlContent, 'Hapis-Tour');
                       } catch (e) {
                         // ignore: avoid_print
                         print(e);
