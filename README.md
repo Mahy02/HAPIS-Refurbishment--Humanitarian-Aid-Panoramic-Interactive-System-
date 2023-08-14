@@ -135,6 +135,8 @@ Now the donation is sucessful :)
 
 <br>
 
+_**HOW TO DELETE YOUR USER ACCOUNT?**_
+
 You can delete your account anytime you want by opening the side menu, choosing settings, then delete account from here:
 
 <div style="display: flex; justify-content: center;">
