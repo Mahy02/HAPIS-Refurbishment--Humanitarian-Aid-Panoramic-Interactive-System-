@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 class SqlDb {
@@ -18,8 +19,11 @@ class SqlDb {
   Future<List<Map<String, dynamic>>> readData(String selectSql) async {
     //var conn = await getConnection();
     final pool = MySQLConnectionPool(
-      host: '192.168.1.5',
-      port: 3306,
+      // host: '192.168.1.5',
+      //host: '172.174.45.252',
+      host: dotenv.env['IP_ADDRESS']!,
+      port: int.parse(dotenv.env['PORT']!),
+      // port: 3306,
       userName: 'root',
       password: 'mySql_2023_GsoC',
       maxConnections: 200000,
@@ -43,8 +47,11 @@ class SqlDb {
 
   Future<int> insertData(String insertSql) async {
     final pool = MySQLConnectionPool(
-      host: '192.168.1.5',
-      port: 3306,
+      //host: '192.168.1.5',
+      // host: '172.174.45.252',
+      // port: 3306,
+      host: dotenv.env['IP_ADDRESS']!,
+      port: int.parse(dotenv.env['PORT']!),
       userName: 'root',
       password: 'mySql_2023_GsoC',
       maxConnections: 200000,
@@ -68,8 +75,11 @@ class SqlDb {
 
   Future<int> updateData(String updateSql) async {
     final pool = MySQLConnectionPool(
-      host: '192.168.1.5',
-      port: 3306,
+      //  host: '192.168.1.5',
+      // host: '172.174.45.252',
+      // port: 3306,
+      host: dotenv.env['IP_ADDRESS']!,
+      port: int.parse(dotenv.env['PORT']!),
       userName: 'root',
       password: 'mySql_2023_GsoC',
       maxConnections: 200000,
@@ -94,8 +104,11 @@ class SqlDb {
 
   Future<int> deleteData(String deleteSql) async {
     final pool = MySQLConnectionPool(
-      host: '192.168.1.5',
-      port: 3306,
+      //host: '192.168.1.5',
+      // host: '172.174.45.252',
+      // port: 3306,
+      host: dotenv.env['IP_ADDRESS']!,
+      port: int.parse(dotenv.env['PORT']!),
       userName: 'root',
       password: 'mySql_2023_GsoC',
       maxConnections: 200000,

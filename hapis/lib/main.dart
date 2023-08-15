@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/providers/date_selection.dart';
 import 'package:hapis/providers/drop_down_state.dart';
@@ -47,6 +48,7 @@ void main() async {
   /// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
   await LoginSessionSharedPreferences.init();
   await LgConnectionSharedPref.init();
+  await dotenv.load(fileName: "assets/.env");
 
   runApp(
     MultiProvider(
