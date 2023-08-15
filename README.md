@@ -327,7 +327,23 @@ If you followed all the steps till now you have your app up and running.
 
 Enjoy HAPIS  :)  !!
 
+<br>
+<br>
+<br>
 
+### HAPIS Database Setup Guide
+
+<br>
+
+This guide will walk you through setting up the HAPIS database using Docker and connecting to it from your Flutter app.
+
+<br>
+
+**Prerequisites**
+
+<br>
+
+> Docker: Make sure you have Docker installed on your machine. If not, follow the official installation guide:[ Docker Installation Guide](https://docs.docker.com/engine/install/)
 
 
 
