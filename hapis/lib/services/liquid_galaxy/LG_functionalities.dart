@@ -248,6 +248,7 @@ fi
       final kmlFile = await _fileService.createFile(fileName, tourKml);
 
       await _sshData.uploadKml(kmlFile, fileName);
+      print('kml uploaded');
 
       await _sshData
           .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');

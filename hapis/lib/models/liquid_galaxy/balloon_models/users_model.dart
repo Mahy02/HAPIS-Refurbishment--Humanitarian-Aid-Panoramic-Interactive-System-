@@ -104,6 +104,21 @@ class UsersModel {
       <br/>
     ''';
 
+     /// Gets the balloon content from the current seeker.
+  String tourUserBalloonContent() => '''
+      <b><font size="+2">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
+      <br/><br/>
+      <div style="text-align:center;">
+      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week4/hapis/assets/images/defaultuserballoon.png?raw=true" style="display: block; margin: auto; width: 200px; height: 200px;"/><br/><br/>
+      </div>
+      <b>Name:</b> ${'$firstName $lastName'}
+      <br/>
+      <b>Phone Number:</b> $phoneNum
+      <br/>
+      <b>Email:</b> $email
+      <br/>
+    ''';
+
   List<Map<String, double>> getUserOrbitCoordinates(
     String address, {
     double step = 3,

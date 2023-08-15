@@ -75,7 +75,7 @@ class TourDBServices {
   Future<List<UserLocationModel>> getUserAddressesForCity(
       String cityName) async {
     String sqlStatement = '''
-      SELECT AddressLocation
+      SELECT AddressLocation, FirstName, LastName,  UserName, PhoneNum,Email
       FROM Users
       WHERE City = '$cityName';
     ''';
@@ -86,11 +86,23 @@ class TourDBServices {
       List<UserLocationModel> addresses = [];
       for (var row in queryResult) {
         String address = row['AddressLocation'];
+        String phone = row['PhoneNum'];
+        String username = row['UserName'];
+        String email = row['Email'];
+        String firstName = row['FirstName'];
+        String lastName = row['LastName'];
         LatLng coords;
         coords = await getCoordinates(address);
 
-        UserLocationModel userLocation =
-            UserLocationModel(address, coords.longitude, coords.latitude);
+        UserLocationModel userLocation = UserLocationModel(
+            username,
+            address,
+            coords.longitude,
+            coords.latitude,
+            firstName,
+            lastName,
+            phone,
+            email);
         addresses.add(userLocation);
       }
 

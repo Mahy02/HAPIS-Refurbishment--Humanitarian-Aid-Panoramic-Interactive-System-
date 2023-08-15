@@ -6,12 +6,17 @@ import '../../models/liquid_galaxy/balloon_models/users_model.dart';
 import '../../models/liquid_galaxy/tour_models/city_model.dart';
 import '../../models/liquid_galaxy/tour_models/country_model.dart';
 import '../../utils/extract_geocoordinates.dart';
+import '../db_services/city_db_services.dart';
 import '../db_services/global_db_services.dart';
 import '../db_services/tour_db_services.dart';
 
 class TourService {
   Future<String> generateTourKMLContent() async {
+    print('here');
     List<CountryModel> countries = await TourDBServices().getCountries();
+
+    // CityModel? cityM;
+    // UsersModel user = UsersModel();
 
     String kmlContent = '''
 <?xml version="1.0" encoding="UTF-8"?>
@@ -24,46 +29,79 @@ class TourService {
         <name>Play me</name>
         <gx:Playlist>
 ''';
-
+    print('here1');
 // Set initial FlyTo for the globe
     kmlContent += generateInitialFlyTo();
+    print('after initial fly to');
 
-    // Generate balloon for the globe
-    int numberOfSeekers = await globalDBServices().getNumberOfSeekers();
-    int numberOfGivers = await globalDBServices().getNumberOfGivers();
+    // // Generate balloon for the globe
+    // int numberOfSeekers = await globalDBServices().getNumberOfSeekers();
+    // int numberOfGivers = await globalDBServices().getNumberOfGivers();
 
-    int inProgressDonations =
-        await globalDBServices().getNumberOfInProgressDonations();
-    int successfulDonations =
-        await globalDBServices().getNumberOfSuccessfulDonations();
-    List<String> topThreeCategories =
-        await globalDBServices().getTopDonatedCategories();
-    List<String> topThreeCities = await globalDBServices().getTopCities();
+    // int inProgressDonations =
+    //     await globalDBServices().getNumberOfInProgressDonations();
+    // int successfulDonations =
+    //     await globalDBServices().getNumberOfSuccessfulDonations();
+    // List<String> topThreeCategories =
+    //     await globalDBServices().getTopDonatedCategories();
+    // List<String> topThreeCities = await globalDBServices().getTopCities();
 
-    ///defining a new globe instance for `GlobeModel`` with all the retrieved data from the database
-    GlobeModel globe = GlobeModel(
-        id: 'Globe',
-        numberOfSeekers: numberOfSeekers,
-        numberOfGivers: numberOfGivers,
-        inProgressDonations: inProgressDonations,
-        successfulDonations: successfulDonations,
-        topThreeCategories: topThreeCategories,
-        topThreeCities: topThreeCities);
-    kmlContent += generateBalloonPlacemark(
-        globe.balloonContent(), LatLng(-60.4518936, -47.0000101));
+    // ///defining a new globe instance for `GlobeModel`` with all the retrieved data from the database
+    // GlobeModel globe = GlobeModel(
+    //     id: 'Globe',
+    //     numberOfSeekers: numberOfSeekers,
+    //     numberOfGivers: numberOfGivers,
+    //     inProgressDonations: inProgressDonations,
+    //     successfulDonations: successfulDonations,
+    //     topThreeCategories: topThreeCategories,
+    //     topThreeCities: topThreeCities);
 
+    // kmlContent += generateBalloonPlacemark(
+    //     globe.balloonContent(), LatLng(-60.4518936, -47.0000101));
+
+    //kmlContent += generatePlacemarkwithID('Globe');
     for (var country in countries) {
       kmlContent += generateCountryFlyTo(country);
 
       for (var city in country.cities) {
         kmlContent += generateCityFlyTo(city);
         // kmlContent += generateBalloonPlacemark(CityModel().balloonContent(), city.cityCoordinates);
+        // kmlContent += generatePlacemarkwithID(city.name);
 
         // Add a wait time between cities
         kmlContent += generateWait(4);
+        // print('here after city');
+        // //for city:
+        // int numberOfSeekers =
+        //     await cityDBServices().getNumberOfSeekers(city.name);
+        // int numberOfGivers =
+        //     await cityDBServices().getNumberOfGivers(city.name);
+        // int inProgressDonations =
+        //     await cityDBServices().getNumberOfInProgressDonations(city.name);
+        // int successfulDonations =
+        //     await cityDBServices().getNumberOfSuccessfulDonations(city.name);
+        // List<String> topThreeCategories =
+        //     await cityDBServices().getTopDonatedCategories(city.name);
+        // LatLng coordsCity = LatLng(city.latitude, city.longitude);
+
+        // ///defining a new city instance for `cityModel` with all the retrieved data from the database
+        // cityM = CityModel(
+        //     id: city.name,
+        //     name: city.name,
+        //     numberOfSeekers: numberOfSeekers,
+        //     numberOfGivers: numberOfGivers,
+        //     inProgressDonations: inProgressDonations,
+        //     successfulDonations: successfulDonations,
+        //     topThreeCategories: topThreeCategories,
+        //     cityCoordinates: coordsCity);
 
         for (var userLocation in city.userLocations) {
+          // user.email = userLocation.email;
+          // user.firstName = userLocation.firstName;
+          // user.lastName = userLocation.lastName;
+          // user.phoneNum = userLocation.phoneNum;
           kmlContent += generateUserLocationFlyTo(userLocation);
+          // kmlContent += generatePlacemarkwithID(userLocation.userName);
           // kmlContent += generateBalloonPlacemark(UsersModel().giverBalloonContent(), userLocation.userCoordinates);
           kmlContent += generateWait(2);
           kmlContent +=
@@ -72,11 +110,29 @@ class TourService {
         }
       }
     }
-
+    print('here before placemakrs');
     kmlContent += '''
         </gx:Playlist>
       </gx:Tour>
       <!-- Placemark definitions for underwater and onland locations go here -->
+''';
+    // kmlContent += generateBalloonPlacemark(
+    //     globe.balloonContent(), LatLng(-60.4518936, -47.0000101));
+    // kmlContent += generateBalloonPlacemark(
+    //     cityM!.balloonContent(), cityM.cityCoordinates);
+    // kmlContent += generateBalloonPlacemark(
+    //     user.tourUserBalloonContent(), user.userCoordinates!);
+
+//     kmlContent += '''
+//         </gx:Playlist>
+//       </gx:Tour>
+//       <!-- Placemark definitions for underwater and onland locations go here -->
+//     </Folder>
+//   </Document>
+// </kml>
+// ''';
+
+    kmlContent += '''
     </Folder>
   </Document>
 </kml>
@@ -200,6 +256,22 @@ class TourService {
         </Point>
       </Placemark>
     ''';
+  }
+
+  String generatePlacemarkwithID(String placemarkID) {
+    return '''
+        <gx:AnimatedUpdate>
+          <!-- the default duration is 0.0 -->
+          <Update>
+            <targetHref/>
+            <Change>
+              <Placemark targetId="$placemarkID">
+                <gx:balloonVisibility>1</gx:balloonVisibility>
+              </Placemark>
+            </Change>
+          </Update>
+        </gx:AnimatedUpdate>
+''';
   }
 }
 
