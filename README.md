@@ -269,7 +269,7 @@ You can also clear the KML, shutdown, reboot or relaunch the LGs from the settin
 
 ---
 
-### Prerequisites & Usage For running the code from the source
+## Prerequisites & Usage For running the code from the source
 
 <br>
 
@@ -328,8 +328,48 @@ If you followed all the steps till now you have your app up and running.
 Enjoy HAPIS  :)  !!
 
 
+<br>
 
 
+---
+
+<br>
+
+
+
+## HAPIS Database Setup Guide
+
+<br>
+
+This guide will walk you through setting up the HAPIS database using Docker and connecting to it from your Flutter app.
+
+<br>
+
+**Prerequisites**
+
+<br>
+
+> Docker: Make sure you have Docker installed on your machine. If not, follow the official installation guide:[ Docker Installation Guide](https://docs.docker.com/engine/install/)
+
+
+<br>
+
+---
+
+<br>
+
+## Wiki
+
+You can find all the development process, more information about this project and the issues faced and their solutions in the [Wiki](https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/wiki)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+Copyright (C) 2023 [Mahinour Alaa Elsarky](https://github.com/Mahy02)
 
 
 
