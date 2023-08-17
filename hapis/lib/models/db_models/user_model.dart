@@ -48,6 +48,7 @@ class UserModel {
 
   ///property that defines password
   // String? pass;
+  String? imagePath;
 
   UserModel(
       {this.userID,
@@ -65,6 +66,7 @@ class UserModel {
       this.category,
       this.multiDates,
       this.forWho, 
+      this.imagePath,
       //this.pass
       });
 
@@ -85,6 +87,7 @@ class UserModel {
       category: map['Category'],
       multiDates: map['Dates_available'],
       forWho: map['ForWho'],
+      imagePath: map['ProfileImage']
       //pass: map['Password']
     );
   }

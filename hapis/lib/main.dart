@@ -48,7 +48,8 @@ void main() async {
   /// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
   await LoginSessionSharedPreferences.init();
   await LgConnectionSharedPref.init();
-  await dotenv.load(fileName: "assets/.env");
+  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: "assets/.env");
 
   runApp(
     MultiProvider(

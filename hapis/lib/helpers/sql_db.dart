@@ -4,31 +4,19 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 class SqlDb {
-  // Future<MySqlConnection> getConnection() async {
-  //   var settings = ConnectionSettings(
-  //     host: '192.168.1.5',
-  //     port: 3306,
-  //     user: 'root',
-  //     db: 'hapisdb',
-  //     password: 'mySql_2023_GsoC',
-  //   );
-
-  //   return await MySqlConnection.connect(settings);
-  // }
 
   Future<List<Map<String, dynamic>>> readData(String selectSql) async {
-    //var conn = await getConnection();
+   
     final pool = MySQLConnectionPool(
-      // host: '192.168.1.5',
-      //host: '172.174.45.252',
+    
       host: dotenv.env['IP_ADDRESS']!,
       port: int.parse(dotenv.env['PORT']!),
-      // port: 3306,
       userName: 'root',
-      password: 'mySql_2023_GsoC',
+      password: dotenv.env['DB_PASSWORD']!,
       maxConnections: 200000,
       databaseName: 'hapisdb',
       timeoutMs: 60000,
+      collation: 'utf8_general_ci',
     );
     //print(await conn.query(' SELECT * FROM hapisdb.Matchings;'));
     List<Map<String, dynamic>> now = [];
@@ -47,16 +35,14 @@ class SqlDb {
 
   Future<int> insertData(String insertSql) async {
     final pool = MySQLConnectionPool(
-      //host: '192.168.1.5',
-      // host: '172.174.45.252',
-      // port: 3306,
-      host: dotenv.env['IP_ADDRESS']!,
+     host: dotenv.env['IP_ADDRESS']!,
       port: int.parse(dotenv.env['PORT']!),
       userName: 'root',
-      password: 'mySql_2023_GsoC',
+      password: dotenv.env['DB_PASSWORD']!,
       maxConnections: 200000,
       databaseName: 'hapisdb',
       timeoutMs: 60000,
+       collation: 'utf8_general_ci',
     );
     try {
       //int totalAffectedRows = 0;
@@ -75,16 +61,14 @@ class SqlDb {
 
   Future<int> updateData(String updateSql) async {
     final pool = MySQLConnectionPool(
-      //  host: '192.168.1.5',
-      // host: '172.174.45.252',
-      // port: 3306,
-      host: dotenv.env['IP_ADDRESS']!,
+       host: dotenv.env['IP_ADDRESS']!,
       port: int.parse(dotenv.env['PORT']!),
       userName: 'root',
-      password: 'mySql_2023_GsoC',
+      password: dotenv.env['DB_PASSWORD']!,
       maxConnections: 200000,
       databaseName: 'hapisdb',
       timeoutMs: 60000,
+       collation: 'utf8_general_ci',
     );
     try {
       int totalAffectedRows = 0;
@@ -104,16 +88,14 @@ class SqlDb {
 
   Future<int> deleteData(String deleteSql) async {
     final pool = MySQLConnectionPool(
-      //host: '192.168.1.5',
-      // host: '172.174.45.252',
-      // port: 3306,
-      host: dotenv.env['IP_ADDRESS']!,
+     host: dotenv.env['IP_ADDRESS']!,
       port: int.parse(dotenv.env['PORT']!),
       userName: 'root',
-      password: 'mySql_2023_GsoC',
+      password: dotenv.env['DB_PASSWORD']!,
       maxConnections: 200000,
       databaseName: 'hapisdb',
       timeoutMs: 60000,
+       collation: 'utf8_general_ci',
     );
 
     try {
@@ -127,78 +109,6 @@ class SqlDb {
     }
   }
 }
-
-// class SqlDb {
-//   //late MySqlConnection _connection;
-
-//   SqlDb();
-
-//   Future<MySqlConnection> getConnection() async {
-//     var settings = new ConnectionSettings(
-//       host: '192.168.1.5',
-//       port: 3306,
-//       user: 'root',
-//       db: 'hapisdb',
-//       password: 'mySql_2023_GsoC',
-//     );
-//     return await MySqlConnection.connect(settings);
-//   }
-
-
-//   // Future<void> openDb() async {
-//   //   try {
-//   //     _connection = await MySqlConnection.connect(ConnectionSettings(
-//   //       host: '192.168.1.5',
-//   //       port: 3306,
-//   //       user: 'root',
-//   //       db: 'hapisdb',
-//   //       password: 'mySql_2023_GsoC',
-//   //     ));
-//   //     print('here');
-//   //     print(await _connection.query(' SELECT * FROM hapisdb.Matchings;'));
-
-//   //     print('Connected to the database');
-//   //   } catch (e) {
-//   //     print('Error connecting to the database: $e');
-//   //   }
-//   // }
-
-//   // Future<void> closeDb() async {
-//   //   await _connection.close();
-//   // }
-
-//   // Future<List<Map<String, dynamic>>> readData(String selectSql) async {
-//   //   var db = new SqlDb();
-//   //   db.getConnection().then((conn) {
-//   //     String sql = '';
-//   //     conn.query(sql).then((result) {
-//   //       return result.map((r) => r.fields).toList();
-//   //     });
-//   //   });
-//   //   return [];
-//   //   // print(selectSql);
-//   //   // final results = await _connection.query(selectSql);
-//   //   // print('here');
-//   //   // print(results);
-
-//   //   // return results.map((r) => r.fields).toList();
-//   // }
-
-//   Future<int> insertData(String insertSql) async {
-//     final result = await _connection.query(insertSql);
-//     return result.insertId!;
-//   }
-
-//   Future<int> updateData(String updateSql) async {
-//     final result = await _connection.query(updateSql);
-//     return result.affectedRows ?? 0;
-//   }
-
-//   Future<int> deleteData(String deleteSql) async {
-//     final result = await _connection.query(deleteSql);
-//     return result.affectedRows ?? 0;
-//   }
-// }
 
 
 // import 'package:sqflite/sqflite.dart';

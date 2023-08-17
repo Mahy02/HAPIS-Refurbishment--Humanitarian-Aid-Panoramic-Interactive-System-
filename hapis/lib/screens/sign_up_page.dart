@@ -63,6 +63,8 @@ class _SignUpPageState extends State<SignUpPage> {
       _addressController.text = user.addressLocation!;
       _phoneNumberController.text = user.phoneNum!;
       _country = user.country!;
+     
+      image = File(user.imagePath?? '');
     }
   }
 

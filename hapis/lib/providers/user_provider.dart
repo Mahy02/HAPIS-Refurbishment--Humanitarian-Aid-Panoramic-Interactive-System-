@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/db_models/user_model.dart';
 
-
 ///This is a [Provider] class of [UserAppProvider] that extends [ChangeNotifier]
 
 ///They all have setters and getters
@@ -59,8 +58,15 @@ class UserAppProvider extends ChangeNotifier {
   ///property that defines list of givers
   List<UserModel> _giversApp = [];
 
+  String? _imagePath;
+
   set forWho(String? value) {
     _forWho = value;
+    notifyListeners();
+  }
+
+  set imagePath(String? value) {
+    _imagePath = value;
     notifyListeners();
   }
 
@@ -155,6 +161,7 @@ class UserAppProvider extends ChangeNotifier {
   String? get forWho => _forWho;
   List<UserModel> get seekersApp => _seekersApp;
   List<UserModel> get giversApp => _giversApp;
+  String? get imagePath => _imagePath;
 
   final UserModel _user = UserModel();
   UserModel get user => _user;
@@ -174,6 +181,7 @@ class UserAppProvider extends ChangeNotifier {
     String category,
     String multiDates,
     String forWho,
+    String imagePath,
   ) {
     _user.userID = userID;
     _user.userName = userName;
@@ -189,6 +197,7 @@ class UserAppProvider extends ChangeNotifier {
     _user.category = category;
     _user.multiDates = multiDates;
     _user.forWho = forWho;
+    _user.imagePath = imagePath;
 
     notifyListeners();
   }

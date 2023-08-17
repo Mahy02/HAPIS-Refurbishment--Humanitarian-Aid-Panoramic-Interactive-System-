@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -31,22 +32,21 @@ class UserAppComponent extends StatefulWidget {
   final bool isMobile;
   final double friendshipSize;
 
-  const UserAppComponent(
-      {Key? key,
-      required this.user,
-      required this.imageHeight,
-      required this.imageWidth,
-      required this.expansionTitleFontSize,
-      required this.containerHeight,
-      required this.containerWidth,
-      required this.userImageHeight,
-      required this.userImageWidth,
-      required this.headerFontSize,
-      required this.textFontSize,
-      required this.isMobile,
-      required this.friendshipSize,
-      })
-      : super(key: key);
+  const UserAppComponent({
+    Key? key,
+    required this.user,
+    required this.imageHeight,
+    required this.imageWidth,
+    required this.expansionTitleFontSize,
+    required this.containerHeight,
+    required this.containerWidth,
+    required this.userImageHeight,
+    required this.userImageWidth,
+    required this.headerFontSize,
+    required this.textFontSize,
+    required this.isMobile,
+    required this.friendshipSize,
+  }) : super(key: key);
 
   @override
   State<UserAppComponent> createState() => _UserAppComponentState();
@@ -108,7 +108,15 @@ class _UserAppComponentState extends State<UserAppComponent> {
             width: widget.imageWidth,
             height: widget.imageHeight,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                print(widget.user.firstName);
+                print(widget.user.imagePath ?? '');
+                print((widget.user.imagePath == null ||
+                    widget.user.imagePath == ''));
+                print((widget.user.imagePath != null ||
+                    widget.user.imagePath != ''));
+                print(widget.user.imagePath!.isEmpty);
+              },
             ),
           ),
         ),
@@ -138,11 +146,21 @@ class _UserAppComponentState extends State<UserAppComponent> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'assets/images/donorpin.png',
-                      height: widget.userImageHeight,
-                      width: widget.userImageWidth,
-                    ),
+                    if (!widget.user.imagePath!.isEmpty)
+                      Image.asset(
+                        widget.user.imagePath!,
+                        height: widget.userImageHeight,
+                        width: widget.userImageWidth,
+                      ),
+                    // Image.asset('assets/images/db_images/sai.jpg'),
+                    // Image.file(File(
+                    //     'D:MahyDolphin\internships\GSOC\Liquid Galaxy\Coding Period\HAPIS_GitHub\HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-\hapis\assets\images\db_images\sai')),
+                    if (widget.user.imagePath!.isEmpty)
+                      Image.asset(
+                        'assets/images/donorpin.png',
+                        height: widget.userImageHeight,
+                        width: widget.userImageWidth,
+                      ),
                     Text(
                       ' ${widget.user.firstName} ${widget.user.lastName}',
                       style: TextStyle(
@@ -189,10 +207,10 @@ class _UserAppComponentState extends State<UserAppComponent> {
                             },
                             //we should checkfriendship to see which icon to use
                             child: requested
-                                ?  Icon(Icons.check,
+                                ? Icon(Icons.check,
                                     color: HapisColors.lgColor4,
                                     size: widget.friendshipSize)
-                                :  Icon(Icons.person_add_alt_1_rounded,
+                                : Icon(Icons.person_add_alt_1_rounded,
                                     color: HapisColors.lgColor1,
                                     size: widget.friendshipSize),
                           );

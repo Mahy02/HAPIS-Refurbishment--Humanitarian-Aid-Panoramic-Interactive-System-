@@ -141,12 +141,13 @@ flutter:
       - assets/images/lg.png
       - assets/images/google.png
       - assets/images/defaultuser.png
+      - assets/images/db_images/
       #- assets/images/Logos_2.png
       - assets/Forms.csv
       - assets/Matchings.csv
       - assets/Requests.csv
       - assets/Users.csv
-      - assets/.env 
+      - .env 
 
       
 

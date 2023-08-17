@@ -103,6 +103,8 @@ class UserServices {
               addressLocation: row['AddressLocation'],
               phoneNum: row['PhoneNum'],
               email: row['Email'],
+              // imagePath: row['ProfileImage']
+
               // pass: row['Password']
             ))
         .toList();
@@ -116,7 +118,7 @@ class UserServices {
   getUsersInfo(String type, BuildContext context) async {
     //Edited => ForWho and FormStatus and FormType
     String sql = '''
-      SELECT hapisdb.Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, ForWho
+      SELECT hapisdb.Users.UserID AS UserUserID, FormID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, Item, Category, Dates_available, ForWho, ProfileImage
       FROM hapisdb.Forms
       JOIN hapisdb.Users ON hapisdb.Forms.UserID = hapisdb.Users.UserID
       WHERE hapisdb.Forms.FormType = '$type' AND hapisdb.Forms.FormStatus = 'Not Completed'
@@ -133,22 +135,22 @@ class UserServices {
     for (Map<String, dynamic> row in result) {
       try {
         UserModel user = UserModel(
-          userID: row['UserUserID'],
-          formID: int.parse(row['FormID']),
-          userName: row['UserName'],
-          firstName: row['FirstName'],
-          lastName: row['LastName'],
-          city: row['City'],
-          country: row['Country'],
-          addressLocation: row['AddressLocation'],
-          phoneNum: row['PhoneNum'],
-          email: row['Email'],
-          type: type,
-          item: row['Item'],
-          category: row['Category'],
-          multiDates: row['Dates_available'],
-          forWho: row['ForWho'],
-        );
+            userID: row['UserUserID'],
+            formID: int.parse(row['FormID']),
+            userName: row['UserName'],
+            firstName: row['FirstName'],
+            lastName: row['LastName'],
+            city: row['City'],
+            country: row['Country'],
+            addressLocation: row['AddressLocation'],
+            phoneNum: row['PhoneNum'],
+            email: row['Email'],
+            type: type,
+            item: row['Item'],
+            category: row['Category'],
+            multiDates: row['Dates_available'],
+            forWho: row['ForWho'],
+            imagePath: row['ProfileImage']);
 
         if (type == 'seeker') {
           userProvider.saveSeekersApp(user);
