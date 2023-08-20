@@ -45,7 +45,7 @@ class _CreateFormState extends State<CreateForm> {
   final _formKey = GlobalKey<FormState>();
   List<DateSelectionModel> _selectedDatesSeeker = [];
   List<DateSelectionModel> _selectedDatesGiver = [];
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -495,6 +495,9 @@ class _CreateFormState extends State<CreateForm> {
       ),
       GestureDetector(
         onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
           int numberOfChanges = 0;
           int rows = 0;
 
@@ -865,6 +868,9 @@ class _CreateFormState extends State<CreateForm> {
                 });
               } else {
                 if (rows > 0) {
+                  setState(() {
+                    isLoading = false;
+                  });
                   showDatabasePopup(context, 'Form created successfully!',
                       isError: false, onOKPressed: () {
                     Navigator.push(
@@ -892,6 +898,14 @@ class _CreateFormState extends State<CreateForm> {
           ),
         ),
       ),
+      if (isLoading)
+        Positioned.fill(
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
+            ),
+          ),
+        ),
     ]);
   }
 
@@ -1279,6 +1293,9 @@ class _CreateFormState extends State<CreateForm> {
       ),
       GestureDetector(
         onTap: () async {
+          setState(() {
+            isLoading = true;
+          });
           int numberOfChanges = 0;
           int rows = 0;
 
@@ -1649,6 +1666,9 @@ class _CreateFormState extends State<CreateForm> {
                 });
               } else {
                 if (rows > 0) {
+                  setState(() {
+                    isLoading = false;
+                  });
                   showDatabasePopup(context, 'Form created successfully!',
                       isError: false, onOKPressed: () {
                     Navigator.push(
@@ -1676,6 +1696,14 @@ class _CreateFormState extends State<CreateForm> {
           ),
         ),
       ),
+      if (isLoading)
+        Positioned.fill(
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
+            ),
+          ),
+        ),
     ]);
   }
 }

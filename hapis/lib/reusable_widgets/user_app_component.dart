@@ -87,6 +87,7 @@ class _UserAppComponentState extends State<UserAppComponent> {
     return request;
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final imagePath = countryMap[widget.user.country];
@@ -179,6 +180,9 @@ class _UserAppComponentState extends State<UserAppComponent> {
                           return GestureDetector(
                             onTap: () async {
                               //Make new request if not requested before
+                              setState(() {
+                                isLoading = true;
+                              });
                               print(requested);
                               if (requested == false) {
                                 if (GoogleSignInApi().isUserSignedIn() ==
@@ -189,6 +193,9 @@ class _UserAppComponentState extends State<UserAppComponent> {
                                   int result = await RequestsServices()
                                       .createRequest(id, widget.user.userID!,
                                           widget.user.formID!);
+                                  setState(() {
+                                    isLoading = false;
+                                  });
                                   if (result > 0) {
                                     showDatabasePopup(
                                         context, 'Request sent successfully!',
@@ -212,9 +219,21 @@ class _UserAppComponentState extends State<UserAppComponent> {
                                 ? Icon(Icons.check,
                                     color: HapisColors.lgColor4,
                                     size: widget.friendshipSize)
-                                : Icon(Icons.person_add_alt_1_rounded,
-                                    color: HapisColors.lgColor1,
-                                    size: widget.friendshipSize),
+                                : Stack(
+                                    children: [
+                                      Icon(Icons.person_add_alt_1_rounded,
+                                          color: HapisColors.lgColor1,
+                                          size: widget.friendshipSize),
+                                      if (isLoading)
+                                        Positioned.fill(
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                           );
                         }),
                   ],
