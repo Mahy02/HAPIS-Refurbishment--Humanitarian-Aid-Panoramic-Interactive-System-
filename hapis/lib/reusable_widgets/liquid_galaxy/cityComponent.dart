@@ -104,6 +104,8 @@ class _CityComponentState extends State<CityComponent> {
     }
   }
 
+  bool isLoadingCity = false;
+
   @override
   Widget build(BuildContext context) {
     final imagePath = countryMap[widget.country];
@@ -113,7 +115,7 @@ class _CityComponentState extends State<CityComponent> {
     return HapisElevatedButton(
       fontSize: widget.fontSize,
       buttonColor: widget.buttonColor,
-      elevatedButtonContent: buttonContent,
+      elevatedButtonContent: isLoadingCity ? 'Loading...' : buttonContent,
       height: MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width * 0.1,
       imageHeight: widget.imageHeight,
@@ -121,6 +123,10 @@ class _CityComponentState extends State<CityComponent> {
       imagePath: imagePath,
       isPoly: true,
       onpressed: () async {
+        setState(() {
+          isLoadingCity = true;
+        });
+
         /// retrieving all city data from the database
         int numberOfSeekers =
             await cityDBServices().getNumberOfSeekers(widget.city);
@@ -142,6 +148,10 @@ class _CityComponentState extends State<CityComponent> {
 
         await cityDBServices().getGiversInfo(widget.city, context);
 
+        // Hide the loading indicator and navigate to the new page
+        setState(() {
+          isLoadingCity = false;
+        });
         try {
           /// retrieving  `city coordinates`
           final LatLng cityCoordinates = await getCoordinates(widget.city);

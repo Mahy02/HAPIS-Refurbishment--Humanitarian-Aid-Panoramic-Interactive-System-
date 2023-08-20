@@ -43,7 +43,7 @@ class cityDBServices {
   /// Retrieve the list of seekers and all their info for the given city `cityName`
   getSeekersInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
-      SELECT  Users.UserID AS UserUserID , UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,COUNT(CASE WHEN Forms.ForWho = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.ForWho = 'other' THEN Forms.FormID END) AS other_count
+      SELECT  Users.UserID AS UserUserID , ProfileImage, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,COUNT(CASE WHEN Forms.ForWho = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.ForWho = 'other' THEN Forms.FormID END) AS other_count
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
       WHERE Users.City = '$cityName' AND Forms.FormType = 'seeker'
@@ -96,6 +96,7 @@ class cityDBServices {
           addressLocation: row['AddressLocation'],
           phoneNum: row['PhoneNum'],
           email: row['Email'],
+          imagePath: row['ProfileImage'],
           seekingForOthers: int.parse(row['other_count']),
           seekingsForSelf: int.parse(row['self_count']),
           userCoordinates: coords,
@@ -111,7 +112,7 @@ class cityDBServices {
   /// Retrieve the list of giversand all their info for the given city `cityName`
   getGiversInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
-      SELECT  Users.UserID AS UserUserID, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, COUNT(*) AS numberOfGivings
+      SELECT  Users.UserID AS UserUserID, ProfileImage, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, COUNT(*) AS numberOfGivings
       FROM Forms
       JOIN Users ON Forms.UserID = Users.UserID
       WHERE Users.City = '$cityName' AND Forms.FormType = 'giver'
@@ -136,8 +137,8 @@ class cityDBServices {
           addressLocation: row['AddressLocation'],
           phoneNum: row['PhoneNum'],
           email: row['Email'],
-         
-          givings:int.parse( row['numberOfGivings']),
+          imagePath: row['ProfileImage'],
+          givings: int.parse(row['numberOfGivings']),
           userCoordinates: coords,
         );
         userProvider.saveGivers(user);
@@ -169,7 +170,8 @@ class cityDBServices {
   ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
-    int numberOfSuccessfulDonations = int.parse(result[0]['successful_donation_count']);
+    int numberOfSuccessfulDonations =
+        int.parse(result[0]['successful_donation_count']);
 
     return numberOfSuccessfulDonations;
   }
@@ -195,7 +197,8 @@ class cityDBServices {
   ''';
 
     List<Map<String, dynamic>> result = await db.readData(sqlStatement);
-    int numberOfInProgressDonations = int.parse(result[0]['Inprogress_donation_count']);
+    int numberOfInProgressDonations =
+        int.parse(result[0]['Inprogress_donation_count']);
 
     return numberOfInProgressDonations;
   }

@@ -117,6 +117,10 @@ class _LgHomePageState extends State<LgHomePage> {
     }
   }
 
+  bool isLoadingGlobalStats = false;
+  bool isLoadingHAPISTour = false;
+  bool isLoadingCity = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,7 +172,10 @@ class _LgHomePageState extends State<LgHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 HapisElevatedButton(
-                    elevatedButtonContent: 'Global Statistics',
+                    //elevatedButtonContent: 'Global Statistics',
+                    elevatedButtonContent: isLoadingGlobalStats
+                        ? 'Loading...'
+                        : 'Global Statistics',
                     buttonColor: HapisColors.lgColor1,
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: MediaQuery.of(context).size.width * 0.65,
@@ -178,6 +185,10 @@ class _LgHomePageState extends State<LgHomePage> {
                     fontSize: 20,
                     isPoly: false,
                     onpressed: () async {
+                      setState(() {
+                        isLoadingGlobalStats = true;
+                      });
+
                       /// retrieving all globe data from the database
                       int numberOfSeekers =
                           await globalDBServices().getNumberOfSeekers();
@@ -203,6 +214,9 @@ class _LgHomePageState extends State<LgHomePage> {
                           topThreeCategories: topThreeCategories,
                           topThreeCities: topThreeCities);
 
+                      setState(() {
+                        isLoadingGlobalStats = false;
+                      });
                       final sshData =
                           // ignore: use_build_context_synchronously
                           Provider.of<SSHprovider>(context, listen: false);
@@ -220,27 +234,51 @@ class _LgHomePageState extends State<LgHomePage> {
                 const SizedBox(
                   height: 30,
                 ),
-                HapisElevatedButton(
-                    elevatedButtonContent: 'Cities',
-                    buttonColor: HapisColors.lgColor3,
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    width: MediaQuery.of(context).size.width * 0.65,
-                    imagePath: 'assets/images/architecture-and-city.png',
-                    imageHeight: MediaQuery.of(context).size.height * 0.1,
-                    imageWidth: MediaQuery.of(context).size.height * 0.1,
-                    fontSize: 20,
-                    isPoly: false,
-                    onpressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CitiesPage()));
-                    }),
+                Stack(
+                  alignment: Alignment.center,
+                  children:[ HapisElevatedButton(
+                      elevatedButtonContent: 'Cities',
+                      buttonColor: HapisColors.lgColor3,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      imagePath: 'assets/images/architecture-and-city.png',
+                      imageHeight: MediaQuery.of(context).size.height * 0.1,
+                      imageWidth: MediaQuery.of(context).size.height * 0.1,
+                      fontSize: 20,
+                      isPoly: false,
+                      onpressed: () async{
+                         setState(() {
+                            isLoadingCity = true;
+                          });
+
+                          // Perform any necessary loading or asynchronous tasks
+                          await Future.delayed(Duration(seconds: 5));
+
+                          // Hide the loading indicator and navigate to the new page
+                          setState(() {
+                            isLoadingCity = false;
+                          });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CitiesPage()));
+                      }),
+                      if (isLoadingCity)
+                      Center(
+                        child: CircularProgressIndicator(
+                          color: Colors
+                              .white, // Customize the color of the indicator
+                        ),
+                      ),
+                  ],
+                ),
                 const SizedBox(
                   height: 30,
                 ),
                 HapisElevatedButton(
-                    elevatedButtonContent: 'HAPIS Tour',
+                    elevatedButtonContent:
+                        isLoadingHAPISTour ? 'Loading...' : 'HAPIS Tour',
+                    // elevatedButtonContent: 'HAPIS Tour',
                     buttonColor: HapisColors.lgColor2,
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: MediaQuery.of(context).size.width * 0.65,
@@ -251,6 +289,9 @@ class _LgHomePageState extends State<LgHomePage> {
                     isPoly: false,
                     onpressed: () async {
                       //TourService().tourKML;
+                      setState(() {
+                        isLoadingHAPISTour = true;
+                      });
                       print('tourr');
                       final sshData =
                           Provider.of<SSHprovider>(context, listen: false);
@@ -260,6 +301,9 @@ class _LgHomePageState extends State<LgHomePage> {
                           await LgService(sshData).clearKml();
                           String tourKmlContent =
                               await TourService().generateTourKMLContent();
+                          setState(() {
+                            isLoadingHAPISTour = false;
+                          });
                           await LgService(sshData)
                               .sendTour(tourKmlContent, 'Hapis-Tour');
                         } catch (e) {
@@ -389,7 +433,10 @@ class _LgHomePageState extends State<LgHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 HapisElevatedButton(
-                    elevatedButtonContent: 'Global Statistics',
+                    elevatedButtonContent: isLoadingGlobalStats
+                        ? 'Loading...'
+                        : 'Global Statistics',
+                    //elevatedButtonContent: 'Global Statistics',
                     buttonColor: HapisColors.lgColor1,
                     height: MediaQuery.of(context).size.height * 0.4,
                     width: MediaQuery.of(context).size.width * 0.3,
@@ -399,6 +446,10 @@ class _LgHomePageState extends State<LgHomePage> {
                     fontSize: 35,
                     isPoly: false,
                     onpressed: () async {
+                      setState(() {
+                        isLoadingGlobalStats = true;
+                      });
+
                       /// retrieving all globe data from the database
                       int numberOfSeekers =
                           await globalDBServices().getNumberOfSeekers();
@@ -424,6 +475,10 @@ class _LgHomePageState extends State<LgHomePage> {
                           topThreeCategories: topThreeCategories,
                           topThreeCities: topThreeCities);
 
+                      setState(() {
+                        isLoadingGlobalStats = false;
+                      });
+
                       final sshData =
                           // ignore: use_build_context_synchronously
                           Provider.of<SSHprovider>(context, listen: false);
@@ -438,24 +493,49 @@ class _LgHomePageState extends State<LgHomePage> {
                         showDialogConnection(context);
                       }
                     }),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    HapisElevatedButton(
+                        elevatedButtonContent: 'Cities',
+                        buttonColor: HapisColors.lgColor3,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        imagePath: 'assets/images/architecture-and-city.png',
+                        imageHeight: MediaQuery.of(context).size.height * 0.2,
+                        imageWidth: MediaQuery.of(context).size.height * 0.2,
+                        fontSize: 35,
+                        isPoly: false,
+                        onpressed: () async {
+                          setState(() {
+                            isLoadingCity = true;
+                          });
+
+                          // Perform any necessary loading or asynchronous tasks
+                          await Future.delayed(Duration(seconds: 5));
+
+                          // Hide the loading indicator and navigate to the new page
+                          setState(() {
+                            isLoadingCity = false;
+                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CitiesPage()));
+                        }),
+                    if (isLoadingCity)
+                      Center(
+                        child: CircularProgressIndicator(
+                          color: Colors
+                              .white, // Customize the color of the indicator
+                        ),
+                      ),
+                  ],
+                ),
                 HapisElevatedButton(
-                    elevatedButtonContent: 'Cities',
-                    buttonColor: HapisColors.lgColor3,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    imagePath: 'assets/images/architecture-and-city.png',
-                    imageHeight: MediaQuery.of(context).size.height * 0.2,
-                    imageWidth: MediaQuery.of(context).size.height * 0.2,
-                    fontSize: 35,
-                    isPoly: false,
-                    onpressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CitiesPage()));
-                    }),
-                HapisElevatedButton(
-                    elevatedButtonContent: 'HAPIS Tour',
+                    elevatedButtonContent:
+                        isLoadingHAPISTour ? 'Loading...' : 'HAPIS Tour',
+                    //elevatedButtonContent: 'HAPIS Tour',
                     buttonColor: HapisColors.lgColor2,
                     height: MediaQuery.of(context).size.height * 0.4,
                     width: MediaQuery.of(context).size.width * 0.3,
@@ -466,6 +546,10 @@ class _LgHomePageState extends State<LgHomePage> {
                     isPoly: false,
                     onpressed: () async {
                       //TourService().tourKML;
+
+                      setState(() {
+                        isLoadingHAPISTour = true;
+                      });
                       print('tourr');
                       final sshData =
                           Provider.of<SSHprovider>(context, listen: false);
@@ -475,6 +559,9 @@ class _LgHomePageState extends State<LgHomePage> {
                           await LgService(sshData).clearKml();
                           String tourKmlContent =
                               await TourService().generateTourKMLContent();
+                          setState(() {
+                            isLoadingHAPISTour = false;
+                          });
                           await LgService(sshData)
                               .sendTour(tourKmlContent, 'Hapis-Tour');
                         } catch (e) {
@@ -517,6 +604,7 @@ class _LgHomePageState extends State<LgHomePage> {
 
                       if (sshData.client != null) {
                         try {
+                          await LgService(sshData).stopTour();
                           await LgService(sshData).startTour('Hapis-Tour');
                         } catch (e) {
                           // ignore: avoid_print

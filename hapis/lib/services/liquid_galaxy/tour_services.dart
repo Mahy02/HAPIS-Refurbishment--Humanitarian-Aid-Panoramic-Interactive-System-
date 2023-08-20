@@ -15,8 +15,8 @@ class TourService {
     print('here');
     List<CountryModel> countries = await TourDBServices().getCountries();
 
-    // CityModel? cityM;
-    // UsersModel user = UsersModel();
+    CityModel? cityM;
+    UsersModel user = UsersModel();
 
     String kmlContent = '''
 <?xml version="1.0" encoding="UTF-8"?>
@@ -26,7 +26,7 @@ class TourService {
     <open>1</open>
     <Folder>
       <gx:Tour>
-        <name>Play me</name>
+        <name>Hapis-Tour</name>
         <gx:Playlist>
 ''';
     print('here1');
@@ -56,21 +56,21 @@ class TourService {
     //     topThreeCategories: topThreeCategories,
     //     topThreeCities: topThreeCities);
 
-    // kmlContent += generateBalloonPlacemark(
-    //     globe.balloonContent(), LatLng(-60.4518936, -47.0000101));
-
-    //kmlContent += generatePlacemarkwithID('Globe');
+    // kmlContent += generatePlacemarkwithID('Globe');
+    // // kmlContent += showBalloon(globe.balloonContent());
+    // kmlContent += generateWait(4);
+    // kmlContent += hidePlacemarkwithID('Globe');
     for (var country in countries) {
       kmlContent += generateCountryFlyTo(country);
 
       for (var city in country.cities) {
         kmlContent += generateCityFlyTo(city);
-        // kmlContent += generateBalloonPlacemark(CityModel().balloonContent(), city.cityCoordinates);
+
         // kmlContent += generatePlacemarkwithID(city.name);
 
         // Add a wait time between cities
         kmlContent += generateWait(4);
-        // print('here after city');
+
         // //for city:
         // int numberOfSeekers =
         //     await cityDBServices().getNumberOfSeekers(city.name);
@@ -84,7 +84,7 @@ class TourService {
         //     await cityDBServices().getTopDonatedCategories(city.name);
         // LatLng coordsCity = LatLng(city.latitude, city.longitude);
 
-        // ///defining a new city instance for `cityModel` with all the retrieved data from the database
+        ///defining a new city instance for `cityModel` with all the retrieved data from the database
         // cityM = CityModel(
         //     id: city.name,
         //     name: city.name,
@@ -101,8 +101,8 @@ class TourService {
           // user.lastName = userLocation.lastName;
           // user.phoneNum = userLocation.phoneNum;
           kmlContent += generateUserLocationFlyTo(userLocation);
-          // kmlContent += generatePlacemarkwithID(userLocation.userName);
-          // kmlContent += generateBalloonPlacemark(UsersModel().giverBalloonContent(), userLocation.userCoordinates);
+          //kmlContent += generatePlacemarkwithID(userLocation.userName);
+
           kmlContent += generateWait(2);
           kmlContent +=
               generateUserLocationOrbit(userLocation); // Add orbit animation
@@ -123,6 +123,7 @@ class TourService {
     // kmlContent += generateBalloonPlacemark(
     //     user.tourUserBalloonContent(), user.userCoordinates!);
 
+//we dont want it at all
 //     kmlContent += '''
 //         </gx:Playlist>
 //       </gx:Tour>
@@ -137,6 +138,8 @@ class TourService {
   </Document>
 </kml>
 ''';
+
+    print(kmlContent);
 
     return kmlContent;
   }
@@ -249,7 +252,8 @@ class TourService {
   String generateBalloonPlacemark(String balloonContent, LatLng coordinates) {
     return '''
       <Placemark>
-        <name>Balloon</name>
+        <name></name>
+        <gx:balloonVisibility>1</gx:balloonVisibility>
         <description><![CDATA[$balloonContent]]></description>
         <Point>
           <coordinates>${coordinates.longitude},${coordinates.latitude}</coordinates>
@@ -266,7 +270,43 @@ class TourService {
             <targetHref/>
             <Change>
               <Placemark targetId="$placemarkID">
-                <gx:balloonVisibility>1</gx:balloonVisibility>
+                <visibility>1</visibility>
+              </Placemark>
+            </Change>
+          </Update>
+        </gx:AnimatedUpdate>
+''';
+  }
+
+//   String showBalloon(String content) {
+//     return '''
+//    <gx:AnimatedUpdate>
+//           <Update>
+//             <targetHref/>
+//             <Change>
+//               <gx:Balloon>
+//                 <gx:html>
+//                   <![CDATA[
+//                    $content
+//                    ]]>
+//                 </gx:html>
+//                 <gx:visibility>1</gx:visibility>
+//               </gx:Balloon>
+//             </Change>
+//           </Update>
+//         </gx:AnimatedUpdate>
+// ''';
+//   }
+
+  String hidePlacemarkwithID(String placemarkID) {
+    return '''
+        <gx:AnimatedUpdate>
+          <!-- the default duration is 0.0 -->
+          <Update>
+            <targetHref/>
+            <Change>
+              <Placemark targetId="$placemarkID">
+               <visibility>0</visibility>
               </Placemark>
             </Change>
           </Update>

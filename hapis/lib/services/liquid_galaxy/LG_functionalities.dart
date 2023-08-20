@@ -254,7 +254,7 @@ fi
           .execute('echo "\n$_url/$fileName" >> /var/www/html/kmls.txt');
     } catch (e) {
       // ignore: avoid_print
-      print(e);
+      print(e.toString());
     }
   }
 

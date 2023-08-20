@@ -6,7 +6,6 @@ import '../../../utils/extract_geocoordinates.dart';
 /// Model that represents the `UsersModel`, with all of its properties and methods.
 
 class UsersModel {
-  
   /// Property that defines the user userID
   String? userID;
 
@@ -34,7 +33,8 @@ class UsersModel {
   /// Property that defines the user's email
   String? email;
 
- 
+  ///property that defines the user's image
+  String? imagePath;
 
   /// property that defines the user's total number of donations
   int? givings;
@@ -60,14 +60,16 @@ class UsersModel {
       this.addressLocation,
       this.phoneNum,
       this.email,
-     
+      this.imagePath,
       this.givings,
       this.seekingForOthers,
       this.seekingsForSelf,
       this.userCoordinates});
 
   /// Gets the balloon content from the current giver.
-  String giverBalloonContent() => '''
+  String giverBalloonContent() {
+    if (imagePath == null || imagePath == '') {
+      return '''
       <div style="text-align:center;">
       <b><font size="+3">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
       </div>
@@ -84,9 +86,32 @@ class UsersModel {
       <b>Total Number of donations made:</b> $givings
       <br/>
     ''';
+    } else {
+      return '''
+      <div style="text-align:center;">
+      <b><font size="+3">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
+      </div>
+      <br/><br/>
+      <div style="text-align:center;">
+      
+      <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week8/hapis/$imagePath?raw=true" style="width: 150px; height: 150px;"/><br/><br/>
+      </div>
+      <b>Name:</b> ${'$firstName $lastName'}
+      <br/>
+      <b>Phone Number:</b> $phoneNum
+      <br/>
+      <b>Email:</b> $email
+      <br/>
+      <b>Total Number of donations made:</b> $givings
+      <br/>
+    ''';
+    }
+  }
 
   /// Gets the balloon content from the current seeker.
-  String seekerBalloonContent() => '''
+  String seekerBalloonContent() {
+    if (imagePath == null || imagePath == '') {
+      return '''
       <b><font size="+2">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
       <br/><br/>
       <div style="text-align:center;">
@@ -103,8 +128,28 @@ class UsersModel {
       <b>Total Number seekings made for others:</b> $seekingForOthers
       <br/>
     ''';
+    } else {
+      return '''
+      <b><font size="+2">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
+      <br/><br/>
+      <div style="text-align:center;">
+     <img src="https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/blob/week8/hapis/$imagePath?raw=true" style="width: 150px; height: 150px;"/><br/><br/>
+      </div>
+      <b>Name:</b> ${'$firstName $lastName'}
+      <br/>
+      <b>Phone Number:</b> $phoneNum
+      <br/>
+      <b>Email:</b> $email
+      <br/>
+      <b>Total Number seekings made for self:</b> $seekingsForSelf
+      <br/>
+      <b>Total Number seekings made for others:</b> $seekingForOthers
+      <br/>
+    ''';
+    }
+  }
 
-     /// Gets the balloon content from the current seeker.
+  /// Gets the balloon content from the current seeker.
   String tourUserBalloonContent() => '''
       <b><font size="+2">Personal Information & statistics<font color="#5D5D5D"></font></font></b>
       <br/><br/>
@@ -156,7 +201,6 @@ class UsersModel {
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
-     
       userID: map['UserID'],
       userName: map['UserName'],
       firstName: map['FirstName'],
