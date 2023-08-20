@@ -341,15 +341,8 @@ Enjoy HAPIS  :)  !!
 
 <br>
 
-This guide will walk you through setting up the HAPIS database using Docker and connecting to it from your Flutter app.
+[This guide](https://github.com/Mahy02/HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-/wiki/Database) will walk you through setting up the HAPIS database using Docker and connecting to it from your Flutter app.
 
-<br>
-
-**Prerequisites**
-
-<br>
-
-> Docker: Make sure you have Docker installed on your machine. If not, follow the official installation guide:[ Docker Installation Guide](https://docs.docker.com/engine/install/)
 
 
 <br>
