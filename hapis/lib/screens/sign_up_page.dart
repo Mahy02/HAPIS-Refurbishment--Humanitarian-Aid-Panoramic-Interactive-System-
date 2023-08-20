@@ -63,8 +63,8 @@ class _SignUpPageState extends State<SignUpPage> {
       _addressController.text = user.addressLocation!;
       _phoneNumberController.text = user.phoneNum!;
       _country = user.country!;
-     
-      image = File(user.imagePath?? '');
+
+      image = File(user.imagePath ?? '');
     }
   }
 
@@ -103,16 +103,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       backgroundImage: widget.googleUser != null
                           ? widget.googleUser!.photoUrl != null
                               ? NetworkImage(widget.googleUser!.photoUrl!)
-                              : image != null
-                                  ? FileImage(image!)
-                                  : const AssetImage(
-                                      'assets/images/defaultuser.png',
-                                    ) as ImageProvider<Object>
-                          : image != null
-                              ? FileImage(image!)
                               : const AssetImage(
                                   'assets/images/defaultuser.png',
-                                ) as ImageProvider<Object>,
+                                ) as ImageProvider<Object>
+                          : const AssetImage(
+                              'assets/images/defaultuser.png',
+                            ) as ImageProvider<Object>,
                       child: IconButton(
                         icon: const Icon(Icons.camera_alt),
                         color: Colors.black.withOpacity(
@@ -468,16 +464,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       backgroundImage: widget.googleUser != null
                           ? widget.googleUser!.photoUrl != null
                               ? NetworkImage(widget.googleUser!.photoUrl!)
-                              : image != null
-                                  ? FileImage(image!)
-                                  : const AssetImage(
-                                      'assets/images/defaultuser.png',
-                                    ) as ImageProvider<Object>
-                          : image != null
-                              ? FileImage(image!)
                               : const AssetImage(
                                   'assets/images/defaultuser.png',
-                                ) as ImageProvider<Object>,
+                                ) as ImageProvider<Object>
+                          : const AssetImage(
+                              'assets/images/defaultuser.png',
+                            ) as ImageProvider<Object>,
                       child: IconButton(
                         icon: const Icon(Icons.camera_alt),
                         color: Colors.black.withOpacity(

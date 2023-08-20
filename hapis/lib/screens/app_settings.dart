@@ -19,6 +19,7 @@ import '../services/db_services/notifications_services.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/database_popups.dart';
 import '../utils/signup_popup.dart';
+import 'google_signup.dart';
 import 'notify_screen.dart';
 
 class AppSettings extends StatefulWidget {
@@ -170,6 +171,22 @@ class _AppSettingsState extends State<AppSettings> {
               style: TextStyle(color: HapisColors.lgColor1, fontSize: 18),
             ),
             tiles: [
+              SettingsTile(
+                title: Text(
+                  'Sign In',
+                  style: TextStyle(fontSize: 16),
+                ),
+                leading: Icon(
+                  Icons.exit_to_app,
+                  color: HapisColors.lgColor4,
+                ),
+                onPressed: (BuildContext context) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GoogleSignUp()));
+                },
+              ),
               SettingsTile(
                 title: Text(
                   'Sign Out',
@@ -368,6 +385,23 @@ class _AppSettingsState extends State<AppSettings> {
                   style: TextStyle(color: HapisColors.lgColor1, fontSize: 40),
                 ),
                 tiles: [
+                  SettingsTile(
+                    title: Text(
+                      'Sign In',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    leading: Icon(
+                      Icons.exit_to_app,
+                      color: HapisColors.lgColor4,
+                    ),
+                    onPressed: (BuildContext context) {
+                      // Handle sign out action
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const GoogleSignUp()));
+                    },
+                  ),
                   SettingsTile(
                     title: Text(
                       'Sign Out',

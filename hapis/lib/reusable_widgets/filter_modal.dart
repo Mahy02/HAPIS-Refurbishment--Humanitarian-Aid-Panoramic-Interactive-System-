@@ -117,28 +117,29 @@ class _FilterModalState extends State<FilterModal> {
               },
             ),
           ),
-          const Text(
-            'Month',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          Slider(
-            value: _value,
-            min: 2023,
-            max: 2040,
-            divisions: (2040 - 2023),
-            onChanged: (double newValue) {
-              setState(() {
-                filterSetting.setSelectedDate(newValue.toString());
-                _value = newValue;
-              });
-            },
-            label: '${_value.toInt()}',
-          ),
+          // const Text(
+          //   'Month',
+          //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          // ),
+          // Slider(
+          //   value: _value,
+          //   min: 2023,
+          //   max: 2040,
+          //   divisions: (2040 - 2023),
+          //   onChanged: (double newValue) {
+          //     setState(() {
+          //       filterSetting.setSelectedDate(newValue.toString());
+          //       _value = newValue;
+          //     });
+          //   },
+          //   label: '${_value.toInt()}',
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor4),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: HapisColors.lgColor4),
                 onPressed: () {
                   widget.onFiltered();
                   Navigator.pop(context);
@@ -146,7 +147,8 @@ class _FilterModalState extends State<FilterModal> {
                 child: const Text('FILTER'),
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor2),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: HapisColors.lgColor2),
                 onPressed: () {
                   filterSetting.clearFilters();
                   widget.onFiltered();
@@ -249,28 +251,29 @@ class _FilterModalState extends State<FilterModal> {
               },
             ),
           ),
-          const Text(
-            'Month',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-          Slider(
-            value: _value,
-            min: 2023,
-            max: 2040,
-            divisions: (2040 - 2023),
-            onChanged: (double newValue) {
-              setState(() {
-                filterSetting.setSelectedDate(newValue.toString());
-                _value = newValue;
-              });
-            },
-            label: '${_value.toInt()}',
-          ),
+          // const Text(
+          //   'Month',
+          //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          // ),
+          // Slider(
+          //   value: _value,
+          //   min: 2023,
+          //   max: 2040,
+          //   divisions: (2040 - 2023),
+          //   onChanged: (double newValue) {
+          //     setState(() {
+          //       filterSetting.setSelectedDate(newValue.toString());
+          //       _value = newValue;
+          //     });
+          //   },
+          //   label: '${_value.toInt()}',
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor4),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: HapisColors.lgColor4),
                 onPressed: () {
                   widget.onFiltered();
                   Navigator.pop(context);
@@ -281,7 +284,8 @@ class _FilterModalState extends State<FilterModal> {
                 ),
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: HapisColors.lgColor2),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: HapisColors.lgColor2),
                 onPressed: () {
                   filterSetting.clearFilters();
                   widget.onFiltered();

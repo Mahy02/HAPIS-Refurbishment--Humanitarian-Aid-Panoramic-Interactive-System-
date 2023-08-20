@@ -3,6 +3,7 @@ import 'package:hapis/screens/about_screen.dart';
 import 'package:hapis/screens/app_home.dart';
 import '../reusable_widgets/item_side_menu.dart';
 import '../screens/app_settings.dart';
+import '../screens/how_it_works_page.dart';
 import '../screens/liquid_galaxy/configuration_screen.dart';
 import '../screens/liquid_galaxy/home.dart';
 import '../screens/liquid_galaxy/settings_screen.dart';
@@ -14,7 +15,8 @@ import '../screens/liquid_galaxy/settings_screen.dart';
 ///It helps navigate between these pages=> [About], [], [AppSettings] and [AppHomePage] in the main app view
 ///We use  [IconSideMenuWidget] to represent each item in the sidemenu
 
-Drawer buildDrawer(BuildContext context, bool isLg, double fontSize, double iconFontSize) {
+Drawer buildDrawer(
+    BuildContext context, bool isLg, double fontSize, double iconFontSize) {
   return isLg
       ? Drawer(
           backgroundColor: const Color.fromARGB(222, 255, 255, 255),
@@ -40,7 +42,7 @@ Drawer buildDrawer(BuildContext context, bool isLg, double fontSize, double icon
                   itemTitle: 'About',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                 IconSideMenuWidget(
+                IconSideMenuWidget(
                   itemNumber: '2',
                   fontSize: fontSize,
                   iconFontSize: iconFontSize,
@@ -48,7 +50,7 @@ Drawer buildDrawer(BuildContext context, bool isLg, double fontSize, double icon
                   itemTitle: 'Home',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                 IconSideMenuWidget(
+                IconSideMenuWidget(
                   itemNumber: '3',
                   fontSize: fontSize,
                   iconFontSize: iconFontSize,
@@ -56,7 +58,7 @@ Drawer buildDrawer(BuildContext context, bool isLg, double fontSize, double icon
                   itemTitle: 'LG Settings',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                 IconSideMenuWidget(
+                IconSideMenuWidget(
                   itemNumber: '4',
                   fontSize: fontSize,
                   iconFontSize: iconFontSize,
@@ -95,15 +97,15 @@ Drawer buildDrawer(BuildContext context, bool isLg, double fontSize, double icon
                   itemTitle: 'About',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                 IconSideMenuWidget(
+                IconSideMenuWidget(
                   itemNumber: '2',
                   fontSize: fontSize,
                   iconFontSize: iconFontSize,
-                  page: AppHomePage(),
+                  page: HowItWorksPage(isLg: isLg),
                   itemTitle: 'How it works',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                 IconSideMenuWidget(
+                IconSideMenuWidget(
                   itemNumber: '3',
                   fontSize: fontSize,
                   iconFontSize: iconFontSize,
@@ -111,7 +113,7 @@ Drawer buildDrawer(BuildContext context, bool isLg, double fontSize, double icon
                   itemTitle: 'Settings',
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                 IconSideMenuWidget(
+                IconSideMenuWidget(
                   itemNumber: '4',
                   fontSize: fontSize,
                   iconFontSize: iconFontSize,

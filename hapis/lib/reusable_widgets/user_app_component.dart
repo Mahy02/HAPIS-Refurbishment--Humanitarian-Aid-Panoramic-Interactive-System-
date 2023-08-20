@@ -71,9 +71,11 @@ class _UserAppComponentState extends State<UserAppComponent> {
       checkFriendshipRequest(id, widget.user.userID!, widget.user.formID!)
           .then((result) {
         // Set the state when the Future completes
-        setState(() {
-          requested = result;
-        });
+        if (mounted) {
+          setState(() {
+            requested = result;
+          });
+        }
       });
     }
   }
