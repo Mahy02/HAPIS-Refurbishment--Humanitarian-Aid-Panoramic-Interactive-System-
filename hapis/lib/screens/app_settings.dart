@@ -152,12 +152,18 @@ class _AppSettingsState extends State<AppSettings> {
                   },
                 ),
                 onPressed: (BuildContext context) {
+                  print(GoogleSignInApi().isUserSignedIn() == true ||
+                      LoginSessionSharedPreferences.getLoggedIn() == true);
                   if (GoogleSignInApi().isUserSignedIn() == true ||
                       LoginSessionSharedPreferences.getLoggedIn() == true) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NotificationPage()));
+                            builder: (context) => NotificationPage(
+                                  notifyFontSize: 20,
+                                  textFontSize: 18,
+                                  titleFontSize: 20,
+                                )));
                   } else {
                     showDialogSignUp(context);
                   }
@@ -361,12 +367,60 @@ class _AppSettingsState extends State<AppSettings> {
                       Icons.notifications,
                       color: HapisColors.lgColor4,
                     ),
+                    trailing: FutureBuilder<int>(
+                      future: NotificationsServices().getNotificationCount(
+                          userId), // Replace userId with the actual user ID
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          // While waiting for the future to complete, show a loading indicator
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          // If an error occurred, display an error message
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          // If the future completed successfully, show the notification count
+                          int notificationCount = snapshot.data ?? 0;
+                          return CircleAvatar(
+                            backgroundColor: Colors.red,
+                            radius: 25,
+                            child: Text(
+                              '$notificationCount',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 24),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                     onPressed: (BuildContext context) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationPage()));
+                      print(GoogleSignInApi().isUserSignedIn() == true ||
+                          LoginSessionSharedPreferences.getLoggedIn() == true);
+                      if (GoogleSignInApi().isUserSignedIn() == true ||
+                          LoginSessionSharedPreferences.getLoggedIn() == true) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NotificationPage(
+                                      notifyFontSize: 26,
+                                      textFontSize: 24,
+                                      titleFontSize: 38,
+                                    )));
+                      } else {
+                        showDialogSignUp(context);
+                      }
                     },
+
+                    // onPressed: (BuildContext context) {
+                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => NotificationPage(
+                    //                 notifyFontSize: 26,
+                    //                 textFontSize: 24,
+                    //                 titleFontSize: 38,
+                    //               )));
+                    // },
                   ),
                 ],
               ),

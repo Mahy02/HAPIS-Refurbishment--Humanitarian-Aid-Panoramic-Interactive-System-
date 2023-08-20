@@ -8,13 +8,15 @@ class NotificationComponent extends StatefulWidget {
   final String title;
   final String message;
   final int id;
+  final double notifyFontSize;
+  final double textFontSize;
   final VoidCallback? onPressed;
 
   const NotificationComponent({
     required this.title,
     required this.message,
     required this.id,
-    required this.onPressed,
+    required this.onPressed, required this.notifyFontSize, required this.textFontSize,
   });
 
   @override
@@ -50,7 +52,8 @@ class _NotificationComponentState extends State<NotificationComponent> {
         title: Text(
           widget.title,
           style: TextStyle(
-              fontSize: 20,
+              //fontSize: 20,
+              fontSize: widget.notifyFontSize,
               color: HapisColors.lgColor1,
               fontWeight: FontWeight.bold),
         ),
@@ -58,7 +61,10 @@ class _NotificationComponentState extends State<NotificationComponent> {
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
             widget.message,
-            style: TextStyle(fontSize: 18, color: Colors.black),
+            style: TextStyle(
+              //fontSize: 18,
+              fontSize: widget.textFontSize,
+               color: Colors.black),
           ),
         ),
       ),
