@@ -1,0 +1,7 @@
+FROM mysql
+
+
+EXPOSE 3306
+
+# Copy the initialization script to docker-entrypoint-initdb.d directory
+COPY init.sql /docker-entrypoint-initdb.d/
