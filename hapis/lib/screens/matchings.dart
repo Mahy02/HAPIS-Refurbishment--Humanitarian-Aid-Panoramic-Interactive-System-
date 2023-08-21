@@ -3,27 +3,30 @@ import 'package:hapis/models/db_models/get_matchings_model.dart';
 
 import '../helpers/google_signin_api.dart';
 import '../helpers/login_session_shared_preferences.dart';
-import '../reusable_widgets/back_button.dart';
 import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/requests_component.dart';
 import '../services/db_services/matchings_db_services.dart';
 
+/// The `Matchings` widget displays a list of matching opportunities for the user.
+///
+/// This widget fetches and displays a list of matching opportunities that are available to the user.
+/// Each matching opportunity is displayed using the `RequestComponent` widget.
+///
+/// **Properties:**
+///
+/// - `fontSize`: The font size for the text in the widget.
+/// - `subHeadFontSize`: The font size for the subhead text.
+/// - `buttonFontSize`: The font size for the button text.
+///
 class Matchings extends StatefulWidget {
   final double fontSize;
   final double subHeadFontSize;
   final double buttonFontSize;
-  //  final double buttonHeight;
-  // final double finishButtonHeight;
-  // final double pendingButtonHeight;
-  //   final double buttonWidth;
-  // final double finishButtonWidth;
-  // final double pendingButtonWidth;
   const Matchings({
     super.key,
     required this.fontSize,
     required this.subHeadFontSize,
     required this.buttonFontSize,
-    // required this.buttonHeight, required this.finishButtonHeight, required this.pendingButtonHeight, required this.buttonWidth, required this.finishButtonWidth, required this.pendingButtonWidth
   });
 
   @override
@@ -46,6 +49,7 @@ class _MatchingsState extends State<Matchings> {
     _future = MatchingsServices().getMatchings(id);
   }
 
+ /// - `_refreshData()`: Refreshes the data by fetching matching opportunities.
   Future<void> _refreshData() async {
     final user = GoogleSignInApi().getCurrentUser();
     if (user != null) {
@@ -61,17 +65,8 @@ class _MatchingsState extends State<Matchings> {
 
   @override
   Widget build(BuildContext context) {
-    // String id;
-    // final user = GoogleSignInApi().getCurrentUser();
-    // if (user != null) {
-    //   id = user.id;
-    // } else {
-    //   id = LoginSessionSharedPreferences.getUserID()!;
-    // }
-
     return FutureBuilder<List<MatchingsModel>>(
         future: _future,
-        // MatchingsServices().getMatchings(id),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -80,9 +75,9 @@ class _MatchingsState extends State<Matchings> {
             return const Center(child: Text('Error fetching matchings'));
           }
           final matchingsList = snapshot.data ?? [];
-          // print(matchingsList);
+
           final noMatchings = matchingsList.isEmpty;
-          //print(noDrafts); //false
+
           return noMatchings!
               ? const NoComponentWidget(
                   displayText: 'You don\'t have any matchings',
@@ -102,15 +97,12 @@ class _MatchingsState extends State<Matchings> {
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.01),
                       ListView.builder(
-                        // itemCount: 20,
                         itemCount: matchingsList.length,
-                        //matchingsProvider.matchings.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           final MatchingsModel matching = matchingsList[index];
 
-                          // final matching = matchingsProvider.matchings[index];
                           final type = matching.type;
                           final personName =
                               '${matching.firstName} ${matching.lastName}';
@@ -154,13 +146,6 @@ class _MatchingsState extends State<Matchings> {
                             onPressed: () {
                               _refreshData();
                             },
-
-                            // buttonHeight: buttonHeight,
-                            // finishButtonHeight:finishButtonHeight ,
-                            // pendingButtonHeight: pendingButtonHeight,
-                            // buttonWidth:buttonWidth ,
-                            // pendingButtonWidth:pendingButtonWidth ,
-                            // finishButtonWidth: finishButtonWidth,
                           ));
                         },
                       ),

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 
+/// A widget that displays a back button icon and allows the user to navigate back.
 class BackButtonWidget extends StatefulWidget {
   final bool isTablet;
+
+   /// Constructor for the BackButtonWidget class.
+  /// The `isTablet` parameter specifies whether the device is a tablet.
   const BackButtonWidget({super.key, required this.isTablet});
 
+  
   @override
   State<BackButtonWidget> createState() => _BackButtonWidgetState();
 }

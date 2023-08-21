@@ -3,10 +3,10 @@ import 'package:hapis/responsive/responsive_layout.dart';
 
 import '../constants.dart';
 
-///This is a function [showDatabasePopup] that calls [showDialog] built in function in flutter
-///This is used for displayed a pop up to the user regarding sign up
-///It returns an [AlertDialog]
-
+/// Display a dialog box to show database-related messages to the user.
+/// The appearance of the dialog varies based on screen size and message type.
+/// Returns a Future<dynamic> that resolves when the dialog is dismissed.
+/// 
 Future<dynamic> showDatabasePopup(BuildContext context, String db_error,
     {bool isError = true,
     bool isWarning = false,

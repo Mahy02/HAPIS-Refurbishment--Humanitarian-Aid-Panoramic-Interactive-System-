@@ -6,11 +6,15 @@ import 'package:provider/provider.dart';
 import '../../helpers/sql_db.dart';
 import '../../providers/liquid_galaxy/users_provider.dart';
 
+/// The `cityDBServices` class provides methods to interact with the database and retrieve information related to city statistics.
 class cityDBServices {
-  /// retrieving the [db] database instance
+
+  /// The [db] database instance.
   SqlDb db = SqlDb();
 
-  /// Retrieve the number of seekers in the given city `cityName`
+  /// Retrieve the number of seekers in the given city `cityName`.
+  ///
+  /// Returns a [Future] with the number of seekers.
   Future<int> getNumberOfSeekers(String cityName) async {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS seeker_count
@@ -25,7 +29,9 @@ class cityDBServices {
     return numberOfSeekers;
   }
 
-  /// Retrieve the number of givers in the given city `cityName`
+  /// Retrieve the number of givers in the given city `cityName`.
+  ///
+  /// Returns a [Future] with the number of givers.
   Future<int> getNumberOfGivers(String cityName) async {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS giver_count
@@ -40,7 +46,9 @@ class cityDBServices {
     return numberOfGivers;
   }
 
-  /// Retrieve the list of seekers and all their info for the given city `cityName`
+  /// Retrieve the list of seekers and their information for the given city `cityName`.
+  ///
+  /// This method fetches seekers' data from the database and stores it in the UserProvider.
   getSeekersInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
       SELECT  Users.UserID AS UserUserID , ProfileImage, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email,COUNT(CASE WHEN Forms.ForWho = 'self' THEN Forms.FormID END) AS self_count, COUNT(CASE WHEN Forms.ForWho = 'other' THEN Forms.FormID END) AS other_count
@@ -109,7 +117,9 @@ class cityDBServices {
     }
   }
 
-  /// Retrieve the list of giversand all their info for the given city `cityName`
+  /// Retrieve the list of givers and their information for the given city `cityName`.
+  ///
+  /// This method fetches givers' data from the database and stores it in the UserProvider.
   getGiversInfo(String cityName, BuildContext context) async {
     String sqlStatment = '''
       SELECT  Users.UserID AS UserUserID, ProfileImage, UserName, FirstName, LastName, City, Country, AddressLocation,PhoneNum,Email, COUNT(*) AS numberOfGivings
@@ -149,7 +159,9 @@ class cityDBServices {
     }
   }
 
-  /// Retrieve the number of successful donations in the given city  `cityName`
+  /// Retrieve the number of successful donations in the given city `cityName`.
+  ///
+  /// Returns a [Future] with the number of successful donations.
   Future<int> getNumberOfSuccessfulDonations(String cityName) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS successful_donation_count
@@ -176,7 +188,9 @@ class cityDBServices {
     return numberOfSuccessfulDonations;
   }
 
-  /// Retrieve the number of in progress donations in the given city  `cityName`
+   /// Retrieve the number of in-progress donations in the given city `cityName`.
+  ///
+  /// Returns a [Future] with the number of in-progress donations.
   Future<int> getNumberOfInProgressDonations(String cityName) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS Inprogress_donation_count
@@ -203,7 +217,9 @@ class cityDBServices {
     return numberOfInProgressDonations;
   }
 
-  // Retrieve the top 3 donated categories in the given city  `cityName`
+  /// Retrieve the top 3 donated categories in the given city `cityName`.
+  ///
+  /// Returns a [Future] with a list of the top 3 donated categories.
   Future<List<String>> getTopDonatedCategories(String cityName) async {
     String sqlStatement = '''
         SELECT Forms.Category, COUNT(*) AS category_count

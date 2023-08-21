@@ -3,28 +3,30 @@ import 'package:hapis/helpers/google_signin_api.dart';
 import 'package:hapis/helpers/login_session_shared_preferences.dart';
 import 'package:hapis/models/db_models/get_requests_recieved_model.dart';
 import 'package:hapis/models/db_models/get_requests_sent_model.dart';
-import 'package:hapis/screens/google_signup.dart';
 import 'package:hapis/services/db_services/requests_db_services.dart';
-import '../reusable_widgets/back_button.dart';
 import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/requests_component.dart';
 
+
+/// The `Requests` widget displays the user's received and sent requests.
+///
+/// This widget fetches and displays the user's received and sent requests.
+/// It presents both types of requests in separate sections.
+///
+/// **Properties:**
+///
+/// - `fontSize`: The font size for the text content.
+/// - `subHeadFontSize`: The font size for subheadings.
+/// - `buttonFontSize`: The font size for buttons.
 class Requests extends StatefulWidget {
   final double fontSize;
   final double subHeadFontSize;
   final double buttonFontSize;
-  //  final double buttonHeight;
-  // final double finishButtonHeight;
-  // final double pendingButtonHeight;
-  //   final double buttonWidth;
-  // final double finishButtonWidth;
-  // final double pendingButtonWidth;
   const Requests({
     super.key,
     required this.fontSize,
     required this.subHeadFontSize,
     required this.buttonFontSize,
-    //required this.buttonHeight, required this.finishButtonHeight, required this.pendingButtonHeight, required this.buttonWidth, required this.finishButtonWidth, required this.pendingButtonWidth
   });
 
   @override
@@ -41,7 +43,7 @@ class _RequestsState extends State<Requests> {
     } else {
       id = LoginSessionSharedPreferences.getUserID()!;
     }
-    print(id);
+   
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -107,12 +109,7 @@ class _RequestsState extends State<Requests> {
                               onPressed: () {
                                 setState(() {});
                               },
-                              //   buttonHeight: buttonHeight,
-                              // finishButtonHeight:finishButtonHeight ,
-                              // pendingButtonHeight: pendingButtonHeight,
-                              // buttonWidth:buttonWidth ,
-                              // pendingButtonWidth:pendingButtonWidth ,
-                              // finishButtonWidth: finishButtonWidth,
+                            
                             ));
                           },
                         ),
@@ -180,12 +177,7 @@ class _RequestsState extends State<Requests> {
                               onPressed: () {
                                 setState(() {});
                               },
-                              // buttonHeight: buttonHeight,
-                              // finishButtonHeight:finishButtonHeight ,
-                              // pendingButtonHeight: pendingButtonHeight,
-                              // buttonWidth:buttonWidth ,
-                              // pendingButtonWidth:pendingButtonWidth ,
-                              // finishButtonWidth: finishButtonWidth,
+                            
                             ));
                           },
                         ));

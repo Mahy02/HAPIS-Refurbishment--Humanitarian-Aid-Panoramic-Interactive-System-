@@ -25,7 +25,6 @@ Future<dynamic> showDialogSignUp(BuildContext context) {
             actions: [
               TextButton(
                 onPressed: () {
-                  //  Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -47,7 +46,6 @@ Future<dynamic> showDialogSignUp(BuildContext context) {
             actions: [
               TextButton(
                 onPressed: () {
-                  //  Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(

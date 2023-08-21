@@ -309,13 +309,6 @@ fi
       {List<Map<String, String>> images = const []}) async {
     final fileName = '${kml.name}.kml';
 
-    // try {
-    //   await clearKml();
-    // } catch (e) {
-    //   // ignore: avoid_print
-    //   print(e);
-    // }
-
     for (var img in images) {
       final image = await _fileService.createImage(img['name']!, img['path']!);
       String imageName = img['name']!;

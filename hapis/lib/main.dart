@@ -12,8 +12,6 @@ import 'package:hapis/providers/liquid_galaxy/connection_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/ssh_provider.dart';
 import 'package:hapis/providers/liquid_galaxy/users_provider.dart';
 import 'package:hapis/providers/user_provider.dart';
-import 'package:hapis/screens/notify_screen.dart';
-import 'package:hapis/screens/sign_up_page.dart';
 import 'package:hapis/screens/splash_screen.dart';
 import 'package:hapis/services/liquid_galaxy/LG_functionalities.dart';
 import 'package:provider/provider.dart';
@@ -32,24 +30,18 @@ import 'package:responsive_framework/responsive_framework.dart';
 ///At the beginning of our [main] function we initialize [SqlDb] instance to create the database or simply retrieve it if already existing
 /// We Create a [Timer] that calls the reconnectClient() function every 30 seconds as client loses connection after some time
 
+
+/// This is the main starting point of the HAPIS application
 void main() async {
+
   /// Initialize the app
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// Import the database tables from CSV files
-
-  // SqlDb sqlDbb = SqlDb();
-  // await sqlDbb.deleteDb();
-
-  //those were uncommented
-  //SqlDb sqlDb = SqlDb();
-  //await sqlDb.importAllTablesFromCSV();
-
-  /// getting the login information from the shared pereferences `LoginSessionSharedPreferences`
+  /// Initialize shared preferences for login session and LG connection
   await LoginSessionSharedPreferences.init();
   await LgConnectionSharedPref.init();
   await dotenv.load(fileName: ".env");
-  // await dotenv.load(fileName: "assets/.env");
+
 
   runApp(
     MultiProvider(
@@ -95,6 +87,8 @@ void main() async {
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+
+/// The root widget of the HAPIS application.
 class HAPIS extends StatelessWidget {
   const HAPIS({super.key});
 
@@ -119,19 +113,19 @@ class HAPIS extends StatelessWidget {
       title: 'HAPIS',
       home: OrientationBuilder(
         builder: (context, orientation) {
-          // Get the device's screen size and aspect ratio
+         /// Get the device's screen size and aspect ratio
           final screenSize = MediaQuery.of(context).size;
           final screenAspectRatio = screenSize.width / screenSize.height;
 
-          // If the device is a tablet (large screen size and square or landscape aspect ratio)
+          /// If the device is a tablet (large screen size and square or landscape aspect ratio)
           if (screenSize.shortestSide >= 600 && screenAspectRatio >= 1) {
-            // Lock the screen orientation to landscape mode
+            /// Lock the screen orientation to landscape mode
             SystemChrome.setPreferredOrientations([
               DeviceOrientation.landscapeLeft,
               DeviceOrientation.landscapeRight,
             ]);
           } else {
-            // Allow the screen orientation to be determined by the device's physical orientation
+            /// Allow the screen orientation to be determined by the device's physical orientation
             SystemChrome.setPreferredOrientations([
               DeviceOrientation.portraitUp,
               DeviceOrientation.portraitDown,

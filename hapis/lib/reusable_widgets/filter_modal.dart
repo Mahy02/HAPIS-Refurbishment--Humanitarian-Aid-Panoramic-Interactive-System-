@@ -117,23 +117,6 @@ class _FilterModalState extends State<FilterModal> {
               },
             ),
           ),
-          // const Text(
-          //   'Month',
-          //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          // ),
-          // Slider(
-          //   value: _value,
-          //   min: 2023,
-          //   max: 2040,
-          //   divisions: (2040 - 2023),
-          //   onChanged: (double newValue) {
-          //     setState(() {
-          //       filterSetting.setSelectedDate(newValue.toString());
-          //       _value = newValue;
-          //     });
-          //   },
-          //   label: '${_value.toInt()}',
-          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -251,23 +234,6 @@ class _FilterModalState extends State<FilterModal> {
               },
             ),
           ),
-          // const Text(
-          //   'Month',
-          //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          // ),
-          // Slider(
-          //   value: _value,
-          //   min: 2023,
-          //   max: 2040,
-          //   divisions: (2040 - 2023),
-          //   onChanged: (double newValue) {
-          //     setState(() {
-          //       filterSetting.setSelectedDate(newValue.toString());
-          //       _value = newValue;
-          //     });
-          //   },
-          //   label: '${_value.toInt()}',
-          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

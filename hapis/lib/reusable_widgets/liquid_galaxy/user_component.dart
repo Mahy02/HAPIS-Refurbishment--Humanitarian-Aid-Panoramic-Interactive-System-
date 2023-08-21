@@ -8,6 +8,7 @@ import 'package:hapis/reusable_widgets/liquid_galaxy/user_elevated_button.dart';
 ///   -   `user` [UsersModel] to be displayed
 ///   -   `type` for the user type
 ///   -   `height` and `width` for adapting to different scales and being responsive
+///   -   `imageHeight` and `imageWidth` for adapting to different scales and being responsive
 class UserComponent extends StatefulWidget {
   final UsersModel user;
   final String type;

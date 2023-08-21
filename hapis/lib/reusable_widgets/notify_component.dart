@@ -4,6 +4,7 @@ import 'package:hapis/services/db_services/notifications_services.dart';
 
 import '../utils/database_popups.dart';
 
+/// A widget that represents a notification component.
 class NotificationComponent extends StatefulWidget {
   final String title;
   final String message;
@@ -52,7 +53,6 @@ class _NotificationComponentState extends State<NotificationComponent> {
         title: Text(
           widget.title,
           style: TextStyle(
-              //fontSize: 20,
               fontSize: widget.notifyFontSize,
               color: HapisColors.lgColor1,
               fontWeight: FontWeight.bold),
@@ -62,7 +62,6 @@ class _NotificationComponentState extends State<NotificationComponent> {
           child: Text(
             widget.message,
             style: TextStyle(
-              //fontSize: 18,
               fontSize: widget.textFontSize,
                color: Colors.black),
           ),

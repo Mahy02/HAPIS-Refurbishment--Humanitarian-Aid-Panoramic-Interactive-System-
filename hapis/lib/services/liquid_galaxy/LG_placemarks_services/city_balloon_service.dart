@@ -9,8 +9,15 @@ import '../../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../../models/liquid_galaxy/kml/point_model.dart';
 import '../../../models/liquid_galaxy/kml/tour_model.dart';
 
+/// The `CityBalloonService` class handles building KML elements for city balloons and orbits.
 class CityBalloonService {
-  /// Builds and returns a city `Placemark` entity according to the given [city]
+
+  /// Builds and returns a city `Placemark` entity based on the given [city].
+  ///
+  /// The [balloon] parameter determines whether to include balloon content.
+  /// The [orbitPeriod] specifies the orbit period.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// The [updatePosition] parameter determines whether to update the position.
   PlacemarkModel buildCityPlacemark(
     CityModel city,
     bool balloon,
@@ -64,9 +71,11 @@ class CityBalloonService {
     );
   }
 
-  /// Builds an `orbit` KML based on the given [city]
+  /// Builds an `orbit` KML for the given [city].
   ///
-  /// Returns a [String] that represents the `orbit` KML.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// Returns a [String] representing the `orbit` KML.
+  /// 
   String buildOrbit(CityModel city, {LookAtModel? lookAt}) {
     LookAtModel lookAtObj;
 
@@ -76,7 +85,6 @@ class CityBalloonService {
         latitude: city.cityCoordinates.latitude,
         altitude: 0,
         range: '4000000',
-        // range: '2000000',
         tilt: '60',
         heading: '0',
       );

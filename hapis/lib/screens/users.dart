@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
-import 'package:hapis/responsive/responsive_layout.dart';
-import 'package:hapis/reusable_widgets/back_button.dart';
-import 'package:hapis/services/db_services/users_services.dart';
-import 'package:provider/provider.dart';
 
 import '../components/tabs/donors_tab.dart';
 import '../components/tabs/seekers_tab.dart';
 import '../models/db_models/user_model.dart';
-import '../providers/user_provider.dart';
+
+
+/// The `UsersPage` widget displays a tabbed view of donors and seekers.
+///
+/// This widget provides a tabbed interface to switch between the list of donors
+/// and the list of seekers. Each tab displays a list of user profiles.
+/// 
+/// **Properties:**
+///
+/// - `fontSize`: The font size for the text in the tab labels.
+///
 
 class UsersPage extends StatefulWidget {
   final double fontSize;
@@ -19,7 +25,11 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
+  
+  /// - `seekers`: A list of user models representing seekers.
   List<UserModel> seekers = [];
+
+  /// - `donors`: A list of user models representing donors.
   List<UserModel> donors = [];
 
   @override
@@ -47,15 +57,12 @@ class _UsersPageState extends State<UsersPage> {
                   style: TextStyle(
                     fontSize: widget.fontSize,
                     color: Color.fromARGB(236, 77, 77, 77),
-
-                    /// set the text color here
                   ),
                 ),
               ),
             ],
           ),
-
-          //we need a tab bar view for the content of our 3 tabs:
+       
           const Expanded(
             child: TabBarView(children: [
               //1st tab:

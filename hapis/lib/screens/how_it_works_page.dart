@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/reusable_widgets/app_bar.dart';
-import 'package:hapis/reusable_widgets/back_button.dart';
 import 'package:hapis/utils/drawer.dart';
 
+/// This is a widget responsible for showing the user some instruction that might help while using the app
 class HowItWorksPage extends StatelessWidget {
   final bool isLg;
   const HowItWorksPage({super.key, required this.isLg});
@@ -26,7 +26,6 @@ class HowItWorksPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //BackButtonWidget(isTablet: false),
             HowToSection(
               isTablet: false,
               title: 'How to Connect?',
@@ -121,7 +120,6 @@ class HowItWorksPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //  BackButtonWidget(isTablet: true),
             HowToSection(
               isTablet: true,
               title: 'How to Connect?',

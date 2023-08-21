@@ -80,7 +80,6 @@ class _CityComponentState extends State<CityComponent> {
 
     try {
       /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
-
       await LgService(sshData).sendKMLToSlave(
         LgService(sshData).balloonScreen,
         kmlBalloon.body,
@@ -96,7 +95,6 @@ class _CityComponentState extends State<CityComponent> {
         latitude: city.cityCoordinates.latitude,
         longitude: city.cityCoordinates.longitude,
         altitude: 0,
-        // range: '13000',
         range: '10000',
         tilt: '45',
         heading: '0',
@@ -109,7 +107,6 @@ class _CityComponentState extends State<CityComponent> {
   @override
   Widget build(BuildContext context) {
     final imagePath = countryMap[widget.country];
-
     final buttonContent = '${widget.city}\n${widget.country}';
 
     return HapisElevatedButton(
@@ -148,7 +145,7 @@ class _CityComponentState extends State<CityComponent> {
 
         await cityDBServices().getGiversInfo(widget.city, context);
 
-        // Hide the loading indicator and navigate to the new page
+        /// Hide the loading indicator and navigate to the new page
         setState(() {
           isLoadingCity = false;
         });

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 
+/// A widget that displays an indicator to show the connection status.
 class ConnectionIndicator extends StatelessWidget {
   final bool isConnected;
 
+   /// Constructor for the ConnectionIndicator class.
+  /// The `isConnected` parameter specifies whether the device is connected to the network.
   ConnectionIndicator({required this.isConnected});
 
   @override

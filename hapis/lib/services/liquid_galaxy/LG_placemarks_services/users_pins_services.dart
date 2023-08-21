@@ -5,8 +5,15 @@ import '../../../models/liquid_galaxy/balloon_models/users_model.dart';
 import '../../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../../models/liquid_galaxy/kml/point_model.dart';
 
+/// The `UsersPinsService` class handles building KML elements for donor and seeker pins.
+
 class UsersPinsService {
-  /// Builds and returns a Donor `Placemark` entity according to the given a list of [donors]
+  /// Builds and returns a list of `Placemark` entities for donors according to the given list of [donors].
+  ///
+  /// The [orbitPeriod] parameter specifies the orbit period.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// The [updatePosition] parameter determines whether to update the position.
+  
   List<PlacemarkModel> buildDonorsPlacemark(
     List<UsersModel> donors,
     double orbitPeriod, {
@@ -48,7 +55,12 @@ class UsersPinsService {
     return placemarks;
   }
 
-  /// Builds and returns a Seeker `Placemark` entity according to the given a list of [seekers]
+
+  /// Builds and returns a list of `Placemark` entities for seekers according to the given list of [seekers].
+  ///
+  /// The [orbitPeriod] parameter specifies the orbit period.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// The [updatePosition] parameter determines whether to update the position.
   List<PlacemarkModel> buildSeekersPlacemark(
     List<UsersModel> seekers,
     double orbitPeriod, {

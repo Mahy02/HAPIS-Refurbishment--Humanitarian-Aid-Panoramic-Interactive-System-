@@ -6,7 +6,6 @@ import '../constants.dart';
 ///This is a function [showConnectionError] that calls [showDialog] built in function in flutter
 ///This is used for displayed a pop up to the user regarding the connection to the LG
 ///It returns an [AlertDialog]
-///
 
 Future<dynamic> showConnectionError(BuildContext context, String errorMessage) {
   return showDialog(

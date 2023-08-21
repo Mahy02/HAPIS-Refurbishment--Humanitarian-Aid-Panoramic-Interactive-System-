@@ -90,8 +90,6 @@ class ScreenOverlayModel {
       overlayY: 1,
       screenX: 0.02,
       screenY: 0.95,
-      //sizeX: 558,
-      //sizeY: 527,
       sizeX: 446,
       sizeY: 421,
       // sizeX: 279, // reduce the size by 50%

@@ -13,11 +13,12 @@ import 'package:hapis/services/db_services/matchings_db_services.dart';
 import 'package:hapis/services/db_services/requests_db_services.dart';
 import 'package:hapis/utils/drawer.dart';
 import 'package:badges/badges.dart' as badges;
-
 import '../utils/signup_popup.dart';
 import 'form_page.dart';
 import 'matchings.dart';
 
+/// This widget represents the main application home page.
+/// It has `screens` for the [BottomNavigationBar]  which is in [ResponsiveLayout] to adapt to both mobile and tablet devices
 class AppHomePage extends StatefulWidget {
   const AppHomePage({super.key});
 
@@ -186,9 +187,6 @@ class _AppHomePageState extends State<AppHomePage> {
           DonationsServices().getInProgressDonationsCount(userId)
         ]),
         builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //    return CircularProgressIndicator();
-          // } else
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -290,9 +288,6 @@ class _AppHomePageState extends State<AppHomePage> {
           DonationsServices().getInProgressDonationsCount(userId)
         ]),
         builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //    return CircularProgressIndicator();
-          // } else
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -390,61 +385,3 @@ class _AppHomePageState extends State<AppHomePage> {
 }
 
 
-/*
-BottomNavigationBar(
-        selectedFontSize: 25,
-        unselectedFontSize: 24,
-        iconSize: 40,
-        currentIndex: currentIndex,
-        onTap: (index) {
-          if (GoogleSignInApi().isUserSignedIn() == true ||
-              LoginSessionSharedPreferences.getLoggedIn() == true) {
-            setState(() {
-              currentIndex = index;
-            });
-          } else {
-            showDialogSignUp(context);
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: HapisColors.lgColor1),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.assignment_outlined),
-              label: 'My Forms',
-              backgroundColor: HapisColors.lgColor2),
-          BottomNavigationBarItem(
-            icon: badges.Badge(
-              badgeContent: Text('3'),
-              badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
-              child: Icon(Icons.person_add_alt_1_rounded),
-            ),
-            label: 'Requests',
-            backgroundColor: HapisColors.lgColor3,
-          ),
-          BottomNavigationBarItem(
-              icon: badges.Badge(
-                badgeContent: Text(
-                  '3',
-                  style: TextStyle(color: HapisColors.lgColor2),
-                ),
-                badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
-                child: Icon(Icons.compare_arrows),
-              ),
-              label: 'Matchings',
-              backgroundColor: HapisColors.lgColor4),
-          BottomNavigationBarItem(
-              icon: badges.Badge(
-                badgeContent: Text(
-                  '3',
-                  style: TextStyle(color: HapisColors.lgColor2),
-                ),
-                badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
-                child: Icon(Icons.favorite),
-              ),
-              label: 'Donations',
-              backgroundColor: HapisColors.lgColor1),
-        ]);
-*/

@@ -2,14 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hapis/constants.dart';
-import 'package:hapis/models/db_models/get_inprogress_donations_model.dart';
 import 'package:hapis/services/db_services/donations_db_services.dart';
 import 'package:hapis/services/db_services/matchings_db_services.dart';
 import 'package:hapis/services/db_services/notifications_services.dart';
 import 'package:hapis/services/db_services/requests_db_services.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import '../utils/database_popups.dart';
-import '../utils/date_popup.dart';
 import '../utils/show_user_details_modal.dart';
 
 /// [RequestComponent] is a custom widget that displays the component shown in main app view for either Requests, Donations or Matchings page
@@ -28,6 +26,15 @@ import '../utils/show_user_details_modal.dart';
 /// * [phone] - Optional if its required to provide the phone
 /// * [location] - Optional if its required to provide the location
 /// * [dates] - Optional if its required to provide the dates
+/// * [id]  - Optional if its required to provide the id of a current match, donation or request or a form
+/// * [id2]  - Optional if its required to provide the other Id of a form
+/// * [userID]  - Optional if its required to provide the other userID
+/// * [seekerStatus]  - Optional if its required to provide a seeker request status 
+/// * [giverStatus]  - Optional if its required to provide a giver request status 
+/// * [currentDonationStatus]  - Optional if its required to provide a donation status of the current user
+/// * [otherDonationStatus] - Optional if its required to provide a donation status of the other user
+/// * [currentUserID] - Optional if its required to provide the current UserID
+/// * [onPressed]  - Optional if its required to provide a callback function
 class RequestComponent extends StatefulWidget {
   final bool isSent;
   final bool isMatching;
@@ -91,8 +98,6 @@ class _RequestComponentState extends State<RequestComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: MediaQuery.of(context).size.width * 0.3,
-      // height: MediaQuery.of(context).size.height * 0.2,
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(8),
@@ -318,7 +323,7 @@ class _RequestComponentState extends State<RequestComponent> {
                           SizedBox(
                             child: ElevatedButton(
                               onPressed: () async {
-                                //change status
+                              
                                 int result = await MatchingsServices()
                                     .updateMatching(widget.id!, widget.type!);
 
@@ -555,9 +560,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                         SizedBox(
                                           child: ElevatedButton(
                                             onPressed: () async {
-                                              print(
-                                                  'inside on press to finish process');
-                                              print('type: ${widget.type}');
+                                            
                                               //update donation
                                               final result =
                                                   await DonationsServices()
@@ -574,8 +577,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                                       widget.userID!,
                                                       '$name has ended the donation process');
 
-                                              print('aaaaaaaaa');
-                                              print(result);
+                                             
                                               if (result['result'] > 0 &&
                                                   result['areBothFinished']) {
                                                 showDatabasePopup(context,
@@ -739,7 +741,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                   //change status in database
                                   int result = await RequestsServices()
                                       .acceptRequest(widget.id!);
-                                  print('result: $result');
+                                
                                   String name = await UserServices()
                                       .getFullNameById(widget.currentUserID!);
                                   await NotificationsServices()
@@ -802,7 +804,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                   }
                                   //refresh:
                                   widget.onPressed!();
-                                  //send push notification
+                                  
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty

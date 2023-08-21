@@ -2,11 +2,16 @@ import 'package:hapis/models/db_models/notify_models.dart';
 
 import '../../helpers/sql_db.dart';
 
+/// The `NotificationsServices` class contains methods for managing user notifications using the database.
+
 class NotificationsServices {
-  /// retrieving the [db] database instance
+
+  /// The [db] database instance.
   SqlDb db = SqlDb();
 
-  //insert
+   /// Insert a new notification entry for a user with the given message.
+  ///
+  /// Returns a [Future] with the ID of the inserted row.
   Future<int> insertNotification(String userId, String message) async {
     String sqlStatment = '''
     INSERT INTO Notifications (UserID, Message)
@@ -17,27 +22,27 @@ class NotificationsServices {
     return rowID;
   }
 
-  //delete
-
+  /// Delete a notification entry based on its `notificationId`.
+  ///
+  /// Returns a [Future] with the result of the delete operation.
   Future<int> deleteNotification(int notificationId) async {
     String sqlStatement = '''
     DELETE FROM Notifications
     WHERE N_ID = $notificationId
   ''';
     int queryResult;
-
     try {
       queryResult = await db.deleteData(sqlStatement);
-      print(queryResult);
     } catch (e) {
       print('Error : $e');
-      String error = e.toString();
-
       return -1;
     }
     return queryResult;
   }
 
+  /// Retrieve notifications for a user with the specified `userId`.
+  ///
+  /// Returns a [Future] with a List of `NotifyModel` representing notifications.
   Future<List<NotifyModel>> getNotificationsByUserId(String userId) async {
     String sqlStatement = '''
       SELECT * FROM Notifications
@@ -54,6 +59,9 @@ class NotificationsServices {
     return notifications;
   }
 
+  /// Retrieve the count of notifications for a user with the specified `userId`.
+  ///
+  /// Returns a [Future] with the count of notifications.
   Future<int> getNotificationCount(String userId) async {
     String sqlStatement = '''
     SELECT COUNT(*) as count FROM Notifications
@@ -69,12 +77,4 @@ class NotificationsServices {
   }
 }
 
-/*
-- we want to send notifications in these cases:
 
-1. someone requested someone  (NO)
-2. someone accepted or declined request  (YES)
-3. a match occured   (NO)
-4. someone accepted, rejected the match (YES)
-5. someone cancelled or finished the donation (YES)
-*/ 

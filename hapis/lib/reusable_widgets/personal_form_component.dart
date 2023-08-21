@@ -14,6 +14,15 @@ import '../services/db_services/users_services.dart';
 import '../utils/edit_form_popup.dart';
 import '../utils/show_user_details_modal.dart';
 
+
+/// [PersonalFormComponent] is a custom widget that displays the component shown in forms page
+/// It takes the following parameters:
+/// * [fontSize] - Required for having responsive layout
+/// * [form] - Required [UserModel] form that has the form info of the current user
+/// * [editSize] - Required for determining the edit icon size
+/// * [deletesize] - Required for determining the delete icon size
+/// * [onPressed]  - Optional if its required to provide a callback function
+
 class PersonalFormComponent extends StatefulWidget {
   final double fontSize;
   final UserModel form;
@@ -98,8 +107,7 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                         });
                         FormProvider formProvider =
                             Provider.of<FormProvider>(context, listen: false);
-                        // DateSelectionModel datesProvider =
-                        //     Provider.of<DateSelectionModel>(context, listen: false);
+                       
 
                         String dates = widget.form.multiDates!;
                         List<String> dateList = dates
@@ -124,14 +132,12 @@ class _PersonalFormComponentState extends State<PersonalFormComponent> {
                           datesProvider.clearData();
                           datesProvider.dateStart = dateList[i];
                           datesProvider.timeStart = timeList[i];
-                          print('-------');
-                          print(dateList[i]);
-                          print(timeList[i]);
+                        
 
-                          print(datesProvider.dateControllerStart.text);
+                         
                           _selectedDates.add(datesProvider);
                         }
-                        print(_selectedDates);
+                      
 
                         if (widget.form.type == 'seeker') {
                           formProvider.categoryS = widget.form.category!;

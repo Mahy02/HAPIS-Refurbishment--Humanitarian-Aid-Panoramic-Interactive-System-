@@ -1,18 +1,19 @@
 import 'package:hapis/models/liquid_galaxy/tour_models/userlocation_model.dart';
 
 import '../../models/liquid_galaxy/balloon_models/city_ballon_model.dart';
-import '../../models/liquid_galaxy/balloon_models/global_stats_model.dart';
 import '../../models/liquid_galaxy/balloon_models/users_model.dart';
 import '../../models/liquid_galaxy/tour_models/city_model.dart';
 import '../../models/liquid_galaxy/tour_models/country_model.dart';
 import '../../utils/extract_geocoordinates.dart';
-import '../db_services/city_db_services.dart';
-import '../db_services/global_db_services.dart';
 import '../db_services/tour_db_services.dart';
 
+
+/// The `TourService` class handles generating KML content for a tour.
 class TourService {
+
+   /// Generates KML content for the tour.
   Future<String> generateTourKMLContent() async {
-    print('here');
+   
     List<CountryModel> countries = await TourDBServices().getCountries();
 
     CityModel? cityM;
@@ -29,10 +30,9 @@ class TourService {
         <name>Hapis-Tour</name>
         <gx:Playlist>
 ''';
-    print('here1');
-// Set initial FlyTo for the globe
+    
     kmlContent += generateInitialFlyTo();
-    print('after initial fly to');
+  
 
     // // Generate balloon for the globe
     // int numberOfSeekers = await globalDBServices().getNumberOfSeekers();
@@ -110,7 +110,7 @@ class TourService {
         }
       }
     }
-    print('here before placemakrs');
+   
     kmlContent += '''
         </gx:Playlist>
       </gx:Tour>
@@ -139,11 +139,12 @@ class TourService {
 </kml>
 ''';
 
-    print(kmlContent);
+   
 
     return kmlContent;
   }
 
+  /// Generates a FlyTo element for the initial view of the globe.
   String generateInitialFlyTo() {
     return '''
       <!-- Initial FlyTo for the globe -->
@@ -159,6 +160,7 @@ class TourService {
     ''';
   }
 
+ /// Generates a FlyTo element for a specific country in the tour.
   String generateCountryFlyTo(CountryModel country) {
     return '''
       <!-- FlyTo for ${country.name} -->
@@ -177,6 +179,7 @@ class TourService {
     ''';
   }
 
+  /// Generates a FlyTo element for a specific city in the tour.
   String generateCityFlyTo(CityModelTour city) {
     return '''
       <!-- FlyTo for ${city.name} -->
@@ -195,6 +198,7 @@ class TourService {
     ''';
   }
 
+  /// Generates a FlyTo element for a specific user location in the tour.
   String generateUserLocationFlyTo(UserLocationModel userLocation) {
     return '''
        <!-- FlyTo for ${userLocation.userName} -->
@@ -214,6 +218,7 @@ class TourService {
     ''';
   }
 
+  /// Generates a wait time between tour elements.
   String generateWait(double duration) {
     return '''
         <gx:Wait>
@@ -222,6 +227,7 @@ class TourService {
     ''';
   }
 
+ /// Generates an orbit animation for a specific user location.
   String generateUserLocationOrbit(UserLocationModel userLocation) {
     String kmlContent = '';
     double orbitDuration = 1.0;
@@ -249,6 +255,7 @@ class TourService {
     return kmlContent;
   }
 
+  /// Generates a Placemark with a specific ID to show on the tour.
   String generateBalloonPlacemark(String balloonContent, LatLng coordinates) {
     return '''
       <Placemark>
@@ -262,6 +269,7 @@ class TourService {
     ''';
   }
 
+   /// Generates a Placemark with balloon content at specific coordinates.
   String generatePlacemarkwithID(String placemarkID) {
     return '''
         <gx:AnimatedUpdate>
@@ -298,6 +306,7 @@ class TourService {
 // ''';
 //   }
 
+  /// Generates a Placemark with specific ID to hide on the tour.
   String hidePlacemarkwithID(String placemarkID) {
     return '''
         <gx:AnimatedUpdate>
@@ -317,8 +326,10 @@ class TourService {
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+/// Example of the tour KML:
 
 //   String tourKMLContent = '''
 // <?xml version="1.0" encoding="UTF-8"?>
@@ -486,215 +497,3 @@ class TourService {
 
 
 
-
-
-
-/*
-
- static void viewGlobe(
-    GlobeModel globe,
-    bool showBalloon,
-    BuildContext context, {
-    double orbitPeriod = 2.8,
-    bool updatePosition = true,
-  }) async {
-    final sshData = Provider.of<SSHprovider>(context, listen: false);
-    final GlobalBalloonService globeService = GlobalBalloonService();
-
-    PlacemarkModel? _globePlacemark;
-
-    final placemark = globeService.buildGlobalPlacemark(
-      globe,
-      showBalloon,
-      orbitPeriod,
-      lookAt: _globePlacemark != null && !updatePosition
-          ? _globePlacemark.lookAt
-          : null,
-      updatePosition: false,
-    );
-
-    try {
-      await LgService(sshData).clearKml();
-    } catch (e) {
-      print(e);
-    }
-
-    final kmlBalloon = KMLModel(
-      name: 'HAPIS-Global-balloon',
-      content: placemark.balloonOnlyTag,
-    );
-
-    try {
-      await LgService(sshData).sendKMLToSlave(
-        LgService(sshData).balloonScreen,
-        kmlBalloon.body,
-      );
-    } catch (e) {
-      print(e);
-    }
-
-    if (updatePosition) {
-      await LgService(sshData).flyTo(LookAtModel(
-        longitude: -45.4518936,
-        latitude: 0.0000101,
-        range: '31231212.86',
-        tilt: '0',
-        altitude: 50000.1097385,
-        heading: '0',
-        altitudeMode: 'relativeToSeaFloor',
-      ));
-    }
-  }
-
-  void viewCity(CityModel city, bool showBalloon, BuildContext context,
-      {double orbitPeriod = 2.8, bool updatePosition = true}) async {
-    final sshData = Provider.of<SSHprovider>(context, listen: false);
-
-    final CityBalloonService cityService = CityBalloonService();
-    PlacemarkModel? _cityPlacemark;
-
-    /// calling the `buildCityPlacemark` that returns the `city placemark`
-    final placemark = cityService.buildCityPlacemark(
-      city,
-      showBalloon,
-      orbitPeriod,
-      lookAt: _cityPlacemark != null && !updatePosition
-          ? _cityPlacemark.lookAt
-          : null,
-      updatePosition: updatePosition,
-    );
-
-    try {
-      await LgService(sshData).clearKml();
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-
-    /// defining the `kml balloon` content and name
-    final kmlBalloon = KMLModel(
-      name: 'HAPIS-City-balloon',
-      content: placemark.balloonOnlyTag,
-    );
-
-    try {
-      /// sending kml to slave where we send to `balloon screen` and send the `kml balloon ` body
-
-      await LgService(sshData).sendKMLToSlave(
-        LgService(sshData).balloonScreen,
-        kmlBalloon.body,
-      );
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-
-    ///  `updating postion` to fly to certain city
-    if (updatePosition) {
-      await LgService(sshData).flyTo(LookAtModel(
-        latitude: city.cityCoordinates.latitude,
-        longitude: city.cityCoordinates.longitude,
-        altitude: 0,
-        // range: '13000',
-        range: '5000',
-        tilt: '0',
-        heading: '0',
-      ));
-    }
-  }
-
-  void viewUser(
-      UsersModel user, bool showBalloon, BuildContext context, String type,
-      {double orbitPeriod = 2.8, bool updatePosition = true}) async {
-    PlacemarkModel? _userPlacemark;
-    bool seeker = false;
-
-    if (type == 'seeker') {
-      seeker = true;
-    }
-    final sshData = Provider.of<SSHprovider>(context, listen: false);
-
-    final UserBalloonService userService = UserBalloonService();
-
-    final placemark = userService.buildUserPlacemark(
-      user,
-      showBalloon,
-      seeker, //if seeker then true
-      orbitPeriod,
-      lookAt: _userPlacemark != null && !updatePosition
-          ? _userPlacemark.lookAt
-          : null,
-      updatePosition: updatePosition,
-    );
-
-    try {
-      await LgService(sshData).clearKml();
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-    // according to user if seeker or giver
-    final kmlBalloon = KMLModel(
-      name: 'HAPIS-USER-balloon',
-      content: placemark.balloonOnlyTag,
-    );
-
-    await Future.delayed(Duration(seconds: 3));
-    try {
-      await LgService(sshData).sendKMLToSlave(
-        LgService(sshData).balloonScreen,
-        kmlBalloon.body,
-      );
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-
-    if (updatePosition) {
-      await LgService(sshData).flyTo(LookAtModel(
-        latitude: user.userCoordinates!.latitude,
-        longitude: user.userCoordinates!.longitude,
-        altitude: 0,
-        range: '300',
-        tilt: '0',
-        heading: '0',
-      ));
-    }
-
-    await Future.delayed(Duration(seconds: 5));
-    String query = 'echo "exittour=true" > /tmp/query.txt ';
-    try {
-      await sshData.execute(query);
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-    final orbit = userService.buildOrbit(user);
-    try {
-      await LgService(sshData).sendTour(orbit, 'Orbit');
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-  }
-
-  // hapisTour(
-  //     GlobeModel globe,
-  //     bool showBalloon,
-  //     BuildContext context,
-  //     List<CityModel> cities,
-  //     List<UsersModel> users,
-  //     Duration delayBetweenUsers) async {
-  //    viewGlobe(globe, showBalloon, context);
-
-  //   for (final city in cities) {
-  //      viewCity(city, showBalloon, context);
-  //     for (final user in users) {
-  //       if (user.cityId == city.id) {
-  //          viewUser(user, showBalloon, context, delayBetweenUsers);
-  //       }
-  //     }
-  //   }
-  // }
-
-*/

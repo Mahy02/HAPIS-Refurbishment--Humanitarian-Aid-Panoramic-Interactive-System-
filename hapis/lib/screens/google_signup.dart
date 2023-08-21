@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hapis/helpers/login_session_shared_preferences.dart';
 import 'package:hapis/responsive/responsive_layout.dart';
 import 'package:hapis/screens/app_home.dart';
 import 'package:hapis/screens/sign_up_page.dart';
-
 import '../helpers/google_signin_api.dart';
-import '../reusable_widgets/text_form_field.dart';
 import '../services/db_services/users_services.dart';
 import '../utils/colors.dart';
 import '../utils/database_popups.dart';
@@ -78,48 +75,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-            // TextFormFieldWidget(
-            //   key: const ValueKey("email"),
-            //   fillColor: Color.fromARGB(0, 255, 255, 255),
-            //   textController: _emailController,
-            //   hint: 'Enter your Email',
-            //   isHidden: false,
-            //   isSuffixRequired: true,
-            //   label: 'Email',
-            //   fontSize: 16,
-            // ),
-            // TextFormFieldWidget(
-            //   fillColor: Color.fromARGB(0, 255, 255, 255),
-            //   key: const ValueKey("pass"),
-            //   textController: _passController,
-            //   hint: 'Enter your password',
-            //   isHidden: true,
-            //   isSuffixRequired: true,
-            //   label: 'Password',
-            //   fontSize: 16,
-            // ),
-            // ElevatedButton(
-            //   onPressed: () => signIn(false),
-            //   style: ButtonStyle(
-            //       backgroundColor:
-            //           MaterialStateProperty.all<Color>(Colors.white),
-            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //         RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(20.0),
-            //         ),
-            //       )),
-            //   child: const Padding(
-            //     padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            //     child: Text(
-            //       "Sign in",
-            //       style: TextStyle(
-            //         fontSize: 16.0,
-            //         fontWeight: FontWeight.bold,
-            //         color: Colors.black54,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+           
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
@@ -234,48 +190,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            // TextFormFieldWidget(
-            //   key: const ValueKey("email"),
-            //   fillColor: Color.fromARGB(0, 255, 255, 255),
-            //   textController: _emailController,
-            //   hint: 'Enter your Email',
-            //   isHidden: false,
-            //   isSuffixRequired: true,
-            //   label: 'Email',
-            //   fontSize: 20,
-            // ),
-            // TextFormFieldWidget(
-            //   fillColor: Color.fromARGB(0, 255, 255, 255),
-            //   key: const ValueKey("pass"),
-            //   textController: _passController,
-            //   hint: 'Enter your password',
-            //   isHidden: true,
-            //   isSuffixRequired: true,
-            //   label: 'Password',
-            //   fontSize: 20,
-            // ),
-            // ElevatedButton(
-            //   onPressed: () => signIn(false),
-            //   style: ButtonStyle(
-            //       backgroundColor:
-            //           MaterialStateProperty.all<Color>(Colors.white),
-            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //         RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(20.0),
-            //         ),
-            //       )),
-            //   child: const Padding(
-            //     padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            //     child: Text(
-            //       "Sign in",
-            //       style: TextStyle(
-            //         fontSize: 25.0,
-            //         fontWeight: FontWeight.bold,
-            //         color: Colors.black54,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+          
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
@@ -385,25 +300,6 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
         print('Sign-in error: $e');
         showDatabasePopup(context,
             'There was a problem signing in. \nPlease try again later.');
-        return;
-      }
-    } else {
-      String pass = _passController.text;
-      String email = _emailController.text;
-      final userID = await UserServices().doesNormalUserExist(pass, email);
-      print(userID);
-      if (userID.isNotEmpty) {
-        //save ID
-        LoginSessionSharedPreferences.setUserID(userID);
-        //set login to tryue
-        LoginSessionSharedPreferences.setLoggedIn(true);
-        // ignore: use_build_context_synchronously
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AppHomePage()));
-      } else {
-        print(userID);
-        showDatabasePopup(context,
-            'User doesn\'t exist \n \nPlease check your credentials again or try signing up if you are new to HAPIS.');
         return;
       }
     }

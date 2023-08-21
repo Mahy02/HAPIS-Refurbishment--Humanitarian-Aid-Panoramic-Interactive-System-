@@ -46,8 +46,7 @@ class UserModel {
   /// Property that defines for who -only if seeker  so it could be null or empty
   String? forWho;
 
-  ///property that defines password
-  // String? pass;
+  ///Property that defines the user imagepath if exists
   String? imagePath;
 
   UserModel(
@@ -67,7 +66,6 @@ class UserModel {
       this.multiDates,
       this.forWho, 
       this.imagePath,
-      //this.pass
       });
 
   /// Turns a `Map` into a `UsersModel`.  "Map From the database"
@@ -88,7 +86,6 @@ class UserModel {
       multiDates: map['Dates_available'],
       forWho: map['ForWho'],
       imagePath: map['ProfileImage']
-      //pass: map['Password']
     );
   }
 }

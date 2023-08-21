@@ -1,10 +1,25 @@
 import 'dart:async';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mysql_client/mysql_client.dart';
 
+
+/// A utility class for interacting with a MySQL database using asynchronous operations.
 class SqlDb {
 
+  /// Reads data from the database using the provided SELECT SQL query.
+  ///
+  /// This method connects to the MySQL database using a connection pool and executes
+  /// the given SELECT SQL query. It retrieves and returns a list of maps representing
+  /// the query results. Each map contains column names as keys and corresponding
+  /// values from the database.
+  ///
+  /// The provided `selectSql` parameter should be a valid SELECT SQL query string.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// List<Map<String, dynamic>> result = await SqlDb().readData('SELECT * FROM users');
+  /// ```
   Future<List<Map<String, dynamic>>> readData(String selectSql) async {
    
     final pool = MySQLConnectionPool(
@@ -18,7 +33,7 @@ class SqlDb {
       timeoutMs: 60000,
       collation: 'utf8_general_ci',
     );
-    //print(await conn.query(' SELECT * FROM hapisdb.Matchings;'));
+  
     List<Map<String, dynamic>> now = [];
     try {
       var result = await pool.execute(selectSql);
@@ -27,12 +42,24 @@ class SqlDb {
         now.add(row.assoc());
       }
       return now;
-      // return result.map((r) => r.fields).toList();
+    
     } finally {
       await pool.close();
     }
   }
 
+  /// Inserts data into the database using the provided INSERT SQL query.
+  ///
+  /// This method connects to the MySQL database using a connection pool and executes
+  /// the given INSERT SQL query. It returns the ID of the last inserted row.
+  ///
+  /// The provided `insertSql` parameter should be a valid INSERT SQL query string.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// int insertedRowID = await SqlDb().insertData('INSERT INTO users (name, email) VALUES ("John", "john@example.com")');
+  /// ```
   Future<int> insertData(String insertSql) async {
     final pool = MySQLConnectionPool(
      host: dotenv.env['IP_ADDRESS']!,
@@ -45,20 +72,30 @@ class SqlDb {
        collation: 'utf8_general_ci',
     );
     try {
-      //int totalAffectedRows = 0;
+     
       var res = await pool.execute(insertSql);
 
       int rowID = res.lastInsertID.toInt();
-      //totalAffectedRows += res.affectedRows.toInt();
-      //print('affected rows in insert');
-
-      //print(totalAffectedRows);
+    
       return rowID;
     } finally {
       await pool.close();
     }
   }
 
+
+  /// Updates data in the database using the provided UPDATE SQL query.
+  ///
+  /// This method connects to the MySQL database using a connection pool and executes
+  /// the given UPDATE SQL query. It returns the total number of affected rows due to the update.
+  ///
+  /// The provided `updateSql` parameter should be a valid UPDATE SQL query string.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// int affectedRows = await SqlDb().updateData('UPDATE users SET name = "Jane" WHERE id = 1');
+  /// ```
   Future<int> updateData(String updateSql) async {
     final pool = MySQLConnectionPool(
        host: dotenv.env['IP_ADDRESS']!,
@@ -79,12 +116,25 @@ class SqlDb {
 
       return totalAffectedRows;
 
-      //var result = await conn.query(updateSql);
-      // return result.affectedRows!;
+   
     } finally {
       await pool.close();
     }
   }
+
+  
+  /// Deletes data from the database using the provided DELETE SQL query.
+  ///
+  /// This method connects to the MySQL database using a connection pool and executes
+  /// the given DELETE SQL query. It returns the total number of affected rows due to the delete.
+  ///
+  /// The provided `deleteSql` parameter should be a valid DELETE SQL query string.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// int affectedRows = await SqlDb().deleteData('DELETE FROM users WHERE id = 1');
+  /// ```
 
   Future<int> deleteData(String deleteSql) async {
     final pool = MySQLConnectionPool(
@@ -110,6 +160,10 @@ class SqlDb {
   }
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///The code if you wanted to use sqllite db with the tables in the assets folder
 
 // import 'package:sqflite/sqflite.dart';
 // import 'package:path/path.dart';

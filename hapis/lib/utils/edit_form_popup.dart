@@ -3,8 +3,8 @@ import 'package:hapis/responsive/responsive_layout.dart';
 
 import '../constants.dart';
 
-///This is a function [showDatePopUp] that calls [showDialog] built in function in flutter
-///This is used for displayed a pop up to the user regarding sign up
+///This is a function [showEditErrorPopUp] that calls [showDialog] built in function in flutter
+///This is used for displayed a pop up to the user regarding editing or deleting
 ///It returns an [AlertDialog]
 
 Future<dynamic> showEditErrorPopUp(BuildContext context, String editOrDelete) {

@@ -3,14 +3,15 @@ import 'package:hapis/models/db_models/get_requests_sent_model.dart';
 
 import '../../helpers/sql_db.dart';
 
-///   `RequestsServices` class that contains everything related to the requests query and interactions with the database
-
+/// The `RequestsServices` class contains methods for managing user requests using the database.
 class RequestsServices {
-  /// retrieving the [db] database instance
+
+  /// The [db] database instance.
   SqlDb db = SqlDb();
 
-  /// `getRequestsSent` function that retrives all requests sent for a certain user taking his `id`
-  /// It returns Future list of `RequestSentModel`
+  /// Retrieve all requests sent by a user with the specified `id`.
+  ///
+  /// Returns a [Future] list of `RequestSentModel` representing requests.
   Future<List<RequestSentModel>> getRequestsSent(String id) async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Rec_Status, R_ID
@@ -38,8 +39,9 @@ class RequestsServices {
     return requests;
   }
 
-  /// `getRequestsReceived` function that retrives all requests received for a certain user taking his `id`
-  /// It returns Future list of `RequestReceivedModel`
+  /// Retrieve all requests received by a user with the specified `id`.
+  ///
+  /// Returns a [Future] list of `RequestReceivedModel` representing requests.
   Future<List<RequestReceivedModel>> getRequestsReceived(String id) async {
     String sqlStatement = '''
     SELECT FirstName, LastName, Item, FormType, R_ID, Users.UserID AS UserID
@@ -70,7 +72,9 @@ class RequestsServices {
     return requests;
   }
 
-  /// Function to get the count of requests sent by a user
+  /// Retrieve the count of requests sent by a user with the specified `id`.
+  ///
+  /// Returns a [Future] with the count of requests sent.
   Future<int> getRequestsSentCount(String id) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS Count
@@ -86,7 +90,9 @@ class RequestsServices {
     }
   }
 
-  /// Function to get the count of requests received by a user
+  /// Retrieve the count of requests received by a user with the specified `id`.
+  ///
+  /// Returns a [Future] with the count of requests received.
   Future<int> getRequestsReceivedCount(String id) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS Count
@@ -102,6 +108,9 @@ class RequestsServices {
     }
   }
 
+  /// Accept a request by updating its status and donation statuses.
+  ///
+  /// Returns a [Future] with the result of the update operation.
   Future<int> acceptRequest(int id) async {
     String sqlStatement = '''
     UPDATE Requests 
@@ -110,15 +119,16 @@ class RequestsServices {
     ''';
     try {
       int queryResult = await db.updateData(sqlStatement);
-
       return queryResult;
     } catch (e) {
       print('Error updating form: $e');
-
       return -3; // Error updating request
     }
   }
 
+  /// Delete a request entry based on its `id`.
+  ///
+  /// Returns a [Future] with the result of the delete operation.
   Future<int> deleteRequest(int id) async {
     String sqlStatement = '''
     DELETE FROM Requests
@@ -134,6 +144,9 @@ class RequestsServices {
     return queryResult;
   }
 
+  /// Retrieve the Form ID associated with a request based on its `rId`.
+  ///
+  /// Returns a [Future] with the Form ID.
   Future<int> getFormId(int rId) async {
     String sqlStatement = '''
     SELECT Rec_FormID
@@ -150,6 +163,9 @@ class RequestsServices {
     }
   }
 
+  /// Create a new request entry in the database.
+  ///
+  /// Returns a [Future] with the ID of the inserted row.
   Future<int> createRequest(String senderID, String recID, int formID) async {
     String sqlStatment = '''
     INSERT INTO Requests (Sender_ID, Rec_ID, Rec_FormID, Rec_Status, Rec1_Donation_Status, Rec2_Donation_Status)
@@ -158,16 +174,17 @@ class RequestsServices {
 
     try {
       int rowID = await db.insertData(sqlStatment);
-
       return rowID;
     } catch (e) {
       print('Error creating request: $e');
-      String error = e.toString();
-
+     
       return -3;
     }
   }
 
+  /// Check if a friendship request exists based on sender ID, recipient ID, and form ID.
+  ///
+  /// Returns a [Future] with `true` if a request exists, otherwise `false`.
   Future<bool> checkFriendshipRequest(
       String senderId, String recId, int recFormID) async {
     String sqlStatement = '''

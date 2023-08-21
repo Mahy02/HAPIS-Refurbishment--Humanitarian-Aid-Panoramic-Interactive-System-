@@ -59,10 +59,10 @@ class DateSelectionModel extends ChangeNotifier {
             data: ThemeData.light().copyWith(
               colorScheme: ColorScheme.light(
                   primary:
-                      HapisColors.lgColor1), // Change the button text color
+                      HapisColors.lgColor1), 
               buttonTheme: ButtonThemeData(
                   textTheme:
-                      ButtonTextTheme.primary), // Change the button color
+                      ButtonTextTheme.primary), 
             ),
             child: child!,
           );
@@ -85,10 +85,10 @@ class DateSelectionModel extends ChangeNotifier {
             data: ThemeData.light().copyWith(
               colorScheme: ColorScheme.light(
                   primary:
-                      HapisColors.lgColor1), // Change the button text color
+                      HapisColors.lgColor1),
               buttonTheme: ButtonThemeData(
                   textTheme:
-                      ButtonTextTheme.primary), // Change the button color
+                      ButtonTextTheme.primary), 
             ),
             child: child!,
           );
@@ -103,7 +103,7 @@ class DateSelectionModel extends ChangeNotifier {
     );
   }
 
-  // Function to clear the data stored in the provider
+  /// Function to clear the data stored in the provider
   void clearData() {
     _dateControllerStart.text = '';
     _timeControllerStart.text = '';

@@ -21,9 +21,6 @@ class CreateMatchingsModel {
 
   /// Property that defines the donation status 
   String? rec2DonStatus;
-
-
-
  
 
   CreateMatchingsModel(

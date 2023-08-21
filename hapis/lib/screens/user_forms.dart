@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:hapis/models/db_models/get_matchings_model.dart';
 import 'package:hapis/models/db_models/user_model.dart';
-import 'package:hapis/reusable_widgets/back_button.dart';
 import 'package:hapis/services/db_services/users_services.dart';
-
 import '../helpers/google_signin_api.dart';
 import '../helpers/login_session_shared_preferences.dart';
 import '../reusable_widgets/no_component.dart';
 import '../reusable_widgets/personal_form_component.dart';
-import '../reusable_widgets/requests_component.dart';
-import '../services/db_services/matchings_db_services.dart';
 
+/// The `UserForms` widget displays a list of user-filled forms.
+///
+/// This widget fetches and displays a list of forms filled by the user.
+/// Each form is displayed using the `PersonalFormComponent` widget.
+///
+/// **Properties:**
+///
+/// - `fontSize`: The font size for the text in the form and button labels.
+/// - `subHeadFontSize`: The font size for the subhead text.
+/// - `deleteSize`: The font size for the delete button text.
+/// - `editSize`: The font size for the edit button text.
+/// 
 class UserForms extends StatefulWidget {
   final double fontSize;
   final double subHeadFontSize;
@@ -31,7 +38,11 @@ class UserForms extends StatefulWidget {
 }
 
 class _UserFormsState extends State<UserForms> {
+
+  /// - `id`: The user ID used to fetch user forms.
   late String id;
+  
+  /// - `formsList`: A list of `UserModel` objects representing filled forms.
   late Future<List<UserModel>>? _future;
 
   @override

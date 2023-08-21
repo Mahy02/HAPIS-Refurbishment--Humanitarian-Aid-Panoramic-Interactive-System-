@@ -3,9 +3,13 @@ import '../../helpers/sql_db.dart';
 ///   `globalDBServices` class that contains everything related to the global statistics query and interactions with the database
 
 class globalDBServices {
+
+  /// The [db] database instance.
   SqlDb db = SqlDb();
 
-  /// Retrieve the number of seekers globally
+  /// Retrieve the number of seekers globally.
+  ///
+  /// Returns a [Future] with the count of seekers.
   Future<int> getNumberOfSeekers() async {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS seeker_count
@@ -19,7 +23,9 @@ class globalDBServices {
     return numberOfSeekers;
   }
 
-  /// Retrieve the number of givers globally
+  /// Retrieve the number of givers globally.
+  ///
+  /// Returns a [Future] with the count of givers.
   Future<int> getNumberOfGivers() async {
     String sqlStatment = '''
       SELECT COUNT(DISTINCT Forms.UserID) AS giver_count
@@ -33,7 +39,9 @@ class globalDBServices {
     return numberOfGivers;
   }
 
-  /// Retrieve the number of successful donations globally
+  /// Retrieve the number of successful donations globally.
+  ///
+  /// Returns a [Future] with the count of successful donations.
   Future<int> getNumberOfSuccessfulDonations() async {
     String sqlStatement = '''
     SELECT COUNT(*) AS successful_donation_count
@@ -56,7 +64,9 @@ class globalDBServices {
     return numberOfSuccessfulDonations;
   }
 
-  /// Retrieve the number of in progress donations globally
+  /// Retrieve the number of in-progress donations globally.
+  ///
+  /// Returns a [Future] with the count of in-progress donations.
   Future<int> getNumberOfInProgressDonations() async {
     String sqlStatement = '''
     SELECT COUNT(*) AS Inprogress_donation_count
@@ -79,7 +89,9 @@ class globalDBServices {
     return numberOfInProgressDonations;
   }
 
-  /// Retrieve the top 3 donated categories globally
+  /// Retrieve the top 3 donated categories globally.
+  ///
+  /// Returns a [Future] with a List of the top 3 donated categories.
   Future<List<String>> getTopDonatedCategories() async {
     String sqlStatement = '''
         SELECT Forms.Category, COUNT(*) AS category_count
@@ -100,7 +112,9 @@ class globalDBServices {
     return topCategories;
   }
 
-  /// Retrieve the top 3 cities globally
+  /// Retrieve the top 3 cities with the most forms globally.
+  ///
+  /// Returns a [Future] with a List of the top 3 cities.
   Future<List<String>> getTopCities() async {
     String sqlStatement = '''
         SELECT Users.City AS City , COUNT(*) AS city_count

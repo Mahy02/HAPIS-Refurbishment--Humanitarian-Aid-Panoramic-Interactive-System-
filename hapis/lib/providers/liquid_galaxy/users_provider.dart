@@ -38,7 +38,6 @@ class UserProvider extends ChangeNotifier {
   /// Property that defines the user's email
   String? _email;
 
- 
 
   /// property that defines the user's total number of donations
   int? _givings;

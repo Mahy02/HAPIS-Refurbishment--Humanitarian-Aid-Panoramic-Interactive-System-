@@ -2,13 +2,13 @@ import '../../helpers/sql_db.dart';
 import '../../models/db_models/get_inprogress_donations_model.dart';
 
 ///   `DonationsServices` class that contains everything related to the donations query and interactions with the database
-
 class DonationsServices {
-  /// retrieving the [db] database instance
+  /// The [db] database instance.
   SqlDb db = SqlDb();
 
-  /// `getDonationsInProgress` function that retrieves all donations in progress for a certain user given his `id`
-  /// It returns a future List of `InProgressDonationModel`
+  /// Retrieve all donations in progress for a certain user based on their `id`.
+  ///
+  /// Returns a [Future] with a List of [InProgressDonationModel].
   //======> *** type here can be sender rec seeker giver
   Future<List<InProgressDonationModel>> getDonationsInProgress(
       String id) async {
@@ -101,7 +101,6 @@ class DonationsServices {
     List<InProgressDonationModel> donations;
     try {
       List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-      print(queryResult);
 
       donations = queryResult
           .map((result) => InProgressDonationModel(
@@ -123,7 +122,9 @@ class DonationsServices {
     return donations;
   }
 
-  /// Function to get the count of in-progress donations for a user
+  /// Retrieve the count of in-progress donations for a user based on their `id`.
+  ///
+  /// Returns a [Future] with the count of in-progress donations.
   Future<int> getInProgressDonationsCount(String id) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS Count
@@ -159,17 +160,15 @@ class DonationsServices {
       return 0;
     }
   }
-
+  
+  /// Finish a donation based on its `rid`, `mid`, and `type`.
+  ///
+  /// Returns a [Future] with a Map containing the result of the update and whether both donations are finished.
   Future<Map<String, dynamic>> finishDonation(
-      int rid, int mid, String type) async {
+    int rid, int mid, String type) async {
     int queryResultRequest = 0;
     int queryResultMatching = 0;
     bool areBothFinished = false;
-
-    print('inside finish donation');
-    print(rid);
-    print(mid);
-    print(type);
 
     if (rid != 0) {
       if (type == 'sender') {
@@ -239,7 +238,7 @@ class DonationsServices {
       ''';
         try {
           queryResultMatching = await db.updateData(sqlStatementMatching);
-          print(queryResultMatching);
+         
         } catch (e) {
           print('Error updating: $e');
           return {'result': -1, 'areBothFinished': false};
@@ -274,12 +273,13 @@ class DonationsServices {
     };
   }
 
+
+  /// Cancel a donation based on its `rid`, `mid`, and `type`.
+  ///
+  /// Returns a [Future] with the result of the update.
   Future<int> cancelDonation(int rid, int mid, String type) async {
     int queryResultRequest = 0;
     int queryResultMatching = 0;
-
-    print(type);
-    print('hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
 
     if (rid != 0) {
       if (type == 'sender') {
@@ -336,20 +336,7 @@ class DonationsServices {
         }
       }
     }
-    print(queryResultMatching + queryResultRequest);
-
     return queryResultMatching + queryResultRequest;
   }
 }
 
-
-/*
-case:
-dlwa2ty user 3ml finish process 
-we user tany 3ml cancel 
-fa dlwa2ty b2a el status kdah => finished cancelled
-e7na b2a fe sf7t el retrieval bngeb el inprogress bs 
-fa lao cancelled w cancelled msh byban
-w lao finished w finish msh byban
-bs 3yzen n handle case lao finished w cancelled teb2a lesa byana l7ad ma te2lb cancelled w cancelled
-*/

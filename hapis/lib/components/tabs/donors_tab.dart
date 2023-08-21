@@ -11,6 +11,14 @@ import '../../reusable_widgets/no_component.dart';
 import '../../reusable_widgets/user_app_component.dart';
 import '../../services/db_services/users_services.dart';
 
+/// This file contains the implementation of the `DonorsTab` widget, which represents
+/// a tab in an app for displaying a list of seekers. It includes search and filter
+/// functionalities for users.
+/// 
+/// 
+
+
+/// Represents a tab for displaying donors with search and filter functionalities.
 class DonorsTab extends StatefulWidget {
   const DonorsTab({Key? key}) : super(key: key);
 
@@ -35,6 +43,7 @@ class _DonorsTabState extends State<DonorsTab> {
     });
   }
 
+ /// Fetches user data and initializes the list of donors.
   void getUsers() async {
     UserAppProvider userProvider =
         Provider.of<UserAppProvider>(context, listen: false);
@@ -55,7 +64,8 @@ class _DonorsTabState extends State<DonorsTab> {
     return ResponsiveLayout(
         mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout());
   }
-
+ 
+  /// Updates the filtered users list based on the provided search query.
   void performSearch(String query) {
     setState(() {
       filteredUsersList = usersList.where((user) {
@@ -77,7 +87,7 @@ class _DonorsTabState extends State<DonorsTab> {
       }).toList();
     });
   }
-
+/// Updates the filtered users list based on the selected filter settings.
   void performFilter() {
     FilterSettingsModel filterSettingsModel =
         Provider.of<FilterSettingsModel>(context, listen: false);
@@ -102,17 +112,8 @@ class _DonorsTabState extends State<DonorsTab> {
                 filterSettingsModel.selectedCategories.any((selectedCategory) =>
                     cat.contains(selectedCategory.toLowerCase()));
 
-        // // Extract the years from multiDates
-        // List<String> multiDatesList = date.split(',');
-        // List<String> yearsList = multiDatesList
-        //     .map((date) => DateTime.parse(date).year.toString())
-        //     .toList();
-
-        // // Check if the selected year matches any of the years in multiDates
-        // final bool matchesYear =
-        //     yearsList.contains(filterSettingsModel.selectedDate);
         return matchesCity && matchesCountry && matchesCategory;
-        //&& matchesYear;
+
       }).toList();
     });
   }
@@ -329,6 +330,25 @@ class _DonorsTabState extends State<DonorsTab> {
     );
   }
 
+ /// Displays a bottom sheet modal for applying filter settings.
+  ///
+  /// This method fetches a list of cities and countries using the `UserServices`
+  /// class and displays a bottom sheet modal containing a `FilterModal` widget.
+  /// The `FilterModal` widget allows the user to select filter criteria such as
+  /// cities, countries, and categories. Once the filtering is applied, the `onFiltered`
+  /// callback triggers the `performFilter` method to update the list of filtered users.
+  ///
+  /// The modal is displayed with rounded corners and takes into account the safe
+  /// area of the device. It is scrollable and adapts to the content's height.
+  ///
+  /// It is important to note that this method should be called within a context
+  /// that has access to the `BuildContext` of the widget hierarchy.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// showFilterModal();
+  /// ```
   void showFilterModal() async {
     List<Map<String, String>> citiesAndCountries =
         await UserServices().getCitiesAndCountries();
@@ -339,7 +359,7 @@ class _DonorsTabState extends State<DonorsTab> {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
-      isScrollControlled: true, // Set this to true
+      isScrollControlled: true, 
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(20),

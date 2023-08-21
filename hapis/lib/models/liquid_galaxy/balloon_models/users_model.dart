@@ -50,7 +50,6 @@ class UsersModel {
 
   UsersModel(
       {
-      // required this.id,
       this.userID,
       this.userName,
       this.firstName,

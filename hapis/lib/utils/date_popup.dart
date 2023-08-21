@@ -63,7 +63,6 @@ Widget buildMobileLayout(BuildContext context, List<String> dates) {
 
 /// Function that returns the widget for the `AlertDialog` of the date popup in tablet layout
 /// It takes a list of `dates` to show in the pop up
-
 Widget buildTabletLayout(BuildContext context, List<String> dates) {
   return AlertDialog(
     title: Row(

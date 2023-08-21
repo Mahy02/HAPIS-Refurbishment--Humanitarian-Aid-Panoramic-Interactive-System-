@@ -7,8 +7,16 @@ import '../../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../../models/liquid_galaxy/kml/point_model.dart';
 import '../../../models/liquid_galaxy/kml/tour_model.dart';
 
+/// The `UserBalloonService` class handles building KML elements for user balloons and orbits.
+
 class UserBalloonService {
-  /// Builds and returns a user `Placemark` entity according to the given [user]
+  /// Builds and returns a user `Placemark` entity based on the given [user].
+  ///
+  /// The [balloon] parameter determines whether to include balloon content.
+  /// The [seeker] parameter indicates whether the user is a seeker.
+  /// The [orbitPeriod] specifies the orbit period.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// The [updatePosition] parameter determines whether to update the position.
   PlacemarkModel buildUserPlacemark(
     UsersModel user,
     bool balloon,
@@ -74,9 +82,10 @@ class UserBalloonService {
     );
   }
 
-  /// Builds an `orbit` KML based on the given [user]
+  /// Builds an `orbit` KML based on the given [user].
   ///
-  /// Returns a [String] that represents the `orbit` KML.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// Returns a [String] representing the `orbit` KML.
   String buildOrbit(UsersModel user, {LookAtModel? lookAt}) {
     LookAtModel lookAtObj;
 

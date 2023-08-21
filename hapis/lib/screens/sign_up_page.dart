@@ -7,18 +7,16 @@ import 'package:hapis/screens/app_home.dart';
 import 'package:hapis/screens/google_signup.dart';
 import 'package:hapis/services/db_services/users_services.dart';
 import 'package:image_picker/image_picker.dart';
-import '../helpers/api.dart';
 import '../location_and_maps/location_controller.dart';
 import '../models/db_models/user_model.dart';
-import '../models/place_autocomplete.dart';
 import '../reusable_widgets/back_button.dart';
 import '../reusable_widgets/drop_down_list_component.dart';
-import '../reusable_widgets/location_list_title.dart';
 import '../reusable_widgets/text_form_field.dart';
 import 'dart:io';
-
 import '../utils/database_popups.dart';
 
+/// This is the SignUp Page for allowing users to Sign up or edit their profile
+/// * [update] - Required [bool] for knowing whether user wants to update their info or Sign up as new user
 class SignUpPage extends StatefulWidget {
   final GoogleSignInAccount? googleUser;
   final UserModel? normalUser;
@@ -387,7 +385,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       _phoneNumberController.text,
                                       _addressController.text,
                                       widget.normalUser!.email!
-                                      //  widget.normalUser!.pass!
+                                     
                                       );
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',
@@ -736,7 +734,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 });
                               }
                             } else {
-                              //update normal user with password
+                              
                               final numberOfChanges = await UserServices()
                                   .updateUser(
                                       widget.normalUser!.userID!,
@@ -748,7 +746,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       _phoneNumberController.text,
                                       _addressController.text,
                                       widget.normalUser!.email!
-                                      //  widget.normalUser!.pass!
+                                     
                                       );
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',

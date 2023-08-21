@@ -125,51 +125,6 @@ Widget buildTabletLogos() {
             ),
           ),
         ),
-
-        // Padding(
-        //   padding: const EdgeInsets.all(20.0),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: Text(
-        //       'Organization : Liquid Galaxy project',
-        //       style: TextStyle(
-        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(20.0),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: Text(
-        //       'Mentor: Claudia Diosan',
-        //       style: TextStyle(
-        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(20.0),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: Text(
-        //       'Organization admin: Andreu Ibañez',
-        //       style: TextStyle(
-        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(20.0),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: Text(
-        //       'Liquid Galaxy LAB testers : Mohamed Zazou,Navdeep Singh, Imad Laichi',
-        //       style: TextStyle(
-        //           fontSize: 28, fontFamily: GoogleFonts.lato().fontFamily),
-        //     ),
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Align(
@@ -365,41 +320,6 @@ Widget buildMobileLogos() {
             ),
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.all(20.0),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: Text(
-        //       'Contributor: Mahinour Elsarky',
-        //       style: TextStyle(
-        //           fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(20.0),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: Text(
-        //       'Mentors: Claudia Diosan, Karine Pistili Rodrigues, Deniz Yuksel',
-        //       textAlign: TextAlign.center,
-        //       style: TextStyle(
-        //           fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(20.0),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: Text(
-        //       'Liquid Galxy Project Admin: Andreu Ibáñez Perales',
-        //       textAlign: TextAlign.center,
-        //       style: TextStyle(
-        //           fontSize: 18, fontFamily: GoogleFonts.lato().fontFamily),
-        //     ),
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Align(
@@ -427,18 +347,10 @@ Widget buildMobileLogos() {
           height: 20,
         ),
         Row(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/EDU.png", scale: 6),
-            // const SizedBox(
-            //   width: 30,
-            // ),
             Image.asset("assets/images/LiquidGalaxyLab.png", scale: 5),
-            // const SizedBox(
-            //   width: 30,
-            // ),
             Image.asset("assets/images/3-removebg-preview.png", scale: 3),
           ],
         ),
@@ -446,20 +358,12 @@ Widget buildMobileLogos() {
           height: 20,
         ),
         Row(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/WomenTech.png", scale: 7),
-            // const SizedBox(
-            //   width: 30,
-            // ),
             Image.asset(
                 "assets/images/Laboratoris_TIC_-agrobiotech-removebg-preview-removebg-preview.png",
                 scale: 7.5),
-            // const SizedBox(
-            //   width: 30,
-            // ),
             Image.asset(
                 "assets/images/Parc_AgrobioTech_Lleida-removebg-preview.png",
                 scale: 7.5)

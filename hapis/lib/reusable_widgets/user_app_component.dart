@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -112,13 +110,7 @@ class _UserAppComponentState extends State<UserAppComponent> {
             height: widget.imageHeight,
             child: InkWell(
               onTap: () {
-                print(widget.user.firstName);
-                print(widget.user.imagePath ?? '');
-                print((widget.user.imagePath == null ||
-                    widget.user.imagePath == ''));
-                print((widget.user.imagePath != null ||
-                    widget.user.imagePath != ''));
-                print(widget.user.imagePath!.isEmpty);
+               
               },
             ),
           ),
@@ -183,7 +175,7 @@ class _UserAppComponentState extends State<UserAppComponent> {
                               setState(() {
                                 isLoading = true;
                               });
-                              print(requested);
+                             
                               if (requested == false) {
                                 if (GoogleSignInApi().isUserSignedIn() ==
                                         true ||

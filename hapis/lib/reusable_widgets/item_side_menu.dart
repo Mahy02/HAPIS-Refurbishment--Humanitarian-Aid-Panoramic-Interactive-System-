@@ -17,8 +17,7 @@ class IconSideMenuWidget extends StatelessWidget {
   final Widget page;
   final double fontSize;
   final double iconFontSize;
-  //final IconState iconState;
-
+  
   const IconSideMenuWidget({
     Key? key,
     required this.itemTitle,

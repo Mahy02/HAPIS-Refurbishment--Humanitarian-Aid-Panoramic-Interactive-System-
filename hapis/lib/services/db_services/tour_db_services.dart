@@ -5,15 +5,21 @@ import '../../helpers/sql_db.dart';
 import '../../models/liquid_galaxy/tour_models/city_model.dart';
 import '../../models/liquid_galaxy/tour_models/country_model.dart';
 
+/// The `TourDBServices` class contains methods for retrieving location data for creating tour models.
+/// 
 class TourDBServices {
-  /// retrieving the [db] database instance
+
+  /// The [db] database instance.
   SqlDb db = SqlDb();
 
+  /// Retrieve a list of `CountryModel` representing different countries.
+  ///
+  /// Returns a [Future] list of `CountryModel`.
   Future<List<CountryModel>> getCountries() async {
     String sqlStatement = '''
-  SELECT DISTINCT Country 
-  FROM Users;
-  ''';
+    SELECT DISTINCT Country 
+    FROM Users;
+    ''';
 
     List<CountryModel> countries = [];
     try {
@@ -40,6 +46,9 @@ class TourDBServices {
     return countries;
   }
 
+   /// Retrieve a list of `CityModelTour` for a specific country.
+  ///
+  /// Returns a [Future] list of `CityModelTour`.
   Future<List<CityModelTour>> getCitiesForCountry(String countryName) async {
     String sqlStatement = '''
       SELECT DISTINCT City
@@ -72,6 +81,10 @@ class TourDBServices {
     }
   }
 
+   
+  /// Retrieve a list of `UserLocationModel` for a specific city.
+  ///
+  /// Returns a [Future] list of `UserLocationModel`.
   Future<List<UserLocationModel>> getUserAddressesForCity(
       String cityName) async {
     String sqlStatement = '''

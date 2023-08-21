@@ -8,8 +8,16 @@ import '../../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../../models/liquid_galaxy/kml/point_model.dart';
 import '../../../models/liquid_galaxy/kml/tour_model.dart';
 
+/// The `GlobalBalloonService` class handles building KML elements for global statistics balloons and orbits.
 class GlobalBalloonService {
-  /// Builds and returns a globe `Placemark` entity
+
+  /// Builds and returns a globe `Placemark` entity based on the given [globe].
+  ///
+  /// The [balloon] parameter determines whether to include balloon content.
+  /// The [orbitPeriod] specifies the orbit period.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// The [updatePosition] parameter determines whether to update the position.
+  /// 
   PlacemarkModel buildGlobalPlacemark(
     GlobeModel globe,
     bool balloon,
@@ -66,9 +74,12 @@ class GlobalBalloonService {
     );
   }
 
-  /// Builds an `orbit` KML based on Globe
+ 
+  /// Builds an `orbit` KML based on global statistics.
   ///
-  /// Returns a [String] that represents the `orbit` KML.
+  /// The [lookAt] parameter can be used to set a custom LookAt configuration.
+  /// Returns a [String] representing the `orbit` KML.
+  /// 
   String buildOrbit({LookAtModel? lookAt}) {
     LookAtModel lookAtObj;
 

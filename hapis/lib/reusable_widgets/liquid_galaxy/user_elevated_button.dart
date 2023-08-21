@@ -18,6 +18,7 @@ import '../../utils/pop_up_connection.dart';
 /// - * [type] which is a required to determine whether user was seeker or giver
 /// - * [user] which is a required [UsersModel] for displaying the user statistics
 /// - * [height] and [width] which are required for having a responsive layout
+/// - * [imageHeight] and [imageWidth] which are optional if image exists to adapt to different layouts
 
 class UserElevatedButton extends StatefulWidget {
   final String elevatedButtonContent;
@@ -70,13 +71,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
     setState(() {
       _userPlacemark = placemark;
     });
-
-    // try {
-    //   await LgService(sshData).clearKml();
-    // } catch (e) {
-    //   // ignore: avoid_print
-    //   print(e);
-    // }
 
     final kmlBalloon = KMLModel(
       name: 'HAPIS-USER-balloon',
@@ -167,8 +161,6 @@ class _UserElevatedButtonState extends State<UserElevatedButton> {
                             'assets/images/info.png',
                             height: widget.imageHeight,
                             width: widget.imageWidth,
-                            // height: MediaQuery.of(context).size.height * 0.01,
-                            // width: MediaQuery.of(context).size.width * 0.03,
                           ),
                           onTap: () async {
                             final sshData = Provider.of<SSHprovider>(context,

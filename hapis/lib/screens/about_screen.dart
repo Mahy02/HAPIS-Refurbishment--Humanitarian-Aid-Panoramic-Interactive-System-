@@ -5,7 +5,6 @@ import 'package:hapis/utils/drawer.dart';
 import '../utils/build_inner_logos.dart';
 
 ///This is the about page, where we have the logos, name of the app, authors, links
-///We call [BuildLogos] that has all the content of the About page
 class About extends StatelessWidget {
   final bool isLg;
   const About({super.key, required this.isLg});
@@ -25,10 +24,7 @@ class About extends StatelessWidget {
           mobileBody: buildMobileLogos(),
           tabletBody: buildTabletLogos(),
         )
-        //BuildLogos()
-        //  SingleChildScrollView(
-        //   child: BuildLogos(),
-        // )
+
         );
   }
 }

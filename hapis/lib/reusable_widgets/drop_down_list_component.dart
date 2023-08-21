@@ -56,14 +56,12 @@ class DropDownListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print(items);
     return Consumer<DropdownState>(
       key: key,
       builder: (BuildContext context, state, Widget? child) => Padding(
         padding: const EdgeInsets.all(10.0),
         child: DropdownButtonFormField<String>(
           decoration: InputDecoration(
-            //border: const OutlineInputBorder(),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50),
               borderSide: const BorderSide(
@@ -99,7 +97,6 @@ class DropDownListWidget extends StatelessWidget {
           onChanged: (value) {
             int index = state.selectedIndex = items.indexOf(value!);
             int length = items.length;
-
             onChanged?.call(value);
           },
           style: TextStyle(fontSize: fontSize, color: Colors.black),

@@ -4,11 +4,13 @@ import '../../models/db_models/get_matchings_model.dart';
 ///   `MatchingsServices` class that contains everything related to the matchings query and interactions with the database
 
 class MatchingsServices {
-  /// retrieving the [db] database instance
+  
+  /// The [db] database instance.
   SqlDb db = SqlDb();
 
-  /// `getMatchings` function that retrieves all matches for a certain user given his `id`
-  /// It returns a future List of `MatchingsModel`
+  /// Retrieve all matches for a certain user given their `id`.
+  ///
+  /// Returns a [Future] with a List of `MatchingsModel`.
   Future<List<MatchingsModel>> getMatchings(String id) async {
     //type of current user
     String sqlStatement = '''
@@ -68,19 +70,18 @@ class MatchingsServices {
 
     M_ID, Rec1_Status, Rec2_status
     
-FROM Matchings M
-JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
-JOIN Forms F2 ON M.Giver_FormID = F2.FormID
-JOIN Users U1 ON F1.UserID = U1.UserID
-JOIN Users U2 ON F2.UserID = U2.UserID
-WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not Started'
+    FROM Matchings M
+    JOIN Forms F1 ON M.Seeker_FormID = F1.FormID
+    JOIN Forms F2 ON M.Giver_FormID = F2.FormID
+    JOIN Users U1 ON F1.UserID = U1.UserID
+    JOIN Users U2 ON F2.UserID = U2.UserID
+    WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not Started'
 ''';
     List<MatchingsModel> matchings;
 
     try {
       List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-      print(queryResult);
-
+   
       matchings = queryResult
           .map((matchingMap) => MatchingsModel(
               matchingID: int.parse(matchingMap['M_ID']),
@@ -101,7 +102,6 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
           .toList();
     } catch (e) {
       print('Error creating request: $e');
-      String error = e.toString();
 
       return [];
     }
@@ -109,7 +109,9 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     return matchings;
   }
 
-  /// Function to get the count of matchings for a user
+  /// Retrieve the count of matchings for a user.
+  ///
+  /// Returns a [Future] with the count of matchings.
   Future<int> getMatchingsCount(String id) async {
     String sqlStatement = '''
     SELECT COUNT(*) AS Count
@@ -129,8 +131,11 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     }
   }
 
+  /// Update the status of a matching entry based on the user's type.
+  ///
+  /// Returns a [Future] with the result of the update operation.
   Future<int> updateMatching(int id, String type) async {
-    print(type);
+  
     String sqlStatement;
     if (type == 'seeker') {
       sqlStatement = '''
@@ -183,13 +188,14 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
       queryResult = await db.updateData(sqlStatement);
     } catch (e) {
       print('Error : $e');
-      String error = e.toString();
-
       return -1;
     }
     return queryResult;
   }
 
+  /// Delete a matching entry based on its `id`.
+  ///
+  /// Returns a [Future] with the result of the delete operation.
   Future<int> deleteMatching(int id) async {
     String sqlStatement = '''
     DELETE FROM Matchings
@@ -200,13 +206,14 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
       queryResult = await db.deleteData(sqlStatement);
     } catch (e) {
       print('Error : $e');
-      String error = e.toString();
-
       return -1;
     }
     return queryResult;
   }
 
+  /// Retrieve the Form IDs associated with a given matching ID.
+  ///
+  /// Returns a [Future] with a List of Form IDs.
   Future<List<int>> getFormIds(int mId) async {
     String sqlStatement = '''
     SELECT Seeker_FormID, Giver_FormID
@@ -216,7 +223,7 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     List<Map<String, dynamic>> results = await db.readData(sqlStatement);
     List<int> ids = [];
     if (results.isNotEmpty) {
-      print(results[0]['Seeker_FormID']);
+      
       int seekerFormId = int.parse(results[0]['Seeker_FormID']) as int;
       int giverFormId = int.parse(results[0]['Giver_FormID']) as int;
       ids.add(seekerFormId);
@@ -227,18 +234,11 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
     }
   }
 
+   /// Check for potential matches based on specified criteria.
+  ///
+  /// Returns a [Future] with a List of potential matching Form IDs.
   Future<List<int?>> checkMatching(
       String type, String item, String cat, String dates, String city) async {
-    print(dates);
-    //for MY SQL:
-
-    // String sqlStatement = '''
-    // SELECT FormID
-    // FROM Forms
-    // INNER JOIN Users ON Forms.UserID = Users.UserID
-    // WHERE Forms.Type = '$type' AND Forms.Item = '$item' AND Forms.Category = '$cat' AND (Forms.Dates_available LIKE '%$dates%' OR FIND_IN_SET(Forms.Dates_available, '$dates') > 0) AND Forms.Status = 'Not Completed' AND Users.City = '$city'
-    // ''';
-    //for sqllitee:
     final individualDates = dates.split(',');
     final dateConditions = individualDates.map((date) {
       return "Forms.Dates_available LIKE '%$date%'";
@@ -256,26 +256,22 @@ WHERE (F1.UserID = '$id' OR F2.UserID = '$id') AND M.Rec1_Donation_Status= 'Not 
       AND Users.City = '$city'
     ''';
     List<Map<String, dynamic>> queryResult = await db.readData(sqlStatement);
-    print('matchings: $queryResult');
-    // If a matching form exists, return its Form_ID
+  
     List<int?> matching =
         queryResult.map<int?>((row) => int.parse(row['FormID'])).toList();
 
     return matching;
   }
 
+  /// Create a new match between a seeker and a giver.
+  ///
+  /// Returns a [Future] with the ID of the inserted row.
   Future<int> createMatch(int seekerFormID, int giverFormID) async {
-    print('creating match');
-    print(seekerFormID);
-    print(giverFormID);
     String sqlStatment = '''
     INSERT INTO Matchings (Seeker_FormID,	Giver_FormID,	Rec1_Status ,	Rec2_status, 	Rec1_Donation_Status, Rec2_Donation_Status)
         VALUES ($seekerFormID, $giverFormID, 'Pending', 'Pending', 'Not Started', 'Not Started');
     ''';
-
     int rowID = await db.insertData(sqlStatment);
-    print(rowID);
-
     return rowID;
   }
 }

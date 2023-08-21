@@ -13,8 +13,6 @@ import 'package:hapis/utils/drawer.dart';
 import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
-
-import '../helpers/google_signin_api.dart';
 import '../helpers/login_session_shared_preferences.dart';
 import '../providers/date_selection.dart';
 import '../reusable_widgets/back_button.dart';
@@ -24,6 +22,7 @@ import '../reusable_widgets/drop_down_list_component.dart';
 import '../reusable_widgets/text_form_field.dart';
 import '../utils/empty_date_popup.dart';
 
+/// This is a widget responsible for creating or editing forms
 class CreateForm extends StatefulWidget {
   final List<DateSelectionModel> selectedDates;
   final String? type;
@@ -54,13 +53,13 @@ class _CreateFormState extends State<CreateForm> {
         for (int i = 0; i < widget.selectedDates.length; i++) {
           _selectedDatesSeeker.add(widget.selectedDates[i]);
         }
-        //  _selectedDatesSeeker = widget.selectedDates;
+      
       } else if (widget.type == 'giver') {
         for (int i = 0; i < widget.selectedDates.length; i++) {
-          print(widget.selectedDates[i].dateControllerStart.text);
+        
           _selectedDatesGiver.add(widget.selectedDates[i]);
         }
-        //  _selectedDatesGiver = widget.selectedDates;
+       
       }
     }
   }
@@ -555,7 +554,7 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
-                  print(numberOfChanges);
+                 
                   if (numberOfChanges == 0) {
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
@@ -854,9 +853,9 @@ class _CreateFormState extends State<CreateForm> {
               }
             }
             // ignore: use_build_context_synchronously
-            print('noc: $numberOfChanges');
+          
             if (numberOfChanges <= 0 && widget.update == true) {
-              print('no navigation');
+            
             } else {
               if (widget.update == true) {
                 showDatabasePopup(context, 'Form updated successfully!',
@@ -1353,7 +1352,7 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
-                  print(numberOfChanges);
+                
                   if (numberOfChanges == 0) {
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
@@ -1652,9 +1651,9 @@ class _CreateFormState extends State<CreateForm> {
               }
             }
             // ignore: use_build_context_synchronously
-            print('noc: $numberOfChanges');
+          
             if (numberOfChanges <= 0 && widget.update == true) {
-              print('no navigation');
+             
             } else {
               if (widget.update == true) {
                 showDatabasePopup(context, 'Form updated successfully!',

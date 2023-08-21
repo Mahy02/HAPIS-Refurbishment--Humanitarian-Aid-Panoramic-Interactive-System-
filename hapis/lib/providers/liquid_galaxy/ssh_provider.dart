@@ -30,8 +30,10 @@ class SSHprovider extends ChangeNotifier {
   /// Property that defines the SSH machine password or RSA private key.
   String? _passwordOrKey = LgConnectionSharedPref.getPassword();
 
+  /// Property that defines the number of LG screens
   int? _numberOfScreens = LgConnectionSharedPref.getScreenAmount();
 
+  /// Property that defines the SSH client 
   SSHClient? _client;
 
   /// reconnects with the client again every 30 seconds while the app is running with given `ssh` info
@@ -52,14 +54,12 @@ class SSHprovider extends ChangeNotifier {
         keepAliveInterval: const Duration(seconds: 36000000),
       );
 
-      // Perform other operations on the connected socket
+     
     } catch (e) {
       result = 'fail';
-      print(result);
-      print('Failed to connect to the SSH server----: $e');
+    
     }
-    print('hereeeeeeeeeeeeee');
-    print(result);
+   
     Connectionprovider connection =
         Provider.of<Connectionprovider>(context, listen: false);
     if (result == 'fail') {
@@ -67,8 +67,6 @@ class SSHprovider extends ChangeNotifier {
     } else {
       connection.isConnected = true;
     }
-
-    print(connection.isConnected);
 
     return result;
   }
@@ -106,7 +104,7 @@ class SSHprovider extends ChangeNotifier {
         throw Exception('SSH authentication failed');
       }
 
-      // Perform other operations on the connected socket
+    
     } catch (e) {
       result = "Failed to connect to the SSH server: $e";
     }
@@ -163,12 +161,7 @@ class SSHprovider extends ChangeNotifier {
   }
 
   Future<String?> init(BuildContext context) async {
-    // final settings = Provider.of<Connectionprovider>(context, listen: false);
     String? result = await setClient(SSHModel(
-      // username: settings.connectionFormData.username,
-      // host: settings.connectionFormData.ip,
-      // passwordOrKey: settings.connectionFormData.password,
-      // port: settings.connectionFormData.port,
       username: LgConnectionSharedPref.getUserName() ?? '',
       host: LgConnectionSharedPref.getIP() ?? '',
       passwordOrKey: LgConnectionSharedPref.getPassword() ?? '',
@@ -180,11 +173,6 @@ class SSHprovider extends ChangeNotifier {
     _port = int.parse(LgConnectionSharedPref.getPort() ?? '22');
     _numberOfScreens = LgConnectionSharedPref.getScreenAmount();
 
-    // _username = settings.connectionFormData.username;
-    // _host = settings.connectionFormData.ip;
-    // _passwordOrKey = settings.connectionFormData.password;
-    // _port = settings.connectionFormData.port;
-    // _numberOfScreens = settings.connectionFormData.screenAmount;
 
     notifyListeners();
     return result;
