@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../models/liquid_galaxy/balloon_models/users_model.dart';
 import '../../models/liquid_galaxy/kml/KMLModel.dart';
-import '../../models/liquid_galaxy/kml/look_at_model.dart';
+
 import '../../models/liquid_galaxy/kml/placemark_model.dart';
 import '../../providers/liquid_galaxy/connection_provider.dart';
 import '../../providers/liquid_galaxy/ssh_provider.dart';
@@ -17,7 +17,7 @@ import '../../reusable_widgets/app_bar.dart';
 import '../../reusable_widgets/hapis_elevated_button.dart';
 import '../../reusable_widgets/liquid_galaxy/connection_indicator.dart';
 import '../../reusable_widgets/sub_text.dart';
-import '../../services/liquid_galaxy/LG_placemarks_services/city_balloon_service.dart';
+
 import '../../services/liquid_galaxy/LG_placemarks_services/users_pins_services.dart';
 import '../../services/liquid_galaxy/LG_functionalities.dart';
 import '../../utils/drawer.dart';
@@ -82,10 +82,8 @@ class _UsersState extends State<Users> {
   }
 
   Future<void> sendPlacemarks(List<PlacemarkModel> usersPlacemarks) async {
-    print(usersPlacemarks.length);
 
     for (PlacemarkModel placemark in usersPlacemarks) {
-      print('here');
       final kmlPlacemark = KMLModel(
         name: 'HAPIS-Users-pin-${placemark.id}',
         content: placemark.pinOnlyTag,
@@ -178,6 +176,7 @@ class _UsersState extends State<Users> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               HapisElevatedButton(
+                 isLoading: false,
                   fontSize: 18,
                   elevatedButtonContent: 'Seekers',
                   buttonColor: HapisColors.lgColor2,
@@ -204,6 +203,7 @@ class _UsersState extends State<Users> {
                 width: MediaQuery.of(context).size.width * 0.02,
               ),
               HapisElevatedButton(
+                 isLoading: false,
                   fontSize: 18,
                   elevatedButtonContent: 'Donors',
                   buttonColor: HapisColors.lgColor4,
@@ -299,6 +299,7 @@ class _UsersState extends State<Users> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 HapisElevatedButton(
+                   isLoading: false,
                     fontSize: 35,
                     elevatedButtonContent: 'Seekers',
                     buttonColor: HapisColors.lgColor2,
@@ -321,6 +322,7 @@ class _UsersState extends State<Users> {
                                   seekersList: seekers, city: widget.city)));
                     }),
                 HapisElevatedButton(
+                   isLoading: false,
                     fontSize: 35,
                     elevatedButtonContent: 'Donors',
                     buttonColor: HapisColors.lgColor4,

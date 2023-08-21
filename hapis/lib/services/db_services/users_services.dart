@@ -670,9 +670,7 @@ class UserServices {
   /// ```dart
   /// String foundUserID = await doesNormalUserExist('securepassword', 'user@example.com');
   /// if (foundUserID.isNotEmpty) {
-  ///   print('User found with ID: $foundUserID');
   /// } else {
-  ///   print('User not found.');
   /// }
   /// ```
   Future<String> doesNormalUserExist(String password, String email) async {

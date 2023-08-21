@@ -46,7 +46,9 @@ class Settings extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        BackButtonWidget(isTablet: false,),
+        BackButtonWidget(
+          isTablet: false,
+        ),
         ConnectionIndicator(isConnected: connection.isConnected),
         Padding(
           padding: const EdgeInsets.only(top: 20.0, left: 30),
@@ -62,6 +64,7 @@ class Settings extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             HapisElevatedButton(
+                isLoading: false,
                 fontSize: 20,
                 elevatedButtonContent: 'Clear KML',
                 buttonColor: HapisColors.lgColor1,
@@ -85,6 +88,7 @@ class Settings extends StatelessWidget {
                   }
                 }),
             HapisElevatedButton(
+                isLoading: false,
                 fontSize: 20,
                 elevatedButtonContent: 'Relaunch LG',
                 buttonColor: HapisColors.lgColor2,
@@ -114,6 +118,7 @@ class Settings extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             HapisElevatedButton(
+                isLoading: false,
                 elevatedButtonContent: 'Reboot LG',
                 buttonColor: HapisColors.lgColor3,
                 height: MediaQuery.of(context).size.height * 0.2,
@@ -135,6 +140,7 @@ class Settings extends StatelessWidget {
                   }
                 }),
             HapisElevatedButton(
+                isLoading: false,
                 elevatedButtonContent: 'ShutDown LG',
                 buttonColor: HapisColors.lgColor1,
                 height: MediaQuery.of(context).size.height * 0.2,
@@ -170,7 +176,9 @@ class Settings extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          BackButtonWidget(isTablet: true,),
+          BackButtonWidget(
+            isTablet: true,
+          ),
           ConnectionIndicator(isConnected: connection.isConnected),
           const SubText(
             subTextContent: 'LG Settings',
@@ -183,6 +191,7 @@ class Settings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               HapisElevatedButton(
+                  isLoading: false,
                   fontSize: 35,
                   elevatedButtonContent: 'Clear KML',
                   buttonColor: HapisColors.lgColor1,
@@ -206,6 +215,7 @@ class Settings extends StatelessWidget {
                     }
                   }),
               HapisElevatedButton(
+                  isLoading: false,
                   fontSize: 35,
                   elevatedButtonContent: 'Relaunch LG',
                   buttonColor: HapisColors.lgColor2,
@@ -235,6 +245,7 @@ class Settings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               HapisElevatedButton(
+                  isLoading: false,
                   elevatedButtonContent: 'Reboot LG',
                   buttonColor: HapisColors.lgColor3,
                   height: MediaQuery.of(context).size.height * 0.2,
@@ -256,6 +267,7 @@ class Settings extends StatelessWidget {
                     }
                   }),
               HapisElevatedButton(
+                  isLoading: false,
                   elevatedButtonContent: 'Shut Down LG',
                   buttonColor: HapisColors.lgColor1,
                   height: MediaQuery.of(context).size.height * 0.2,

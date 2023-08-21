@@ -15,8 +15,6 @@ import '../../services/db_services/users_services.dart';
 /// a tab in an app for displaying a list of seekers. It includes search and filter
 /// functionalities for users.
 
-
-
 /// Represents a tab for displaying seekers with search and filter functionalities.
 class SeekersTab extends StatefulWidget {
   const SeekersTab({Key? key}) : super(key: key);
@@ -42,7 +40,7 @@ class _SeekersTabState extends State<SeekersTab> {
     });
   }
 
-/// Fetches user data and initializes the list of seekers.
+  /// Fetches user data and initializes the list of seekers.
   void getUsers() async {
     UserAppProvider userProvider =
         Provider.of<UserAppProvider>(context, listen: false);
@@ -53,18 +51,17 @@ class _SeekersTabState extends State<SeekersTab> {
     setState(() {
       usersList = userProvider.seekersApp;
       filteredUsersList = userProvider.seekersApp;
-      print("seekers length");
-      print(usersList.length);
     });
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(
         mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout());
   }
 
- /// Updates the filtered users list based on the provided search query.
+  /// Updates the filtered users list based on the provided search query.
   void performSearch(String query) {
     setState(() {
       filteredUsersList = usersList.where((user) {
@@ -87,7 +84,7 @@ class _SeekersTabState extends State<SeekersTab> {
     });
   }
 
-/// Updates the filtered users list based on the selected filter settings.
+  /// Updates the filtered users list based on the selected filter settings.
   void performFilter() {
     FilterSettingsModel filterSettingsModel =
         Provider.of<FilterSettingsModel>(context, listen: false);
@@ -124,7 +121,6 @@ class _SeekersTabState extends State<SeekersTab> {
 
   Widget buildMobileLayout() {
     final noSeekers = filteredUsersList.isEmpty;
-    print(filteredUsersList.length);
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -151,12 +147,22 @@ class _SeekersTabState extends State<SeekersTab> {
                 color: HapisColors.lgColor3,
               ),
               suffixIcon: GestureDetector(
-                child: const Icon(
-                  Icons.filter_list_rounded,
-                  size: 30,
-                  color: HapisColors.lgColor3,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Icon(
+                      Icons.filter_list_rounded,
+                      size: 30,
+                      color: HapisColors.lgColor3,
+                    ),
+                    if (isLoading)
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(HapisColors.lgColor3),
+                      ),
+                  ],
                 ),
-                onTap: () {
+                onTap: () async {
                   showFilterModal();
                 },
               ),
@@ -348,31 +354,41 @@ class _SeekersTabState extends State<SeekersTab> {
   /// ```dart
   /// showFilterModal();
   /// ```
-
   void showFilterModal() async {
-    List<Map<String, String>> citiesAndCountries =
-        await UserServices().getCitiesAndCountries();
-    List<String> cities =
-        citiesAndCountries.map((item) => item['city']!).toList();
+    setState(() {
+      isLoading = true;
+    });
 
-    // ignore: use_build_context_synchronously
-    showModalBottomSheet(
-      context: context,
-      useSafeArea: true,
-      isScrollControlled: true, 
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
+    try {
+      List<Map<String, String>> citiesAndCountries =
+          await UserServices().getCitiesAndCountries();
+      List<String> cities =
+          citiesAndCountries.map((item) => item['city']!).toList();
+
+      await showModalBottomSheet(
+        context: context,
+        useSafeArea: true,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
         ),
-      ),
-      builder: (BuildContext context) {
-        return FilterModal(
-          cities: cities,
-          onFiltered: () {
-            performFilter();
-          },
-        );
-      },
-    );
+        builder: (BuildContext context) {
+          return FilterModal(
+            cities: cities,
+            onFiltered: () {
+              performFilter();
+            },
+          );
+        },
+      );
+    } catch (e) {
+      print('Error showing filter modal: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }

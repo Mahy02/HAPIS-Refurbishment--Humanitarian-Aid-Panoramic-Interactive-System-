@@ -41,7 +41,6 @@ class _NotificationComponentState extends State<NotificationComponent> {
           onPressed: () async {
             int result =
                 await NotificationsServices().deleteNotification(widget.id);
-            print('result');
 
             if (result <= 0) {
               showDatabasePopup(context,

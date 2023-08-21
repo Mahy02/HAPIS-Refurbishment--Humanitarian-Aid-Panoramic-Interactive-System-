@@ -14,9 +14,8 @@ import '../../services/db_services/users_services.dart';
 /// This file contains the implementation of the `DonorsTab` widget, which represents
 /// a tab in an app for displaying a list of seekers. It includes search and filter
 /// functionalities for users.
-/// 
-/// 
-
+///
+///
 
 /// Represents a tab for displaying donors with search and filter functionalities.
 class DonorsTab extends StatefulWidget {
@@ -43,7 +42,7 @@ class _DonorsTabState extends State<DonorsTab> {
     });
   }
 
- /// Fetches user data and initializes the list of donors.
+  /// Fetches user data and initializes the list of donors.
   void getUsers() async {
     UserAppProvider userProvider =
         Provider.of<UserAppProvider>(context, listen: false);
@@ -54,17 +53,16 @@ class _DonorsTabState extends State<DonorsTab> {
     setState(() {
       usersList = userProvider.giversApp;
       filteredUsersList = userProvider.giversApp;
-      print("donors length");
-      print(usersList.length);
     });
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(
         mobileBody: buildMobileLayout(), tabletBody: buildTabletLayout());
   }
- 
+
   /// Updates the filtered users list based on the provided search query.
   void performSearch(String query) {
     setState(() {
@@ -87,7 +85,8 @@ class _DonorsTabState extends State<DonorsTab> {
       }).toList();
     });
   }
-/// Updates the filtered users list based on the selected filter settings.
+
+  /// Updates the filtered users list based on the selected filter settings.
   void performFilter() {
     FilterSettingsModel filterSettingsModel =
         Provider.of<FilterSettingsModel>(context, listen: false);
@@ -113,7 +112,6 @@ class _DonorsTabState extends State<DonorsTab> {
                     cat.contains(selectedCategory.toLowerCase()));
 
         return matchesCity && matchesCountry && matchesCategory;
-
       }).toList();
     });
   }
@@ -126,7 +124,6 @@ class _DonorsTabState extends State<DonorsTab> {
 
   Widget buildMobileLayout() {
     final noSeekers = filteredUsersList.isEmpty;
-    print(filteredUsersList.length);
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -152,12 +149,22 @@ class _DonorsTabState extends State<DonorsTab> {
                 color: HapisColors.lgColor3,
               ),
               suffixIcon: GestureDetector(
-                child: const Icon(
-                  Icons.filter_list_rounded,
-                  size: 30,
-                  color: HapisColors.lgColor3,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Icon(
+                      Icons.filter_list_rounded,
+                      size: 30,
+                      color: HapisColors.lgColor3,
+                    ),
+                    if (isLoading)
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(HapisColors.lgColor3),
+                      ),
+                  ],
                 ),
-                onTap: () {
+                onTap: () async {
                   showFilterModal();
                 },
               ),
@@ -330,7 +337,7 @@ class _DonorsTabState extends State<DonorsTab> {
     );
   }
 
- /// Displays a bottom sheet modal for applying filter settings.
+  /// Displays a bottom sheet modal for applying filter settings.
   ///
   /// This method fetches a list of cities and countries using the `UserServices`
   /// class and displays a bottom sheet modal containing a `FilterModal` widget.
@@ -350,29 +357,40 @@ class _DonorsTabState extends State<DonorsTab> {
   /// showFilterModal();
   /// ```
   void showFilterModal() async {
-    List<Map<String, String>> citiesAndCountries =
-        await UserServices().getCitiesAndCountries();
-    List<String> cities =
-        citiesAndCountries.map((item) => item['city']!).toList();
+    setState(() {
+      isLoading = true;
+    });
 
-    // ignore: use_build_context_synchronously
-    showModalBottomSheet(
-      context: context,
-      useSafeArea: true,
-      isScrollControlled: true, 
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
+    try {
+      List<Map<String, String>> citiesAndCountries =
+          await UserServices().getCitiesAndCountries();
+      List<String> cities =
+          citiesAndCountries.map((item) => item['city']!).toList();
+
+      await showModalBottomSheet(
+        context: context,
+        useSafeArea: true,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
         ),
-      ),
-      builder: (BuildContext context) {
-        return FilterModal(
-          cities: cities,
-          onFiltered: () {
-            performFilter();
-          },
-        );
-      },
-    );
+        builder: (BuildContext context) {
+          return FilterModal(
+            cities: cities,
+            onFiltered: () {
+              performFilter();
+            },
+          );
+        },
+      );
+    } catch (e) {
+      print('Error showing filter modal: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }

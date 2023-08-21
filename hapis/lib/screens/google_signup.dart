@@ -75,7 +75,6 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-           
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
@@ -190,7 +189,6 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-          
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
@@ -267,15 +265,9 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
   Future signIn(bool isGoogleUser) async {
     if (isGoogleUser) {
       try {
-        print('here1');
         await GoogleSignInApi.login();
-        print('here2');
         await GoogleSignInApi.logout();
-        print('here3');
         final user = await GoogleSignInApi.login();
-        print('here4');
-
-        print(user.id);
 
         if (user == Null) {
         } else {
@@ -298,8 +290,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
       } on Exception catch (e) {
         // Handle the sign-in error.
         print('Sign-in error: $e');
-        showDatabasePopup(context,
-            'There was a problem signing in. \nPlease try again later.');
+        showDatabasePopup(context, 'There was a problem signing in. ${e.toString()}');
         return;
       }
     }
@@ -327,8 +318,7 @@ class _GoogleSignUpState extends State<GoogleSignUp> {
     } on Exception catch (e) {
       // Handle the sign-in error.
       print('Sign-in error: $e');
-      showDatabasePopup(
-          context, 'There was a problem signing in. \nPlease try again later.');
+       showDatabasePopup(context, 'There was a problem signing in. ${e.toString()}');
       return;
     }
   }

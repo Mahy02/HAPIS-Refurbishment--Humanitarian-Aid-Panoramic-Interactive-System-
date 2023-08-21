@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:hapis/reusable_widgets/app_bar.dart';
 import 'package:hapis/screens/liquid_galaxy/cities.dart';
@@ -176,6 +175,7 @@ class _LgHomePageState extends State<LgHomePage> {
                     elevatedButtonContent: isLoadingGlobalStats
                         ? 'Loading...'
                         : 'Global Statistics',
+                    isLoading: isLoadingGlobalStats,
                     buttonColor: HapisColors.lgColor1,
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: MediaQuery.of(context).size.width * 0.65,
@@ -236,34 +236,36 @@ class _LgHomePageState extends State<LgHomePage> {
                 ),
                 Stack(
                   alignment: Alignment.center,
-                  children:[ HapisElevatedButton(
-                      elevatedButtonContent: 'Cities',
-                      buttonColor: HapisColors.lgColor3,
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      width: MediaQuery.of(context).size.width * 0.65,
-                      imagePath: 'assets/images/architecture-and-city.png',
-                      imageHeight: MediaQuery.of(context).size.height * 0.1,
-                      imageWidth: MediaQuery.of(context).size.height * 0.1,
-                      fontSize: 20,
-                      isPoly: false,
-                      onpressed: () async{
-                         setState(() {
-                            isLoadingCity = true;
-                          });
+                  children: [
+                    HapisElevatedButton(
+                        isLoading: isLoadingCity,
+                        elevatedButtonContent: 'Cities',
+                        buttonColor: HapisColors.lgColor3,
+                        height: MediaQuery.of(context).size.height * 0.25,
+                        width: MediaQuery.of(context).size.width * 0.65,
+                        imagePath: 'assets/images/architecture-and-city.png',
+                        imageHeight: MediaQuery.of(context).size.height * 0.1,
+                        imageWidth: MediaQuery.of(context).size.height * 0.1,
+                        fontSize: 20,
+                        isPoly: false,
+                        onpressed: () async {
+                          // setState(() {
+                          //   isLoadingCity = true;
+                          // });
 
-                          // Perform any necessary loading or asynchronous tasks
-                          await Future.delayed(Duration(seconds: 5));
+                          // // Perform any necessary loading or asynchronous tasks
+                          // await Future.delayed(Duration(seconds: 5));
 
-                          // Hide the loading indicator and navigate to the new page
-                          setState(() {
-                            isLoadingCity = false;
-                          });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CitiesPage()));
-                      }),
-                      if (isLoadingCity)
+                          // // Hide the loading indicator and navigate to the new page
+                          // setState(() {
+                          //   isLoadingCity = false;
+                          // });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CitiesPage()));
+                        }),
+                    if (isLoadingCity)
                       Center(
                         child: CircularProgressIndicator(
                           color: Colors
@@ -276,6 +278,7 @@ class _LgHomePageState extends State<LgHomePage> {
                   height: 30,
                 ),
                 HapisElevatedButton(
+                    isLoading: isLoadingHAPISTour,
                     elevatedButtonContent:
                         isLoadingHAPISTour ? 'Loading...' : 'HAPIS Tour',
                     // elevatedButtonContent: 'HAPIS Tour',
@@ -311,6 +314,9 @@ class _LgHomePageState extends State<LgHomePage> {
                           print(e);
                         }
                       } else {
+                        setState(() {
+                          isLoadingHAPISTour = false;
+                        });
                         showDialogConnection(context);
                       }
                     }),
@@ -433,6 +439,7 @@ class _LgHomePageState extends State<LgHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 HapisElevatedButton(
+                    isLoading: isLoadingGlobalStats,
                     elevatedButtonContent: isLoadingGlobalStats
                         ? 'Loading...'
                         : 'Global Statistics',
@@ -497,6 +504,7 @@ class _LgHomePageState extends State<LgHomePage> {
                   alignment: Alignment.center,
                   children: [
                     HapisElevatedButton(
+                        isLoading: isLoadingCity,
                         elevatedButtonContent: 'Cities',
                         buttonColor: HapisColors.lgColor3,
                         height: MediaQuery.of(context).size.height * 0.4,
@@ -533,6 +541,7 @@ class _LgHomePageState extends State<LgHomePage> {
                   ],
                 ),
                 HapisElevatedButton(
+                    isLoading: isLoadingHAPISTour,
                     elevatedButtonContent:
                         isLoadingHAPISTour ? 'Loading...' : 'HAPIS Tour',
                     //elevatedButtonContent: 'HAPIS Tour',
@@ -550,7 +559,7 @@ class _LgHomePageState extends State<LgHomePage> {
                       setState(() {
                         isLoadingHAPISTour = true;
                       });
-                      print('tourr');
+
                       final sshData =
                           Provider.of<SSHprovider>(context, listen: false);
 
@@ -569,6 +578,9 @@ class _LgHomePageState extends State<LgHomePage> {
                           print(e);
                         }
                       } else {
+                        setState(() {
+                          isLoadingHAPISTour = false;
+                        });
                         showDialogConnection(context);
                       }
                     }),

@@ -10,7 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 ///   * [onpressed]  - A [Function] to be displayed when the button is pressed
 ///   * [height] - A [double] parameter for adjusting the height of the button
 ///   * [imagePath] - An optional [String] representing the image path, if a button requires an image
-
+///   * [isLoading]  - An optional indicator of loading
 class HapisElevatedButton extends StatelessWidget {
   final String elevatedButtonContent;
   final Color buttonColor;
@@ -22,6 +22,7 @@ class HapisElevatedButton extends StatelessWidget {
   double? imageHeight;
   double? imageWidth;
   String? imagePath;
+  bool isLoading = false;
   HapisElevatedButton({
     required this.elevatedButtonContent,
     required this.buttonColor,
@@ -32,6 +33,7 @@ class HapisElevatedButton extends StatelessWidget {
     this.imagePath,
     this.imageHeight,
     this.imageWidth,
+    required this.isLoading,
     required this.isPoly,
     super.key,
   });
@@ -51,59 +53,69 @@ class HapisElevatedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
           ),
         ),
-        child: (imagePath != null && imagePath != '')
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  isPoly
-                      ? Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: buttonColor,
-                              width: 0.0,
+        child: Stack(
+          children: [
+            if (isLoading)
+              Positioned.fill(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            (imagePath != null && imagePath != '')
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      isPoly
+                          ? Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: buttonColor,
+                                  width: 0.0,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: Image.asset(
+                                imagePath!,
+                                height: imageHeight,
+                                width: imageWidth,
+                              ),
+                            )
+                          : Image.asset(
+                              imagePath!,
+                              height: imageHeight,
+                              width: imageWidth,
                             ),
-                            borderRadius: BorderRadius.circular(30.0),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            elevatedButtonContent,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: fontSize,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          child: Image.asset(
-                            imagePath!,
-                            height: imageHeight,
-                            width: imageWidth,
-                          ),
-                        )
-                      : Image.asset(
-                          imagePath!,
-                          height: imageHeight,
-                          width: imageWidth,
                         ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        elevatedButtonContent,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: fontSize,
-                          fontFamily: GoogleFonts.montserrat().fontFamily,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      ),
+                    ],
+                  )
+                : Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      elevatedButtonContent,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ],
-              )
-            : Align(
-                alignment: Alignment.center,
-                child: Text(
-                  elevatedButtonContent,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: fontSize,
-                    fontFamily: GoogleFonts.montserrat().fontFamily,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+          ],
+        ),
       ),
     );
   }

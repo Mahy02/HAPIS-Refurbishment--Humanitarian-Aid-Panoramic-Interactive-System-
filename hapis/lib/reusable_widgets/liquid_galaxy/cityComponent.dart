@@ -110,6 +110,7 @@ class _CityComponentState extends State<CityComponent> {
     final buttonContent = '${widget.city}\n${widget.country}';
 
     return HapisElevatedButton(
+      isLoading: isLoadingCity,
       fontSize: widget.fontSize,
       buttonColor: widget.buttonColor,
       elevatedButtonContent: isLoadingCity ? 'Loading...' : buttonContent,
@@ -118,7 +119,7 @@ class _CityComponentState extends State<CityComponent> {
       imageHeight: widget.imageHeight,
       imageWidth: widget.imageWidth,
       imagePath: imagePath,
-      isPoly: true,
+      isPoly: false,
       onpressed: () async {
         setState(() {
           isLoadingCity = true;

@@ -76,7 +76,6 @@ void main() async {
           port: int.parse(LgConnectionSharedPref.getPort() ?? '22'),
         ),
         navigatorKey.currentContext!);
-    print(' res: $result');
     if (result == 'fail' || result != '') {
       connection.isConnected = false;
     } else {
