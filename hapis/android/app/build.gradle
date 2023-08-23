@@ -52,30 +52,21 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.liquidgalaxy.HapisRemake"
+        applicationId "com.liquidgalaxy.hapisremake"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 30
         targetSdkVersion flutter.targetSdkVersion
         //flutter.targetSdkVersion
-        versionCode 1
+        versionCode 3
         //flutterVersionCode.toInteger()
-        versionName "1.0.0"
+        versionName "1.0.2"
         //flutterVersionName
     }
     
-    signingConfigs{
-        debug{
-            keyAlias 'androiddebugkey'
-            keyPassword 'hApis_GsoC@2023_MC'
-            storeFile file('mykey.jks')
-            storePassword 'hApis_GsoC@2023_MC'
-        }
-    }
-
+   
     // signingConfigs {
-    //     release {
-
+    //     debug {
     //         keyAlias keystoreProperties['keyAlias']
     //         keyPassword keystoreProperties['keyPassword']
     //         storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
@@ -83,17 +74,26 @@ android {
     //     }
     // }
 
-    buildTypes {
-        //  release {
-        //     signingConfig signingConfigs.release
-        //     // Add any other release-specific configurations here
-        // }
-        debug {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
         }
+    }
+
+    buildTypes {
+         release {
+            signingConfig signingConfigs.release
+            // Add any other release-specific configurations here
+        }
+        // debug {
+        //     // TODO: Add your own signing config for the release build.
+        //     // Signing with the debug keys for now, so `flutter run --release` works.
+        //     signingConfig signingConfigs.debug
+
+        // }
     }
 }
 
