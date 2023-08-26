@@ -66,6 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     int countryIndex = countries.indexOf(_countryController.text);
@@ -300,6 +301,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+
                           if (widget.update != true) {
                             final result = await UserServices().createNewUser(
                               userID: widget.googleUser!.id,
@@ -384,9 +389,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       _cityController.text,
                                       _phoneNumberController.text,
                                       _addressController.text,
-                                      widget.normalUser!.email!
-                                     
-                                      );
+                                      widget.normalUser!.email!);
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',
                                     isError: false, isWarning: true);
@@ -412,9 +415,12 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                             }
                           }
+                          setState(() {
+                            isLoading = false;
+                          });
                         },
-                        child: const Text(
-                          'SAVE',
+                        child: Text(
+                          isLoading ? 'Loading...' : 'SAVE',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -661,6 +667,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
                           if (widget.update != true) {
                             final result = await UserServices().createNewUser(
                               userID: widget.googleUser!.id,
@@ -734,7 +743,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 });
                               }
                             } else {
-                              
                               final numberOfChanges = await UserServices()
                                   .updateUser(
                                       widget.normalUser!.userID!,
@@ -745,9 +753,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       _cityController.text,
                                       _phoneNumberController.text,
                                       _addressController.text,
-                                      widget.normalUser!.email!
-                                     
-                                      );
+                                      widget.normalUser!.email!);
                               if (numberOfChanges == 0) {
                                 showDatabasePopup(context, 'No changes made.',
                                     isError: false, isWarning: true);
@@ -773,9 +779,12 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                             }
                           }
+                          setState(() {
+                            isLoading = false;
+                          });
                         },
-                        child: const Text(
-                          'SAVE',
+                        child: Text(
+                          isLoading ? 'Loading...' : 'SAVE',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,

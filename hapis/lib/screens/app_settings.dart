@@ -20,7 +20,6 @@ import '../utils/signup_popup.dart';
 import 'google_signup.dart';
 import 'notify_screen.dart';
 
-
 /// The `AppSettings` class represents the settings page of the HAPIS application.
 ///
 /// This page allows users to manage their account settings, notifications,
@@ -44,8 +43,8 @@ class _AppSettingsState extends State<AppSettings> {
   /// - `userId`: A string that holds the unique identifier of the current user.
   late String userId;
 
-/// - `initState()`: Initializes the state of the widget. Checks if the user is signed in
-///   and retrieves the user ID accordingly.
+  /// - `initState()`: Initializes the state of the widget. Checks if the user is signed in
+  ///   and retrieves the user ID accordingly.
   @override
   void initState() {
     super.initState();
@@ -62,7 +61,10 @@ class _AppSettingsState extends State<AppSettings> {
     }
   }
 
+  bool isEditLoading = false;
+  bool isDeleteLoading = false;
   @override
+
   /// - `build(BuildContext context)`: Builds the widget's UI by creating a scaffold with
   ///   an app bar, a drawer, and the main body content. It uses the `ResponsiveLayout` widget
   ///   to display different layouts for mobile and tablet devices.
@@ -78,7 +80,7 @@ class _AppSettingsState extends State<AppSettings> {
     );
   }
 
- /// - `buildMobile()`: Builds the UI content for mobile devices, including sections and tiles
+  /// - `buildMobile()`: Builds the UI content for mobile devices, including sections and tiles
   ///   for various settings options. It provides options to edit profile, manage notifications,
   ///   sign in or out, and delete the account.
   Widget buildMobile() {
@@ -106,11 +108,25 @@ class _AppSettingsState extends State<AppSettings> {
                   'Edit Profile',
                   style: TextStyle(fontSize: 16),
                 ),
-                leading: Icon(
-                  Icons.edit,
-                  color: HapisColors.lgColor1,
+                leading: Stack(
+                  children: [
+                    Icon(
+                      Icons.edit,
+                      color: HapisColors.lgColor1,
+                    ),
+                    if (isEditLoading)
+                      Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.blue,
+                        ),
+                      ),
+                  ],
                 ),
                 onPressed: (BuildContext context) async {
+                  setState(() {
+                    isEditLoading = true;
+                  });
+
                   if (GoogleSignInApi().isUserSignedIn() == true ||
                       LoginSessionSharedPreferences.getLoggedIn() == true) {
                     String id;
@@ -125,6 +141,9 @@ class _AppSettingsState extends State<AppSettings> {
                     }
 
                     UserModel user = await UserServices().getUser(id);
+                    setState(() {
+                      isEditLoading = false;
+                    });
 
                     Navigator.push(
                         context,
@@ -148,17 +167,13 @@ class _AppSettingsState extends State<AppSettings> {
                   color: HapisColors.lgColor4,
                 ),
                 trailing: FutureBuilder<int>(
-                  future: NotificationsServices().getNotificationCount(
-                      userId),
+                  future: NotificationsServices().getNotificationCount(userId),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                     
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                     
                       return Text('Error: ${snapshot.error}');
                     } else {
-                   
                       int notificationCount = snapshot.data ?? 0;
                       return CircleAvatar(
                         backgroundColor: Colors.red,
@@ -225,7 +240,7 @@ class _AppSettingsState extends State<AppSettings> {
                   if (GoogleSignInApi().isUserSignedIn() == true ||
                       LoginSessionSharedPreferences.getLoggedIn() == true) {
                     final user = GoogleSignInApi().getCurrentUser();
-                   
+
                     if (user != null) {
                       GoogleSignInApi.logout();
                     }
@@ -246,11 +261,24 @@ class _AppSettingsState extends State<AppSettings> {
                   'Delete Account',
                   style: TextStyle(fontSize: 16),
                 ),
-                leading: Icon(
-                  Icons.delete,
-                  color: HapisColors.lgColor2,
+                leading: Stack(
+                  children: [
+                    Icon(
+                      Icons.delete,
+                      color: HapisColors.lgColor2,
+                    ),
+                    if (isDeleteLoading)
+                      Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.blue,
+                        ),
+                      ),
+                  ],
                 ),
                 onPressed: (BuildContext context) async {
+                  setState(() {
+                    isDeleteLoading = true;
+                  });
                   if (GoogleSignInApi().isUserSignedIn() == true ||
                       LoginSessionSharedPreferences.getLoggedIn() == true) {
                     String id;
@@ -269,6 +297,10 @@ class _AppSettingsState extends State<AppSettings> {
                         LoginSessionSharedPreferences.setLoggedIn(false);
                         int result = await UserServices().deleteUser(id);
                         completer.complete(result);
+                      }, onCancelPressed: () {
+                        setState(() {
+                          isDeleteLoading = false;
+                        });
                       });
 
                       int result = await completer.future;
@@ -280,7 +312,6 @@ class _AppSettingsState extends State<AppSettings> {
                         showDatabasePopup(context,
                             'Error deleting user \n\nPlease try again later.');
                       }
-                     
                     } else {
                       id = LoginSessionSharedPreferences.getUserID()!;
 
@@ -294,25 +325,38 @@ class _AppSettingsState extends State<AppSettings> {
                         LoginSessionSharedPreferences.setLoggedIn(false);
                         int result = await UserServices().deleteUser(id);
                         completer.complete(result);
+                      }, onCancelPressed: () {
+                        setState(() {
+                          isDeleteLoading = false;
+                        });
                       });
 
                       int result = await completer.future;
+
                       if (result == 1) {
                         showDatabasePopup(context, 'User deleted successfully!',
-                            isError: false);
+                            isError: false, onOKPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AppHomePage()));
+                        });
                       } else if (result == 0) {
                         showDatabasePopup(context,
                             'Error deleting user \n\nPlease try again later.');
                       }
-                     
                     }
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AppHomePage()));
+
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const AppHomePage()));
                   } else {
                     showDialogSignUp(context);
                   }
+                  setState(() {
+                    isDeleteLoading = false;
+                  });
                 },
               ),
             ],
@@ -322,9 +366,9 @@ class _AppSettingsState extends State<AppSettings> {
     );
   }
 
- /// - `buildTablet(BuildContext context)`: Builds the UI content for tablet devices, similar to
-///   the mobile layout, but with larger font sizes and expanded sections to make optimal use
-///   of the tablet screen size.
+  /// - `buildTablet(BuildContext context)`: Builds the UI content for tablet devices, similar to
+  ///   the mobile layout, but with larger font sizes and expanded sections to make optimal use
+  ///   of the tablet screen size.
   Widget buildTablet(BuildContext context) {
     return Column(
       children: [
@@ -347,11 +391,24 @@ class _AppSettingsState extends State<AppSettings> {
                       'Edit Profile',
                       style: TextStyle(fontSize: 30),
                     ),
-                    leading: Icon(
-                      Icons.edit,
-                      color: HapisColors.lgColor1,
+                    leading: Stack(
+                      children: [
+                        Icon(
+                          Icons.edit,
+                          color: HapisColors.lgColor1,
+                        ),
+                        if (isEditLoading)
+                          Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.blue,
+                            ),
+                          ),
+                      ],
                     ),
                     onPressed: (BuildContext context) async {
+                      setState(() {
+                        isEditLoading = true;
+                      });
                       if (GoogleSignInApi().isUserSignedIn() == true ||
                           LoginSessionSharedPreferences.getLoggedIn() == true) {
                         String id;
@@ -366,6 +423,9 @@ class _AppSettingsState extends State<AppSettings> {
                         }
 
                         UserModel user = await UserServices().getUser(id);
+                        setState(() {
+                          isEditLoading = false;
+                        });
 
                         Navigator.push(
                             context,
@@ -389,18 +449,15 @@ class _AppSettingsState extends State<AppSettings> {
                       color: HapisColors.lgColor4,
                     ),
                     trailing: FutureBuilder<int>(
-                      future: NotificationsServices().getNotificationCount(
-                          userId), 
+                      future:
+                          NotificationsServices().getNotificationCount(userId),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                         
                           return CircularProgressIndicator();
                         } else if (snapshot.hasError) {
-                          
                           return Text('Error: ${snapshot.error}');
                         } else {
-                          
                           int notificationCount = snapshot.data ?? 0;
                           return CircleAvatar(
                             backgroundColor: Colors.red,
@@ -415,7 +472,6 @@ class _AppSettingsState extends State<AppSettings> {
                       },
                     ),
                     onPressed: (BuildContext context) {
-                     
                       if (GoogleSignInApi().isUserSignedIn() == true ||
                           LoginSessionSharedPreferences.getLoggedIn() == true) {
                         Navigator.push(
@@ -430,7 +486,6 @@ class _AppSettingsState extends State<AppSettings> {
                         showDialogSignUp(context);
                       }
                     },
-
                   ),
                 ],
               ),
@@ -480,7 +535,7 @@ class _AppSettingsState extends State<AppSettings> {
                       if (GoogleSignInApi().isUserSignedIn() == true ||
                           LoginSessionSharedPreferences.getLoggedIn() == true) {
                         final user = GoogleSignInApi().getCurrentUser();
-                      
+
                         if (user != null) {
                           GoogleSignInApi.logout();
                         }
@@ -501,52 +556,102 @@ class _AppSettingsState extends State<AppSettings> {
                       'Delete Account',
                       style: TextStyle(fontSize: 30),
                     ),
-                    leading: Icon(
-                      Icons.delete,
-                      color: HapisColors.lgColor2,
+                    leading: Stack(
+                      children: [
+                        Icon(
+                          Icons.delete,
+                          color: HapisColors.lgColor2,
+                        ),
+                        if (isDeleteLoading)
+                          Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.blue,
+                            ),
+                          ),
+                      ],
                     ),
                     onPressed: (BuildContext context) async {
-                      if (GoogleSignInApi().isUserSignedIn() == true ||
-                          LoginSessionSharedPreferences.getLoggedIn() == true) {
-                        String id;
-                        final user = GoogleSignInApi().getCurrentUser();
-                        if (user != null) {
-                          id = user.id;
-                          GoogleSignInApi.logout();
-                          LoginSessionSharedPreferences.removeUserID();
-                          LoginSessionSharedPreferences.setLoggedIn(false);
-                          int result = await UserServices().deleteUser(id);
-                          if (result == 1) {
-                            showDatabasePopup(
-                                context, 'User deleted successfully!',
-                                isError: false);
-                          } else if (result == 0) {
-                            showDatabasePopup(context,
-                                'Error deleting user \n\nPlease try again later.');
-                          }
-                        
-                        } else {
-                          id = LoginSessionSharedPreferences.getUserID()!;
-                          LoginSessionSharedPreferences.removeUserID();
-                          LoginSessionSharedPreferences.setLoggedIn(false);
-                          int result = await UserServices().deleteUser(id);
-                          if (result == 1) {
-                            showDatabasePopup(
-                                context, 'User deleted successfully!',
-                                isError: false);
-                          } else if (result == 0) {
-                            showDatabasePopup(context,
-                                'Error deleting user \n\nPlease try again later.');
-                          }
-                     
-                        }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AppHomePage()));
-                      } else {
-                        showDialogSignUp(context);
+                      setState(() {
+                    isDeleteLoading = true;
+                  });
+                  if (GoogleSignInApi().isUserSignedIn() == true ||
+                      LoginSessionSharedPreferences.getLoggedIn() == true) {
+                    String id;
+                    final user = GoogleSignInApi().getCurrentUser();
+                    if (user != null) {
+                      id = user.id;
+
+                      Completer<int> completer = Completer<int>();
+                      showDatabasePopup(
+                          context, 'Are you sure you want to delete?',
+                          isWarning: true,
+                          isError: false,
+                          isCancel: true, onOKPressed: () async {
+                        GoogleSignInApi.logout();
+                        LoginSessionSharedPreferences.removeUserID();
+                        LoginSessionSharedPreferences.setLoggedIn(false);
+                        int result = await UserServices().deleteUser(id);
+                        completer.complete(result);
+                      }, onCancelPressed: () {
+                        setState(() {
+                          isDeleteLoading = false;
+                        });
+                      });
+
+                      int result = await completer.future;
+
+                      if (result == 1) {
+                        showDatabasePopup(context, 'User deleted successfully!',
+                            isError: false);
+                      } else if (result == 0) {
+                        showDatabasePopup(context,
+                            'Error deleting user \n\nPlease try again later.');
                       }
+                    } else {
+                      id = LoginSessionSharedPreferences.getUserID()!;
+
+                      Completer<int> completer = Completer<int>();
+                      showDatabasePopup(
+                          context, 'Are you sure you want to delete?',
+                          isWarning: true,
+                          isError: false,
+                          isCancel: true, onOKPressed: () async {
+                        LoginSessionSharedPreferences.removeUserID();
+                        LoginSessionSharedPreferences.setLoggedIn(false);
+                        int result = await UserServices().deleteUser(id);
+                        completer.complete(result);
+                      }, onCancelPressed: () {
+                        setState(() {
+                          isDeleteLoading = false;
+                        });
+                      });
+
+                      int result = await completer.future;
+
+                      if (result == 1) {
+                        showDatabasePopup(context, 'User deleted successfully!',
+                            isError: false, onOKPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AppHomePage()));
+                        });
+                      } else if (result == 0) {
+                        showDatabasePopup(context,
+                            'Error deleting user \n\nPlease try again later.');
+                      }
+                    }
+
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const AppHomePage()));
+                  } else {
+                    showDialogSignUp(context);
+                  }
+                  setState(() {
+                    isDeleteLoading = false;
+                  });
                     },
                   ),
                 ],

@@ -6,11 +6,12 @@ import '../constants.dart';
 /// Display a dialog box to show database-related messages to the user.
 /// The appearance of the dialog varies based on screen size and message type.
 /// Returns a Future<dynamic> that resolves when the dialog is dismissed.
-/// 
+///
 Future<dynamic> showDatabasePopup(BuildContext context, String db_error,
     {bool isError = true,
     bool isWarning = false,
     Function()? onOKPressed,
+    Function()? onCancelPressed,
     bool isCancel = false}) {
   return showDialog(
     context: context,
@@ -52,6 +53,9 @@ Future<dynamic> showDatabasePopup(BuildContext context, String db_error,
             if (isCancel)
               TextButton(
                 onPressed: () {
+                  if (onCancelPressed != null) {
+                    onCancelPressed(); // Call the custom function if provided
+                  }
                   Navigator.pop(context);
                 },
                 child: const Text('SKIP',
@@ -96,6 +100,9 @@ Future<dynamic> showDatabasePopup(BuildContext context, String db_error,
             if (isCancel)
               TextButton(
                 onPressed: () {
+                  if (onCancelPressed != null) {
+                    onCancelPressed(); // Call the custom function if provided
+                  }
                   Navigator.pop(context);
                 },
                 child: const Text('SKIP',

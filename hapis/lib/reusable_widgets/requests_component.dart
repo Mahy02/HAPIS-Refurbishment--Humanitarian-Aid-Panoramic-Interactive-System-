@@ -29,8 +29,8 @@ import '../utils/show_user_details_modal.dart';
 /// * [id]  - Optional if its required to provide the id of a current match, donation or request or a form
 /// * [id2]  - Optional if its required to provide the other Id of a form
 /// * [userID]  - Optional if its required to provide the other userID
-/// * [seekerStatus]  - Optional if its required to provide a seeker request status 
-/// * [giverStatus]  - Optional if its required to provide a giver request status 
+/// * [seekerStatus]  - Optional if its required to provide a seeker request status
+/// * [giverStatus]  - Optional if its required to provide a giver request status
 /// * [currentDonationStatus]  - Optional if its required to provide a donation status of the current user
 /// * [otherDonationStatus] - Optional if its required to provide a donation status of the other user
 /// * [currentUserID] - Optional if its required to provide the current UserID
@@ -95,6 +95,14 @@ class RequestComponent extends StatefulWidget {
 class _RequestComponentState extends State<RequestComponent> {
   bool _accepted = false;
 
+  bool isDeleteMatchLoad = false;
+  bool isAcceptMatchLoad = false;
+  bool isAcceptRequestLoad = false;
+  bool isRejectRequestLoad = false;
+  bool isFinishDonationLoad = false;
+  bool isCancelDonationLoad = false;
+  bool isDeleteRequestLoad = false;
+  bool isConfirmCancelDonation = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -258,6 +266,10 @@ class _RequestComponentState extends State<RequestComponent> {
                   children: [
                     GestureDetector(
                       onTap: () async {
+                        setState(() {
+                          isDeleteRequestLoad = true;
+                        });
+
                         Completer<int> completer = Completer<int>();
                         showDatabasePopup(
                             context, 'Are you sure you want to delete?',
@@ -279,13 +291,27 @@ class _RequestComponentState extends State<RequestComponent> {
                           showDatabasePopup(context,
                               'Error deleting request \n\nPlease try again later.');
                         }
+                        setState(() {
+                          isDeleteRequestLoad = false;
+                        });
+
                         //refresh:
                         widget.onPressed!();
                       },
-                      child: Icon(
-                        Icons.delete,
-                        color: HapisColors.lgColor2,
-                        size: 25,
+                      child: Stack(
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: HapisColors.lgColor2,
+                            size: 25,
+                          ),
+                          if (isDeleteRequestLoad)
+                            Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.blue,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -323,7 +349,10 @@ class _RequestComponentState extends State<RequestComponent> {
                           SizedBox(
                             child: ElevatedButton(
                               onPressed: () async {
-                              
+                                setState(() {
+                                  isAcceptMatchLoad = true;
+                                });
+
                                 int result = await MatchingsServices()
                                     .updateMatching(widget.id!, widget.type!);
 
@@ -342,6 +371,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                   showDatabasePopup(context,
                                       'There was a problem accepting the match. Please try again later..');
                                 }
+                                setState(() {
+                                  isAcceptMatchLoad = false;
+                                });
 
                                 //referesh
                                 widget.onPressed!();
@@ -361,7 +393,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                 ),
                               ),
                               child: Text(
-                                'ACCEPT',
+                                isAcceptMatchLoad ? 'Loading...' : 'ACCEPT',
                                 style:
                                     TextStyle(fontSize: widget.buttonFontSize),
                               ),
@@ -374,6 +406,10 @@ class _RequestComponentState extends State<RequestComponent> {
                           SizedBox(
                             child: ElevatedButton(
                               onPressed: () async {
+                                setState(() {
+                                  isDeleteMatchLoad = true;
+                                });
+
                                 //delete matching
                                 int result = await MatchingsServices()
                                     .deleteMatching(widget.id!);
@@ -385,6 +421,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                   await NotificationsServices()
                                       .insertNotification(widget.userID!,
                                           '$name has declined the matching');
+
                                   showDatabasePopup(
                                       context, 'Matching deleted successfully!',
                                       isError: false);
@@ -396,6 +433,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                 //referesh
                                 widget.onPressed!();
                                 //send push notification to other person
+                                setState(() {
+                                  isDeleteMatchLoad = false;
+                                });
                               },
                               style: ButtonStyle(
                                 backgroundColor:
@@ -412,7 +452,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                 ),
                               ),
                               child: Text(
-                                'IGNORE',
+                                isDeleteMatchLoad ? 'Loading...' : 'IGNORE',
                                 style:
                                     TextStyle(fontSize: widget.buttonFontSize),
                               ),
@@ -485,6 +525,9 @@ class _RequestComponentState extends State<RequestComponent> {
                               ? SizedBox(
                                   child: ElevatedButton(
                                     onPressed: () async {
+                                      setState(() {
+                                        isConfirmCancelDonation = true;
+                                      });
                                       Completer<int> completer =
                                           Completer<int>();
                                       showDatabasePopup(
@@ -498,7 +541,12 @@ class _RequestComponentState extends State<RequestComponent> {
                                           completer.complete(result);
                                         },
                                       );
+
                                       int result = await completer.future;
+
+                                      setState(() {
+                                        isConfirmCancelDonation = false;
+                                      });
                                       //referesh
                                       widget.onPressed!();
                                     },
@@ -518,7 +566,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                       ),
                                     ),
                                     child: Text(
-                                      'CANCELLED',
+                                      isConfirmCancelDonation
+                                          ? 'Loading...'
+                                          : 'CANCELLED',
                                       style: TextStyle(
                                           fontSize: widget.buttonFontSize),
                                     ),
@@ -560,7 +610,10 @@ class _RequestComponentState extends State<RequestComponent> {
                                         SizedBox(
                                           child: ElevatedButton(
                                             onPressed: () async {
-                                            
+                                              setState(() {
+                                                isFinishDonationLoad = true;
+                                              });
+
                                               //update donation
                                               final result =
                                                   await DonationsServices()
@@ -577,7 +630,6 @@ class _RequestComponentState extends State<RequestComponent> {
                                                       widget.userID!,
                                                       '$name has ended the donation process');
 
-                                             
                                               if (result['result'] > 0 &&
                                                   result['areBothFinished']) {
                                                 showDatabasePopup(context,
@@ -625,6 +677,10 @@ class _RequestComponentState extends State<RequestComponent> {
                                                 showDatabasePopup(context,
                                                     'There was a problem ending the donation process. Please try again later..');
                                               }
+
+                                              setState(() {
+                                                isFinishDonationLoad = false;
+                                              });
                                               //referesh
                                               widget.onPressed!();
                                             },
@@ -645,7 +701,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                               ),
                                             ),
                                             child: Text(
-                                              'FINISH \n PROCESS',
+                                              isFinishDonationLoad
+                                                  ? 'Loading...'
+                                                  : 'FINISH \n PROCESS',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontSize:
@@ -656,6 +714,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                         SizedBox(
                                           child: ElevatedButton(
                                             onPressed: () async {
+                                              setState(() {
+                                                isCancelDonationLoad = true;
+                                              });
                                               // Update the donation
                                               Completer<int> completer =
                                                   Completer<int>();
@@ -702,6 +763,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                                   'There was a problem cancelling the donation process. Please try again later..',
                                                 );
                                               }
+                                              setState(() {
+                                                isCancelDonationLoad = false;
+                                              });
                                               //referesh
                                               widget.onPressed!();
                                             },
@@ -722,7 +786,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                               ),
                                             ),
                                             child: Text(
-                                              'CANCEL \n PROCESS',
+                                              isCancelDonationLoad
+                                                  ? 'Loading'
+                                                  : 'CANCEL \n PROCESS',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontSize:
@@ -738,10 +804,14 @@ class _RequestComponentState extends State<RequestComponent> {
                             SizedBox(
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  setState(() {
+                                    isAcceptRequestLoad = true;
+                                  });
+
                                   //change status in database
                                   int result = await RequestsServices()
                                       .acceptRequest(widget.id!);
-                                
+
                                   String name = await UserServices()
                                       .getFullNameById(widget.currentUserID!);
                                   await NotificationsServices()
@@ -757,6 +827,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                         'There was a problem accepting request. Please try again later..');
                                   }
                                   //refresh:
+                                  setState(() {
+                                    isAcceptRequestLoad = false;
+                                  });
                                   widget.onPressed!();
                                   //send push notification
                                 },
@@ -775,7 +848,7 @@ class _RequestComponentState extends State<RequestComponent> {
                                   ),
                                 ),
                                 child: Text(
-                                  'ACCEPT',
+                                  isAcceptRequestLoad ? 'Loading...' : 'ACCEPT',
                                   style: TextStyle(
                                       fontSize: widget.buttonFontSize),
                                 ),
@@ -784,6 +857,10 @@ class _RequestComponentState extends State<RequestComponent> {
                             SizedBox(
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  setState(() {
+                                    isRejectRequestLoad = true;
+                                  });
+
                                   //change status in database
                                   int result = await RequestsServices()
                                       .deleteRequest(widget.id!);
@@ -802,9 +879,11 @@ class _RequestComponentState extends State<RequestComponent> {
                                     showDatabasePopup(context,
                                         'Error deleting request \n\nPlease try again later.');
                                   }
+                                  setState(() {
+                                    isRejectRequestLoad = false;
+                                  });
                                   //refresh:
                                   widget.onPressed!();
-                                  
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty
@@ -821,7 +900,9 @@ class _RequestComponentState extends State<RequestComponent> {
                                   ),
                                 ),
                                 child: Text(
-                                  'DECLINE',
+                                  isRejectRequestLoad
+                                      ? 'Loading...'
+                                      : 'DECLINE',
                                   style: TextStyle(
                                       fontSize: widget.buttonFontSize),
                                 ),

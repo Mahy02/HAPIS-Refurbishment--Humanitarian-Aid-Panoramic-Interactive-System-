@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hapis/constants.dart';
@@ -109,9 +108,7 @@ class _UserAppComponentState extends State<UserAppComponent> {
             width: widget.imageWidth,
             height: widget.imageHeight,
             child: InkWell(
-              onTap: () {
-               
-              },
+              onTap: () {},
             ),
           ),
         ),
@@ -141,21 +138,25 @@ class _UserAppComponentState extends State<UserAppComponent> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (!widget.user.imagePath!.isEmpty)
-                      Image.asset(
-                        widget.user.imagePath!,
-                        height: widget.userImageHeight,
-                        width: widget.userImageWidth,
-                      ),
+                    if (widget.user.imagePath != null)
+                      if ((!widget.user.imagePath!.isEmpty) ||
+                          !(widget.user.imagePath! == ''))
+                        Image.asset(
+                          widget.user.imagePath!,
+                          height: widget.userImageHeight,
+                          width: widget.userImageWidth,
+                        ),
                     // Image.asset('assets/images/db_images/sai.jpg'),
                     // Image.file(File(
                     //     'D:MahyDolphin\internships\GSOC\Liquid Galaxy\Coding Period\HAPIS_GitHub\HAPIS-Refurbishment--Humanitarian-Aid-Panoramic-Interactive-System-\hapis\assets\images\db_images\sai')),
-                    if (widget.user.imagePath!.isEmpty)
-                      Image.asset(
-                        'assets/images/donorpin.png',
-                        height: widget.userImageHeight,
-                        width: widget.userImageWidth,
-                      ),
+                    if (widget.user.imagePath == null ||  widget.user.imagePath!.isEmpty)
+                      // if (widget.user.imagePath!.isEmpty ||
+                      //     widget.user.imagePath! == '')
+                        Image.asset(
+                          'assets/images/donorpin.png',
+                          height: widget.userImageHeight,
+                          width: widget.userImageWidth,
+                        ),
                     Text(
                       ' ${widget.user.firstName} ${widget.user.lastName}',
                       style: TextStyle(
@@ -175,7 +176,7 @@ class _UserAppComponentState extends State<UserAppComponent> {
                               setState(() {
                                 isLoading = true;
                               });
-                             
+
                               if (requested == false) {
                                 if (GoogleSignInApi().isUserSignedIn() ==
                                         true ||
