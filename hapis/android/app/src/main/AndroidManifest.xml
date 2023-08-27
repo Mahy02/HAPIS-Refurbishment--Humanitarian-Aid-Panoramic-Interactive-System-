@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.liquidgalaxy.HapisRemake">
+    package="com.liquidgalaxy.hapisremakedemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
    <application

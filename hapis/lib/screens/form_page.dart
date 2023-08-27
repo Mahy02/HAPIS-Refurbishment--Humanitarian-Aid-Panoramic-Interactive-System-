@@ -53,13 +53,10 @@ class _CreateFormState extends State<CreateForm> {
         for (int i = 0; i < widget.selectedDates.length; i++) {
           _selectedDatesSeeker.add(widget.selectedDates[i]);
         }
-      
       } else if (widget.type == 'giver') {
         for (int i = 0; i < widget.selectedDates.length; i++) {
-        
           _selectedDatesGiver.add(widget.selectedDates[i]);
         }
-       
       }
     }
   }
@@ -494,9 +491,6 @@ class _CreateFormState extends State<CreateForm> {
       ),
       GestureDetector(
         onTap: () async {
-          setState(() {
-            isLoading = true;
-          });
           int numberOfChanges = 0;
           int rows = 0;
 
@@ -542,6 +536,9 @@ class _CreateFormState extends State<CreateForm> {
               if (datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
+                setState(() {
+                  isLoading = true;
+                });
                 int rowID = 0;
 
                 if (widget.update == true) {
@@ -554,13 +551,22 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
-                 
+
                   if (numberOfChanges == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -595,6 +601,9 @@ class _CreateFormState extends State<CreateForm> {
                   rows = rowID;
                   if (rowID <= 0) {
                     //error creating form
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem creating the form. \n \nPlease try again later.');
                   } else {
@@ -623,6 +632,9 @@ class _CreateFormState extends State<CreateForm> {
               if (datesG.isEmpty) {
                 showDatePopUp(context);
               } else {
+                setState(() {
+                  isLoading = true;
+                });
                 int rowID = 0;
                 if (widget.update == true) {
                   numberOfChanges = await UserServices().updateForm(
@@ -635,11 +647,20 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed',
                       widget.formID);
                   if (numberOfChanges == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -672,6 +693,9 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed');
                   rows = rowID;
                   if (rowID <= 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     //error creating form
                     showDatabasePopup(context,
                         'There was a problem creating the form. \n \nPlease try again later.');
@@ -701,6 +725,9 @@ class _CreateFormState extends State<CreateForm> {
               if (datesG.isEmpty || datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
+                setState(() {
+                  isLoading = true;
+                });
                 int rowIDS = 0;
                 int numberOfChangesS = 0;
 
@@ -715,11 +742,20 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed',
                       widget.formID);
                   if (numberOfChangesS == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -752,6 +788,9 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed');
                   rows = rowIDS;
                   if (rowIDS <= 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     //error creating form
                     showDatabasePopup(context,
                         'There was a problem creating the form. \n \nPlease try again later.');
@@ -790,11 +829,20 @@ class _CreateFormState extends State<CreateForm> {
                       widget.formID);
 
                   if (numberOfChangesG == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -827,6 +875,9 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed');
                   rows = rowIDG;
                   if (rowIDG <= 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     //error creating form
                     showDatabasePopup(context,
                         'There was a problem creating the form. \n \nPlease try again later.');
@@ -853,11 +904,13 @@ class _CreateFormState extends State<CreateForm> {
               }
             }
             // ignore: use_build_context_synchronously
-          
+
             if (numberOfChanges <= 0 && widget.update == true) {
-            
             } else {
               if (widget.update == true) {
+                setState(() {
+                  isLoading = false;
+                });
                 showDatabasePopup(context, 'Form updated successfully!',
                     isError: false, onOKPressed: () {
                   Navigator.push(
@@ -1292,9 +1345,6 @@ class _CreateFormState extends State<CreateForm> {
       ),
       GestureDetector(
         onTap: () async {
-          setState(() {
-            isLoading = true;
-          });
           int numberOfChanges = 0;
           int rows = 0;
 
@@ -1340,6 +1390,9 @@ class _CreateFormState extends State<CreateForm> {
               if (datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
+                setState(() {
+                  isLoading = true;
+                });
                 int rowID = 0;
 
                 if (widget.update == true) {
@@ -1352,13 +1405,22 @@ class _CreateFormState extends State<CreateForm> {
                       seekerModel.forWhoS,
                       'Not Completed',
                       widget.formID);
-                
+
                   if (numberOfChanges == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -1381,6 +1443,9 @@ class _CreateFormState extends State<CreateForm> {
                       }
                     }
                   }
+                  setState(() {
+                    isLoading = false;
+                  });
                 } else {
                   rowID = await UserServices().createNewForm(
                       id,
@@ -1415,12 +1480,18 @@ class _CreateFormState extends State<CreateForm> {
                     }
                   }
                 }
+                setState(() {
+                  isLoading = false;
+                });
               }
               /////////////////////////////////////////////////////////////////////////
             } else if (donorModel.typeD == 'giver') {
               if (datesG.isEmpty) {
                 showDatePopUp(context);
               } else {
+                setState(() {
+                  isLoading = true;
+                });
                 int rowID = 0;
                 if (widget.update == true) {
                   numberOfChanges = await UserServices().updateForm(
@@ -1433,11 +1504,20 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed',
                       widget.formID);
                   if (numberOfChanges == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -1459,6 +1539,9 @@ class _CreateFormState extends State<CreateForm> {
                       }
                     }
                   }
+                  setState(() {
+                    isLoading = false;
+                  });
                 } else {
                   rowID = await UserServices().createNewForm(
                       id,
@@ -1494,11 +1577,17 @@ class _CreateFormState extends State<CreateForm> {
                   }
                 }
               }
+              setState(() {
+                isLoading = false;
+              });
               //////////////////////////////////////////////////////////////////////////////////////
             } else {
               if (datesG.isEmpty || datesS.isEmpty) {
                 showDatePopUp(context);
               } else {
+                setState(() {
+                  isLoading = true;
+                });
                 int rowIDS = 0;
                 int numberOfChangesS = 0;
 
@@ -1513,11 +1602,20 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed',
                       widget.formID);
                   if (numberOfChangesS == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -1539,6 +1637,9 @@ class _CreateFormState extends State<CreateForm> {
                       }
                     }
                   }
+                  setState(() {
+                    isLoading = false;
+                  });
                 } else {
                   rowIDS = await UserServices().createNewForm(
                       id,
@@ -1550,6 +1651,9 @@ class _CreateFormState extends State<CreateForm> {
                       'Not Completed');
                   rows = rowIDS;
                   if (rowIDS <= 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     //error creating form
                     showDatabasePopup(context,
                         'There was a problem creating the form. \n \nPlease try again later.');
@@ -1571,6 +1675,9 @@ class _CreateFormState extends State<CreateForm> {
                       }
                     }
                   }
+                  setState(() {
+                    isLoading = false;
+                  });
                 }
 
                 int rowIDG = 0;
@@ -1588,11 +1695,20 @@ class _CreateFormState extends State<CreateForm> {
                       widget.formID);
 
                   if (numberOfChangesG == 0) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'No changes made.',
                         isError: false, isWarning: true);
                   } else if (numberOfChanges == -1) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context, 'Form doesn\'t exist!');
                   } else if (numberOfChanges == -3) {
+                    setState(() {
+                      isLoading = false;
+                    });
                     showDatabasePopup(context,
                         'There was a problem updating form. Please try again later..!');
                   } else {
@@ -1614,6 +1730,9 @@ class _CreateFormState extends State<CreateForm> {
                       }
                     }
                   }
+                  setState(() {
+                    isLoading = false;
+                  });
                 } else {
                   rowIDG = await UserServices().createNewForm(
                       id,
@@ -1651,11 +1770,16 @@ class _CreateFormState extends State<CreateForm> {
               }
             }
             // ignore: use_build_context_synchronously
-          
+
             if (numberOfChanges <= 0 && widget.update == true) {
-             
+              setState(() {
+                isLoading = false;
+              });
             } else {
               if (widget.update == true) {
+                setState(() {
+                  isLoading = false;
+                });
                 showDatabasePopup(context, 'Form updated successfully!',
                     isError: false, onOKPressed: () {
                   Navigator.push(

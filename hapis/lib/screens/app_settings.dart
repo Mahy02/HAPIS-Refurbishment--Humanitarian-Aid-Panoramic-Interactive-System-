@@ -204,163 +204,163 @@ class _AppSettingsState extends State<AppSettings> {
               ),
             ],
           ),
-          SettingsSection(
-            title: Text(
-              'General',
-              style: TextStyle(color: HapisColors.lgColor1, fontSize: 18),
-            ),
-            tiles: [
-              SettingsTile(
-                title: Text(
-                  'Sign In',
-                  style: TextStyle(fontSize: 16),
-                ),
-                leading: Icon(
-                  Icons.exit_to_app,
-                  color: HapisColors.lgColor4,
-                ),
-                onPressed: (BuildContext context) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const GoogleSignUp()));
-                },
-              ),
-              SettingsTile(
-                title: Text(
-                  'Sign Out',
-                  style: TextStyle(fontSize: 16),
-                ),
-                leading: Icon(
-                  Icons.exit_to_app,
-                  color: HapisColors.lgColor3,
-                ),
-                onPressed: (BuildContext context) {
-                  // Handle sign out action
-                  if (GoogleSignInApi().isUserSignedIn() == true ||
-                      LoginSessionSharedPreferences.getLoggedIn() == true) {
-                    final user = GoogleSignInApi().getCurrentUser();
+          // SettingsSection(
+          //   title: Text(
+          //     'General',
+          //     style: TextStyle(color: HapisColors.lgColor1, fontSize: 18),
+          //   ),
+          //   tiles: [
+          //     SettingsTile(
+          //       title: Text(
+          //         'Sign In',
+          //         style: TextStyle(fontSize: 16),
+          //       ),
+          //       leading: Icon(
+          //         Icons.exit_to_app,
+          //         color: HapisColors.lgColor4,
+          //       ),
+          //       onPressed: (BuildContext context) {
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => const GoogleSignUp()));
+          //       },
+          //     ),
+          //     SettingsTile(
+          //       title: Text(
+          //         'Sign Out',
+          //         style: TextStyle(fontSize: 16),
+          //       ),
+          //       leading: Icon(
+          //         Icons.exit_to_app,
+          //         color: HapisColors.lgColor3,
+          //       ),
+          //       onPressed: (BuildContext context) {
+          //         // Handle sign out action
+          //         if (GoogleSignInApi().isUserSignedIn() == true ||
+          //             LoginSessionSharedPreferences.getLoggedIn() == true) {
+          //           final user = GoogleSignInApi().getCurrentUser();
 
-                    if (user != null) {
-                      GoogleSignInApi.logout();
-                    }
+          //           if (user != null) {
+          //             GoogleSignInApi.logout();
+          //           }
 
-                    LoginSessionSharedPreferences.removeUserID();
-                    LoginSessionSharedPreferences.setLoggedIn(false);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AppHomePage()));
-                  } else {
-                    showDialogSignUp(context);
-                  }
-                },
-              ),
-              SettingsTile(
-                title: Text(
-                  'Delete Account',
-                  style: TextStyle(fontSize: 16),
-                ),
-                leading: Stack(
-                  children: [
-                    Icon(
-                      Icons.delete,
-                      color: HapisColors.lgColor2,
-                    ),
-                    if (isDeleteLoading)
-                      Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.blue,
-                        ),
-                      ),
-                  ],
-                ),
-                onPressed: (BuildContext context) async {
-                  setState(() {
-                    isDeleteLoading = true;
-                  });
-                  if (GoogleSignInApi().isUserSignedIn() == true ||
-                      LoginSessionSharedPreferences.getLoggedIn() == true) {
-                    String id;
-                    final user = GoogleSignInApi().getCurrentUser();
-                    if (user != null) {
-                      id = user.id;
+          //           LoginSessionSharedPreferences.removeUserID();
+          //           LoginSessionSharedPreferences.setLoggedIn(false);
+          //           Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                   builder: (context) => const AppHomePage()));
+          //         } else {
+          //           showDialogSignUp(context);
+          //         }
+          //       },
+          //     ),
+          //     SettingsTile(
+          //       title: Text(
+          //         'Delete Account',
+          //         style: TextStyle(fontSize: 16),
+          //       ),
+          //       leading: Stack(
+          //         children: [
+          //           Icon(
+          //             Icons.delete,
+          //             color: HapisColors.lgColor2,
+          //           ),
+          //           if (isDeleteLoading)
+          //             Center(
+          //               child: CircularProgressIndicator(
+          //                 color: Colors.blue,
+          //               ),
+          //             ),
+          //         ],
+          //       ),
+          //       onPressed: (BuildContext context) async {
+          //         setState(() {
+          //           isDeleteLoading = true;
+          //         });
+          //         if (GoogleSignInApi().isUserSignedIn() == true ||
+          //             LoginSessionSharedPreferences.getLoggedIn() == true) {
+          //           String id;
+          //           final user = GoogleSignInApi().getCurrentUser();
+          //           if (user != null) {
+          //             id = user.id;
 
-                      Completer<int> completer = Completer<int>();
-                      showDatabasePopup(
-                          context, 'Are you sure you want to delete?',
-                          isWarning: true,
-                          isError: false,
-                          isCancel: true, onOKPressed: () async {
-                        GoogleSignInApi.logout();
-                        LoginSessionSharedPreferences.removeUserID();
-                        LoginSessionSharedPreferences.setLoggedIn(false);
-                        int result = await UserServices().deleteUser(id);
-                        completer.complete(result);
-                      }, onCancelPressed: () {
-                        setState(() {
-                          isDeleteLoading = false;
-                        });
-                      });
+          //             Completer<int> completer = Completer<int>();
+          //             showDatabasePopup(
+          //                 context, 'Are you sure you want to delete?',
+          //                 isWarning: true,
+          //                 isError: false,
+          //                 isCancel: true, onOKPressed: () async {
+          //               GoogleSignInApi.logout();
+          //               LoginSessionSharedPreferences.removeUserID();
+          //               LoginSessionSharedPreferences.setLoggedIn(false);
+          //               int result = await UserServices().deleteUser(id);
+          //               completer.complete(result);
+          //             }, onCancelPressed: () {
+          //               setState(() {
+          //                 isDeleteLoading = false;
+          //               });
+          //             });
 
-                      int result = await completer.future;
+          //             int result = await completer.future;
 
-                      if (result == 1) {
-                        showDatabasePopup(context, 'User deleted successfully!',
-                            isError: false);
-                      } else if (result == 0) {
-                        showDatabasePopup(context,
-                            'Error deleting user \n\nPlease try again later.');
-                      }
-                    } else {
-                      id = LoginSessionSharedPreferences.getUserID()!;
+          //             if (result == 1) {
+          //               showDatabasePopup(context, 'User deleted successfully!',
+          //                   isError: false);
+          //             } else if (result == 0) {
+          //               showDatabasePopup(context,
+          //                   'Error deleting user \n\nPlease try again later.');
+          //             }
+          //           } else {
+          //             id = LoginSessionSharedPreferences.getUserID()!;
 
-                      Completer<int> completer = Completer<int>();
-                      showDatabasePopup(
-                          context, 'Are you sure you want to delete?',
-                          isWarning: true,
-                          isError: false,
-                          isCancel: true, onOKPressed: () async {
-                        LoginSessionSharedPreferences.removeUserID();
-                        LoginSessionSharedPreferences.setLoggedIn(false);
-                        int result = await UserServices().deleteUser(id);
-                        completer.complete(result);
-                      }, onCancelPressed: () {
-                        setState(() {
-                          isDeleteLoading = false;
-                        });
-                      });
+          //             Completer<int> completer = Completer<int>();
+          //             showDatabasePopup(
+          //                 context, 'Are you sure you want to delete?',
+          //                 isWarning: true,
+          //                 isError: false,
+          //                 isCancel: true, onOKPressed: () async {
+          //               LoginSessionSharedPreferences.removeUserID();
+          //               LoginSessionSharedPreferences.setLoggedIn(false);
+          //               int result = await UserServices().deleteUser(id);
+          //               completer.complete(result);
+          //             }, onCancelPressed: () {
+          //               setState(() {
+          //                 isDeleteLoading = false;
+          //               });
+          //             });
 
-                      int result = await completer.future;
+          //             int result = await completer.future;
 
-                      if (result == 1) {
-                        showDatabasePopup(context, 'User deleted successfully!',
-                            isError: false, onOKPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AppHomePage()));
-                        });
-                      } else if (result == 0) {
-                        showDatabasePopup(context,
-                            'Error deleting user \n\nPlease try again later.');
-                      }
-                    }
+          //             if (result == 1) {
+          //               showDatabasePopup(context, 'User deleted successfully!',
+          //                   isError: false, onOKPressed: () {
+          //                 Navigator.push(
+          //                     context,
+          //                     MaterialPageRoute(
+          //                         builder: (context) => const AppHomePage()));
+          //               });
+          //             } else if (result == 0) {
+          //               showDatabasePopup(context,
+          //                   'Error deleting user \n\nPlease try again later.');
+          //             }
+          //           }
 
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const AppHomePage()));
-                  } else {
-                    showDialogSignUp(context);
-                  }
-                  setState(() {
-                    isDeleteLoading = false;
-                  });
-                },
-              ),
-            ],
-          ),
+          //           // Navigator.push(
+          //           //     context,
+          //           //     MaterialPageRoute(
+          //           //         builder: (context) => const AppHomePage()));
+          //         } else {
+          //           showDialogSignUp(context);
+          //         }
+          //         setState(() {
+          //           isDeleteLoading = false;
+          //         });
+          //       },
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -498,164 +498,164 @@ class _AppSettingsState extends State<AppSettings> {
                   ),
                 ],
               ),
-              SettingsSection(
-                title: Text(
-                  'General',
-                  style: TextStyle(color: HapisColors.lgColor1, fontSize: 40),
-                ),
-                tiles: [
-                  SettingsTile(
-                    title: Text(
-                      'Sign In',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    leading: Icon(
-                      Icons.exit_to_app,
-                      color: HapisColors.lgColor4,
-                    ),
-                    onPressed: (BuildContext context) {
-                      // Handle sign out action
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const GoogleSignUp()));
-                    },
-                  ),
-                  SettingsTile(
-                    title: Text(
-                      'Sign Out',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    leading: Icon(
-                      Icons.exit_to_app,
-                      color: HapisColors.lgColor3,
-                    ),
-                    onPressed: (BuildContext context) {
-                      // Handle sign out action
-                      if (GoogleSignInApi().isUserSignedIn() == true ||
-                          LoginSessionSharedPreferences.getLoggedIn() == true) {
-                        final user = GoogleSignInApi().getCurrentUser();
+          //     SettingsSection(
+          //       title: Text(
+          //         'General',
+          //         style: TextStyle(color: HapisColors.lgColor1, fontSize: 40),
+          //       ),
+          //       tiles: [
+          //         SettingsTile(
+          //           title: Text(
+          //             'Sign In',
+          //             style: TextStyle(fontSize: 30),
+          //           ),
+          //           leading: Icon(
+          //             Icons.exit_to_app,
+          //             color: HapisColors.lgColor4,
+          //           ),
+          //           onPressed: (BuildContext context) {
+          //             // Handle sign out action
+          //             Navigator.push(
+          //                 context,
+          //                 MaterialPageRoute(
+          //                     builder: (context) => const GoogleSignUp()));
+          //           },
+          //         ),
+          //         SettingsTile(
+          //           title: Text(
+          //             'Sign Out',
+          //             style: TextStyle(fontSize: 30),
+          //           ),
+          //           leading: Icon(
+          //             Icons.exit_to_app,
+          //             color: HapisColors.lgColor3,
+          //           ),
+          //           onPressed: (BuildContext context) {
+          //             // Handle sign out action
+          //             if (GoogleSignInApi().isUserSignedIn() == true ||
+          //                 LoginSessionSharedPreferences.getLoggedIn() == true) {
+          //               final user = GoogleSignInApi().getCurrentUser();
 
-                        if (user != null) {
-                          GoogleSignInApi.logout();
-                        }
+          //               if (user != null) {
+          //                 GoogleSignInApi.logout();
+          //               }
 
-                        LoginSessionSharedPreferences.removeUserID();
-                        LoginSessionSharedPreferences.setLoggedIn(false);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AppHomePage()));
-                      } else {
-                        showDialogSignUp(context);
-                      }
-                    },
-                  ),
-                  SettingsTile(
-                    title: Text(
-                      'Delete Account',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    leading: Stack(
-                      children: [
-                        Icon(
-                          Icons.delete,
-                          color: HapisColors.lgColor2,
-                        ),
-                        if (isDeleteLoading)
-                          Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.blue,
-                            ),
-                          ),
-                      ],
-                    ),
-                    onPressed: (BuildContext context) async {
-                      setState(() {
-                    isDeleteLoading = true;
-                  });
-                  if (GoogleSignInApi().isUserSignedIn() == true ||
-                      LoginSessionSharedPreferences.getLoggedIn() == true) {
-                    String id;
-                    final user = GoogleSignInApi().getCurrentUser();
-                    if (user != null) {
-                      id = user.id;
+          //               LoginSessionSharedPreferences.removeUserID();
+          //               LoginSessionSharedPreferences.setLoggedIn(false);
+          //               Navigator.push(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                       builder: (context) => const AppHomePage()));
+          //             } else {
+          //               showDialogSignUp(context);
+          //             }
+          //           },
+          //         ),
+          //         SettingsTile(
+          //           title: Text(
+          //             'Delete Account',
+          //             style: TextStyle(fontSize: 30),
+          //           ),
+          //           leading: Stack(
+          //             children: [
+          //               Icon(
+          //                 Icons.delete,
+          //                 color: HapisColors.lgColor2,
+          //               ),
+          //               if (isDeleteLoading)
+          //                 Center(
+          //                   child: CircularProgressIndicator(
+          //                     color: Colors.blue,
+          //                   ),
+          //                 ),
+          //             ],
+          //           ),
+          //           onPressed: (BuildContext context) async {
+          //             setState(() {
+          //           isDeleteLoading = true;
+          //         });
+          //         if (GoogleSignInApi().isUserSignedIn() == true ||
+          //             LoginSessionSharedPreferences.getLoggedIn() == true) {
+          //           String id;
+          //           final user = GoogleSignInApi().getCurrentUser();
+          //           if (user != null) {
+          //             id = user.id;
 
-                      Completer<int> completer = Completer<int>();
-                      showDatabasePopup(
-                          context, 'Are you sure you want to delete?',
-                          isWarning: true,
-                          isError: false,
-                          isCancel: true, onOKPressed: () async {
-                        GoogleSignInApi.logout();
-                        LoginSessionSharedPreferences.removeUserID();
-                        LoginSessionSharedPreferences.setLoggedIn(false);
-                        int result = await UserServices().deleteUser(id);
-                        completer.complete(result);
-                      }, onCancelPressed: () {
-                        setState(() {
-                          isDeleteLoading = false;
-                        });
-                      });
+          //             Completer<int> completer = Completer<int>();
+          //             showDatabasePopup(
+          //                 context, 'Are you sure you want to delete?',
+          //                 isWarning: true,
+          //                 isError: false,
+          //                 isCancel: true, onOKPressed: () async {
+          //               GoogleSignInApi.logout();
+          //               LoginSessionSharedPreferences.removeUserID();
+          //               LoginSessionSharedPreferences.setLoggedIn(false);
+          //               int result = await UserServices().deleteUser(id);
+          //               completer.complete(result);
+          //             }, onCancelPressed: () {
+          //               setState(() {
+          //                 isDeleteLoading = false;
+          //               });
+          //             });
 
-                      int result = await completer.future;
+          //             int result = await completer.future;
 
-                      if (result == 1) {
-                        showDatabasePopup(context, 'User deleted successfully!',
-                            isError: false);
-                      } else if (result == 0) {
-                        showDatabasePopup(context,
-                            'Error deleting user \n\nPlease try again later.');
-                      }
-                    } else {
-                      id = LoginSessionSharedPreferences.getUserID()!;
+          //             if (result == 1) {
+          //               showDatabasePopup(context, 'User deleted successfully!',
+          //                   isError: false);
+          //             } else if (result == 0) {
+          //               showDatabasePopup(context,
+          //                   'Error deleting user \n\nPlease try again later.');
+          //             }
+          //           } else {
+          //             id = LoginSessionSharedPreferences.getUserID()!;
 
-                      Completer<int> completer = Completer<int>();
-                      showDatabasePopup(
-                          context, 'Are you sure you want to delete?',
-                          isWarning: true,
-                          isError: false,
-                          isCancel: true, onOKPressed: () async {
-                        LoginSessionSharedPreferences.removeUserID();
-                        LoginSessionSharedPreferences.setLoggedIn(false);
-                        int result = await UserServices().deleteUser(id);
-                        completer.complete(result);
-                      }, onCancelPressed: () {
-                        setState(() {
-                          isDeleteLoading = false;
-                        });
-                      });
+          //             Completer<int> completer = Completer<int>();
+          //             showDatabasePopup(
+          //                 context, 'Are you sure you want to delete?',
+          //                 isWarning: true,
+          //                 isError: false,
+          //                 isCancel: true, onOKPressed: () async {
+          //               LoginSessionSharedPreferences.removeUserID();
+          //               LoginSessionSharedPreferences.setLoggedIn(false);
+          //               int result = await UserServices().deleteUser(id);
+          //               completer.complete(result);
+          //             }, onCancelPressed: () {
+          //               setState(() {
+          //                 isDeleteLoading = false;
+          //               });
+          //             });
 
-                      int result = await completer.future;
+          //             int result = await completer.future;
 
-                      if (result == 1) {
-                        showDatabasePopup(context, 'User deleted successfully!',
-                            isError: false, onOKPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AppHomePage()));
-                        });
-                      } else if (result == 0) {
-                        showDatabasePopup(context,
-                            'Error deleting user \n\nPlease try again later.');
-                      }
-                    }
+          //             if (result == 1) {
+          //               showDatabasePopup(context, 'User deleted successfully!',
+          //                   isError: false, onOKPressed: () {
+          //                 Navigator.push(
+          //                     context,
+          //                     MaterialPageRoute(
+          //                         builder: (context) => const AppHomePage()));
+          //               });
+          //             } else if (result == 0) {
+          //               showDatabasePopup(context,
+          //                   'Error deleting user \n\nPlease try again later.');
+          //             }
+          //           }
 
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const AppHomePage()));
-                  } else {
-                    showDialogSignUp(context);
-                  }
-                  setState(() {
-                    isDeleteLoading = false;
-                  });
-                    },
-                  ),
-                ],
-              ),
+          //           // Navigator.push(
+          //           //     context,
+          //           //     MaterialPageRoute(
+          //           //         builder: (context) => const AppHomePage()));
+          //         } else {
+          //           showDialogSignUp(context);
+          //         }
+          //         setState(() {
+          //           isDeleteLoading = false;
+          //         });
+          //           },
+          //         ),
+          //       ],
+          //     ),
             ],
           ),
         ),
