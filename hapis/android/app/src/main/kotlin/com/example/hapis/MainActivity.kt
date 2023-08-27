@@ -1,4 +1,4 @@
-package com.liquidgalaxy.hapisremake
+package com.liquidgalaxy.HapisRemake
 
 import io.flutter.embedding.android.FlutterActivity
 
